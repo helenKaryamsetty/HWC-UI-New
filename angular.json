@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "HWC-Facility-App-NEXT": {
+    "HWC-Facility-App": {
       "projectType": "application",
       "schematics": {},
       "root": "",
