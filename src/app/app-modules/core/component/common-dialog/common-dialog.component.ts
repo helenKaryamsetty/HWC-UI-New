@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './common-dialog.component.html',
   styleUrls: ['./common-dialog.component.css'],
 })
-export class CommonDialogComponent implements OnInit {
+export class CommonDialogComponent {
   @Output() cancelEvent = new EventEmitter();
 
   public title!: string;
@@ -18,7 +18,7 @@ export class CommonDialogComponent implements OnInit {
   public alertFetsenseMessage!: boolean;
   public confirmAlert!: boolean;
   public confirmcalibration!: boolean;
-  public confirmHealthID!:boolean;
+  public confirmHealthID!: boolean;
   public remarks!: boolean;
   public capture!: boolean;
   public editRemarks!: boolean;
@@ -33,17 +33,14 @@ export class CommonDialogComponent implements OnInit {
   // Choose from Radio Button Ends
 
   // selectable
-  
-  public choiceSelect!:boolean;
-  public options:any
-  public selectedOption :any;
-  public confirmCBAC!:boolean;
-  public confirmCareContext!:boolean;
-  public cbacData:any=[];
-  constructor(public dialogRef: MatDialogRef<CommonDialogComponent>) { }
 
-  ngOnInit() {
-  }
+  public choiceSelect!: boolean;
+  public options: any;
+  public selectedOption: any;
+  public confirmCBAC!: boolean;
+  public confirmCareContext!: boolean;
+  public cbacData: any = [];
+  constructor(public dialogRef: MatDialogRef<CommonDialogComponent>) {}
 
   Confirm() {
     this.cancelEvent.emit(null);
@@ -63,7 +60,7 @@ export class CommonDialogComponent implements OnInit {
       this.intervalRef = setInterval(() => {
         if (timer == 0) {
           clearInterval(this.intervalRef);
-          this.dialogRef.close({ action: 'timeout'});
+          this.dialogRef.close({ action: 'timeout' });
         } else {
           this.minutes = timer / 60;
           this.seconds = timer % 60;
@@ -76,12 +73,11 @@ export class CommonDialogComponent implements OnInit {
 
   stopTimer() {
     clearInterval(this.intervalRef);
-    this.dialogRef.close({action: 'cancel', remainingTime: this.timer});
+    this.dialogRef.close({ action: 'cancel', remainingTime: this.timer });
   }
 
   continueSession() {
     clearInterval(this.intervalRef);
-    this.dialogRef.close({action: 'continue'});
+    this.dialogRef.close({ action: 'continue' });
   }
-
 }

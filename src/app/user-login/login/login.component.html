@@ -1,44 +1,76 @@
 <div class="flex-container">
   <div class="row">
-  <div class="btn-center mdCardSonar"> 
-    <img src="assets/images/SwasthyaL-withoutcard.png" alt="Logo"> 
-  </div>
-  <form [formGroup]="loginForm" (ngSubmit)="loginForm.valid && login()">
-    <div class="row" style="text-align: center;">
-      <div class="col-xs-12 col-md-1 col-sm-1 m-t-25">
-        <mat-form-field class="full-width">
-          <mat-icon>person</mat-icon>
-          <input matInput allowText="usernameValidator" autofocus="autofocus" type="text" id="userID" placeholder="Enter User Name" formControlName="userName" name="userName" #focus/>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-md-11 col-sm-11">
-        <mat-form-field class="full-width">
-          <mat-icon>key</mat-icon>
-          <input autocomplete="off" matInput [type]="dynamictype" id="password" placeholder="Enter Password" formControlName="password" name="password" />
-          <mat-icon matSuffix class="mat-icon material-icons cursorPointer" role="img" aria-hidden="true" matTooltip="Show Password" (mousedown)='showPWD()' (mouseup)='hidePWD()' style="color:gray">visibility</mat-icon>
-        </mat-form-field>
-      </div>
+    <div class="btn-center mdCardSonar">
+      <img src="assets/images/SwasthyaL-withoutcard.png" alt="Logo" />
     </div>
-    <div class="row">
-      <div class="col-xs-12 col-md-12 col-sm-12">
-        <button type="submit" class="full-width-login background-overall">Login</button>
-      </div>
-    </div>
-    <div class="row m-t-25">
-      <div class="col-xs-6 col-sm-6">
-      </div>
-      <div class="col-xs-6 col-sm-6">
-        <!-- <ul class="list-unstyled list-inline">
-          <li><a class="cursorPointer f-c-54 font-regular password" routerLink="/reset-password">Forgot Password?</a></li>
-        </ul> -->
-        <div class="pull-right">
-          <a style="float: right;" class="cursorPointer f-c-54 font-regular password" routerLink="/reset-password">Forgot Password?</a>
+    <form [formGroup]="loginForm" (ngSubmit)="loginForm.valid && login()">
+      <div class="row" style="text-align: center">
+        <div class="col-xs-12 col-md-1 col-sm-1 m-t-25">
+          <mat-form-field class="full-width">
+            <mat-icon>person</mat-icon>
+            <input
+              matInput
+              allowText="usernameValidator"
+              type="text"
+              id="userID"
+              placeholder="Enter User Name"
+              formControlName="userName"
+              name="userName"
+              #focus
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-md-11 col-sm-11">
+          <mat-form-field class="full-width">
+            <mat-icon>key</mat-icon>
+            <input
+              autocomplete="off"
+              matInput
+              [type]="dynamictype"
+              id="password"
+              placeholder="Enter Password"
+              formControlName="password"
+              name="password"
+            />
+            <mat-icon
+              matSuffix
+              class="mat-icon material-icons cursorPointer"
+              role="img"
+              aria-hidden="true"
+              matTooltip="Show Password"
+              (mousedown)="showPWD()"
+              (mouseup)="hidePWD()"
+              style="color: gray"
+              >visibility</mat-icon
+            >
+          </mat-form-field>
         </div>
       </div>
-    </div>
-  </form>
-  
-    </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-12 col-sm-12">
+          <button type="submit" class="full-width-login background-overall">
+            Login
+          </button>
+        </div>
+      </div>
+      <div class="row m-t-25">
+        <div class="col-xs-6 col-sm-6"></div>
+        <div class="col-xs-6 col-sm-6">
+          <!-- <ul class="list-unstyled list-inline">
+          <li><a class="cursorPointer f-c-54 font-regular password" routerLink="/reset-password">Forgot Password?</a></li>
+        </ul> -->
+          <div class="pull-right">
+            <a
+              style="float: right"
+              class="cursorPointer f-c-54 font-regular password"
+              routerLink="/reset-password"
+              >Forgot Password?</a
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- <app-footer></app-footer> -->

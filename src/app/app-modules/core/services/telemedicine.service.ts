@@ -5,16 +5,19 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 
 @Injectable()
 export class TelemedicineService {
-  telemedicineUrl:any;
+  telemedicineUrl: any;
 
-  constructor( @Inject(DOCUMENT) private document : any, private confirmationService: ConfirmationService) { }
-  
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private confirmationService: ConfirmationService,
+  ) {}
+
   routeToTeleMedecine() {
     const authKey = this.getAuthKey();
     const protocol = this.getProtocol();
     const host = this.getHost();
-    if (authKey && protocol && host){
-      this.telemedicineUrl = `${environment.TELEMEDICINE_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackMMUUrl}&back=${environment.redirInMMUUrl}`
+    if (authKey && protocol && host) {
+      this.telemedicineUrl = `${environment.TELEMEDICINE_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackMMUUrl}&back=${environment.redirInMMUUrl}`;
       window.location.href = this.telemedicineUrl;
     }
   }
@@ -25,7 +28,6 @@ export class TelemedicineService {
     }
     return null; // or return undefined; depending on your use case
   }
-  
 
   getProtocol() {
     return this.document.location.protocol;
@@ -34,5 +36,4 @@ export class TelemedicineService {
   getHost() {
     return `${this.document.location.host}${this.document.location.pathname}`;
   }
-
 }

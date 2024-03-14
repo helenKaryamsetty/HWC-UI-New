@@ -1,0 +1,60 @@
+<div class="speclogin">
+  <button class="pull-right exit" mat-icon-button (click)="closeSnackBar(true)">
+    <mat-icon>close</mat-icon>
+  </button>
+  <form [formGroup]="specialistTMLoginForm">
+    <mat-form-field class="input-full-width">
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        name="userName"
+        formControlName="userName"
+        placeholder="User Name"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field class="input-full-width">
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        [type]="dynamictype"
+        name="Password"
+        formControlName="password"
+        placeholder="Password"
+        required
+      />
+      <mat-icon
+        matSuffix
+        class="mat-icon material-icons cursorPointer"
+        role="img"
+        aria-hidden="true"
+        matTooltip="Show Password"
+        (mousedown)="showPWD()"
+        (mouseup)="hidePWD()"
+        style="color: gray"
+        >visibility</mat-icon
+      >
+    </mat-form-field>
+    <mat-form-field class="input-full-width">
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        name="domain"
+        formControlName="domain"
+        placeholder="Domain"
+        required
+      />
+    </mat-form-field>
+    <button
+      [disabled]="!specialistTMLoginForm.valid"
+      class="pull-right exit btn-save"
+      mat-button
+      (click)="closeSnackBar(false)"
+    >
+      {{ data.action }}
+    </button>
+  </form>
+</div>

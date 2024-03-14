@@ -28,7 +28,11 @@ import { LoginComponent } from './user-login/login/login.component';
 // import { CbacService } from './app-modules/nurse-doctor/shared/services/cbac.service';
 // import { HrpService } from './app-modules/nurse-doctor/shared/services/hrp.service';
 // import { AudioRecordingService } from './app-modules/nurse-doctor/shared/services/audio-recording.service';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { MaterialModule } from './app-modules/core/material.module';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { UserLoginModule } from './user-login/user-login.module';
@@ -37,18 +41,15 @@ import { HttpInterceptorService } from './app-modules/core/services/http-interce
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
     // ServicePointComponent,
     // ServiceComponent,
     // ResetPasswordComponent,
     // SetPasswordComponent,
     // SetSecurityQuestionsComponent,
     // TmLogoutComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -62,7 +63,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     AppRoutingModule,
     UserLoginModule,
     //DataSYNCModule,
-    CoreModule.forRoot()
+    CoreModule.forRoot(),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
@@ -74,6 +75,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     },
   ],
   //providers: [ServicePointService, ServicePointResolve,HttpServiceService,RegistrarService,FamilyTaggingService, CbacService, HrpService, AudioRecordingService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

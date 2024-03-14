@@ -5,7 +5,7 @@ import { IotService } from './iot.service';
 describe('IotService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [IotService]
+      providers: [IotService],
     });
   });
 

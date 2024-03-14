@@ -1,5 +1,14 @@
 import { Component } from '@angular/core';
-import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, ResolveStart, NavigationCancel, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import {
+  Router,
+  RouteConfigLoadStart,
+  RouteConfigLoadEnd,
+  ResolveStart,
+  NavigationCancel,
+  NavigationStart,
+  NavigationEnd,
+  NavigationError,
+} from '@angular/router';
 import { SpinnerService } from './app-modules/core/services/spinner.service';
 
 @Component({
@@ -9,8 +18,6 @@ import { SpinnerService } from './app-modules/core/services/spinner.service';
 })
 export class AppComponent {
   title = 'HWC-Facility-App';
-
-
   // constructor(
   //   private router: Router,
   //   private spinnerService: SpinnerService
@@ -22,7 +29,7 @@ export class AppComponent {
   //       this.spinnerService.show();
   //     // } else if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
   //     //   setTimeout(this.spinnerService.hide(), 500);
-  //     // } else if (event instanceof NavigationError ) {
+  //     // } else if (event instanceof NavigationError) {
   //     //   setTimeout(this.spinnerService.hide(), 500);
   //     // } else if (event instanceof NavigationCancel) {
   //     //   setTimeout(this.spinnerService.hide(), 500);

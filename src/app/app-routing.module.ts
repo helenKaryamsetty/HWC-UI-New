@@ -20,11 +20,11 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   // {
   //   path: 'logout-tm',
@@ -80,16 +80,16 @@ const routes: Routes = [
   //   path: 'datasync',
   //   canActivate: [AuthGuard],
   //   loadChildren: './app-modules/data-sync/dataSync.module#DataSYNCModule'
-  // },
-  // {
-  //   path: '**',
-  //   redirectTo: 'login',
-  //   pathMatch: 'full'
-  // }
+  //},
+  {
+    path: '**',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

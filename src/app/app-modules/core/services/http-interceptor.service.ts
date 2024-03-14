@@ -32,9 +32,9 @@ export class HttpInterceptorService implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    let key: any = sessionStorage.getItem('key');
+    const key: any = sessionStorage.getItem('key');
     let modifiedReq = null;
     if (key !== undefined && key !== null) {
       modifiedReq = req.clone({
@@ -47,8 +47,8 @@ export class HttpInterceptorService implements HttpInterceptor {
     }
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if(req.url !== undefined && !req.url.includes('cti/getAgentState') )
-        this.spinnerService.show();
+        if (req.url !== undefined && !req.url.includes('cti/getAgentState'))
+          this.spinnerService.show();
         if (event instanceof HttpResponse) {
           console.log(event.body);
           this.onSuccess(req.url, event.body);
@@ -60,7 +60,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         console.error(error);
         this.spinnerService.show();
         return throwError(error.error);
-      })
+      }),
     );
   }
 

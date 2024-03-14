@@ -6,10 +6,9 @@ import { TelemedicineService } from '../../app-modules/core/services/telemedicin
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css']
+  styleUrls: ['./service.component.css'],
 })
 export class ServiceComponent implements OnInit {
-
   servicesList: any;
   serviceIDs: any;
   fullName: any;
@@ -18,7 +17,8 @@ export class ServiceComponent implements OnInit {
     private router: Router,
     private telemedicineService: TelemedicineService,
     // private servicePointService: ServicePointService,
-    private confirmationService: ConfirmationService) { }
+    private confirmationService: ConfirmationService,
+  ) {}
 
   ngOnInit() {
     localStorage.removeItem('providerServiceID');
@@ -27,7 +27,6 @@ export class ServiceComponent implements OnInit {
       this.servicesList = JSON.parse(servicesData);
     }
     this.fullName = localStorage.getItem('fullName');
-
   }
 
   loginDataResponse: any;
@@ -42,24 +41,30 @@ export class ServiceComponent implements OnInit {
       this.servicesList = JSON.parse(loginData);
     }
     // this.loginDataResponse = JSON.parse(localStorage.getItem('loginDataResponse'));
-    this.checkRoleAndDesingnationMappedForservice(this.loginDataResponse, service);
+    this.checkRoleAndDesingnationMappedForservice(
+      this.loginDataResponse,
+      service,
+    );
   }
 
-  checkRoleAndDesingnationMappedForservice(loginDataResponse: any, service: any) {
+  checkRoleAndDesingnationMappedForservice(
+    loginDataResponse: any,
+    service: any,
+  ) {
     let serviceData: any;
 
     if (loginDataResponse.previlegeObj) {
       serviceData = loginDataResponse.previlegeObj.filter((item: any) => {
-        return item.serviceName == service.serviceName
+        return item.serviceName == service.serviceName;
       })[0];
 
       if (serviceData != null) {
-        this.checkMappedRoleForService(serviceData)
+        this.checkMappedRoleForService(serviceData);
       }
     }
   }
 
-  roleArray: any = []
+  roleArray: any = [];
   checkMappedRoleForService(serviceData: any) {
     this.roleArray = [];
     let roleData;
@@ -68,34 +73,52 @@ export class ServiceComponent implements OnInit {
       if (roleData.length > 0) {
         roleData.forEach((role: any) => {
           role.serviceRoleScreenMappings.forEach((serviceRole: any) => {
-            this.roleArray.push(serviceRole.screen.screenName)
+            this.roleArray.push(serviceRole.screen.screenName);
           });
         });
         if (this.roleArray && this.roleArray.length > 0) {
           localStorage.setItem('role', JSON.stringify(this.roleArray));
           this.checkMappedDesignation(this.loginDataResponse);
         } else {
-          this.confirmationService.alert('Role features are not mapped for user , Please map a role feature', 'error');
+          this.confirmationService.alert(
+            'Role features are not mapped for user , Please map a role feature',
+            'error',
+          );
         }
       } else {
-        this.confirmationService.alert('Role features are not mapped for user , Please map a role feature', 'error');
+        this.confirmationService.alert(
+          'Role features are not mapped for user , Please map a role feature',
+          'error',
+        );
       }
     } else {
-      this.confirmationService.alert('Role features are not mapped for user , Please map a role feature', 'error');
+      this.confirmationService.alert(
+        'Role features are not mapped for user , Please map a role feature',
+        'error',
+      );
     }
   }
 
   designation: any;
   checkMappedDesignation(loginDataResponse: any) {
-    if (loginDataResponse.designation && loginDataResponse.designation.designationName) {
+    if (
+      loginDataResponse.designation &&
+      loginDataResponse.designation.designationName
+    ) {
       this.designation = loginDataResponse.designation.designationName;
       if (this.designation != null) {
         this.checkDesignationWithRole();
       } else {
-        this.confirmationService.alert('Designation is not available for user , Please map the designation', 'error');
+        this.confirmationService.alert(
+          'Designation is not available for user , Please map the designation',
+          'error',
+        );
       }
     } else {
-      this.confirmationService.alert('Designation is not available for user , Please map the designation', 'error');
+      this.confirmationService.alert(
+        'Designation is not available for user , Please map the designation',
+        'error',
+      );
     }
   }
 
@@ -105,7 +128,10 @@ export class ServiceComponent implements OnInit {
       // this.getSwymedMailLogin();
       this.routeToDesignation(this.designation);
     } else {
-      this.confirmationService.alert('Designation is not matched with your roles , Please map the designation or include more roles', 'error');
+      this.confirmationService.alert(
+        'Designation is not matched with your roles , Please map the designation or include more roles',
+        'error',
+      );
     }
   }
   // getSwymedMailLogin() {
@@ -114,17 +140,17 @@ export class ServiceComponent implements OnInit {
   //       window.location.href = res.data.response
   //   })
   // }
-  
+
   routeToDesignation(designation: any) {
     switch (designation) {
-      case "TC Specialist":
+      case 'TC Specialist':
         this.router.navigate(['/common/tcspecialist-worklist']);
         break;
-      case "Supervisor":
+      case 'Supervisor':
         this.telemedicineService.routeToTeleMedecine();
         break;
       default:
-        this.router.navigate(["/servicePoint"]);
+        this.router.navigate(['/servicePoint']);
         break;
     }
   }

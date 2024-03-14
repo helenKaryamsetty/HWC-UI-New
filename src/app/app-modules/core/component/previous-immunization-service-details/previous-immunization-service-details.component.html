@@ -1,0 +1,164 @@
+<div>
+  <div class="title info">
+    <h4>{{ input.title }}</h4>
+    <button
+      class="pull-right close-btn"
+      (click)="closeDialog()"
+      mat-icon-button
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <section class="message">
+    <mat-form-field>
+      <input
+        autocomplete="off"
+        matInput
+        placeholder="{{ currentLanguageSet?.common?.inTableSearch }}"
+        #filterTerm
+        (keyup)="filterPreviousData(filterTerm.value)"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <section class="table table-responsive enableScroll">
+      <div class="table-responsive m-t-10">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- sno Column -->
+          <ng-container matColumnDef="sno">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.coreComponents?.sno }}
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <!-- dateOfVisit Column -->
+          <ng-container matColumnDef="dateOfVisit">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.dateOfVisit }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.dateOfVisit }}
+            </td>
+          </ng-container>
+
+          <!-- typeOfImmunizationServices Column -->
+          <ng-container matColumnDef="typeOfImmunizationServices">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.typeOfImmunizationServices }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.immunizationServicesType }}
+            </td>
+          </ng-container>
+
+          <!-- pastImmunizationService Column -->
+          <ng-container matColumnDef="pastImmunizationService">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.pastImmunizationService }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.currentImmunizationService }}
+            </td>
+          </ng-container>
+
+          <!-- vaccineName Column -->
+          <ng-container matColumnDef="vaccineName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.vaccineName }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.vaccineName }}
+            </td>
+          </ng-container>
+
+          <!-- vaccineDose Column -->
+          <ng-container matColumnDef="vaccineDose">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.vaccineDose }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.vaccineDose }}
+            </td>
+          </ng-container>
+
+          <!-- route Column -->
+          <ng-container matColumnDef="route">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.route }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element?.route }}</td>
+          </ng-container>
+
+          <!-- batchNo Column -->
+          <ng-container matColumnDef="batchNo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.batchNo }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element?.batchNo }}</td>
+          </ng-container>
+
+          <!-- siteOfInjection Column -->
+          <ng-container matColumnDef="siteOfInjection">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.siteOfInjection }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.siteOfInjection }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 15]"
+          showFirstLastButtons
+        ></mat-paginator>
+
+        <!-- <table aria-describedby="FamilyTaggingDetails" class="table table-striped" [md2Data]="filteredDataList" #md2="md2DataTable" [rowsPerPage]="5" [activePage]="1">
+          <thead>
+            <tr>
+              <th id="sno">{{currentLanguageSet?.coreComponents?.sno}}</th>
+              <th id="date">{{currentLanguageSet?.dateOfVisit}}</th>
+              <th id="immunizationServiceType">{{currentLanguageSet?.typeOfImmunizationServices}}</th>
+              <th id="currentImmunizationService">{{currentLanguageSet?.pastImmunizationService}}</th>
+              <th id="vaccineName">{{currentLanguageSet?.vaccineName}}</th>
+              <th id="vaccineDose">{{currentLanguageSet?.vaccineDose}}</th>
+              <th id="vaccineBatchNo">{{currentLanguageSet?.route}}</th>
+              <th id="vaccineRoute">{{currentLanguageSet?.batchNo}}</th>
+              <th id="vaccineSiteOfInjection">{{currentLanguageSet?.siteOfInjection}}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="filteredDataList?.length == 0">
+              <td colspan="10" class="norecord">{{currentLanguageSet?.casesheet?.noRecordFound}}</td>
+            </tr>
+            <tr *ngFor="let item of md2.data">
+              <td data-title="sno">{{filteredDataList.indexOf(item)+1}}</td>
+              <td data-title="Date of Visit">{{ item?.dateOfVisit}} </td>
+              <td data-title="Type of Immunization Services">{{ item?.immunizationServicesType}} </td>
+              <td data-title="Past Immunization Service">{{ item?.currentImmunizationService}} </td>
+              <td data-title="Vaccine Name">{{ item?.vaccineName}} </td>
+              <td data-title="Dose">{{ item?.vaccineDose}} </td>
+              <td data-title="Route">{{ item?.route}} </td>
+              <td data-title="Batch/Lot No">{{ item?.batchNo}} </td>
+              <td data-title="Site Of Injection">{{ item?.siteOfInjection}} </td>
+
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="10" style="text-align:right">
+                <mat-paginator class="colorpagination"></mat-paginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table> -->
+      </div>
+    </section>
+  </section>
+</div>

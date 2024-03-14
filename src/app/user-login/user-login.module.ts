@@ -8,7 +8,13 @@ import { ServiceComponent } from './service/service.component';
 
 @NgModule({
   declarations: [LoginComponent, ServiceComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    MatIconModule,
+  ],
   exports: [LoginComponent, ServiceComponent],
 })
 export class UserLoginModule {}

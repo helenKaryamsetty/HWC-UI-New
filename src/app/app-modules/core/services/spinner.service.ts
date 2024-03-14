@@ -13,7 +13,7 @@ export class SpinnerService {
   spinnerState = this.spinnerSubject.asObservable();
   temp: any = [];
 
-  constructor() { }
+  constructor() {}
 
   show() {
     this.temp.push(true);
@@ -22,8 +22,7 @@ export class SpinnerService {
   }
 
   hide() {
-    if (this.temp.length > 0)
-      this.temp.pop();
+    if (this.temp.length > 0) this.temp.pop();
 
     if (this.temp.length == 0)
       this.spinnerSubject.next(<SpinnerState>{ show: false });
@@ -33,5 +32,4 @@ export class SpinnerService {
     this.temp = [false];
     this.hide();
   }
-
 }

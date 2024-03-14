@@ -4,14 +4,22 @@ import { environment } from '../../../../environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 @Injectable()
 export class InventoryService {
-
   inventoryUrl: any;
   current_language_set: any;
 
-  constructor(@Inject(DOCUMENT) private document: any, private confirmationService: ConfirmationService) { }
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private confirmationService: ConfirmationService,
+  ) {}
 
-  moveToInventory(benID: any, visit: any, flowID: any, regID: any,language: any,healthID: any) {
-
+  moveToInventory(
+    benID: any,
+    visit: any,
+    flowID: any,
+    regID: any,
+    language: any,
+    healthID: any,
+  ) {
     const authKey = this.getAuthKey();
     const facility = this.getFacilityID();
     const protocol = this.getProtocol();
@@ -26,11 +34,14 @@ export class InventoryService {
       console.log(this.inventoryUrl);
       window.location.href = this.inventoryUrl;
     } else {
-      this.confirmationService.alert(this.current_language_set.alerts.info.noFacilityMapper, 'error');
+      this.confirmationService.alert(
+        this.current_language_set.alerts.info.noFacilityMapper,
+        'error',
+      );
     }
   }
-  getParentAPI(){
-    return environment.parentAPI
+  getParentAPI() {
+    return environment.parentAPI;
   }
   getAuthKey(): string | null {
     if (sessionStorage.getItem('isAuthenticated')) {
@@ -38,11 +49,8 @@ export class InventoryService {
     }
     return null; // or return undefined; depending on your use case
   }
-  
 
-  getFlowID() {
-
-  }
+  getFlowID() {}
 
   getFacilityID() {
     if (sessionStorage.getItem('facilityID')) {
@@ -57,8 +65,10 @@ export class InventoryService {
   }
 
   getHost() {
-    console.log(this.document.location, 'location')
-    console.log(`${this.document.location.host}${this.document.location.pathname}`)
+    console.log(this.document.location, 'location');
+    console.log(
+      `${this.document.location.host}${this.document.location.pathname}`,
+    );
     return `${this.document.location.host}${this.document.location.pathname}`;
   }
 
@@ -72,8 +82,8 @@ export class InventoryService {
   //   return serviceLineDetails.parkingPlaceID;
   // }
 
-  getServiceDetails(){
-    const serviceName= localStorage.getItem('serviceName');
+  getServiceDetails() {
+    const serviceName = localStorage.getItem('serviceName');
     return serviceName;
   }
 }
