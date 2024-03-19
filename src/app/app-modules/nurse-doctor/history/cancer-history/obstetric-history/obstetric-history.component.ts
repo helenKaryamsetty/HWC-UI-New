@@ -36,10 +36,10 @@ import {
   NurseService,
 } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-nurse-cancer-obstetric-history',
@@ -251,7 +251,7 @@ export class ObstetricHistoryComponent
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousCancerPastObstetricHistory(benRegID).subscribe(
       (data: any) => {
-        if (data != null && data.data != null) {
+        if (data !== null && data.data !== null) {
           if (data.data.data.length > 0) {
             this.viewPreviousData(data.data);
           } else {

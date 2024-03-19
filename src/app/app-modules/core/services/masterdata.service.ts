@@ -111,9 +111,9 @@ export class MasterdataService {
     let facilityID = 0;
     if (
       JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-        .facilityID != undefined &&
+        .facilityID !== undefined &&
       JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-        .facilityID != null
+        .facilityID !== null
     ) {
       facilityID = JSON.parse(
         localStorage.getItem('serviceLineDetails') || '{}',
@@ -121,9 +121,9 @@ export class MasterdataService {
     }
     let vanID = 0;
     if (
-      JSON.parse(localStorage.getItem('serviceLineDetails') || '{}').vanID !=
+      JSON.parse(localStorage.getItem('serviceLineDetails') || '{}').vanID !==
         undefined &&
-      JSON.parse(localStorage.getItem('serviceLineDetails') || '{}').vanID !=
+      JSON.parse(localStorage.getItem('serviceLineDetails') || '{}').vanID !==
         null
     ) {
       vanID = JSON.parse(

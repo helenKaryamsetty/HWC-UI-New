@@ -58,7 +58,7 @@ export class PreviousDetailsComponent implements OnInit {
     if (this.input.dataList.columns instanceof Array)
       this.columnList = this.input.dataList.columns;
 
-    if (this.input.title == 'MMU Referral Details') {
+    if (this.input.title === 'MMU Referral Details') {
       const newArray = [];
       let additionalArray;
       if (this.input.dataList.data.refrredToAdditionalServiceList) {
@@ -93,7 +93,7 @@ export class PreviousDetailsComponent implements OnInit {
       this.filteredDataList = this.dataList.slice();
     }
 
-    if (this.input.title == 'MMU Investigation Details') {
+    if (this.input.title === 'MMU Investigation Details') {
       let laboratoryArray;
       if (this.input.dataList.data.laboratoryList) {
         laboratoryArray = this.input.dataList.data.laboratoryList;
@@ -108,7 +108,7 @@ export class PreviousDetailsComponent implements OnInit {
       this.filteredDataList = this.dataList.slice();
     }
 
-    if (this.input.title == 'MMU Prescription Details') {
+    if (this.input.title === 'MMU Prescription Details') {
       this.dataList = [];
       this.filteredDataList = [];
       this.dataList = this.loadDataPrescriptionList(this.input.dataList.data);

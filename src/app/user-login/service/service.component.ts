@@ -55,10 +55,10 @@ export class ServiceComponent implements OnInit {
 
     if (loginDataResponse.previlegeObj) {
       serviceData = loginDataResponse.previlegeObj.filter((item: any) => {
-        return item.serviceName == service.serviceName;
+        return item.serviceName === service.serviceName;
       })[0];
 
-      if (serviceData != null) {
+      if (serviceData !== null) {
         this.checkMappedRoleForService(serviceData);
       }
     }
@@ -106,7 +106,7 @@ export class ServiceComponent implements OnInit {
       loginDataResponse.designation.designationName
     ) {
       this.designation = loginDataResponse.designation.designationName;
-      if (this.designation != null) {
+      if (this.designation !== null) {
         this.checkDesignationWithRole();
       } else {
         this.confirmationService.alert(
@@ -136,7 +136,7 @@ export class ServiceComponent implements OnInit {
   }
   // getSwymedMailLogin() {
   //   this.servicePointService.getSwymedMailLogin().subscribe((res: any) => {
-  //     if (res.statusCode == 200)
+  //     if (res.statusCode === 200)
   //       window.location.href = res.data.response
   //   })
   // }

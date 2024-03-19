@@ -269,11 +269,11 @@ export class RegistrarService {
   }
 
   generateOTP(mobileNo: any, mode: any) {
-    if (mode == 'MOBILE') {
+    if (mode === 'MOBILE') {
       return this.http
         .post(environment.otpGenerationUrl, mobileNo)
         .pipe(map((res: any) => res.json().data));
-    } else if (mode == 'AADHAR') {
+    } else if (mode === 'AADHAR') {
       return this.http
         .post(environment.otpGenerationWithUIDUrl, mobileNo)
         .pipe(map((res: any) => res.json().data));

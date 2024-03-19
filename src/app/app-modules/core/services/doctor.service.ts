@@ -542,10 +542,10 @@ export class DoctorService {
       let bG = false;
 
       postNCDScreeningFormValue.labTestOrders.filter((item: any) => {
-        if (item.procedureName == 'BP Measurement') {
+        if (item.procedureName === 'BP Measurement') {
           bP = true;
         }
-        if (item.procedureName == 'Blood Glucose Measurement') {
+        if (item.procedureName === 'Blood Glucose Measurement') {
           bG = true;
         }
       });
@@ -1039,50 +1039,50 @@ export class DoctorService {
     });
 
     if (!this.getVisitComplaint) {
-      if (visitCategory == 'General OPD (QC)') {
+      if (visitCategory === 'General OPD (QC)') {
         this.getVisitComplaint = this.http
           .post(environment.getGeneralOPDQuickConsultVisitDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'ANC') {
+      if (visitCategory === 'ANC') {
         this.getVisitComplaint = this.http
           .post(environment.getANCVisitDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'General OPD') {
+      if (visitCategory === 'General OPD') {
         this.getVisitComplaint = this.http
           .post(environment.getGeneralOPDVisitDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD screening') {
+      if (visitCategory === 'NCD screening') {
         this.getVisitComplaint = this.http
           .post(environment.getNCDScreeningVisitDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD care') {
+      if (visitCategory === 'NCD care') {
         this.getVisitComplaint = this.http
           .post(environment.getNCDCareVisitDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'PNC') {
+      if (visitCategory === 'PNC') {
         return this.http
           .post(environment.getPNCVisitDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'COVID-19 Screening') {
+      if (visitCategory === 'COVID-19 Screening') {
         this.getVisitComplaint = this.http
           .post(environment.getCovidVisitDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
 
-      if (visitCategory == 'FP & Contraceptive Services') {
+      if (visitCategory === 'FP & Contraceptive Services') {
         this.getVisitComplaint = this.http
           .post(environment.getFamilyPlanningVisitDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
 
       if (
-        visitCategory?.toLowerCase() ==
+        visitCategory?.toLowerCase() ===
         'neonatal and infant health care services'
       ) {
         this.getVisitComplaint = this.http
@@ -1091,7 +1091,7 @@ export class DoctorService {
       }
 
       if (
-        visitCategory?.toLowerCase() ==
+        visitCategory?.toLowerCase() ===
         'childhood & adolescent healthcare services'
       ) {
         this.getVisitComplaint = this.http
@@ -1111,32 +1111,32 @@ export class DoctorService {
       visitCode: localStorage.getItem('visitCode'),
     });
     if (!this.generalHistory) {
-      if (visitCategory == 'ANC') {
+      if (visitCategory === 'ANC') {
         this.generalHistory = this.http
           .post(environment.getANCHistoryDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'General OPD') {
+      if (visitCategory === 'General OPD') {
         this.generalHistory = this.http
           .post(environment.getGeneralOPDHistoryDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD care') {
+      if (visitCategory === 'NCD care') {
         this.generalHistory = this.http
           .post(environment.getNCDCareHistoryDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'COVID-19 Screening') {
+      if (visitCategory === 'COVID-19 Screening') {
         this.generalHistory = this.http
           .post(environment.getCovidHistoryDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'PNC') {
+      if (visitCategory === 'PNC') {
         this.generalHistory = this.http
           .post(environment.getPNCHistoryDetailsUrl, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD screening') {
+      if (visitCategory === 'NCD screening') {
         this.generalHistory = this.http
           .post(environment.getNCDScreeningHistoryDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
@@ -1150,60 +1150,61 @@ export class DoctorService {
       visitCode: localStorage.getItem('visitCode'),
     });
     const visitCategory = localStorage.getItem('visitCategory');
-    if (visitCategory == 'General OPD (QC)') {
+    if (visitCategory === 'General OPD (QC)') {
       return this.http
         .post(environment.getGeneralOPDQuickConsultVitalDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       return this.http
         .post(environment.getANCVitalsDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(environment.getGeneralOPDVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       return this.http
         .post(environment.getNCDCareVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http
         .post(environment.getCovidVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       return this.http
         .post(environment.getPNCVitalsDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.getNCDSceeriningVitalDetails, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'FP & Contraceptive Services') {
+    if (visitCategory === 'FP & Contraceptive Services') {
       return this.http
         .post(environment.getFamilyPlanningVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
     if (
-      visitCategory?.toLowerCase() == 'neonatal and infant health care services'
+      visitCategory?.toLowerCase() ===
+      'neonatal and infant health care services'
     ) {
       return this.http
         .post(environment.getNeonatalVitalsDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
     if (
-      visitCategory?.toLowerCase() ==
+      visitCategory?.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       return this.http
@@ -1213,7 +1214,7 @@ export class DoctorService {
   }
   getRBSPreviousVitals(beneficiary: any) {
     const visitCategory = localStorage.getItem('visitCategory');
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.getNCDSceeriningVitalDetails, beneficiary)
         .pipe(map((res: any) => res.json().data));
@@ -1225,40 +1226,40 @@ export class DoctorService {
       visitCode: localStorage.getItem('referredVisitCode'),
     });
     const visitCategory = localStorage.getItem('visitCategory');
-    if (visitCategory == 'General OPD (QC)') {
+    if (visitCategory === 'General OPD (QC)') {
       return this.http
         .post(environment.getGeneralOPDQuickConsultVitalDetails, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       return this.http
         .post(environment.getANCVitalsDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(environment.getGeneralOPDVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       return this.http
         .post(environment.getNCDCareVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http
         .post(environment.getCovidVitalDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       return this.http
         .post(environment.getPNCVitalsDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json().data));
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.getNCDSceeriningVitalDetails, otherDetails)
         .pipe(map((res: any) => res.json().data));
@@ -1273,17 +1274,17 @@ export class DoctorService {
       visitCode: localStorage.getItem('visitCode'),
     });
 
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       return this.http
         .post(environment.getANCExaminationDataUrl, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(environment.getGeneralOPDExaminationDetailsUrl, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       return this.http
         .post(environment.getPNCExaminationDataUrl, otherDetails)
         .pipe(map((res: any) => res.json()));
@@ -1365,7 +1366,7 @@ export class DoctorService {
       JSON.stringify(updatedHistoryDetails, null, 4),
     );
 
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       delete updatedHistoryDetails.feedingHistory;
       delete updatedHistoryDetails.developmentHistory;
       delete updatedHistoryDetails.perinatalHistroy;
@@ -1378,7 +1379,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(
           environment.updateGeneralOPDHistoryDetailsUrl,
@@ -1390,7 +1391,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       return this.http
         .post(environment.updateNCDCareHistoryDetailsUrl, updatedHistoryDetails)
         .pipe(
@@ -1399,7 +1400,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http
         .post(environment.updateCovidHistoryDetailsUrl, updatedHistoryDetails)
         .pipe(
@@ -1408,7 +1409,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       delete updatedHistoryDetails.feedingHistory;
       delete updatedHistoryDetails.developmentHistory;
       delete updatedHistoryDetails.perinatalHistroy;
@@ -1593,8 +1594,8 @@ export class DoctorService {
       temp,
       {
         riskySexualPracticesStatus:
-          personalHistoryFormValue.riskySexualPracticesStatus != undefined &&
-          personalHistoryFormValue.riskySexualPracticesStatus != null
+          personalHistoryFormValue.riskySexualPracticesStatus !== undefined &&
+          personalHistoryFormValue.riskySexualPracticesStatus !== null
             ? +personalHistoryFormValue.riskySexualPracticesStatus
             : null,
         tobaccoList: tobaccoList,
@@ -1650,9 +1651,9 @@ export class DoctorService {
     // }
 
     if (
-      temp.lMPDate == null ||
-      temp.lMPDate == undefined ||
-      temp.lMPDate == 'Invalid Date'
+      temp.lMPDate === null ||
+      temp.lMPDate === undefined ||
+      temp.lMPDate === 'Invalid Date'
     ) {
       delete temp['lMPDate'];
     }
@@ -1782,7 +1783,7 @@ export class DoctorService {
       },
     );
     console.log('Vitals Form', patientVitalData);
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       return this.http
         .post(environment.updateANCVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1790,7 +1791,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(environment.updateGeneralOPDVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1798,7 +1799,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       return this.http
         .post(environment.updateNCDCareVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1807,7 +1808,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http
         .post(environment.updateCovidVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1816,7 +1817,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       return this.http
         .post(environment.updatePNCVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1824,7 +1825,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.updateNCDVitalsDetailsUrl, patientVitalData)
         .pipe(
@@ -1833,7 +1834,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'FP & Contraceptive Services') {
+    if (visitCategory === 'FP & Contraceptive Services') {
       return this.http
         .post(
           environment.updateFamilyPlanningVitalsDetailsUrl,
@@ -1870,7 +1871,7 @@ export class DoctorService {
     );
     console.log('Vitals Form', patientVitalData);
     if (
-      visitCategory.toLowerCase() == 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     ) {
       return this.http
         .post(environment.updateNeonatalVitalsDetailsUrl, patientVitalData)
@@ -1880,7 +1881,7 @@ export class DoctorService {
         );
     }
     if (
-      visitCategory.toLowerCase() ==
+      visitCategory.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       return this.http
@@ -1907,7 +1908,7 @@ export class DoctorService {
     const parkingPlaceID = JSON.parse(
       localStorage.getItem('serviceLineDetails') || '{}',
     ).parkingPlaceID;
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       updatedExaminationDetails = {
         generalExamination: this.updateGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -1971,7 +1972,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       updatedExaminationDetails = {
         generalExamination: this.updateGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -2035,7 +2036,7 @@ export class DoctorService {
         );
     }
 
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       updatedExaminationDetails = {
         generalExamination: this.updateGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -2130,14 +2131,14 @@ export class DoctorService {
 
   updateOralExaminationForm(oralExaminationForm: any, updateDetails: any) {
     if (oralExaminationForm.dirty) {
-      if (oralExaminationForm.preMalignantLesionTypeList != null) {
+      if (oralExaminationForm.preMalignantLesionTypeList !== null) {
         const index =
           oralExaminationForm.preMalignantLesionTypeList.indexOf(
             'Any other lesion',
           );
         if (
           index > -1 &&
-          index == oralExaminationForm.preMalignantLesionTypeList.length - 1
+          index === oralExaminationForm.preMalignantLesionTypeList.length - 1
         ) {
           oralExaminationForm.preMalignantLesionTypeList.pop();
           oralExaminationForm.preMalignantLesionTypeList.push(
@@ -2266,7 +2267,7 @@ export class DoctorService {
       diagnosisForm.value,
       otherDetails,
     );
-    if (diagnosisForm.value.dateOfDeath == null) {
+    if (diagnosisForm.value.dateOfDeath === null) {
       delete diagnosisFormData['dateOfDeath'];
     }
     return diagnosisFormData;
@@ -2378,7 +2379,7 @@ export class DoctorService {
       !!investigationFormValue.labTest &&
       !!investigationFormValue.radiologyTest
     ) {
-      if (investigationFormValue.radiologyTest == null) {
+      if (investigationFormValue.radiologyTest === null) {
         labTest = investigationFormValue.labTest;
       } else {
         labTest = investigationFormValue.labTest.concat(
@@ -2667,7 +2668,7 @@ export class DoctorService {
         temp.newBornHealthStatus.newBornHealthStatusID;
       temp.newBornHealthStatus = temp.newBornHealthStatus.newBornHealthStatus;
     }
-    // if (!temp.dateOfDelivery || temp.dateOfDelivery == null) {
+    // if (!temp.dateOfDelivery || temp.dateOfDelivery === null) {
     //   temp.dateOfDelivery = undefined;
     // }
     const updatedPNCDetails = Object.assign({}, temp, otherDetails);
@@ -2701,7 +2702,7 @@ export class DoctorService {
     visitID: any,
     visitCategory: any,
   ) {
-    // if(localStorage.getItem("referredVisitCode") === "undefined" || localStorage.getItem("referredVisitCode") === null || parseInt(localStorage.getItem('specialist_flag'))==3)
+    // if(localStorage.getItem("referredVisitCode") ==== "undefined" || localStorage.getItem("referredVisitCode") === null || parseInt(localStorage.getItem('specialist_flag'))==3)
     // {
     const otherDetails = Object.assign({
       benRegID: beneficiaryRegID,
@@ -2718,7 +2719,7 @@ export class DoctorService {
     // }
 
     if (!this.caseRecordAndReferDetails) {
-      if (visitCategory == 'General OPD (QC)') {
+      if (visitCategory === 'General OPD (QC)') {
         this.caseRecordAndReferDetails = this.http
           .post(
             environment.getGeneralOPDQuickConsultDoctorDetails,
@@ -2726,43 +2727,43 @@ export class DoctorService {
           )
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'ANC') {
+      if (visitCategory === 'ANC') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getANCDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'General OPD') {
+      if (visitCategory === 'General OPD') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getGeneralOPDDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD screening') {
+      if (visitCategory === 'NCD screening') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getNCDScreeningDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'NCD care') {
+      if (visitCategory === 'NCD care') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getNCDCareDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'COVID-19 Screening') {
+      if (visitCategory === 'COVID-19 Screening') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getCovidDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'PNC') {
+      if (visitCategory === 'PNC') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getPNCDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
-      if (visitCategory == 'FP & Contraceptive Services') {
+      if (visitCategory === 'FP & Contraceptive Services') {
         this.caseRecordAndReferDetails = this.http
           .post(environment.getFamilyPlanningDoctorDetails, otherDetails)
           .pipe(map((res: any) => res.json()));
       }
       if (
-        visitCategory.toLowerCase() ==
+        visitCategory.toLowerCase() ===
         'neonatal and infant health care services'
       ) {
         this.caseRecordAndReferDetails = this.http
@@ -2770,7 +2771,7 @@ export class DoctorService {
           .pipe(map((res: any) => res.json()));
       }
       if (
-        visitCategory.toLowerCase() ==
+        visitCategory.toLowerCase() ===
         'childhood & adolescent healthcare services'
       ) {
         this.caseRecordAndReferDetails = this.http
@@ -2793,37 +2794,37 @@ export class DoctorService {
       visitCode: visitcode,
     });
 
-    if (visitCategory == 'General OPD (QC)') {
+    if (visitCategory === 'General OPD (QC)') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getGeneralOPDQuickConsultDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getANCDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getGeneralOPDDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getNCDScreeningDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getNCDCareDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getCovidDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
     }
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       this.caseRecordAndReferDetails1 = this.http
         .post(environment.getPNCDoctorDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
@@ -2908,7 +2909,7 @@ export class DoctorService {
       JSON.stringify(updatedDoctorDiagnosis, null, 4),
     );
 
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       return this.http
         .post(environment.updateANCDoctorDetails, updatedDoctorDiagnosis)
         .pipe(
@@ -2916,7 +2917,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       return this.http
         .post(environment.updateGeneralOPDDoctorDetails, updatedDoctorDiagnosis)
         .pipe(
@@ -2924,7 +2925,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       return this.http
         .post(environment.updateNCDCareDoctorDetails, updatedDoctorDiagnosis)
         .pipe(
@@ -2932,7 +2933,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       return this.http
         .post(environment.updatePNCDoctorDetails, updatedDoctorDiagnosis)
         .pipe(
@@ -2940,7 +2941,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http
         .post(environment.updateCovidDoctorDetails, updatedDoctorDiagnosis)
         .pipe(
@@ -2948,7 +2949,7 @@ export class DoctorService {
           shareReplay(1),
         );
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(
           environment.updateNCDScreeningDoctorDetails,
@@ -3050,51 +3051,51 @@ export class DoctorService {
   ) {
     let diagnosisDetails;
 
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       diagnosisDetails = this.postANCCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       diagnosisDetails = this.postGeneralOPDCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       diagnosisDetails = this.postNCDCareCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       diagnosisDetails = this.postCovidCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       diagnosisDetails = this.postANCCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       diagnosisDetails = this.postNCDscreeningCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
 
-    if (visitCategory == 'FP & Contraceptive Services') {
+    if (visitCategory === 'FP & Contraceptive Services') {
       diagnosisDetails = this.postFamilyPlanningCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
     if (
-      visitCategory.toLowerCase() == 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     ) {
       diagnosisDetails = this.postNeonatalCaseRecordDiagnosis(
         diagnosisForm,
@@ -3102,7 +3103,7 @@ export class DoctorService {
       );
     }
     if (
-      visitCategory.toLowerCase() ==
+      visitCategory.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       diagnosisDetails = this.postChildAndAdolescentCaseRecordDiagnosis(
@@ -3275,7 +3276,7 @@ export class DoctorService {
       visitCode: localStorage.getItem('visitCode'),
     });
 
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.getNCDScreeningIDRSDetails, otherDetails)
         .pipe(map((res: any) => res.json()));
@@ -3302,7 +3303,7 @@ export class DoctorService {
     });
 
     const idrsDetails = { idrsDetails: patientIDRSData };
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(environment.updateNCDScreeningIDRSDetailsUrl, idrsDetails)
         .pipe(
@@ -3350,7 +3351,7 @@ export class DoctorService {
       JSON.stringify(updatedHistoryDetails, null, 4),
     );
 
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http
         .post(
           environment.updateNCDScreeningHistoryDetailsUrl,
@@ -3531,7 +3532,7 @@ export class DoctorService {
     );
 
     if (
-      visitCategory.toLowerCase() == 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     ) {
       return this.http
         .post(
@@ -3545,7 +3546,7 @@ export class DoctorService {
     }
 
     if (
-      visitCategory.toLowerCase() ==
+      visitCategory.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       return this.http
@@ -3653,7 +3654,7 @@ export class DoctorService {
   getPreviousBirthImmunizationHistoryDetails(visitCategory: any) {
     // let visitCategory = localStorage.getItem("visitCategory");
     if (
-      visitCategory.toLowerCase() == 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     ) {
       return this.http
         .post(environment.getPreviousBirthImmunizationDetailsUrl, {
@@ -3662,7 +3663,7 @@ export class DoctorService {
         .pipe(map((res: any) => res.json()));
     }
     if (
-      visitCategory.toLowerCase() ==
+      visitCategory.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       return this.http
@@ -4235,7 +4236,7 @@ export class DoctorService {
     );
 
     if (
-      visitCategory.trim().toLowerCase() ==
+      visitCategory.trim().toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       return this.http

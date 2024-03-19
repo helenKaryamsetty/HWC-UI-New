@@ -117,7 +117,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
           }
         },
         (err) => {
-          if (typeof err['_body'] != 'object') {
+          if (typeof err['_body'] !== 'object') {
             this.errorMsg = JSON.parse(err['_body'])['message'];
           } else {
             this.errorMsg =
@@ -178,7 +178,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
       (err) => {
         this.stripShowMsg = false;
         this.statusCalibration = true;
-        if (typeof err['_body'] != 'object') {
+        if (typeof err['_body'] !== 'object') {
           this.errorMsg = JSON.parse(err['_body'])['message'];
         } else {
           this.errorMsg =
@@ -207,7 +207,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
           }
         },
         (err) => {
-          if (typeof err['_body'] != 'object') {
+          if (typeof err['_body'] !== 'object') {
             this.errorMsg = JSON.parse(err['_body'])['message'];
           } else {
             this.errorMsg =
@@ -251,7 +251,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
         }
       },
       (err) => {
-        if (typeof err['_body'] != 'object') {
+        if (typeof err['_body'] !== 'object') {
           this.errorMsg = JSON.parse(err['_body'])['message'];
         } else {
           this.errorMsg =
@@ -298,7 +298,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
             }
           },
           (err) => {
-            if (typeof err['_body'] != 'object') {
+            if (typeof err['_body'] !== 'object') {
               this.errorMsg = JSON.parse(err['_body'])['message'];
             } else {
               this.errorMsg =
@@ -322,7 +322,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
             }
           },
           (err) => {
-            if (typeof err['_body'] != 'object') {
+            if (typeof err['_body'] !== 'object') {
               this.errorMsg = JSON.parse(err['_body'])['message'];
             } else {
               this.errorMsg =

@@ -112,7 +112,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   calculateGestationalAge(lastMP: any) {
     let gestationalAge: any;
-    if (lastMP != null) {
+    if (lastMP !== null) {
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
       gestationalAge = Math.round(
         Math.abs(
@@ -135,7 +135,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   calculateEDD(lastMP: any) {
-    if (lastMP != null) {
+    if (lastMP !== null) {
       const edd = new Date(lastMP);
       edd.setDate(lastMP.getDate() + 280);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });
@@ -145,7 +145,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   calculateTrimester(trimesterWeeks: any) {
-    if (trimesterWeeks != null) {
+    if (trimesterWeeks !== null) {
       if (trimesterWeeks >= 0 && trimesterWeeks <= 12) {
         this.patientANCDetailsForm.patchValue({ trimesterNumber: 1 });
       }

@@ -68,7 +68,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     if (this.timerRef) clearTimeout(this.timerRef);
 
     if (
-      response.statusCode == 5002 &&
+      response.statusCode === 5002 &&
       url.indexOf('user/userAuthenticate') < 0
     ) {
       sessionStorage.clear();
@@ -95,18 +95,18 @@ export class HttpInterceptorService implements HttpInterceptor {
   //         )
   //         .afterClosed()
   //         .subscribe((result: any) => {
-  //           if (result.action == 'continue') {
+  //           if (result.action === 'continue') {
   //             this.http.post(environment.extendSessionUrl, {}).subscribe(
   //               (res: any) => {},
   //               (err: any) => {}
   //             );
-  //           } else if (result.action == 'timeout') {
+  //           } else if (result.action === 'timeout') {
   //             clearTimeout(this.timerRef);
   //             sessionStorage.clear();
   //             localStorage.clear();
   //             this.confirmationService.alert(this.currentLanguageSet.sessionExpired, 'error');
   //             this.router.navigate(['/login']);
-  //           } else if (result.action == 'cancel') {
+  //           } else if (result.action === 'cancel') {
   //             setTimeout(() => {
   //               clearTimeout(this.timerRef);
   //               sessionStorage.clear();

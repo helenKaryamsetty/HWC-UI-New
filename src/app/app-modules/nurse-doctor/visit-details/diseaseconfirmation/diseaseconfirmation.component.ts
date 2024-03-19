@@ -74,10 +74,10 @@ export class DiseaseconfirmationComponent implements OnInit {
     while (this.getDiseasesData().length) {
       this.diseaseFormsArray.removeAt(0);
     }
-    if (this.mode == 'view') {
+    if (this.mode === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
-      if (visitID != null && benRegID != null) {
+      if (visitID !== null && benRegID !== null) {
         this.getIDRSDetailsFrmNurse(visitID, benRegID);
       }
     } else this.getPatientRevisitSuspectedDieseaData();
@@ -86,7 +86,7 @@ export class DiseaseconfirmationComponent implements OnInit {
     // }
     //}
     this.attendantType = this.route.snapshot.params['attendant'];
-    if (this.attendantType == 'doctor') {
+    if (this.attendantType === 'doctor') {
       this.isDoctor = true;
     }
   }
@@ -114,7 +114,7 @@ export class DiseaseconfirmationComponent implements OnInit {
         this.diseaseFormsGroup.get('diseaseFormsArray')?.value;
       const ar: any = [];
       this.diseasearray.forEach((value: any) => {
-        if (value.selected != false) ar.push(value.diseaseName);
+        if (value.selected !== false) ar.push(value.diseaseName);
       });
       console.log('diseasearray', ar);
       if (!event.checked) {
@@ -151,7 +151,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.diseaseArray = [];
           if (this.questions && this.questions.length > 0) {
             for (let i = 0; i < this.questions.length; i++) {
-              if (i != 0) {
+              if (i !== 0) {
                 console.log(
                   this.questions.DiseaseQuestionType !==
                     this.questions[i - 1].DiseaseQuestionType,
@@ -181,11 +181,11 @@ export class DiseaseconfirmationComponent implements OnInit {
             benRegID: localStorage.getItem('beneficiaryRegID'),
           };
           this.nurseService.getPreviousVisitData(obj).subscribe((res: any) => {
-            if (res.statusCode == 200 && res.data != null) {
+            if (res.statusCode === 200 && res.data !== null) {
               this.suspect = [];
               if (
-                res.data.confirmedDisease != undefined &&
-                res.data.confirmedDisease != null
+                res.data.confirmedDisease !== undefined &&
+                res.data.confirmedDisease !== null
               )
                 this.suspect = res.data.confirmedDisease.split(',');
               if (res.data.isDiabetic) this.addToSuspected('Diabetes');
@@ -209,9 +209,9 @@ export class DiseaseconfirmationComponent implements OnInit {
                 .getIDRSDetails(benRegID, visitID)
                 .subscribe((value: any) => {
                   if (
-                    value != null &&
-                    value.statusCode == 200 &&
-                    value.data != null
+                    value !== null &&
+                    value.statusCode === 200 &&
+                    value.data !== null
                   ) {
                     if (this.IDRSDetailsSubscription)
                       this.IDRSDetailsSubscription.unsubscribe();
@@ -219,15 +219,15 @@ export class DiseaseconfirmationComponent implements OnInit {
                     this.questionArray = [];
                     let suspect1 = [];
                     // this.suspect = [];
-                    if (value.data.IDRSDetail.confirmedDisease != null)
+                    if (value.data.IDRSDetail.confirmedDisease !== null)
                       suspect1 =
                         value.data.IDRSDetail.confirmedDisease.split(',');
                     if (
-                      suspect1 != undefined &&
-                      suspect1 != null &&
+                      suspect1 !== undefined &&
+                      suspect1 !== null &&
                       suspect1.length > 0
                     ) {
-                      if (this.suspect != null && this.suspect.length == 0) {
+                      if (this.suspect !== null && this.suspect.length === 0) {
                         this.suspect = suspect1;
                         this.suspect.forEach((value: any) => {
                           this.diseaseArray.forEach((val: any) => {
@@ -240,7 +240,7 @@ export class DiseaseconfirmationComponent implements OnInit {
                         suspect1.forEach((element: any) => {
                           check = false;
                           this.suspect.forEach((value: any) => {
-                            if (value == element) {
+                            if (value === element) {
                               check = true;
                             }
                           });
@@ -270,7 +270,7 @@ export class DiseaseconfirmationComponent implements OnInit {
                     }
                   }
                   this.diseaseArray.forEach((res: any, index: any) => {
-                    if (res.selected == true && res.current == false) {
+                    if (res.selected === true && res.current === false) {
                       const diseaseformArraygroup = (<FormGroup>(
                         this.diseaseFormsGroup.controls['diseaseFormsArray']
                       )).controls[index];
@@ -302,7 +302,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.diseaseArray = [];
           if (this.questions && this.questions.length > 0) {
             for (let i = 0; i < this.questions.length; i++) {
-              if (i != 0) {
+              if (i !== 0) {
                 console.log(
                   this.questions.DiseaseQuestionType !==
                     this.questions[i - 1].DiseaseQuestionType,
@@ -330,7 +330,7 @@ export class DiseaseconfirmationComponent implements OnInit {
               this.addMoreDiseases(d);
             }
             this.diseaseArray.forEach((res: any, index: any) => {
-              if (res.selected == true) {
+              if (res.selected === true) {
                 const diseaseformArraygroup = (<FormGroup>(
                   this.diseaseFormsGroup.controls['diseaseFormsArray']
                 )).controls[index];
@@ -365,7 +365,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.diseaseArray = [];
           if (this.questions && this.questions.length > 0) {
             for (let i = 0; i < this.questions.length; i++) {
-              if (i != 0) {
+              if (i !== 0) {
                 if (
                   this.questions[i].DiseaseQuestionType !==
                   this.questions[i - 1].DiseaseQuestionType
@@ -389,11 +389,11 @@ export class DiseaseconfirmationComponent implements OnInit {
             this.nurseService
               .getPreviousVisitData(obj)
               .subscribe((res: any) => {
-                if (res.statusCode == 200 && res.data != null) {
+                if (res.statusCode === 200 && res.data !== null) {
                   this.suspect = [];
                   if (
-                    res.data.confirmedDisease != undefined &&
-                    res.data.confirmedDisease != null
+                    res.data.confirmedDisease !== undefined &&
+                    res.data.confirmedDisease !== null
                   )
                     this.suspect = res.data.confirmedDisease.split(',');
                   if (res.data.isDiabetic) this.addToSuspected('Diabetes');
@@ -418,7 +418,7 @@ export class DiseaseconfirmationComponent implements OnInit {
                     this.addMoreDiseases(form);
                   });
                   this.diseaseArray.forEach((res: any, index: any) => {
-                    if (res.selected == true) {
+                    if (res.selected === true) {
                       const diseaseformArraygroup = (<FormGroup>(
                         this.diseaseFormsGroup.controls['diseaseFormsArray']
                       )).controls[index];
@@ -445,8 +445,8 @@ export class DiseaseconfirmationComponent implements OnInit {
     )).value;
     tempdiseaseformArray.forEach((element: any, i: any) => {
       if (
-        res.data.isDefectiveVision == true &&
-        element.diseaseName == 'Vision Screening'
+        res.data.isDefectiveVision === true &&
+        element.diseaseName === 'Vision Screening'
       ) {
         const diseaseformArraygroup = (<FormGroup>(
           this.diseaseFormsGroup.controls['diseaseFormsArray']
@@ -458,8 +458,8 @@ export class DiseaseconfirmationComponent implements OnInit {
         });
         (<FormGroup>diseaseformArraygroup).controls['selected'].disable();
       } else if (
-        res.data.isDiabetic == true &&
-        element.diseaseName == 'Diabetes'
+        res.data.isDiabetic === true &&
+        element.diseaseName === 'Diabetes'
       ) {
         const diseaseformArraygroup = (<FormGroup>(
           this.diseaseFormsGroup.controls['diseaseFormsArray']
@@ -471,8 +471,8 @@ export class DiseaseconfirmationComponent implements OnInit {
         });
         (<FormGroup>diseaseformArraygroup).controls['selected'].disable();
       } else if (
-        res.data.isEpilepsy == true &&
-        element.diseaseName == 'Epilepsy'
+        res.data.isEpilepsy === true &&
+        element.diseaseName === 'Epilepsy'
       ) {
         const diseaseformArraygroup = (<FormGroup>(
           this.diseaseFormsGroup.controls['diseaseFormsArray']
@@ -484,8 +484,8 @@ export class DiseaseconfirmationComponent implements OnInit {
         });
         (<FormGroup>diseaseformArraygroup).controls['selected'].disable();
       } else if (
-        res.data.isHypertension == true &&
-        element.diseaseName == 'Hypertension'
+        res.data.isHypertension === true &&
+        element.diseaseName === 'Hypertension'
       ) {
         const diseaseformArraygroup = (<FormGroup>(
           this.diseaseFormsGroup.controls['diseaseFormsArray']

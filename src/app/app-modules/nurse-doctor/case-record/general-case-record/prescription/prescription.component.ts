@@ -272,7 +272,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
         const typeOfDrug = option.isEDL
           ? ''
           : this.current_language_set.nonEDLMedicine;
-        if (option.quantityInHand == 0) {
+        if (option.quantityInHand === 0) {
           this.confirmationService
             .confirm(
               'info ' + typeOfDrug,
@@ -398,7 +398,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   }
   deleteMedicineBackend(index: any, id: any) {
     this.doctorService.deleteMedicine(id).subscribe((res: any) => {
-      if (res.statusCode == 200) {
+      if (res.statusCode === 200) {
         this.deleteMedicineUI(index);
       }
     });
@@ -413,7 +413,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.prescriptionSubscription = this.doctorService
       .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
       .subscribe((res: any) => {
-        if (res?.statusCode == 200 && res?.data?.prescription) {
+        if (res?.statusCode === 200 && res?.data?.prescription) {
           const prescription = res.data.prescription;
           this.patchPrescriptionDetails(prescription);
         }
@@ -445,7 +445,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
           this.drugRouteMaster = masterData.routeOfAdmin;
           this.edlMaster = masterData.NonEdlMaster;
 
-          if (this.caseRecordMode == 'view') {
+          if (this.caseRecordMode === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');
@@ -532,7 +532,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     option.isEDL ? '' : this.current_language_set.nonEDLMedicine;
-    if (option.quantityInHand == 0) {
+    if (option.quantityInHand === 0) {
       this.isStockAvalable = 'warn';
     } else {
       this.isStockAvalable = 'primary';

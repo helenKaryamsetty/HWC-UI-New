@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     if (sessionStorage.getItem('isAuthenticated')) {
       this.authService.validateSessionKey().subscribe((res: any) => {
-        if (res && res.statusCode == 200 && res.data)
+        if (res && res.statusCode === 200 && res.data)
           this.router.navigate(['/service']);
       });
     } else {
@@ -151,8 +151,8 @@ export class LoginComponent implements OnInit {
                                 if (
                                   userLoggedIn.data.previlegeObj &&
                                   userLoggedIn.data.previlegeObj[0] &&
-                                  userLoggedIn.data.previlegeObj != null &&
-                                  userLoggedIn.data.previlegeObj != undefined
+                                  userLoggedIn.data.previlegeObj !== null &&
+                                  userLoggedIn.data.previlegeObj !== undefined
                                 ) {
                                   localStorage.setItem(
                                     'loginDataResponse',
@@ -210,7 +210,7 @@ export class LoginComponent implements OnInit {
     const userNameValue: string | null = userName.value;
 
     // Check if the value is not null before storing it
-    if (userNameValue != null) {
+    if (userNameValue !== null) {
       localStorage.setItem('username', userNameValue);
     }
     localStorage.setItem('fullName', loginDataResponse.fullName);
@@ -219,7 +219,7 @@ export class LoginComponent implements OnInit {
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
         item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
-          .serviceID == '4'
+          .serviceID === '4'
       ) {
         const service = {
           providerServiceID: item.serviceID,
@@ -234,7 +234,7 @@ export class LoginComponent implements OnInit {
     });
     if (services.length > 0) {
       localStorage.setItem('services', JSON.stringify(services));
-      if (loginDataResponse.Status.toLowerCase() == 'new') {
+      if (loginDataResponse.Status.toLowerCase() === 'new') {
         this.router.navigate(['/set-security-questions']);
       } else {
         this.router.navigate(['/service']);

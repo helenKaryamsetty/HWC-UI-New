@@ -67,7 +67,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.getDoctorMasterData();
     this.attendantType = this.route.snapshot.params['attendant'];
-    if (this.attendantType == 'doctor') {
+    if (this.attendantType === 'doctor') {
       this.enableNCDCondition = true;
     }
   }
@@ -88,7 +88,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
         if (masterData.ncdCareTypes)
           this.ncdCareTypes = masterData.ncdCareTypes.slice();
 
-        if (this.caseRecordMode == 'view') {
+        if (this.caseRecordMode === 'view') {
           const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
           const visitID = localStorage.getItem('visitID');
           const visitCategory = localStorage.getItem('visitCategory');
@@ -112,7 +112,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     this.diagnosisSubscription = this.doctorService
       .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
       .subscribe((res: any) => {
-        if (res?.statusCode == 200 && res?.data?.diagnosis) {
+        if (res?.statusCode === 200 && res?.data?.diagnosis) {
           this.patchDiagnosisDetails(res.data.diagnosis);
         }
       });
@@ -126,7 +126,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
 
     const previousArray = diagnosis.provisionalDiagnosisList;
     let j = 0;
-    if (previousArray != undefined && previousArray.length > 0) {
+    if (previousArray !== undefined && previousArray.length > 0) {
       previousArray.forEach((i: any) => {
         generalArray.at(j).patchValue({
           conceptID: i.conceptID,
@@ -199,9 +199,9 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   changeNcdScreeningCondition(eventValue: any, event: any) {
     const value: any = event.value;
     let flag = false;
-    if (value != undefined && value != null && value.length > 0) {
+    if (value !== undefined && value !== null && value.length > 0) {
       value.forEach((element: any) => {
-        if (element == 'Other') flag = true;
+        if (element === 'Other') flag = true;
       });
     }
     if (flag) this.isNcdScreeningConditionOther = true;

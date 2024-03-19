@@ -94,7 +94,7 @@ export class CancerPatientVitalsComponent
     this.rbsSelectedInInvestigationSubscription =
       this.nurseService.rbsSelectedInInvestigation$.subscribe(
         (response: any) =>
-          response == undefined
+          response === undefined
             ? (this.rbsSelectedInInvestigation = false)
             : (this.rbsSelectedInInvestigation = response),
       );
@@ -102,21 +102,21 @@ export class CancerPatientVitalsComponent
 
   ngOnChanges(changes: any) {
     this.nurseService.rbsTestResultFromDoctorFetch = null;
-    if (this.mode == 'view') {
+    if (this.mode === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getCancerVitals(benRegID, visitID);
     }
 
-    if (this.mode == 'update') {
+    if (this.mode === 'update') {
       this.updateCancerVitals();
     }
   }
   checkDiasableRBS() {
     if (
       this.rbsSelectedInInvestigation === true ||
-      (this.nurseService.rbsTestResultFromDoctorFetch != undefined &&
-        this.nurseService.rbsTestResultFromDoctorFetch != null)
+      (this.nurseService.rbsTestResultFromDoctorFetch !== undefined &&
+        this.nurseService.rbsTestResultFromDoctorFetch !== null)
     )
       return true;
 
@@ -125,7 +125,7 @@ export class CancerPatientVitalsComponent
   rbsResultChange(): boolean {
     if (
       this.patientVitalsForm.controls['rbsTestResult'].value &&
-      this.patientVitalsForm.controls['rbsTestResult'].value != null
+      this.patientVitalsForm.controls['rbsTestResult'].value !== null
     ) {
       this.nurseService.setRbsInCurrentVitals(
         this.patientVitalsForm.controls['rbsTestResult'].value,
@@ -135,8 +135,8 @@ export class CancerPatientVitalsComponent
     }
     if (
       this.rbsSelectedInInvestigation === true ||
-      (this.nurseService.rbsTestResultFromDoctorFetch != undefined &&
-        this.nurseService.rbsTestResultFromDoctorFetch != null)
+      (this.nurseService.rbsTestResultFromDoctorFetch !== undefined &&
+        this.nurseService.rbsTestResultFromDoctorFetch !== null)
     ) {
       this.patientVitalsForm.controls['rbsTestResult'].disable();
       this.patientVitalsForm.controls['rbsTestRemarks'].disable();
@@ -156,7 +156,7 @@ export class CancerPatientVitalsComponent
         )
         .subscribe(
           (res: any) => {
-            if (res.statusCode == 200 && res.data != null) {
+            if (res.statusCode === 200 && res.data !== null) {
               this.confirmationService.alert(res.data.response, 'success');
               this.doctorService.setValueToEnableVitalsUpdateButton(false);
               this.patientVitalsForm.markAsPristine();
@@ -195,19 +195,19 @@ export class CancerPatientVitalsComponent
             this.totalMonths = Number(ar[0] * 12) + Number(ar[3]);
           }
           if (
-            beneficiary != undefined &&
-            beneficiary != null &&
-            beneficiary.genderName != null &&
-            beneficiary.genderName.toLowerCase() == 'female'
+            beneficiary !== undefined &&
+            beneficiary !== null &&
+            beneficiary.genderName !== null &&
+            beneficiary.genderName.toLowerCase() === 'female'
           ) {
             this.female = true;
           }
           if (
-            beneficiary != undefined &&
-            beneficiary.genderName != undefined &&
-            beneficiary.genderName != null &&
+            beneficiary !== undefined &&
+            beneficiary.genderName !== undefined &&
+            beneficiary.genderName !== null &&
             beneficiary.genderName &&
-            beneficiary.genderName.toLowerCase() == 'male'
+            beneficiary.genderName.toLowerCase() === 'male'
           ) {
             this.male = true;
           }
@@ -224,7 +224,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.rbsPopup = false;
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           rbsTestResult: result['result'],
         });
@@ -232,7 +232,7 @@ export class CancerPatientVitalsComponent
         this.doctorService.setValueToEnableVitalsUpdateButton(true);
         if (
           this.patientVitalsForm.controls['rbsTestResult'].value &&
-          this.patientVitalsForm.controls['rbsTestResult'].value != null
+          this.patientVitalsForm.controls['rbsTestResult'].value !== null
         ) {
           this.nurseService.setRbsInCurrentVitals(
             this.patientVitalsForm.controls['rbsTestResult'].value,
@@ -249,7 +249,7 @@ export class CancerPatientVitalsComponent
       data: { startAPI: this.startPulseTest },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           sPO2: result['spo2'],
         });
@@ -287,7 +287,11 @@ export class CancerPatientVitalsComponent
     this.cancerVitalsSubscription = this.doctorService
       .getCancerVitalsDetails(benRegID, visitID)
       .subscribe((vitals: any) => {
-        if (vitals != null && vitals.statusCode == 200 && vitals.data != null) {
+        if (
+          vitals !== null &&
+          vitals.statusCode === 200 &&
+          vitals.data !== null
+        ) {
           const data = vitals.data.benVitalDetails;
           if (data) {
             this.patientVitalsForm.patchValue(data);
@@ -301,7 +305,7 @@ export class CancerPatientVitalsComponent
             this.calculateBMI(data.height_cm, data.weight_Kg);
             this.canShowBP3();
             this.nurseService.rbsTestResultFromDoctorFetch = null;
-            if (data.rbsTestResult != null) {
+            if (data.rbsTestResult !== null) {
               this.nurseService.rbsTestResultFromDoctorFetch =
                 data.rbsTestResult;
               this.rbsResultChange();
@@ -394,9 +398,9 @@ export class CancerPatientVitalsComponent
   calculateBMI(patientHeight: any, patientWeight: any) {
     if (
       this.height_cm &&
-      this.height_cm != null &&
+      this.height_cm !== null &&
       this.weight_Kg &&
-      this.weight_Kg != null
+      this.weight_Kg !== null
     ) {
       this.BMI = (this.weight_Kg / (this.height_cm * this.height_cm)) * 10000;
       this.BMI = +this.BMI.toFixed(1);
@@ -411,8 +415,8 @@ export class CancerPatientVitalsComponent
   }
   calculateBMIStatusBasedOnAge() {
     if (
-      this.benGenderAndAge != undefined &&
-      this.benGenderAndAge.age != undefined
+      this.benGenderAndAge !== undefined &&
+      this.benGenderAndAge.age !== undefined
     ) {
       const ageMonth = this.benGenderAndAge.age;
       const ar = ageMonth.split(' ');
@@ -421,8 +425,8 @@ export class CancerPatientVitalsComponent
     if (
       this.totalMonths > 60 &&
       this.totalMonths <= 228 &&
-      (this.benGenderAndAge.genderName.toLowerCase() == 'male' ||
-        this.benGenderAndAge.genderName.toLowerCase() == 'female')
+      (this.benGenderAndAge.genderName.toLowerCase() === 'male' ||
+        this.benGenderAndAge.genderName.toLowerCase() === 'female')
     ) {
       this.nurseService
         .calculateBmiStatus({
@@ -432,9 +436,12 @@ export class CancerPatientVitalsComponent
         })
         .subscribe(
           (res: any) => {
-            if (res.statusCode == 200 && res.data != null) {
+            if (res.statusCode === 200 && res.data !== null) {
               const bmiData = res.data;
-              if (bmiData.bmiStatus != undefined && bmiData.bmiStatus != null) {
+              if (
+                bmiData.bmiStatus !== undefined &&
+                bmiData.bmiStatus !== null
+              ) {
                 this.bmiStatusMinor = bmiData.bmiStatus.toLowerCase();
                 if (this.bmiStatusMinor === 'normal') this.normalBMI = true;
                 else this.normalBMI = false;
@@ -484,8 +491,8 @@ export class CancerPatientVitalsComponent
   checkNormalWaist(patientWaist: any) {
     if (
       this.female &&
-      this.pregnancyStatus != null &&
-      this.pregnancyStatus.toLowerCase() != 'yes'
+      this.pregnancyStatus !== null &&
+      this.pregnancyStatus.toLowerCase() !== 'yes'
     )
       this.normalWaist = patientWaist < 80 ? true : false;
     else if (!this.female) this.normalWaist = patientWaist < 90 ? true : false;
@@ -532,12 +539,12 @@ export class CancerPatientVitalsComponent
     if (
       (Math.abs(this.diastolicBP_2ndReading - this.diastolicBP_1stReading) >=
         6 &&
-        this.diastolicBP_2ndReading != null &&
-        this.diastolicBP_1stReading != null) ||
+        this.diastolicBP_2ndReading !== null &&
+        this.diastolicBP_1stReading !== null) ||
       (Math.abs(this.systolicBP_2ndReading - this.systolicBP_1stReading) >=
         10 &&
-        this.systolicBP_1stReading != null &&
-        this.systolicBP_2ndReading != null)
+        this.systolicBP_1stReading !== null &&
+        this.systolicBP_2ndReading !== null)
     ) {
       this.showBP3 = true;
     } else this.showBP3 = false;
@@ -712,7 +719,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('he;;p', result, result['result']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           weight_Kg: result['result'],
         });
@@ -730,7 +737,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('temperature', result, result['temperature']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           temperature: result['temperature'],
         });
@@ -748,7 +755,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('pulse_oxymetery', result, result['pulseRate']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           pulseRate: result['pulseRate'],
         });
@@ -765,7 +772,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_pressure', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           systolicBP_1stReading: result['sys'],
           diastolicBP_1stReading: result['dia'],
@@ -783,7 +790,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_pressure', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           systolicBP_2ndReading: result['sys'],
           diastolicBP_2ndReading: result['dia'],
@@ -801,7 +808,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_pressure', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           systolicBP_3rdReading: result['sys'],
           diastolicBP_3rdReading: result['dia'],
@@ -819,7 +826,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_pressure', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           hemoglobin: result['result'],
         });
@@ -836,7 +843,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_glucose', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           bloodGlucose_Fasting: result['result'],
         });
@@ -853,7 +860,7 @@ export class CancerPatientVitalsComponent
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('blood_glucose', result['sys'], result['dia']);
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           bloodGlucose_Random: result['result'],
         });
@@ -869,7 +876,7 @@ export class CancerPatientVitalsComponent
       data: { startAPI: this.startBloodGlucose },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result != null) {
+      if (result !== null) {
         this.patientVitalsForm.patchValue({
           bloodGlucose_2HrPostPrandial: result['result'],
         });

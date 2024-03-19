@@ -203,7 +203,7 @@ export class NurseService {
             disease.cancerDiseaseType.cancerDiseaseType;
           //   disease.snomedCode = disease.cancerDiseaseType.snomedCode;
           // disease.snomedTerm = disease.cancerDiseaseType.snomedTerm;
-          if (disease.cancerDiseaseType == 'Any other Cancer')
+          if (disease.cancerDiseaseType === 'Any other Cancer')
             disease.cancerDiseaseType = disease.otherDiseaseType;
         }
         disease.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
@@ -285,14 +285,14 @@ export class NurseService {
           cancerExaminationForm.controls.oralExaminationForm.value,
         ),
       );
-      if (oralExaminationDetails.preMalignantLesionTypeList != null) {
+      if (oralExaminationDetails.preMalignantLesionTypeList !== null) {
         const index =
           oralExaminationDetails.preMalignantLesionTypeList.indexOf(
             'Any other lesion',
           );
         if (
           index > -1 &&
-          index == oralExaminationDetails.preMalignantLesionTypeList.length - 1
+          index === oralExaminationDetails.preMalignantLesionTypeList.length - 1
         ) {
           oralExaminationDetails.preMalignantLesionTypeList.pop();
           oralExaminationDetails.preMalignantLesionTypeList.push(
@@ -498,7 +498,7 @@ export class NurseService {
     benVisitID: any,
     visitCategory: any,
   ): Observable<any> {
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -519,7 +519,7 @@ export class NurseService {
       };
       return visitDeatilsData;
     }
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -532,7 +532,7 @@ export class NurseService {
       };
       return visitDeatilsData;
     }
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -545,7 +545,7 @@ export class NurseService {
       };
       return visitDeatilsData;
     }
-    if (visitCategory == 'NCD care') {
+    if (visitCategory === 'NCD care') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -562,7 +562,7 @@ export class NurseService {
       };
       return visitDeatilsData;
     }
-    if (visitCategory == 'COVID-19 Screening') {
+    if (visitCategory === 'COVID-19 Screening') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -575,7 +575,7 @@ export class NurseService {
       };
       return visitDeatilsData;
     }
-    if (visitCategory == 'NCD screening') {
+    if (visitCategory === 'NCD screening') {
       const visitDeatilsData: any = {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
@@ -608,7 +608,7 @@ export class NurseService {
       JSON.stringify(patientChiefComplaintsForm),
     );
     for (const complaint of patientChiefComplaintsFormValue) {
-      if (complaint.chiefComplaint != null) {
+      if (complaint.chiefComplaint !== null) {
         complaint.chiefComplaintID = complaint.chiefComplaint.chiefComplaintID;
         complaint.chiefComplaint = complaint.chiefComplaint.chiefComplaint;
       }
@@ -720,7 +720,7 @@ export class NurseService {
     benVisitID: any,
     visitCategory: any,
   ): Observable<any> {
-    if (visitCategory == 'ANC') {
+    if (visitCategory === 'ANC') {
       const examDetailsData: any = {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -763,7 +763,7 @@ export class NurseService {
       return examDetailsData;
     }
 
-    if (visitCategory == 'General OPD') {
+    if (visitCategory === 'General OPD') {
       const examDetailsData: any = {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -806,7 +806,7 @@ export class NurseService {
       return examDetailsData;
     }
 
-    if (visitCategory == 'PNC') {
+    if (visitCategory === 'PNC') {
       const examDetailsData: any = {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
@@ -1563,10 +1563,10 @@ export class NurseService {
     //   let bG = false;
 
     //   postNCDScreeningFormValue.labTestOrders.filter((item) => {
-    //     if (item.procedureName == 'BP Measurement') {
+    //     if (item.procedureName === 'BP Measurement') {
     //       bP = true;
     //     }
-    //     if (item.procedureName == 'Blood Glucose Measurement') {
+    //     if (item.procedureName === 'Blood Glucose Measurement') {
     //       bG = true;
     //     }
     //   })

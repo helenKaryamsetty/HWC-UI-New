@@ -29,11 +29,11 @@ import {
   NurseService,
   DoctorService,
 } from '../../../shared/services';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-general-feeding-history',
@@ -97,7 +97,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
           this.masterData = masterData;
-          if (this.mode == 'view') {
+          if (this.mode === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
@@ -113,9 +113,9 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
       .getGeneralHistoryDetails(benRegID, visitID)
       .subscribe((history: any) => {
         if (
-          history != null &&
-          history.statusCode == 200 &&
-          history.data != null &&
+          history !== null &&
+          history.statusCode === 200 &&
+          history.data !== null &&
           history.data.FeedingHistory
         ) {
           this.feedingHistoryData = history.data.FeedingHistory;
@@ -133,8 +133,8 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (beneficairy) {
             const temp = beneficairy.age.split('-');
             if (
-              temp != undefined &&
-              temp != null &&
+              temp !== undefined &&
+              temp !== null &&
               temp.length > 0 &&
               temp[0].indexOf('years') >= 0
             ) {
@@ -146,8 +146,8 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
                 .trim();
               this.age = years * 12 + months;
             } else if (
-              temp != undefined &&
-              temp != null &&
+              temp !== undefined &&
+              temp !== null &&
               temp.length > 0 &&
               temp[0].indexOf('months') >= 0
             ) {
@@ -167,7 +167,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
       .getPreviousFeedingHistory(benRegID, this.visitCategory)
       .subscribe(
         (data: any) => {
-          if (data != null && data.data != null) {
+          if (data !== null && data.data !== null) {
             if (data.data.data.length > 0) {
               this.viewPreviousData(data.data);
             } else {

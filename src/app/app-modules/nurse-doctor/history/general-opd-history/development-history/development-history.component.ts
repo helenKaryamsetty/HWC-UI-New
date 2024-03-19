@@ -27,11 +27,11 @@ import {
   NurseService,
   DoctorService,
 } from '../../../shared/services';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-general-development-history',
@@ -89,7 +89,7 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) {
           this.masterData = masterData;
           console.log('this.masterData ', this.masterData);
-          if (this.mode == 'view') {
+          if (this.mode === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
@@ -105,9 +105,9 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
       .getGeneralHistoryDetails(benRegID, visitID)
       .subscribe((history: any) => {
         if (
-          history != null &&
-          history.statusCode == 200 &&
-          history.data != null &&
+          history !== null &&
+          history.statusCode === 200 &&
+          history.data !== null &&
           history.data.DevelopmentHistory
         ) {
           this.developmentHistoryData = history.data.DevelopmentHistory;
@@ -128,7 +128,7 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
       .getPreviousDevelopmentalHistory(benRegID, this.visitCategory)
       .subscribe(
         (data: any) => {
-          if (data != null && data.data != null) {
+          if (data !== null && data.data !== null) {
             if (data.data.data.length > 0) {
               this.viewPreviousData(data.data);
             } else {
