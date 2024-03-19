@@ -114,7 +114,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     const addedDiagnosis = this.input.addedDiagnosis;
     if (addedDiagnosis.length > 1) {
       const temp = addedDiagnosis.filter(
-        (diagnosis: any) => diagnosis.conceptID == item.conceptID,
+        (diagnosis: any) => diagnosis.conceptID === item.conceptID,
       );
       if (temp.length > 0) {
         return true;
@@ -131,7 +131,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
   checkCurrentSelection(item: any) {
     if (this.selectedDiagnosisList.length > 0) {
       const currentSelection = this.selectedDiagnosisList.filter(
-        (diagnosis: any) => diagnosis.conceptID == item.conceptID,
+        (diagnosis: any) => diagnosis.conceptID === item.conceptID,
       );
       if (currentSelection.length > 0) {
         return true;
@@ -146,7 +146,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     const addedDiagnosis = this.input.addedDiagnosis;
     if (addedDiagnosis.length > 1) {
       const temp = addedDiagnosis.filter(
-        (diagnosis: any) => diagnosis.conceptID == item.conceptID,
+        (diagnosis: any) => diagnosis.conceptID === item.conceptID,
       );
       if (temp.length > 0) {
         return true;
@@ -162,7 +162,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
   enableCurrentSelection(item: any) {
     if (this.selectedDiagnosisList.length > 0) {
       const currentSelection = this.selectedDiagnosisList.filter(
-        (diagnosis: any) => diagnosis.conceptID == item.conceptID,
+        (diagnosis: any) => diagnosis.conceptID === item.conceptID,
       );
       if (currentSelection.length > 0) {
         return false;
@@ -197,12 +197,12 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
         .searchDiagnosisBasedOnPageNo(term, pageNo)
         .subscribe(
           (res) => {
-            if (res.statusCode == 200) {
+            if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = true;
                 this.diagnosis$ = res.data.sctMaster;
-                if (pageNo == 0) {
+                if (pageNo === 0) {
                   this.pageCount = res.data.pageCount;
                 }
                 this.pager = this.getPager(pageNo);
@@ -227,12 +227,12 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
         .searchDiagnosisBasedOnPageNo(term, pageNo, diagnosisType)
         .subscribe(
           (res) => {
-            if (res.statusCode == 200) {
+            if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = true;
                 this.diagnosis$ = res.data.sctMaster;
-                if (pageNo == 0) {
+                if (pageNo === 0) {
                   this.pageCount = res.data.pageCount;
                 }
                 this.pager = this.getPager(pageNo);
@@ -251,7 +251,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     }
   }
   checkPager(pager: any, page: any) {
-    if (page == 0 && pager.currentPage != 0) {
+    if (page === 0 && pager.currentPage !== 0) {
       this.setPage(page);
     } else if (pager.currentPage < page) {
       this.setPage(page);

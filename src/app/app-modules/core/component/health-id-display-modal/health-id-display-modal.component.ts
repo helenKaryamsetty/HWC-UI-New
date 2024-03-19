@@ -86,19 +86,19 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     this.searchPopup = false;
     this.assignSelectedLanguage();
     this.searchPopup =
-      this.input.search != undefined ? this.input.search : false;
+      this.input.search !== undefined ? this.input.search : false;
     // this.httpServiceService.currentLangugae$.subscribe(response => this.currentLanguageSet = response);
     this.healthIDMapping = this.input.healthIDMapping;
     if (
-      this.input.dataList != undefined &&
+      this.input.dataList !== undefined &&
       this.input.dataList.length > 0 &&
-      this.input.search == true
+      this.input.search === true
     )
       this.searchDetails = this.input.dataList;
     if (
-      this.input.dataList != undefined &&
-      this.input.dataList.data != undefined &&
-      this.input.dataList.data.BenHealthDetails != undefined
+      this.input.dataList !== undefined &&
+      this.input.dataList.data !== undefined &&
+      this.input.dataList.data.BenHealthDetails !== undefined
     )
       this.benDetails = this.input.dataList.data.BenHealthDetails;
     this.healthIdOTPForm = this.createOtpGenerationForm();
@@ -149,7 +149,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     };
     this.registrarService.generateOtpForMappingCareContext(reqObj).subscribe(
       (receivedOtpResponse) => {
-        if (receivedOtpResponse.statusCode == 200) {
+        if (receivedOtpResponse.statusCode === 200) {
           this.showProgressBar = false;
           this.confirmationService.alert(
             this.currentLanguageSet.OTPSentToRegMobNo,
@@ -183,7 +183,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
   checkOTP() {
     const otp = this.healthIdOTPForm.controls['otp'].value;
     let cflag = false;
-    if (otp != '' && otp != undefined && otp != null) {
+    if (otp !== '' && otp !== undefined && otp !== null) {
       const hid = otp;
       if (hid.length >= 4 && hid.length <= 32) {
         for (let i = 0; i < hid.length; i++) {
@@ -226,7 +226,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
       .verifyOtpForMappingCarecontext(verifyOtpData)
       .subscribe(
         (verifiedMappingData) => {
-          if (verifiedMappingData.statusCode == 200) {
+          if (verifiedMappingData.statusCode === 200) {
             this.showProgressBar = false;
             this.confirmationService.alert(
               verifiedMappingData.data.response,
@@ -294,7 +294,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     this.showProgressBar = true;
     const reqObj = {
       authMethod:
-        healthMode != null && healthMode != undefined
+        healthMode !== null && healthMode !== undefined
           ? healthMode + '_OTP'
           : null,
       healthid: data.healthId,
@@ -302,7 +302,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     };
     this.registrarService.generateHealthIDCard(reqObj).subscribe(
       (res) => {
-        if (res.statusCode == 200 && Object.keys(res.data).length > 0) {
+        if (res.statusCode === 200 && Object.keys(res.data).length > 0) {
           this.dialogRef.close();
           // this.confirmationService.confirmHealthId('success', this.currentLanguageSet.OTPSentToRegMobNo).subscribe((result) => {
           //   if(result)
@@ -310,7 +310,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
           this.dialogRef.afterClosed().subscribe((result) => {
             // console.log('result', result)
             this.transactionId = res.data.txnId;
-            if (healthMode == 'MOBILE') {
+            if (healthMode === 'MOBILE') {
               this.confirmationService
                 .confirmHealthId(
                   'success',
@@ -324,7 +324,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
                     );
                   }
                 });
-            } else if (healthMode == 'AADHAAR') {
+            } else if (healthMode === 'AADHAAR') {
               this.confirmationService
                 .confirmHealthId(
                   'success',

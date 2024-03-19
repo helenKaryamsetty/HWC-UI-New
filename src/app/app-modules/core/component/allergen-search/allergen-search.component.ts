@@ -108,7 +108,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
         .searchDiagnosisBasedOnPageNo1(term, pageNo)
         .subscribe(
           (res) => {
-            if (res.statusCode == 200) {
+            if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = true;
@@ -117,7 +117,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
                 this.dataSource.data = res.data.sctMaster;
                 this.dataSource.paginator = this.paginator;
 
-                if (pageNo == 0) {
+                if (pageNo === 0) {
                   this.pageCount = res.data.pageCount;
                 }
                 this.pager = this.getPager(pageNo);
@@ -139,7 +139,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   }
 
   checkPager(pager: any, page: any) {
-    if (page == 0 && pager.currentPage != 0) {
+    if (page === 0 && pager.currentPage !== 0) {
       this.setPage(page);
     } else if (pager.currentPage < page) {
       this.setPage(page);

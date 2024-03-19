@@ -86,16 +86,16 @@ export class CalibrationComponent implements OnInit, DoCheck {
       .fetchCalibrationStrips(providerServiceMapID, pageNo)
       .subscribe(
         (res) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode === 200) {
             if (
               res.data &&
-              res.data.calibrationData != undefined &&
+              res.data.calibrationData !== undefined &&
               res.data.calibrationData.length > 0
             ) {
               this.components = res.data.calibrationData;
               this.dataList = res.data.calibrationData;
               console.log('component', this.components);
-              if (pageNo == 0) {
+              if (pageNo === 0) {
                 this.pageCount = res.data.pageCount;
               }
               this.pager = this.getPager(pageNo);
@@ -114,7 +114,7 @@ export class CalibrationComponent implements OnInit, DoCheck {
 
   goToLink(item: any) {
     const today = new Date();
-    if (item.expiryDate != undefined && new Date(item.expiryDate) < today) {
+    if (item.expiryDate !== undefined && new Date(item.expiryDate) < today) {
       this.confirmationService
         .confirmCalibration(
           'info',
@@ -212,7 +212,7 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   checkPager(pager: any, page: any) {
-    if (page == 0 && pager.currentPage != 0) {
+    if (page === 0 && pager.currentPage !== 0) {
       this.setPage(page);
     } else if (pager.currentPage < page) {
       this.setPage(page);

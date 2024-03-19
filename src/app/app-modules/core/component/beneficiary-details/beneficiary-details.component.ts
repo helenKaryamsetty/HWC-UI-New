@@ -139,7 +139,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
       );
       this.beneficiaryDetailsSubscription =
         this.beneficiaryDetailsService.beneficiaryDetails$.subscribe((res) => {
-          if (res != null) {
+          if (res !== null) {
             this.beneficiary = res;
             if (res.serviceDate) {
               this.today = res.serviceDate;
@@ -201,37 +201,37 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
       };
       this.registrarService.getHealthIdDetails(data).subscribe(
         (healthIDDetails: any) => {
-          if (healthIDDetails.statusCode == 200) {
+          if (healthIDDetails.statusCode === 200) {
             console.log('healthID', healthIDDetails);
             if (
-              healthIDDetails.data.BenHealthDetails != undefined &&
-              healthIDDetails.data.BenHealthDetails != null
+              healthIDDetails.data.BenHealthDetails !== undefined &&
+              healthIDDetails.data.BenHealthDetails !== null
             ) {
               this.benDetails = healthIDDetails.data.BenHealthDetails;
               if (this.benDetails.length > 0) {
                 this.benDetails.forEach((healthID: any, index: any) => {
                   if (
-                    healthID.healthId != undefined &&
-                    healthID.healthId != null &&
-                    index != this.benDetails.length - 1
+                    healthID.healthId !== undefined &&
+                    healthID.healthId !== null &&
+                    index !== this.benDetails.length - 1
                   )
                     this.healthIDArray.push(healthID.healthId + ',');
                   else if (
-                    healthID.healthId != undefined &&
-                    healthID.healthId != null
+                    healthID.healthId !== undefined &&
+                    healthID.healthId !== null
                   )
                     this.healthIDArray.push(healthID.healthId);
                   if (
-                    healthID.healthId != undefined &&
-                    healthID.healthId != null
+                    healthID.healthId !== undefined &&
+                    healthID.healthId !== null
                   )
                     this.healthIDValue =
                       this.healthIDValue + healthID.healthId + ',';
                 });
               }
               if (
-                this.healthIDValue != undefined &&
-                this.healthIDValue != null &&
+                this.healthIDValue !== undefined &&
+                this.healthIDValue !== null &&
                 this.healthIDValue.length > 1
               ) {
                 this.healthIDValue = this.healthIDValue.substring(
