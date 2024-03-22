@@ -5,23 +5,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Import custom route module....
+// import { CoreModule } from './app-modules/core/core.module';
 import { CoreModule } from './app-modules/core/core.module';
 
 // Custom components import....
 import { LoginComponent } from './user-login/login/login.component';
-// import { ServicePointComponent } from './service-point/service-point.component';
+import { ServicePointComponent } from './user-login/service-point/service-point.component';
 
 // // Custom services import....
 // import { ServicePointService } from './service-point/service-point.service';
 // import { ServicePointResolve } from './service-point/service-point-resolve.service';
 
-// import { ServiceComponent } from './service/service.component';
-// import { ResetPasswordComponent } from './reset-password/reset-password.component';
-// import { SetPasswordComponent } from './set-password/set-password.component';
-// import { SetSecurityQuestionsComponent } from './set-security-questions/set-security-questions.component';
+import { ServiceComponent } from './user-login/service/service.component';
+import { ResetPasswordComponent } from './user-login/reset-password/reset-password.component';
+import { SetPasswordComponent } from './user-login/set-password/set-password.component';
+import { SetSecurityQuestionsComponent } from './user-login/set-security-questions/set-security-questions.component';
 
-// import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
-// import { TmLogoutComponent } from './tm-logout/tm-logout.component';
+import { TmLogoutComponent } from './user-login/tm-logout/tm-logout.component';
 // import { HttpServiceService } from './app-modules/core/services/http-service.service';
 // import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
 // import { FamilyTaggingService } from './app-modules/registrar/shared/services/familytagging.service';
@@ -40,16 +40,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpInterceptorService } from './app-modules/core/services/http-interceptor.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
+import { TestRoutingComponent } from './app-modules/test-routing/test-routing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    // ServicePointComponent,
-    // ServiceComponent,
-    // ResetPasswordComponent,
-    // SetPasswordComponent,
-    // SetSecurityQuestionsComponent,
-    // TmLogoutComponent,
+    LoginComponent,
+    ServicePointComponent,
+    ServiceComponent,
+    ResetPasswordComponent,
+    SetPasswordComponent,
+    SetSecurityQuestionsComponent,
+    TmLogoutComponent,
+    TestRoutingComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +67,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     BrowserAnimationsModule,
     AppRoutingModule,
     UserLoginModule,
-    //DataSYNCModule,
+    MatGridListModule,
+    DataSYNCModule,
     CoreModule.forRoot(),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

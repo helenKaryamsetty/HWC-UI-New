@@ -18,22 +18,13 @@ import { SpinnerService } from './app-modules/core/services/spinner.service';
 })
 export class AppComponent {
   title = 'HWC-Facility-App';
-  // constructor(
-  //   private router: Router,
-  //   private spinnerService: SpinnerService
-  // ) { }
 
-  // ngOnInit() {
-  //   this.router.events.subscribe(event => {
-  //     if (event instanceof ResolveStart || event instanceof RouteConfigLoadStart) {
-  //       this.spinnerService.show();
-  //     // } else if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
-  //     //   setTimeout(this.spinnerService.hide(), 500);
-  //     // } else if (event instanceof NavigationError) {
-  //     //   setTimeout(this.spinnerService.hide(), 500);
-  //     // } else if (event instanceof NavigationCancel) {
-  //     //   setTimeout(this.spinnerService.hide(), 500);
-  //     }
-  //   });
-  // }
+  constructor(
+    private router: Router,
+    private spinnerService: SpinnerService,
+  ) {}
+
+  ngOnInit() {
+    console.log('success');
+  }
 }

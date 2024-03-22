@@ -1,0 +1,107 @@
+<div class="row m-t-20" [formGroup]="neonatalImmunizationHistoryForm">
+  <div class="col-xs-12 text-right">
+    <mat-form-field>
+      <mat-label class="font-history-label m-t-10">
+        {{ currentLanguageSet?.previouslyCapturedImmunizationServices }}
+      </mat-label>
+      <button
+        type="button"
+        mat-icon-button
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        id="previousDevelopmentalHistory"
+        class="pull-right"
+        color="primary"
+        (click)="getPreviousImmunizationServicesHistory()"
+      >
+        <mat-icon class="md-18">history</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div formArrayName="immunizationList">
+    <ng-container
+      *ngFor="
+        let immunization of neonatalImmunizationHistoryForm.controls[
+          'immunizationList'
+        ]['controls'];
+        let i = index
+      "
+    >
+      <div class="col-xs-12">
+        <mat-card [formGroupName]="i" class="row m-t-10">
+          <mat-card-header>
+            <mat-card-title>
+              <h5>
+                <strong>
+                  {{ immunization.value.defaultReceivingAge }} Vaccines</strong
+                >
+              </h5>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content style="padding: 0 24px 24px 24px">
+            <ng-container formArrayName="vaccines">
+              <div
+                *ngFor="
+                  let vaccines of immunization.controls['vaccines'].controls;
+                  let j = index
+                "
+              >
+                <ng-container [formGroupName]="j">
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                    <mat-form-field>
+                      <mat-label>
+                        {{ vaccines.value.vaccine }}
+                      </mat-label>
+                      <mat-select
+                        class="input-full-width"
+                        [id]="'status' + j"
+                        name="status"
+                        formControlName="status"
+                        (change)="enableReceivedAt(i)"
+                      >
+                        <mat-option
+                          *ngFor="let element of vaccineReceivedStatus"
+                          [value]="element.receivedStatus"
+                        >
+                          {{ element.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+
+            <div class="clearfix"></div>
+
+            <div
+              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+              *ngIf="
+                immunization.controls['enableVaccinationReceivedAt'].value ===
+                true
+              "
+            >
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.vaccinationReceivedAt }}
+                </mat-label>
+                <mat-select
+                  class="input-full-width"
+                  (change)="setVaccineReceivedAt(i)"
+                  name="vaccinationReceivedAtID"
+                  formControlName="vaccinationReceivedAtID"
+                >
+                  <mat-option
+                    *ngFor="let vaccineReceivedValues of vaccineReceivedList"
+                    [value]="vaccineReceivedValues.id"
+                  >
+                    {{ vaccineReceivedValues.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -6,14 +6,12 @@
     overflow: auto;
 }
 
-.mdCardSonar {
+.matCardSonar {
     width: 400px;
     margin-left: 10px;
     margin-right: 10px;
     border-radius: 5px;
-    margin-top: 75px;
-    margin-bottom: 50px;
-    text-align: center;
+    margin-top: 50px;
 }
   
 .formIcons {
@@ -30,7 +28,7 @@ button {
 }
 
 button.submit {
-    background: #336CFB !important;
+    background: #0277bd;
 }
   
 .forgotBtn {
@@ -38,24 +36,25 @@ button.submit {
 }
   
   
-md-card-title {
+mat-card-title {
     text-align: center;
-    margin-bottom: 30px;
     font-size: 25px;
 }
   
 .full-width {
-    width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
-    line-height: 25px;
 }
   
+.text-input-fullwidth
+{
+    width: 100%;
+}
 .errorStyle {
     position: absolute;
     font-size: 12px;
     transition: all .7s;
-    color: #C21F1F !important;
+    color: #F44336;
 }
   
 .loader-overlay {
@@ -67,23 +66,19 @@ md-card-title {
 }
   
 .googleBtn {
-    background-color: #C21F1F !important;
+    background-color: #F44336;
     color: white;
-    /*background-color: white;
-      color: #F44336;*/
 }
   
 .fbBtn {
-    background-color: #3f51b5;
+    background-color: #0277bd;
     color: white;
-    /*color: #3f51b5;
-      background-color: white;*/
 }
   
   
 /*for smaller screens*/
 @media (min-width: 10px) {
-    md-card {
+    mat-card {
       top: 30px;
     }
   }
@@ -91,40 +86,42 @@ md-card-title {
   
 /*for Medium screens*/
 @media (min-width: 480px) {
-    md-card {
+    mat-card {
       top: 0px;
     }
 }
 
 /*for large screens*/
 @media (min-width: 768px) {
-    md-card {
+    mat-card {
       top: 0px;
     }
   }
 
-input::-ms-reveal,
-input::-ms-clear {
-    display: none;
-}
-
-.password {
-    text-decoration: underline;
-    color: #336CFB !important;
+.btn-center {
+    text-align: center;
+    margin-top: 20px !important;
 }
 
 .full-width-login {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
-    height: 35px;
-    border-radius: 10px;
     font-size: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: white;
+    border: none;
+    height: 35px;
 }
 
-.input.mat-input-element {
-    line-height: 25px;
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
+    box-shadow: 0 0 0 20px white inset !important;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
 }

@@ -1,13 +1,37 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { AuthService } from '../../app-modules/core/services';
-import { ConfirmationService } from '../../app-modules/core/services/confirmation.service';
-import * as CryptoJS from 'crypto-js';
+/*
+ * AMRIT – Accessible Medical Records via Integrated Technology
+ * Integrated EHR (Electronic Health Records) Solution
+ *
+ * Copyright (C) "Piramal Swasthya Management and Research Institute"
+ *
+ * This file is part of AMRIT.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see https://www.gnu.org/licenses/.
+ */
 
-// import { DataSyncLoginComponent } from '../app-modules/data-sync/data-sync-login/data-sync-login.component';
-// import { MasterDownloadComponent } from '../app-modules/data-sync/master-download/master-download.component';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
+// import { DataSyncLoginComponent } from 'src/app/app-modules/data-sync/data-sync-login/data-sync-login.component';
+import {
+  AuthService,
+  ConfirmationService,
+} from 'src/app/app-modules/core/services';
+import { FormBuilder } from '@angular/forms';
+import { DataSyncLoginComponent } from 'src/app/app-modules/data-sync/data-sync-login/data-sync-login.component';
+import { MasterDownloadComponent } from 'src/app/app-modules/data-sync/master-download/master-download.component';
 
 @Component({
   selector: 'app-login-cmp',
@@ -15,6 +39,8 @@ import * as CryptoJS from 'crypto-js';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  dynamictype = 'password';
+  encryptedVar: any;
   key: any;
   iv: any;
   SALT = 'RandomInitVector';
@@ -23,9 +49,8 @@ export class LoginComponent implements OnInit {
   _keySize: any;
   _ivSize: any;
   _iterationCount: any;
-  dynamictype = 'password';
-  // @ViewChild('focus')
-  // private elementRef!: ElementRef;
+
+  @ViewChild('focus') private elementRef!: ElementRef;
 
   constructor(
     private router: Router,
@@ -54,16 +79,115 @@ export class LoginComponent implements OnInit {
       sessionStorage.clear();
     }
   }
+  public AfterViewInit(): void {
+    this.elementRef.nativeElement.focus();
+  }
 
-  // public ngAfterViewInit(): void {
-  //   this.elementRef.nativeElement.focus();
+  // login() {
+  //   const encryptPassword = this.encrypt(
+  //     this.Key_IV,
+  //     this.loginForm.controls.password.value,
+  //   );
+
+  //   if (
+  //     this.loginForm.controls.userName.value &&
+  //     this.loginForm.controls.password.value
+  //   ) {
+  //     this.authService
+  //       .login(
+  //         this.loginForm.controls.userName.value.trim(),
+  //         encryptPassword,
+  //         false,
+  //       )
+  //       .subscribe(
+  //         (res: any) => {
+  //           console.log('res in login', res);
+  //           if (res.statusCode === 200) {
+  //             if (res?.data?.previlegeObj[0]) {
+  //               localStorage.setItem(
+  //                 'loginDataResponse',
+  //                 JSON.stringify(res.data),
+  //               );
+  //               this.getServicesAuthdetails(res.data);
+  //             } else {
+  //               this.confirmationService.alert(
+  //                 'Seems you are logged in from somewhere else, Logout from there & try back in.',
+  //                 'error',
+  //               );
+  //             }
+  //           } else if (res.statusCode === 5002) {
+  //             if (
+  //               res.errorMessage ===
+  //               'You are already logged in,please confirm to logout from other device and login again'
+  //             ) {
+  //               this.confirmationService
+  //                 .confirm('info', res.errorMessage)
+  //                 .subscribe((confirmResponse) => {
+  //                   if (confirmResponse) {
+  //                     this.authService
+  //                       .userLogoutPreviousSession(
+  //                         this.loginForm.controls.userName.value,
+  //                       )
+  //                       .subscribe((userlogoutPreviousSession: any) => {
+  //                         if (userlogoutPreviousSession.statusCode === 200) {
+  //                           this.authService
+  //                             .login(
+  //                               this.loginForm.controls.userName.value,
+  //                               encryptPassword,
+  //                               true,
+  //                             )
+  //                             .subscribe((userLoggedIn: any) => {
+  //                               if (userLoggedIn.statusCode === 200) {
+  //                                 if (userLoggedIn?.data?.previlegeObj[0]) {
+  //                                   localStorage.setItem(
+  //                                     'loginDataResponse',
+  //                                     JSON.stringify(userLoggedIn.data),
+  //                                   );
+  //                                   this.getServicesAuthdetails(
+  //                                     userLoggedIn.data,
+  //                                   );
+  //                                 } else {
+  //                                   this.confirmationService.alert(
+  //                                     'Seems you are logged in from somewhere else, Logout from there & try back in.',
+  //                                     'error',
+  //                                   );
+  //                                 }
+  //                               } else {
+  //                                 this.confirmationService.alert(
+  //                                   userLoggedIn.errorMessage,
+  //                                   'error',
+  //                                 );
+  //                               }
+  //                             });
+  //                         } else {
+  //                           this.confirmationService.alert(
+  //                             userlogoutPreviousSession.errorMessage,
+  //                             'error',
+  //                           );
+  //                         }
+  //                       });
+  //                   } else {
+  //                     sessionStorage.clear();
+  //                     this.router.navigate(['/login']);
+  //                   }
+  //                 });
+  //             } else {
+  //               this.confirmationService.alert(res.errorMessage, 'error');
+  //             }
+  //           }
+  //         },
+  //         (err) => {
+  //           this.confirmationService.alert(err, 'error');
+  //         },
+  //       );
+  //   }
   // }
 
   get keySize() {
     return this._keySize;
   }
 
-  set keySize(value: any) {
+  set keySize(value) {
     this._keySize = value;
   }
 
@@ -199,6 +323,7 @@ export class LoginComponent implements OnInit {
   }
 
   getServicesAuthdetails(loginDataResponse: any) {
+    const userName: any = this.loginForm.controls.userName.value;
     sessionStorage.setItem('key', loginDataResponse.key);
     sessionStorage.setItem(
       'isAuthenticated',
@@ -219,7 +344,7 @@ export class LoginComponent implements OnInit {
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
         item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
-          .serviceID === '4'
+          .serviceID === 9
       ) {
         const service = {
           providerServiceID: item.serviceID,
@@ -254,33 +379,35 @@ export class LoginComponent implements OnInit {
     this.dynamictype = 'password';
   }
 
-  // loginDialogRef: MdDialogRef<DataSyncLoginComponent>;
-  // openDialog() {
-  //   this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
-  //     hasBackdrop: true,
-  //     disableClose: true,
-  //     panelClass: 'fit-screen',
-  //     backdropClass: 'backdrop',
-  //     position: { top: "20px" },
-  //     data: {
-  //       masterDowloadFirstTime: true
-  //     }
-  //   });
+  loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;
+  openDialog() {
+    this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
+      hasBackdrop: true,
+      disableClose: true,
+      panelClass: 'fit-screen',
+      backdropClass: 'backdrop',
+      position: { top: '20px' },
+      data: {
+        masterDowloadFirstTime: true,
+      },
+    });
 
-  //   this.loginDialogRef.afterClosed()
-  //     .subscribe((flag: any) => {
-  //       if (flag) {
-  //         this.dialog.open(MasterDownloadComponent, {
-  //           hasBackdrop: true,
-  //           disableClose: true,
-  //           panelClass: 'fit-screen',
-  //           backdropClass: 'backdrop',
-  //           position: { top: "20px" },
-  //         }).afterClosed().subscribe(() => {
-  //           sessionStorage.clear();
-  //           localStorage.clear();
-  //         });
-  //       }
-  //     })
-  // }
+    this.loginDialogRef.afterClosed().subscribe((flag) => {
+      if (flag) {
+        this.dialog
+          .open(MasterDownloadComponent, {
+            hasBackdrop: true,
+            disableClose: true,
+            panelClass: 'fit-screen',
+            backdropClass: 'backdrop',
+            position: { top: '20px' },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            sessionStorage.clear();
+            localStorage.clear();
+          });
+      }
+    });
+  }
 }

@@ -1,0 +1,288 @@
+<div class="row m-t-20" [formGroup]="infantBirthDetailsForm">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+  >
+    <mat-form-field
+      class="input-full-width mat_form_field_background_color mat_form_field_background_width"
+    >
+      <mat-label>
+        {{ currentLanguageSet?.birthDate }}
+      </mat-label>
+      <input
+        matInput
+        [openOnFocus]="true"
+        style="width: 100%"
+        [matDatepicker]="picker"
+        name="dateOfBirth"
+        id="dateOfBirth"
+        formControlName="dateOfBirth"
+        (change)="onValueChange()"
+        [max]="today"
+        [disabled]="true"
+      />
+      <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker [style.width]="'100%'" #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+  >
+    <mat-form-field
+      class="input-full-width mat_form_field_background_color mat_form_field_background_width"
+    >
+      <mat-label>
+        {{ currentLanguageSet?.birthDate }}
+      </mat-label>
+      <input
+        style="width: 100%"
+        matInput
+        type="time"
+        name="timeOfBirth"
+        formControlName="timeOfBirth"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field
+      class="input-full-width mat_form_field_background_color mat_form_field_background_width"
+    >
+      <mat-label>
+        {{ currentLanguageSet?.placeOfDelivery }}
+      </mat-label>
+      <mat-select
+        class="select-full-width"
+        placeholder="{{ currentLanguageSet?.placeOfDelivery }}"
+        id="deliveryPlaceID"
+        name="deliveryPlaceID"
+        formControlName="deliveryPlaceID"
+        (change)="otherPlaceOfDelivery(true)"
+      >
+        <mat-option
+          *ngFor="let place of deliveryPlaceList"
+          [value]="place.deliveryPlaceID"
+          >{{ place.deliveryPlace }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableOtherDeliveryPlace"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.other }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        allowText="alphaspace"
+        defaultNull
+        matTextareaAutosize
+        id="otherDeliveryPlace"
+        name="otherDeliveryPlace"
+        formControlName="otherDeliveryPlace"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.typeOfDelivery }}
+      </mat-label>
+      <mat-select
+        class="select-full-width"
+        id="deliveryTypeID"
+        name="deliveryTypeID"
+        formControlName="deliveryTypeID"
+        (change)="getDeliveryType()"
+      >
+        <mat-option
+          *ngFor="let type of deliveryTypeList"
+          [value]="type.deliveryTypeID"
+          >{{ type.deliveryType }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      visitType.toLowerCase() === 'neonatal and infant health care services'
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.complicationAtBirth }}
+      </mat-label>
+      <mat-select
+        class="select-full-width"
+        id="birthComplicationID"
+        name="birthComplicationID"
+        formControlName="birthComplicationID"
+        (change)="otherBirthComplication()"
+      >
+        <mat-option
+          *ngFor="let complication of birthComplicationList"
+          [value]="complication.complicationID"
+        >
+          {{ complication.complicationValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableOtherBirthComplication"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.other }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        allowText="alphaspace"
+        defaultNull
+        matTextareaAutosize
+        id="otherDeliveryComplication"
+        name="otherDeliveryComplication"
+        formControlName="otherDeliveryComplication"
+        placeholder="{{ currentLanguageSet?.other }}"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.gestation }}
+      </mat-label>
+      <mat-select
+        class="select-full-width"
+        id="gestationID"
+        name="gestationID"
+        formControlName="gestationID"
+        (change)="getGestation()"
+      >
+        <mat-option
+          *ngFor="let item of gestationList"
+          [value]="item.gestationID"
+        >
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.deliveryConductedBy }}
+      </mat-label>
+      <mat-select
+        class="select-full-width"
+        placeholder="{{ currentLanguageSet?.deliveryConductedBy }}"
+        id="deliveryConductedByID"
+        name="deliveryConductedByID"
+        formControlName="deliveryConductedByID"
+        (change)="getDeliveryConductedBy()"
+      >
+        <mat-option
+          *ngFor="let item of deliveryConductedByList"
+          [value]="item.deliveryConductedByID"
+        >
+          {{ item.deliveryConductedBy }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.birthWeightOfNewBorn }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        allowText="number"
+        defaultNull
+        matTextareaAutosize
+        [min]="500"
+        allowMax="6000"
+        id="birthWeightOfNewborn"
+        name="birthWeightOfNewborn"
+        formControlName="birthWeightOfNewborn"
+        placeholder="{{ currentLanguageSet?.birthWeightOfNewBorn }}"
+        (change)="checkNewBornWeight()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      visitType.toLowerCase() === 'neonatal and infant health care services'
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label>
+        {{ currentLanguageSet?.congentialAnomalies }}
+      </mat-label>
+      <mat-select
+        multiple
+        class="select-full-width"
+        id="congenitalAnomaliesList"
+        name="congenitalAnomaliesList"
+        formControlName="congenitalAnomaliesList"
+        (change)="onValueChange()"
+      >
+        <mat-option
+          *ngFor="let item of congenitalAnomaliesList"
+          [value]="item.name"
+        >
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+  >
+    <mat-form-field
+      class="input-full-width mat_form_field_background_color mat_form_field_background_width"
+    >
+      <mat-label>
+        {{ currentLanguageSet?.dateOfUpdatingBirthDetails }}
+      </mat-label>
+      <input
+        matInput
+        [openOnFocus]="true"
+        style="width: 100%"
+        [matDatepicker]="picker1"
+        name="dateOfUpdatingBirthDetails"
+        id="dateOfUpdatingBirthDetails"
+        formControlName="dateOfUpdatingBirthDetails"
+        (change)="onValueChange()"
+        [max]="today"
+        [disabled]="true"
+      />
+      <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker [style.width]="'100%'" #picker1></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>

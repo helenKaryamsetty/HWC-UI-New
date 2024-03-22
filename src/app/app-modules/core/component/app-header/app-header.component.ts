@@ -66,8 +66,8 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
         { link: "/registrar/search", label: "Search" }
       ]
     },
-    { role: "Nurse", link: "/common/nurse-worklist", label: "Nurse" },
-    { role: "Doctor", link: "/common/doctor-worklist", label: "Doctor" },
+    { role: "Nurse", link: "/nurse-doctor/nurse-worklist", label: "Nurse" },
+    { role: "Doctor", link: "/nurse-doctor/doctor-worklist", label: "Doctor" },
     { role: "Lab Technician", link: "/lab/worklist", label: "Lab Technician" },
     {
       role: "Pharmacist",
@@ -76,18 +76,18 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     },
     {
       role: "Radiologist",
-      link: "/common/radiologist-worklist",
+      link: "/nurse-doctor/radiologist-worklist",
       label: "Radiologist"
     },
     {
       role: "Oncologist",
-      link: "/common/oncologist-worklist",
+      link: "/nurse-doctor/oncologist-worklist",
       label: "Oncologist"
     },
     {
       role: "TC Specialist",
       work: [
-        { link: "/common/tcspecialist-worklist", label: "Worklist" },
+        { link: "/nurse-doctor/tcspecialist-worklist", label: "Worklist" },
         {
           // link: this.telemedicineService.routeToTeleMedecine(),
           label: "Timesheet"
@@ -240,12 +240,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
       {
         role: 'Nurse',
-        link: '/common/nurse-worklist',
+        link: '/nurse-doctor/nurse-worklist',
         label: this.currentLanguageSet.role_selection.Nurse,
       },
       {
         role: 'Doctor',
-        link: '/common/doctor-worklist',
+        link: '/nurse-doctor/doctor-worklist',
         label: this.currentLanguageSet.role_selection.Doctor,
       },
       {
@@ -260,12 +260,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
       {
         role: 'Radiologist',
-        link: '/common/radiologist-worklist',
+        link: '/nurse-doctor/radiologist-worklist',
         label: this.currentLanguageSet.role_selection.Radiologist,
       },
       {
         role: 'Oncologist',
-        link: '/common/oncologist-worklist',
+        link: '/nurse-doctor/oncologist-worklist',
         label: this.currentLanguageSet.role_selection.Oncologist,
       },
       {
@@ -273,7 +273,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
         label: this.currentLanguageSet.common.TCSpecialist,
         work: [
           {
-            link: '/common/tcspecialist-worklist',
+            link: '/nurse-doctor/tcspecialist-worklist',
             label: 'Worklist',
             labelName: this.currentLanguageSet.common.Worklist,
           },

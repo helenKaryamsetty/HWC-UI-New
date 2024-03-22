@@ -1,41 +1,46 @@
-<!-- <app-header [showRoles]="false"></app-header> -->
+<app-header [showRoles]="false"></app-header>
 <div class="container" style="margin-top: 8%">
   <section>
     <div class="col-md-3 col-sm-3 col-lg-3"></div>
-    <div class="col-md-6 col-sm-6 col-lg-6" style="text-align: center">
+    <div class="col-md-6 col-sm-6 col-lg-6">
       <!-- <md-card class="min-height: 240px"> -->
       <div class="row m-t-20 min-height: 240px">
-        <div
+        <ul
           class="list-unstyled list-inline text-center"
-          style="text-align: center"
           *ngFor="let service of servicesList"
         >
-          <h6>Welcome</h6>
+          <p>{{ currentLanguageSet?.welcome }}</p>
           <p style="font-size: 18px; font-weight: 550">
             &nbsp;{{ this.fullName }}
           </p>
-          <div class="note">Click on service to proceed</div>
-          <div
-            style="cursor: pointer"
-            (selectionChange)="selectService(service)"
-          >
-            <div style="margin-top: 30px; text-align: center">
-              <!-- <ul class="list-unstyled text-center p-t-15">
-                        
-                          <li class="f-s-20"> -->
-              <div class="p-r-15">
-                <img src="assets/images/TM.png" alt="HWC" />
-                <div><strong style="font-size: 30px">HWC</strong></div>
-              </div>
-              <!-- </li>
-                    </ul> -->
-            </div>
+          <div class="note">
+            {{ currentLanguageSet?.clickonServiceToProceed }}
           </div>
-        </div>
+          <li
+            tabindex="{0}"
+            class="width310px"
+            (click)="selectService(service)"
+            (keydown.enter)="selectService(true)"
+            (keyup.enter)="selectService(true)"
+          >
+            <div style="margin-top: 30px">
+              <ul class="list-unstyled text-center p-t-15">
+                <li class="f-s-20">
+                  <div class="p-r-15 line-height-65">
+                    <img
+                      src="assets/images/TM.png"
+                      alt="HWC"
+                    />&nbsp;&nbsp;&nbsp;HWC
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
       </div>
       <!-- </md-card> -->
     </div>
   </section>
 </div>
 
-<!-- <app-footer></app-footer> -->
+<app-footer></app-footer>

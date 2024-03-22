@@ -1,0 +1,81 @@
+<section id="quickSearch" class="container-fluid">
+  <div class="row title info">
+    <h4>{{ currentLanguageSet?.bendetails?.externalSearch }}</h4>
+    <button
+      class="pull-right close-btn"
+      matTooltip="{{ currentLanguageSet?.common?.close }}"
+      (click)="matDialogRef.close(false)"
+      mat-icon-button
+    >
+      <mat-icon class="md-24">close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content style="overflow-y: hidden">
+    <section class="row m-t-10">
+      <div
+        class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+        [formGroup]="searchIdForm"
+      >
+        <div class="col-xs-12 col-sm-6 box">
+          <div class="select-container">
+            <mat-select
+              class="p-t-12 m-t-10"
+              [style.width]="'100%'"
+              (change)="validateID(searchIdForm.controls['searchId'].value)"
+              formControlName="searchId"
+              autofocus
+              required
+              placeholder="Select ID Type"
+            >
+              <mat-option *ngFor="let idType of ids" [value]="idType.value">
+                {{ idType.idType }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 box m-t-10">
+          <mat-form-field [style.width]="'100%'">
+            <input
+              defaultNull
+              autocomplete="off"
+              [maxlength]="idMaxValue"
+              [minlength]="idMinValue"
+              [pattern]="patternID"
+              required
+              matInput
+              [placeholder]="searchValue"
+              formControlName="ID"
+              minlength="10"
+              maxlength="30"
+            />
+            <strong
+              *ngIf="
+                searchIdForm.controls['searchId'].value === 'National Health ID'
+              "
+              matSuffix
+              >{{ abhaSuffix }}</strong
+            >
+            <mat-error *ngIf="searchIdForm.controls['ID'].hasError('pattern')">
+              {{ idErrorText }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </section>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="padding15 margin15 pull-right">
+    <button
+      class="button-overall-disabled"
+      [disabled]="searchIdForm.invalid"
+      mat-raised-button
+      color="accent"
+      type="button"
+      (click)="getQuickSearchResult(searchIdForm.value)"
+    >
+      {{ currentLanguageSet?.common?.search }}
+    </button>
+  </mat-dialog-actions>
+  <div class="clearfix"></div>
+</section>

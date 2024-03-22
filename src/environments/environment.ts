@@ -5,15 +5,25 @@
 
 // https://amritwprdev.piramalswasthya.org/
 
-const commonIP = 'https://amritwprdev.piramalswasthya.org/';
-const identityIP = 'https://amritwprdev.piramalswasthya.org/';
-const tmIP = 'https://amritwprdev.piramalswasthya.org/';
-const IP104 = 'https://amritwprdev.piramalswasthya.org/';
+const commonIP = 'http://183.82.107.186:8080';
+const inventoryIP = 'http://183.82.107.186:8080';
+const mmuIP = 'http://183.82.107.186:8080';
+const FHIRIP = 'http://183.82.107.186:8080';
+
+// const commonIP = 'https://amritwprdev.piramalswasthya.org/';
+// const inventoryIP = 'https://amritwprdev.piramalswasthya.org/';
+// const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
+// const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
+
+// const commonIP = 'https://amritwprdev.piramalswasthya.org/';
+const identityIP = 'http://183.82.107.186:8080';
+const tmIP = 'http://183.82.107.186:8080';
+const IP104 = 'http://183.82.107.186:8080';
 // const tmIP = 'http://localhost:8080/';
-const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
-const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
-const adminIP = 'https://amritwprdev.piramalswasthya.org/';
-const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
+// const mmuIP = 'http://183.82.107.186:8080/';
+const schedulerIP = 'http://183.82.107.186:8080';
+const adminIP = 'http://183.82.107.186:8080';
+// const FHIRIP = 'http://183.82.107.186:8080/';
 
 // const SERVER_IP = '10.208.122.69';
 
@@ -29,21 +39,22 @@ const SWYMED_IP = 'swymed://14.143.13.109';
 // const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}/commonapi-v0.1/`;
-const COMMON_API = `${commonIP}/commonapi-v0.1/`;
+const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
+const COMMON_API = `${commonIP}/commonapi-v1.0/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 // const COMMON_API_OPEN = `http://localhost:8080/`;
 // const COMMON_API = `http://localhost:8080/`;
-const TM_API = `${tmIP}/tmapi-v0.1/`;
+// const TM_API = `${tmIP}/hwc-tmapi-v1.0/`;
+const TM_API = `${tmIP}/hwc-facility-service/`;
 // const TM_API = `${tmIP}/hwc-facility-service/`;
 
-const API104 = `${IP104}/104api-v0.1/`;
+const API104 = `${IP104}/104api-v1.0/`;
 // const TM_API = `http://localhost:8082/`;
-const MMU_API = `${mmuIP}/mmuapi-v0.1/`;
-const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v0.1/`;
+const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
+const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v0.1`;
+const ADMIN_API = `${adminIP}adminapi-v1.0`;
 
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
@@ -354,12 +365,12 @@ export const environment = {
   cancelBeneficiaryTCRequestUrl: `${TM_API}tc/cancel/benTCRequest`,
   scheduleTCUrl: `${TM_API}tc/create/benTCRequestWithVisitCode`,
   beneficiaryTCRequestStatusUrl: `${TM_API}tc/check/benTCRequestStatus`,
-  swymedUrl: `${SWYMED_IP}`,
+  swymedUrl: `swymed://${SWYMED_IP}`,
   saveSpecialistCancerObservationUrl: `${TM_API}CS-cancerScreening/update/doctorData`,
-  getSwymedMailLoginUrl: `${TM_API}swymed/login/`,
-  invokeSwymedCallUrl: `${TM_API}swymed/call/`,
-  invokeSwymedCallSpecialistUrl: `${TM_API}swymed/callvan/`,
-  getSwymedLogoutUrl: `${TM_API}swymed/logout`,
+  getSwymedMailLoginUrl: `${TM_API}videoConsultation/login/`,
+  invokeSwymedCallUrl: `${TM_API}videoConsultation/call/`,
+  invokeSwymedCallSpecialistUrl: `${TM_API}videoConsultation/callvan/`,
+  getSwymedLogoutUrl: `${TM_API}videoConsultation/logout`,
   updateTCStartTimeUrl: `${TM_API}tc/startconsultation`,
   snomedCTRecordListURL: `${TM_API}snomed/getSnomedCTRecordList`,
   getServiceOnStateUrl: `${COMMON_API}service/serviceList`,
@@ -520,4 +531,7 @@ export const environment = {
   getActionMasterUrl: `${TM_API}uptsu/get/action-master`,
   closeVisitSaveComplaintsUrl: `${TM_API}uptsu/submit/closevisit`,
   getnurse104referredworklisturls: `${TM_API}uptsu/getWorklistByVanID`,
+  getAdminCdssStatus: `${ADMIN_API}/uptsu/getCdssData`,
+  getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
+  getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
 };
