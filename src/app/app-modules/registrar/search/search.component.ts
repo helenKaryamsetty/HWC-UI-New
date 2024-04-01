@@ -539,7 +539,7 @@ export class SearchComponent implements OnInit, DoCheck {
     //   return phoneMaps[0].phoneNo || 'Not Available';
     // } else if (benObject && benObject.phoneNo && phoneMaps.length > 0) {
     //   phoneMaps.forEach((elem: any) => {
-    //     if (elem.phoneNo == benObject.phoneNo) {
+    //     if (elem.phoneNo === benObject.phoneNo) {
     //       phone = elem.phoneNo;
     //     }
     //   });
@@ -622,7 +622,7 @@ export class SearchComponent implements OnInit, DoCheck {
   //     this.filteredExternalBeneficiaryList = [];
   //     this.externalBeneficiaryList.forEach((item) => {
   //       for (let key in item) {
-  //         if (key != 'benObject') {
+  //         if (key !== 'benObject') {
   //           let value: string = '' + item[key];
   //           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
   //             this.filteredExternalBeneficiaryList.push(item); break;
@@ -647,9 +647,9 @@ export class SearchComponent implements OnInit, DoCheck {
     ) {
       const action = false;
       console.log(JSON.stringify(benObject, null, 4), 'benObject');
-      const vanID = JSON.parse(
-        localStorage.getItem('serviceLineDetails') || '{}',
-      ).vanID;
+      const serviceLineDetails: any =
+        localStorage.getItem('serviceLineDetails');
+      const vanID = JSON.parse(serviceLineDetails).vanID;
       benObject['providerServiceMapId'] =
         localStorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
@@ -947,9 +947,8 @@ export class SearchComponent implements OnInit, DoCheck {
     });
   }
   sendBenToAmrit(benDetails: any) {
-    const servicePointDetails = JSON.parse(
-      localStorage.getItem('serviceLineDetails') || '{}',
-    );
+    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
+
     const date = new Date(
       benDetails.profile.patient.yearOfBirth +
         '-' +
@@ -1027,9 +1026,9 @@ export class SearchComponent implements OnInit, DoCheck {
       benObject.amritID !== undefined &&
       benObject.amritID !== ''
     ) {
-      const vanID = JSON.parse(
-        localStorage.getItem('serviceLineDetails') || '{}',
-      ).vanID;
+      const serviceLineDetails: any =
+        localStorage.getItem('serviceLineDetails');
+      const vanID = JSON.parse(serviceLineDetails).vanID;
       benObject['providerServiceMapId'] =
         localStorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
@@ -1197,9 +1196,8 @@ export class SearchComponent implements OnInit, DoCheck {
   // }
 
   transferMigratedBeneficiaryToNurse(benObject: any) {
-    const vanID = JSON.parse(
-      localStorage.getItem('serviceLineDetails') || '{}',
-    ).vanID;
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
     benObject['providerServiceMapId'] =
       localStorage.getItem('providerServiceID');
     benObject['vanID'] = vanID;

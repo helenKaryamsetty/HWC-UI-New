@@ -52,8 +52,8 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-personal-details',
-  templateUrl: './app-register-personal-details.component.html',
-  styleUrls: ['./app-register-personal-details.component.css'],
+  templateUrl: './register-personal-details.component.html',
+  styleUrls: ['./register-personal-details.component.css'],
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, AfterViewChecked, DoCheck, OnDestroy
@@ -510,7 +510,7 @@ export class RegisterPersonalDetailsComponent
     ) {
       searchObject['phoneNo'] = searchTerm;
       this.registrarService.identityQuickSearch(searchObject).subscribe(
-        (beneficiaryList) => {
+        (beneficiaryList: any) => {
           if (
             beneficiaryList &&
             beneficiaryList.length > 0 &&
@@ -601,24 +601,24 @@ export class RegisterPersonalDetailsComponent
     }
     this.confirmMarriageEligible();
     this.checkAgeAtMarriage();
-    //     if (this.personalDetailsForm.value.age != null && this.personalDetailsForm.value.age <= this.ageLimit && this.personalDetailsForm.value.age != 0) {
+    //     if (this.personalDetailsForm.value.age !== null && this.personalDetailsForm.value.age <= this.ageLimit && this.personalDetailsForm.value.age !== 0) {
     //   if (!this.personalDetailsForm.value.ageUnit) {
     //     this.personalDetailsForm.value.ageUnit = 'Years';
     //   }
     //   let age = new Date();
-    //   if (this.personalDetailsForm.value.ageUnit == 'Days') { age.setDate(age.getDate() - this.personalDetailsForm.value.age); }
-    //   else if (this.personalDetailsForm.value.ageUnit == 'Months') { age.setMonth(age.getMonth() - this.personalDetailsForm.value.age); }
-    //   else if (this.personalDetailsForm.value.ageUnit == 'Years') { age.setFullYear(age.getFullYear() - this.personalDetailsForm.value.age); }
+    //   if (this.personalDetailsForm.value.ageUnit === 'Days') { age.setDate(age.getDate() - this.personalDetailsForm.value.age); }
+    //   else if (this.personalDetailsForm.value.ageUnit === 'Months') { age.setMonth(age.getMonth() - this.personalDetailsForm.value.age); }
+    //   else if (this.personalDetailsForm.value.ageUnit === 'Years') { age.setFullYear(age.getFullYear() - this.personalDetailsForm.value.age); }
 
     //   this.confirmMarriageEligible();
     //   let newAge = age.toISOString()
     //   this.personalDetailsForm.patchValue({dob : newAge});
     // } else if (this.personalDetailsForm.value.age > this.ageLimit) {
     //   this.confirmationService.alert(`Age can only be between 1 Day to ${this.ageLimit} Years`, 'warn');
-    // } else if (this.personalDetailsForm.value.age > this.ageLimit && this.personalDetailsForm.value.ageUnit == 'Years') {
+    // } else if (this.personalDetailsForm.value.age > this.ageLimit && this.personalDetailsForm.value.ageUnit === 'Years') {
     //   this.confirmationService.alert(`Age can only be between 1 Day to ${this.ageLimit} Years`, 'warn');
     //   this.personalDetailsForm.patchValue({age : null});
-    // }  else if(this.personalDetailsForm.value.age == null) {
+    // }  else if(this.personalDetailsForm.value.age === null) {
     //   this.confirmationService.alert(`Please Enter Age of Beneficiary`, 'warn');
 
     // }
@@ -756,8 +756,8 @@ export class RegisterPersonalDetailsComponent
   // enableMarriageDetails: Boolean = false;
   // onMaritalStatusChanged() {
   //   if (
-  //     this.personalDetailsForm.value.maritalStatus == 1 ||
-  //     this.personalDetailsForm.value.maritalStatus == 7
+  //     this.personalDetailsForm.value.maritalStatus === 1 ||
+  //     this.personalDetailsForm.value.maritalStatus === 7
 
   //   ) {
   //     this.enableMarriageDetails = false;

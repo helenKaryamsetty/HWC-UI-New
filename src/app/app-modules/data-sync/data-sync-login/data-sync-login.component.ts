@@ -153,9 +153,9 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200) {
-              if (res.data && res.data != null && res.data != undefined) {
+              if (res.data && res.data !== null && res.data !== undefined) {
                 const mmuService = res.data.previlegeObj.filter((item: any) => {
-                  return item.serviceName == 'MMU';
+                  return item.serviceName === 'MMU';
                 });
                 if (
                   mmuService !== undefined &&
@@ -200,7 +200,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
       this.data?.provideAuthorizationToViewTmCS
     ) {
       const mmuService = res.data.previlegeObj.filter((item: any) => {
-        return item.serviceName == 'MMU';
+        return item.serviceName === 'MMU';
       });
       localStorage.setItem(
         'dataSyncProviderServiceMapID',

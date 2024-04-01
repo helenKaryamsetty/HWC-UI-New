@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -29,11 +28,15 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
-import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { DoctorService } from '../../shared/services';
+import { Subscription } from 'rxjs';
+import {
+  BeneficiaryDetailsService,
+  ConfirmationService,
+} from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { DoctorService } from '../../shared/services';
 
 @Component({
   selector: 'app-nurse-general-opd-history',
@@ -41,10 +44,10 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
   styleUrls: ['./general-opd-history.component.css'],
 })
 export class GeneralOpdHistoryComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
-  nurseGeneralHistoryForm!: FormGroup;
+  patientHistoryForm!: FormGroup;
 
   @Input()
   mode: any;
@@ -61,95 +64,48 @@ export class GeneralOpdHistoryComponent
   beneficiary: any;
   showObstetricHistory = false;
   currentLanguageSet: any;
-
+  historyFormDeclared = false;
+  enablingHistorySectionSubscription!: Subscription;
+  beneficiaryAge = 0;
+  benAge!: number;
   showHistory = false;
-  pastHistory!: FormGroup;
-  comorbidityHistory!: FormGroup;
-  medicationHistory!: FormGroup;
-  personalHistory!: FormGroup;
-  familyHistory!: FormGroup;
-  menstrualHistory!: FormGroup;
-  perinatalHistory!: FormGroup;
-  pastObstericHistory!: FormGroup;
-  immunizationHistory!: FormGroup;
-  otherVaccines!: FormGroup;
-  feedingHistory!: FormGroup;
-  developmentHistory!: FormGroup;
-  physicalActivityHistory!: FormGroup;
 
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
+    private confirmationService: ConfirmationService,
+    private ncdScreeningService: NcdScreeningService,
   ) {}
 
   ngOnInit() {
-    this.loadFormData();
     this.assignSelectedLanguage();
     this.getBeneficiaryDetails();
+    this.enableIdrsHistoryForm();
     console.log('showHistory', this.showHistory);
+    // this.enableHistoryOnIDRSSelection();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
+    console.log('visit', this.visitCategory);
   }
+  // enableHistoryOnIDRSSelection() {
+  //   this.enablingHistorySectionSubscription = this.ncdScreeningService.enableHistoryFormafterFormInit$.subscribe(
+  //     (response) => {
+  //       if(response === true) {
+  //         this.historyFormDeclared = true;
+  //         } else {
+  //           this.historyFormDeclared = true;
+  //         }
+  //     });
 
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-
-  loadFormData() {
-    this.pastHistory = this.nurseGeneralHistoryForm.get(
-      'pastHistory',
-    ) as FormGroup;
-    this.comorbidityHistory = this.nurseGeneralHistoryForm.get(
-      'comorbidityHistory',
-    ) as FormGroup;
-    this.medicationHistory = this.nurseGeneralHistoryForm.get(
-      'medicationHistory',
-    ) as FormGroup;
-    this.personalHistory = this.nurseGeneralHistoryForm.get(
-      'personalHistory',
-    ) as FormGroup;
-    this.familyHistory = this.nurseGeneralHistoryForm.get(
-      'familyHistory',
-    ) as FormGroup;
-    this.menstrualHistory = this.nurseGeneralHistoryForm.get(
-      'menstrualHistory',
-    ) as FormGroup;
-    this.perinatalHistory = this.nurseGeneralHistoryForm.get(
-      'perinatalHistory',
-    ) as FormGroup;
-    this.pastObstericHistory = this.nurseGeneralHistoryForm.get(
-      'pastObstericHistory',
-    ) as FormGroup;
-    this.immunizationHistory = this.nurseGeneralHistoryForm.get(
-      'immunizationHistory',
-    ) as FormGroup;
-    this.otherVaccines = this.nurseGeneralHistoryForm.get(
-      'otherVaccines',
-    ) as FormGroup;
-    this.feedingHistory = this.nurseGeneralHistoryForm.get(
-      'feedingHistory',
-    ) as FormGroup;
-    this.developmentHistory = this.nurseGeneralHistoryForm.get(
-      'developmentHistory',
-    ) as FormGroup;
-    this.physicalActivityHistory = this.nurseGeneralHistoryForm.get(
-      'physicalActivityHistory',
-    ) as FormGroup;
-  }
+  // }
 
   ngOnChanges(changes: any) {
-    this.loadFormData();
     if (changes.mode && this.mode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       if (visitCategory === 'NCD screening') {
-        this.updatePatientNCDScreeningHistory(this.nurseGeneralHistoryForm);
+        this.updatePatientNCDScreeningHistory(this.patientHistoryForm);
       } else {
-        this.updatePatientGeneralHistory(this.nurseGeneralHistoryForm);
+        this.updatePatientGeneralHistory(this.patientHistoryForm);
       }
     }
 
@@ -160,17 +116,35 @@ export class GeneralOpdHistoryComponent
     if (changes.primiGravida) {
       this.canShowObstetricHistory();
     }
+    this.enableIdrsHistoryForm();
+  }
+
+  // this method is used to show family history and personal history for IDRS and to show personal history for both IDRS and CBAC
+  enableIdrsHistoryForm() {
+    if (this.visitCategory === 'NCD screening') {
+      this.enablingHistorySectionSubscription =
+        this.ncdScreeningService.enablingIdrs$.subscribe((response) => {
+          if (response === true) {
+            this.showHistory = true;
+          } else {
+            this.showHistory = false;
+          }
+        });
+    }
   }
 
   ngOnDestroy() {
     if (this.beneficiaryDetailsSubscription)
       this.beneficiaryDetailsSubscription.unsubscribe();
+    if (this.enablingHistorySectionSubscription)
+      this.enablingHistorySectionSubscription.unsubscribe();
   }
 
   updatePatientGeneralHistory(generalOPDHistory: any) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
     const temp = {
       beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
       benVisitID: localStorage.getItem('visitID'),
@@ -190,11 +164,11 @@ export class GeneralOpdHistoryComponent
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            if (this.visitCategory === 'ANC') {
+            if (localStorage.getItem('visitCategory') === 'ANC') {
               this.getHRPDetails();
             }
             this.confirmationService.alert(res.data.response, 'success');
-            this.nurseGeneralHistoryForm.markAsPristine();
+            this.patientHistoryForm.markAsPristine();
           } else {
             this.confirmationService.alert(res.errorMessage, 'error');
           }
@@ -205,6 +179,22 @@ export class GeneralOpdHistoryComponent
       );
   }
 
+  getHRPDetails() {
+    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    const visitCode = localStorage.getItem('visitCode');
+    this.doctorService
+      .getHRPDetails(beneficiaryRegID, visitCode)
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data) {
+          if (res.data.isHRP === true) {
+            this.beneficiaryDetailsService.setHRPPositive();
+          } else {
+            this.beneficiaryDetailsService.resetHRPPositive();
+          }
+        }
+      });
+  }
+
   beneficiaryDetailsSubscription: any;
   getBeneficiaryDetails() {
     this.beneficiaryDetailsSubscription =
@@ -212,14 +202,50 @@ export class GeneralOpdHistoryComponent
         (beneficiary) => {
           if (beneficiary) {
             this.beneficiary = beneficiary;
+
+            const calculateAgeInYears = beneficiary.age.split('-')[0].trim();
+            const calculateAgeInMonths = beneficiary.age.split('-')[1]
+              ? beneficiary.age.split('-')[1].trim()
+              : '';
+            const age = this.getAgeValueNew(calculateAgeInYears);
+            if (age !== 0 && calculateAgeInMonths !== '0 months') {
+              this.beneficiaryAge = age + 1;
+            } else {
+              this.beneficiaryAge = age;
+            }
+
+            //  this.ageCalculator(this.beneficiary.dob);
+
             this.canShowObstetricHistory();
           }
         },
       );
   }
 
+  getAgeValueNew(age: any) {
+    if (!age) return 0;
+    const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
+    if (arr[1]) {
+      const ageUnit = arr[1];
+      if (ageUnit.toLowerCase() === 'years') {
+        return parseInt(arr[0]);
+      }
+    }
+    return 0;
+  }
+
+  ageCalculator(dob: any) {
+    if (dob) {
+      const convertAge = new Date(dob);
+      const timeDiff = Math.abs(Date.now() - convertAge.getTime());
+      this.beneficiaryAge = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
+    }
+  }
+
   canShowObstetricHistory() {
     if (this.primiGravida) this.showObstetricHistory = false;
+    else if (this.visitCategory === 'NCD care')
+      this.showObstetricHistory = false;
     else if (this.beneficiary && this.beneficiary.genderName === 'Male')
       this.showObstetricHistory = false;
     else if (
@@ -237,7 +263,6 @@ export class GeneralOpdHistoryComponent
     else if (this.visitCategory === 'PNC') this.showObstetricHistory = true;
     else if (!this.primiGravida) this.showObstetricHistory = true;
   }
-
   updatePatientNCDScreeningHistory(NCDScreeningHistory: any) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -266,7 +291,7 @@ export class GeneralOpdHistoryComponent
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
             this.confirmationService.alert(res.data.response, 'success');
-            this.nurseGeneralHistoryForm.markAsPristine();
+            this.patientHistoryForm.markAsPristine();
           } else {
             this.confirmationService.alert(res.errorMessage, 'error');
           }
@@ -276,20 +301,13 @@ export class GeneralOpdHistoryComponent
         },
       );
   }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
 
-  getHRPDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
-    this.doctorService
-      .getHRPDetails(beneficiaryRegID, visitCode)
-      .subscribe((res: any) => {
-        if (res && res.statusCode === 200 && res.data) {
-          if (res.data.isHRP === true) {
-            this.beneficiaryDetailsService.setHRPPositive();
-          } else {
-            this.beneficiaryDetailsService.resetHRPPositive();
-          }
-        }
-      });
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

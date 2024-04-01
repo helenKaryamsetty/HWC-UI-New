@@ -23,7 +23,7 @@ export class BiometricAuthenticationComponent implements OnInit {
     this.messageInfo = 'Connecting Device...';
     //call the method to connect device discover ADVM
     let res: any;
-    if (res !== undefined && res !== null && res.toLowerCase() == 'ready') {
+    if (res !== undefined && res !== null && res.toLowerCase() === 'ready') {
       this.enableImage = true;
       this.messageInfo =
         'Please place your finger on the device to authenticate';
@@ -33,7 +33,7 @@ export class BiometricAuthenticationComponent implements OnInit {
     }
     //Second method calling
     // let resposne = "success"
-    // if(resposne == "success"){
+    // if(resposne === "success"){
     //   this.messageInfo = "Finger print captured successfully"
     // }
   }

@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -27,6 +26,14 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 @Injectable()
 export class IdrsscoreService {
   private _listners = new Subject<any>();
+  enableDiagnosis: any = null;
+  diseaseConfirmation: any = null;
+  hyperConfirm: any = null;
+  finalHypertension: any = false;
+  diabetesPresentInList!: number;
+  visualAcuityTestInMMU = 1;
+  diabetesNotPresentInMMU = 0;
+  rbsResult: any = null;
 
   listen(): Observable<any> {
     return this._listners.asObservable();
@@ -36,15 +43,11 @@ export class IdrsscoreService {
     this._listners.next(filterBy);
   }
 
-  dummuy: any = false;
-  dummyValue = new BehaviorSubject(this.dummuy);
-  dummyValue$ = this.dummyValue.asObservable();
-
   IRDSscore: any = null;
 
   IDRSFamilyScore = new BehaviorSubject(this.IRDSscore);
   IDRSFamilyScore$ = this.IDRSFamilyScore.asObservable();
-  confirmedValue: any = true;
+  confirmedValue: any = null;
 
   confirmed = new BehaviorSubject(this.confirmedValue);
   confirmed$ = this.confirmed.asObservable();
@@ -70,12 +73,12 @@ export class IdrsscoreService {
   IDRSSuspectedFlag = new BehaviorSubject(this.IDRSSuspected);
   IDRSSuspectedFlag$ = this.IDRSSuspectedFlag.asObservable();
 
-  diabetesSelected: any = false;
+  diabetesSelected: any = null;
 
   diabetesSelectedFlag = new BehaviorSubject(this.diabetesSelected);
   diabetesSelectedFlag$ = this.diabetesSelectedFlag.asObservable();
 
-  VisualAcuityTestMandatory: any = false;
+  VisualAcuityTestMandatory: any = null;
 
   VisualAcuityTestMandatoryFlag = new BehaviorSubject(
     this.VisualAcuityTestMandatory,
@@ -93,7 +96,7 @@ export class IdrsscoreService {
   diastolicBpValue = new BehaviorSubject(this.diastolicBp);
   diastolicBpValue$ = this.diastolicBpValue.asObservable();
 
-  rBSPresent: any = false;
+  rBSPresent: any = null;
 
   rBSPresentFlag = new BehaviorSubject(this.rBSPresent);
   rBSPresentFlag$ = this.rBSPresentFlag.asObservable();
@@ -107,11 +110,6 @@ export class IdrsscoreService {
 
   heamoglobinPresentFlag = new BehaviorSubject(this.heamoglobinPresent);
   heamoglobinPresentFlag$ = this.heamoglobinPresentFlag.asObservable();
-
-  tmcSuggested: any = null;
-
-  tmcSuggestedFlag = new BehaviorSubject(this.tmcSuggested);
-  tmcSuggestedFlag$ = this.tmcSuggestedFlag.asObservable();
 
   referralSuggested: any = null;
 
@@ -133,17 +131,24 @@ export class IdrsscoreService {
 
   visitDiseases = new BehaviorSubject(null);
   visitDiseases$ = this.visitDiseases.asObservable();
+
   uncheckedDiseases = new BehaviorSubject(null);
   uncheckedDiseases$ = this.uncheckedDiseases.asObservable();
-  tmc = true;
-  tmcSubmitDisable = new BehaviorSubject(this.tmc);
-  tmcSubmitDisable$ = this.tmcSubmitDisable.asObservable();
-  constructor(private http: HttpClient) {}
 
-  setdymmyvalue(disease: any) {
-    this.dummyValue.next(disease);
-    console.log('testing');
-  }
+  finalDiagnosisDiseaseconfirm = new BehaviorSubject(this.diseaseConfirmation);
+  finalDiagnosisDiseaseconfirm$ =
+    this.finalDiagnosisDiseaseconfirm.asObservable();
+
+  finalDiagnosisHypertensionConfirmation = new BehaviorSubject(
+    this.hyperConfirm,
+  );
+  finalDiagnosisHypertensionConfirmation$ =
+    this.finalDiagnosisHypertensionConfirmation.asObservable();
+
+  rbsResultsFromVitals = new BehaviorSubject(this.rbsResult);
+  rbsResultsFromVitals$ = this.rbsResultsFromVitals.asObservable();
+
+  constructor(private http: HttpClient) {}
 
   setIDRSFamilyScore(score: any) {
     this.IRDSscore = score;
@@ -222,15 +227,11 @@ export class IdrsscoreService {
     this.systolicBp = value;
     this.systolicBpValue.next(value);
   }
-  // setSystolicBpForFlag(value) {
-  //   this.systolicBpFlag = value;
-  //   this.systolicBpValueForFlag.next(value);
-  // }
   clearSystolicBp() {
     this.systolicBp = 0;
     this.systolicBpValue.next(0);
   }
-
+  //change in diastolic bp
   setDiastolicBp(value: any) {
     this.diastolicBp = value;
     this.diastolicBpValue.next(value);
@@ -254,15 +255,6 @@ export class IdrsscoreService {
     this.heamoglobinPresent = 1;
     this.heamoglobinPresentFlag.next(1);
   }
-  //TMC suggested
-  setTMCSuggested() {
-    this.tmcSuggested = 1;
-    this.tmcSuggestedFlag.next(1);
-  }
-  clearTMCSuggested() {
-    this.tmcSuggested = 1;
-    this.tmcSuggestedFlag.next(0);
-  }
   //Referral Reason suggestion
   setReferralSuggested() {
     this.referralSuggested = 1;
@@ -280,16 +272,23 @@ export class IdrsscoreService {
   clearDiseaseSelected() {
     this.visitDiseases.next(null);
   }
-  setUnchecked(disease: any) {
-    this.uncheckedDiseases.next(disease);
-  }
   clearUnchecked() {
     this.uncheckedDiseases.next(null);
   }
-  setTMCSubmit(disease: any) {
-    this.tmcSubmitDisable.next(disease);
+  setUnchecked(disease: any) {
+    this.uncheckedDiseases.next(disease);
   }
 
+  enableDiseaseConfirmationOnCaseRecord = new BehaviorSubject(
+    this.enableDiagnosis,
+  );
+  enableDiseaseConfirmationOnCaseRecord$ =
+    this.enableDiseaseConfirmationOnCaseRecord.asObservable();
+
+  enableDiseaseConfirmation(arg0: boolean) {
+    this.enableDiagnosis = arg0;
+    this.enableDiseaseConfirmationOnCaseRecord.next(arg0);
+  }
   setHypertensionSelected() {
     this.hypertensionSelected = 1;
     this.hypertensionSelectedFlag.next(1);
@@ -299,7 +298,13 @@ export class IdrsscoreService {
     this.hypertensionSelectedFlag.next(0);
   }
 
-  isHypertensionConfirmed = false;
+  finalDiagnosisDiabetesConfirm(diabetesConfirmation: any) {
+    this.finalDiagnosisDiseaseconfirm.next(diabetesConfirmation);
+  }
+  finalDiagnosisHypertensionConfirm(hyperConfirmation: any) {
+    this.finalHypertension = hyperConfirmation;
+    this.finalDiagnosisHypertensionConfirmation.next(hyperConfirmation);
+  }
 
   setConfirmedDiabeticSelected() {
     this.confirmedDiabeticSelected = 1;
@@ -309,6 +314,7 @@ export class IdrsscoreService {
     this.confirmedDiabeticSelected = 0;
     this.confirmedDiabeticSelectedFlag.next(0);
   }
-
-  isDiabeticsConfirmed = false;
+  rbsTestResultsInVitals(rbsTestResult: any) {
+    this.rbsResultsFromVitals.next(rbsTestResult);
+  }
 }

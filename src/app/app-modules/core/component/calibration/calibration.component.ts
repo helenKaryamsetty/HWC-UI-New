@@ -22,11 +22,11 @@
 import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from '../../services';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MasterdataService } from '../../services/masterdata.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 
 @Component({
   selector: 'app-calibration',
@@ -85,7 +85,7 @@ export class CalibrationComponent implements OnInit, DoCheck {
     this.masterdataService
       .fetchCalibrationStrips(providerServiceMapID, pageNo)
       .subscribe(
-        (res) => {
+        (res: any) => {
           if (res.statusCode === 200) {
             if (
               res.data &&

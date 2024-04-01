@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -33,7 +33,7 @@ import { FamilyTaggingService } from '../../shared/services/familytagging.servic
   templateUrl: './create-family-tagging.component.html',
   styleUrls: ['./create-family-tagging.component.css'],
 })
-export class CreateFamilyTaggingComponent implements OnInit {
+export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
   @ViewChild('newFamilyTaggingForm') form: any;
   currentLanguageSet: any;
   newFamilyTaggingForm!: FormGroup;
@@ -112,7 +112,9 @@ export class CreateFamilyTaggingComponent implements OnInit {
     const typeOfRelation = this.relationShipType.filter((item) => {
       if (item.benRelationshipID === this.relationWithHeadOfFamily) return item;
     });
-
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const reqObject = {
       beneficiaryRegId: this.beneficiaryRegID,
       familyName: this.familyName,
@@ -122,11 +124,8 @@ export class CreateFamilyTaggingComponent implements OnInit {
         this.isHeadOfTheFamily === 'yes' ? this.beneficiaryName : null,
       other: this.otherRelation,
       villageId: parseInt(this.benVillageId),
-      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-        .vanID,
-      parkingPlaceID: JSON.parse(
-        localStorage.getItem('serviceLineDetails') || '{}',
-      ).parkingPlaceID,
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
       createdBy: localStorage.getItem('userName'),
     };
     console.log('Details to be saved', reqObject);
@@ -135,7 +134,7 @@ export class CreateFamilyTaggingComponent implements OnInit {
         //       let response = {
         //   "data":{"benFamilyTagId":10,"familyId":"16626482041101581","familyName":"Mishra","noOfmembers":1,"villageId":899,"familyHeadName":"Shubham","createdBy":"tmall","vanID":220,"parkingPlaceID":246,"beneficiaryRegId":265240,"headofFamily_RelationID":1,"headofFamily_Relation":"io"},"statusCode":200,"errorMessage":"Success","status":"Success"
         // }
-        if (response.statusCode == 200 && response.data) {
+        if (response.statusCode === 200 && response.data) {
           this.confirmationService.alert(
             this.currentLanguageSet.familyCreatedSuccessfully,
             'success',

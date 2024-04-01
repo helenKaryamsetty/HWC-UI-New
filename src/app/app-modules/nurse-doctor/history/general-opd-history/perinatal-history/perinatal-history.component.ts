@@ -19,9 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
   MasterdataService,
@@ -30,8 +36,9 @@ import {
 } from '../../../shared/services';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-general-perinatal-history',
   templateUrl: './perinatal-history.component.html',
@@ -42,7 +49,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   perinatalHistoryForm!: FormGroup;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   @Input()
   mode!: string;
@@ -56,22 +63,13 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private dialog: MatDialog,
-    private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.getMasterData();
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
   ngOnDestroy() {
@@ -87,12 +85,20 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
@@ -100,10 +106,9 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   perinatalHistoryData: any;
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -130,12 +135,12 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
                 );
               })[0];
 
-          if (this.perinatalHistoryData.complicationID)
+          if (this.perinatalHistoryData.complicationAtBirthID)
             this.perinatalHistoryData.complicationAtBirth =
-              this.masterData.deliveryComplicationTypes.filter((item: any) => {
+              this.masterData.birthComplications.filter((item: any) => {
                 return (
                   item.complicationID ===
-                  this.perinatalHistoryData.complicationID
+                  this.perinatalHistoryData.complicationAtBirthID
                 );
               })[0];
 
@@ -144,15 +149,15 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
       });
   }
 
-  checkWeight(birthWeight_kg: any) {
-    if (this.birthWeight_kg >= 6)
+  checkWeight(birthWeightG: any) {
+    if (this.birthWeightG < 500 || this.birthWeightG > 6000)
       this.confirmationService.alert(
         this.currentLanguageSet.alerts.info.recheckValue,
       );
   }
 
-  get birthWeight_kg() {
-    return this.perinatalHistoryForm.controls['birthWeight_kg'].value;
+  get birthWeightG() {
+    return this.perinatalHistoryForm.controls['birthWeightG'].value;
   }
 
   get placeOfDelivery() {
@@ -164,6 +169,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   resetOtherPlaceOfDelivery() {
+    const deliveryList = this.masterData.deliveryTypes;
     if (
       this.placeOfDelivery.deliveryPlace === 'Home-Supervised' ||
       this.placeOfDelivery.deliveryPlace === 'Home-Unsupervised'
@@ -172,13 +178,18 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
         (item: any) => {
           console.log('item', item);
 
-          return (
-            item.deliveryType !== 'Assisted Delivery' &&
-            item.deliveryType !== 'Cesarean Section (LSCS)'
-          );
+          return item.deliveryType === 'Normal Delivery';
         },
       );
       this.selectDeliveryTypes = tempDeliveryTypes;
+    } else if (
+      this.placeOfDelivery.deliveryPlace === 'Subcentre' ||
+      this.placeOfDelivery.deliveryPlace === 'PHC'
+    ) {
+      const deliveryType = deliveryList.filter((item: any) => {
+        return item.deliveryType !== 'Cesarean Section (LSCS)';
+      });
+      this.selectDeliveryTypes = deliveryType;
     } else {
       this.selectDeliveryTypes = this.masterData.deliveryTypes;
     }
@@ -191,10 +202,10 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   getPreviousPerinatalHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
-    console.log('here checkig', this.visitCategory);
+    console.log('here checkig', this.visitType);
 
     this.nurseService
-      .getPreviousPerinatalHistory(benRegID, this.visitCategory)
+      .getPreviousPerinatalHistory(benRegID, this.visitType)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {
@@ -228,8 +239,16 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
         dataList: data,
         title:
           this.currentLanguageSet.historyData.Perinatalhistorydetails
-            .developmentalhistorydetails,
+            .previousPerinatalHistoryDetails,
       },
     });
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

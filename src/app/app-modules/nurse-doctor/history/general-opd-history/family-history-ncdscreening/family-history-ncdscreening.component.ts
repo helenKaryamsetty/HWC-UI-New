@@ -19,28 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
 import {
-  FormBuilder,
-  FormArray,
-  FormGroup,
-  AbstractControl,
-} from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import {
-  ConfirmationService,
-  BeneficiaryDetailsService,
-} from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
+  MasterdataService,
   NurseService,
   DoctorService,
-  MasterdataService,
 } from '../../../shared/services';
+import { ConfirmationService } from '../../../../core/services/confirmation.service';
+import { MatDialog } from '@angular/material/dialog';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
@@ -57,7 +49,7 @@ export class FamilyHistoryNcdscreeningComponent
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   masterData: any;
   familyHistoryData: any;
@@ -68,7 +60,6 @@ export class FamilyHistoryNcdscreeningComponent
   diseaseSelectList: any = [];
   familyMembersArray: any = [];
   IDRSScoreForFamilyMembes: any = 0;
-  dummyValue: any;
   idrsscoredummy: any;
   diabetesMellitusSelected = false;
   beneficiaryDetailSubscription: any;
@@ -84,30 +75,20 @@ export class FamilyHistoryNcdscreeningComponent
     private masterdataService: MasterdataService,
     private idrsscore: IdrsscoreService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    public httpServiceService: HttpServiceService,
+    private httpServices: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.idrsscore.clearMessage();
-    this.idrsscore.dummyValue$.subscribe(
-      (response) => (this.dummyValue = response),
-    );
     this.idrsscore.IDRSFamilyScore$.subscribe(
       (response) => (this.idrsscoredummy = response),
     );
     this.getMasterData();
     this.getBeneficiaryDetails();
+    // localStorage.removeItem("diabetesMellitusSelected")
   }
 
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
   ngOnDestroy() {
     if (this.nurseMasterDataSubscription)
       this.nurseMasterDataSubscription.unsubscribe();
@@ -116,38 +97,41 @@ export class FamilyHistoryNcdscreeningComponent
       this.generalHistorySubscription.unsubscribe();
   }
 
-  getFamilyDiseases(): AbstractControl[] | null {
-    const familyDiseaseControl =
-      this.familyHistoryForm.get('familyDiseaseList');
-    return familyDiseaseControl instanceof FormArray
-      ? familyDiseaseControl.controls
-      : null;
-  }
-
   nurseMasterDataSubscription: any;
   getMasterData() {
+    // this.masterData = this.dummy;
+    // this.diseaseMasterData = this.masterData.data.DiseaseTypes;
+    // this.familyMemeberMasterData = this.masterData.data.familyMemberTypes;
+    // this.addFamilyDisease();
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
           this.familyMemeberMasterData = masterData.familyMemberTypes;
+
           this.addFamilyDisease();
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -191,6 +175,8 @@ export class FamilyHistoryNcdscreeningComponent
         element.diseaseType.diseaseType === 'Diabetes Mellitus'
       ) {
         familyMemberList = element.familyMembers;
+        // this.diabetesMellitusSelected = true;
+        // localStorage.setItem("diabetesMellitusSelected", element.diseaseType.diseaseType);
         this.patchFamilyMembersIDRSScore(familyMemberList);
       }
     });
@@ -209,14 +195,27 @@ export class FamilyHistoryNcdscreeningComponent
             value.diseaseType !== null &&
             value.diseaseType.diseaseType !== 'Other'
           ) {
+            // if (value.diseaseType !== null && value.diseaseType.diseaseType === "Diabetes Mellitus") {
+            //   this.diabetesMellitusSelected = true;
+            //   localStorage.setItem("diabetesMellitusSelected", value.diseaseType.diseaseType);
+            // }
             return value.diseaseType.diseaseType === item.diseaseType;
           } else return false;
         });
         if (item.diseaseType === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;
+        // let flag = arr.length === 0 ? true : false;
+        // return flag;
       });
+      // temp.forEach(element => {
+      //   if(element.deleted === true){
+      //     this.diseaseSelectList[index] = [];
+      //     result.push(element.diseaseType);
+      //   }
+      // });
       this.diseaseSelectList.push(result.slice());
+      // this.sortDiseaseList(this.diseaseSelectList[0]);
     }
     familyDiseaseList.push(this.initFamilyDiseaseList());
   }
@@ -227,12 +226,16 @@ export class FamilyHistoryNcdscreeningComponent
     const temp = familyDiseaseList.value;
 
     if (this.diseaseMasterData) {
-      const result: any = this.diseaseMasterData.filter((item: any) => {
+      const result = this.diseaseMasterData.filter((item: any) => {
         const arr = temp.filter((value: any) => {
           if (
             value.diseaseType !== null &&
             value.diseaseType.diseaseType !== 'Other'
           ) {
+            // if (value.diseaseType !== null && value.diseaseType.diseaseType === "Diabetes Mellitus") {
+            //   // this.diabetesMellitusSelected = true;
+            //   // localStorage.setItem("diabetesMellitusSelected", value.diseaseType.diseaseType);
+            // }
             return value.diseaseType.diseaseType === item.diseaseType;
           } else return false;
         });
@@ -241,6 +244,8 @@ export class FamilyHistoryNcdscreeningComponent
         if (item.diseaseType === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;
+        // let flag = arr.length === 0 ? true : false;
+        // return flag;
       });
 
       temp.forEach((element: any) => {
@@ -266,28 +271,24 @@ export class FamilyHistoryNcdscreeningComponent
 
       const totalLength = this.diseaseSelectList.length + 1; //= 3
       this.diseaseSelectList.splice(totalLength, 0, result.slice());
+      // this.diseaseSelectList[index + 1].push(result.slice());
       this.sortDiseaseList(this.diseaseSelectList[index + 1]);
     }
     familyDiseaseList.push(this.initFamilyDiseaseList());
   }
 
-  filterFamilyDiseaseList(
-    event: any,
-    i: any,
-    familyDiseaseForm?: AbstractControl<any, any>,
-  ) {
-    const disease: any = event.value;
+  filterFamilyDiseaseList(disease: any, i: any, familyDiseaseForm?: FormGroup) {
     const familyDiseaseList = <FormArray>(
       this.familyHistoryForm.controls['familyDiseaseList']
     );
     const tempArray = familyDiseaseList.value;
-    this.idrsscore.setdymmyvalue(disease.diseaseType);
-    const previousValue: any = this.previousSelectedDiseaseList[i];
+    const previousValue = this.previousSelectedDiseaseList[i];
     if (disease.diseaseType === 'None') {
       this.removeFamilyDiseaseExecptNone();
     }
 
     console.log('diseaseForm', familyDiseaseForm);
+
     let diabetesPresent = false;
     tempArray.forEach((element: any) => {
       if (element.diseaseType.diseaseType === 'Diabetes Mellitus') {
@@ -297,6 +298,14 @@ export class FamilyHistoryNcdscreeningComponent
     if (!diabetesPresent) {
       this.idrsscore.setIDRSFamilyScore(0);
     }
+
+    // if (flag) {
+    //   this.diabetesMellitusSelected = true;
+    //   localStorage.setItem("diabetesMellitusSelected", "Diabetes Mellitus");
+    // } else {
+    //   this.diabetesMellitusSelected = false;
+    //   localStorage.removeItem("diabetesMellitusSelected")
+    // }
 
     if (familyDiseaseForm) {
       if (disease.diseaseType !== 'Other') {
@@ -351,7 +360,7 @@ export class FamilyHistoryNcdscreeningComponent
     }
   }
 
-  removeFamilyDisease(i: any, familyHistoryForm?: AbstractControl<any, any>) {
+  removeFamilyDisease(i: any, familyHistoryForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -369,10 +378,14 @@ export class FamilyHistoryNcdscreeningComponent
                 removedValue !== null &&
                 removedValue.diseaseType === 'Diabetes Mellitus'
               ) {
+                // this.diabetesMellitusSelected = false;
+                // localStorage.removeItem("diabetesMellitusSelected");
                 this.idrsscore.setIDRSFamilyScore(0);
               }
               familyDiseaseList.push(this.initFamilyDiseaseList());
               this.diseaseSelectList.push(this.diseaseMasterData);
+              // this.diabetesMellitusSelected = false;
+              // localStorage.removeItem("diabetesMellitusSelected");
             } else {
               familyHistoryForm.reset();
               familyHistoryForm.patchValue({ deleted: false });
@@ -381,6 +394,8 @@ export class FamilyHistoryNcdscreeningComponent
                 removedValue !== null &&
                 removedValue.diseaseType === 'Diabetes Mellitus'
               ) {
+                // this.diabetesMellitusSelected = false;
+                // localStorage.removeItem("diabetesMellitusSelected");
                 this.idrsscore.setIDRSFamilyScore(0);
               }
             }
@@ -400,6 +415,8 @@ export class FamilyHistoryNcdscreeningComponent
               removedValue !== null &&
               removedValue.diseaseType === 'Diabetes Mellitus'
             ) {
+              // this.diabetesMellitusSelected = false;
+              // localStorage.removeItem("diabetesMellitusSelected");
               this.idrsscore.setIDRSFamilyScore(0);
             }
             if (familyDiseaseList.value[i].ID !== null) {
@@ -433,7 +450,7 @@ export class FamilyHistoryNcdscreeningComponent
   getPreviousFamilyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFamilyHistory(benRegID, this.visitCategory)
+      .getPreviousFamilyHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -511,10 +528,14 @@ export class FamilyHistoryNcdscreeningComponent
 
   filterFamilyMembers(familyMembers: any, familyGroup: any) {
     this.familyMembersArray = familyMembers.value;
+    // this.IDRSScoreForFamilyMembes = 0;
     const familyDiseaseType = familyGroup.value.diseaseType.diseaseType;
+    console.log('there', familyGroup);
+
     let singleParent = false;
     let bothParent = false;
     let IDRSScoreForFamilyMembes = 0;
+    // let isdiabetes = localStorage.getItem("diabetesMellitusSelected")
     if (familyDiseaseType && familyDiseaseType === 'Diabetes Mellitus') {
       if (this.familyMembersArray.length > 0) {
         this.familyMembersArray.forEach((element: any) => {
@@ -561,6 +582,7 @@ export class FamilyHistoryNcdscreeningComponent
 
   patchFamilyMembersIDRSScore(familyMembers: any) {
     this.familyMembersArray = familyMembers;
+    // this.IDRSScoreForFamilyMembes = 0;
     let singleParent = false;
     let bothParent = false;
     let IDRSScoreForFamilyMembes = 0;
@@ -589,6 +611,10 @@ export class FamilyHistoryNcdscreeningComponent
     if (bothParent) {
       IDRSScoreForFamilyMembes = 20;
     }
+
+    // console.log("score", IDRSScoreForFamilyMembes);
+    // localStorage.setItem("IdRSScoreFamilyHistory", IDRSScoreForFamilyMembes.toString());
+
     this.idrsscore.setIDRSFamilyScore(IDRSScoreForFamilyMembes);
     console.log('family', familyMembers);
   }
@@ -606,5 +632,14 @@ export class FamilyHistoryNcdscreeningComponent
           }
         },
       );
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

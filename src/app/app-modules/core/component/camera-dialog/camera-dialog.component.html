@@ -87,9 +87,9 @@
 <div class="container-fluid dialog" *ngIf="graph">
 
     <mat-dialog-content id="container-dialog" style="max-height: unset !important;">
-        <h4 *ngIf="graph?.type == 'bw'"> {{currentLanguageSet?.previousvisit?.bodyweighttrends}}</h4>
-        <h4 *ngIf="graph?.type == 'bg'"> {{currentLanguageSet?.previousvisit?.bloodGlucoseTrends}}</h4>
-        <h4 *ngIf="graph?.type == 'bp'"> {{currentLanguageSet?.previousvisit?.bloodPressureTrends}}</h4>
+        <h4 *ngIf="graph?.type === 'bw'"> {{currentLanguageSet?.previousvisit?.bodyweighttrends}}</h4>
+        <h4 *ngIf="graph?.type === 'bg'"> {{currentLanguageSet?.previousvisit?.bloodGlucoseTrends}}</h4>
+        <h4 *ngIf="graph?.type === 'bp'"> {{currentLanguageSet?.previousvisit?.bloodPressureTrends}}</h4>
         <canvas baseChart [datasets]="graph?.chartData" [labels]="graph?.chartLabels" [options]="graph?.lineChartOptions" [colors]="graph?.chartColors"
             [legend]="graph?.chartLegend" [chartType]="graph?.chartType"></canvas>
     </mat-dialog-content>

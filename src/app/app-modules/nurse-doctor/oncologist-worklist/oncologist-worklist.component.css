@@ -10,7 +10,7 @@ md-input-container {
   width: 60%;
 }
 
-::ng-deep.pagination {
+:host /deep/ .pagination {
   margin: 0;
 }
 

@@ -31,9 +31,9 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
-import { RegistrarService } from '../../services/registrar.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 
 @Component({
   selector: 'app-health-id-display-modal',
@@ -148,7 +148,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
       authenticationMode: this.selectedHealthID.authenticationMode,
     };
     this.registrarService.generateOtpForMappingCareContext(reqObj).subscribe(
-      (receivedOtpResponse) => {
+      (receivedOtpResponse: any) => {
         if (receivedOtpResponse.statusCode === 200) {
           this.showProgressBar = false;
           this.confirmationService.alert(
@@ -225,7 +225,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     this.registrarService
       .verifyOtpForMappingCarecontext(verifyOtpData)
       .subscribe(
-        (verifiedMappingData) => {
+        (verifiedMappingData: any) => {
           if (verifiedMappingData.statusCode === 200) {
             this.showProgressBar = false;
             this.confirmationService.alert(
@@ -301,7 +301,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
       healthIdNumber: data.healthIdNumber,
     };
     this.registrarService.generateHealthIDCard(reqObj).subscribe(
-      (res) => {
+      (res: any) => {
         if (res.statusCode === 200 && Object.keys(res.data).length > 0) {
           this.dialogRef.close();
           // this.confirmationService.confirmHealthId('success', this.currentLanguageSet.OTPSentToRegMobNo).subscribe((result) => {

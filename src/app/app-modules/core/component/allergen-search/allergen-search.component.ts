@@ -24,8 +24,8 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterdataService } from '../../services/masterdata.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 
 @Component({
   selector: 'app-allergen-search',
@@ -107,7 +107,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
       this.masterdataService
         .searchDiagnosisBasedOnPageNo1(term, pageNo)
         .subscribe(
-          (res) => {
+          (res: any) => {
             if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {

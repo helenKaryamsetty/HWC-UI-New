@@ -19,20 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DoctorService } from '../../core/services/doctor.service';
+import { DoctorService } from '../shared/services/doctor.service';
 
 @Component({
   selector: 'app-nurse-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css'],
 })
-export class HistoryComponent implements OnInit, OnChanges {
+export class HistoryComponent implements OnChanges, OnInit {
   @Input()
-  patientHistoryDataForm!: FormGroup;
+  patientHistoryForm: FormGroup | undefined;
 
   @Input()
   visitCategory!: string;
@@ -47,8 +46,6 @@ export class HistoryComponent implements OnInit, OnChanges {
   primeGravidaStatus: any;
 
   showGeneralOPD = false;
-  showCancer = false;
-
   attendant: any;
 
   constructor(
@@ -57,7 +54,6 @@ export class HistoryComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.showHistoryTabs();
     this.attendant = this.route.snapshot.params['attendant'];
     this.doctorService.setCapturedHistoryByNurse(null);
 
@@ -65,23 +61,16 @@ export class HistoryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.showHistoryTabs();
-  }
-  showHistoryTabs() {
-    if (
-      this.visitCategory &&
-      (this.visitCategory === 'General OPD' ||
+    if (this.visitCategory) {
+      this.showGeneralOPD =
+        this.visitCategory === 'General OPD' ||
         this.visitCategory === 'ANC' ||
         this.visitCategory === 'NCD care' ||
         this.visitCategory === 'PNC' ||
         this.visitCategory === 'COVID-19 Screening' ||
-        this.visitCategory === 'NCD screening')
-    ) {
-      this.showGeneralOPD = true;
-      this.showCancer = false;
-    } else {
-      this.showCancer = true;
-      this.showGeneralOPD = false;
+        this.visitCategory === 'NCD screening'
+          ? true
+          : false;
     }
   }
   generalHistory() {

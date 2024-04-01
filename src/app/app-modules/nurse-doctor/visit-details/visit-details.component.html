@@ -1,20 +1,49 @@
-<mat-accordion [formGroup]="patientVisitDataForm">
+<mat-accordion [formGroup]="patientVisitForm">
   <mat-expansion-panel expanded="true">
     <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.nurseData?.visitDetails }}</h5>
+      <h5>{{ currentLanguageSet?.nurseData?.visitDetails }}</h5>
     </mat-expansion-panel-header>
-    <app-patient-visit-details
+    <patient-visit-details
       [mode]="mode"
-      [patientVisitDetailsForm]="patientVisitDetailsForm"
-    ></app-patient-visit-details>
+      [patientVisitDetailsForm]="
+        patientVisitForm.controls.patientVisitDetailsForm
+      "
+    ></patient-visit-details>
   </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="visitCategory">
+  <mat-expansion-panel
+    *ngIf="
+      hideAll === true ||
+      (showNcdScreeningVisit === true && enableCBACForm === true)
+    "
+  >
     <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.covidVaccinationStatus }}</h5>
+      <h5>{{ currentLanguageSet?.cbacForm }}</h5>
+    </mat-expansion-panel-header>
+    <app-cbac
+      [mode]="mode"
+      [cbacScreeningForm]="patientVisitForm.controls.cbacScreeningForm"
+    ></app-cbac>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel
+    *ngIf="
+      hideAll === true ||
+      showNcdScreeningVisit === true ||
+      showANCVisit === true ||
+      showPNCVisit === true ||
+      showOPD === true ||
+      showFamilyPlanning === true ||
+      showChildAndAdolescent === true
+    "
+  >
+    <mat-expansion-panel-header>
+      <h5>{{ currentLanguageSet?.covidVaccinationStatus }}</h5>
     </mat-expansion-panel-header>
     <app-covid-vaccination-status
-      [covidVaccineStatusForm]="covidVaccineStatusForm"
+      [covidVaccineStatusForm]="
+        patientVisitForm.controls.covidVaccineStatusForm
+      "
     ></app-covid-vaccination-status>
   </mat-expansion-panel>
 
@@ -22,36 +51,72 @@
     *ngIf="
       hideAll === true ||
       showANCVisit === true ||
-      showNcdScreeningVisit === true ||
-      showPNC === true
+      showPNCVisit === true ||
+      showOPD === true ||
+      showFamilyPlanning === true ||
+      showNeonatalVisit === true ||
+      showChildAndAdolescent === true
     "
   >
     <mat-expansion-panel-header>
       <h5>
         {{
-          current_language_set?.nurseData?.chiefComplaintsDetails
-            ?.chiefComplaints
+          currentLanguageSet?.nurseData?.chiefComplaintsDetails?.chiefComplaints
         }}
       </h5>
     </mat-expansion-panel-header>
-    <app-patient-chief-complaints
+    <patient-chief-complaints
       [mode]="mode"
-      [patientChiefComplaintsForm]="patientChiefComplaintsForm"
-    ></app-patient-chief-complaints>
+      [patientChiefComplaintsForm]="
+        patientVisitForm.controls.patientChiefComplaintsForm
+      "
+    ></patient-chief-complaints>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel *ngIf="visitCategory && isCdssStatus">
+    <mat-expansion-panel-header>
+      <h5>{{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.cdss }}</h5>
+    </mat-expansion-panel-header>
+    <h5>{{ currentLanguageSet?.previousvisit?.ChiefComplaint104 }}</h5>
+    <app-cdss-form
+      [mode]="mode"
+      [presentChiefComplaintDb]="
+        patientVisitForm.controls.cdssForm.controls.presentChiefComplaintDb
+      "
+    ></app-cdss-form>
+    <h5>
+      {{
+        currentLanguageSet?.nurseData?.chiefComplaintsDetails?.diseaseSummary
+      }}
+    </h5>
+    <app-diseaseSummary-form
+      [mode]="mode"
+      [diseaseSummaryDb]="
+        patientVisitForm.controls.cdssForm.controls.diseaseSummaryDb
+      "
+    ></app-diseaseSummary-form>
   </mat-expansion-panel>
 
   <mat-expansion-panel
-    *ngIf="hideAll === true || showANCVisit === true || showNCDCare"
+    *ngIf="
+      ((showANCVisit === true ||
+        showPNCVisit === true ||
+        showOPD === true ||
+        showFamilyPlanning === true) &&
+        visitReason !== undefined &&
+        visitReason !== null &&
+        visitReason === 'Follo===================w Up') ||
+      hideAll === true ||
+      showNCDCare
+    "
   >
     <mat-expansion-panel-header>
-      <h5>
-        {{ current_language_set?.nurseData?.adherenceDetails?.adherence }}
-      </h5>
+      <h5>{{ currentLanguageSet?.nurseData?.adherenceDetails?.adherence }}</h5>
     </mat-expansion-panel-header>
-    <app-patient-adherence
+    <patient-adherence
       [mode]="mode"
-      [patientAdherenceForm]="patientAdherenceForm"
-    ></app-patient-adherence>
+      [patientAdherenceForm]="patientVisitForm.controls.patientAdherenceForm"
+    ></patient-adherence>
   </mat-expansion-panel>
 
   <mat-expansion-panel
@@ -60,74 +125,82 @@
     <mat-expansion-panel-header>
       <h5>
         {{
-          current_language_set?.nurseData?.investigationsDetails?.investigations
+          currentLanguageSet?.nurseData?.investigationsDetails?.investigations
         }}
       </h5>
     </mat-expansion-panel-header>
-    <app-patient-investigations
+    <patient-investigations
       [mode]="mode"
-      [patientInvestigationsForm]="patientInvestigationsForm"
-    ></app-patient-investigations>
+      [patientInvestigationsForm]="
+        patientVisitForm.controls.patientInvestigationsForm
+      "
+    ></patient-investigations>
   </mat-expansion-panel>
+
   <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
     <mat-expansion-panel-header>
       <h5>
         {{
-          current_language_set?.ExaminationData?.cancerScreeningExamination
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.symptoms
         }}
       </h5>
     </mat-expansion-panel-header>
-    <app-symptoms
+    <symptoms
       [mode]="mode"
-      [patientCovidForm]="patientCovidForm"
-    ></app-symptoms>
+      [patientCovidForm]="patientVisitForm.controls.patientCovidForm"
+    ></symptoms>
   </mat-expansion-panel>
   <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
     <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.contactHistory }}</h5>
+      <h5>{{ currentLanguageSet?.contactHistory }}</h5>
     </mat-expansion-panel-header>
-    <app-contact-history
+    <contact-history
       [mode]="mode"
-      [patientCovidForm]="patientCovidForm"
-    ></app-contact-history>
+      [patientCovidForm]="patientVisitForm.controls.patientCovidForm"
+    ></contact-history>
   </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="hideAll === true || showCOVID">
-      <h5>{{ current_language_set?.covid?.travelHistory }}</h5>
+  <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
+    <mat-expansion-panel-header>
+      <h5>{{ currentLanguageSet?.covid?.travelHistory }}</h5>
     </mat-expansion-panel-header>
-    <app-travel-history
+    <travel-history
       [mode]="mode"
-      [patientCovidForm]="patientCovidForm"
-    ></app-travel-history>
+      [patientCovidForm]="patientVisitForm.controls.patientCovidForm"
+      (outputToParent)="getSymptomVal($event)"
+    ></travel-history>
   </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="visitCategory">
-      <h5>
-        {{ current_language_set?.nurseData?.visitDetailsForm?.uploadFiles }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-upload-files
-      [mode]="mode"
-      [enableFileSelection]="enableFileSelection"
-      [patientFileUploadDetailsForm]="patientFileUploadDetailsForm"
-    ></app-patient-upload-files>
-  </mat-expansion-panel>
-
   <mat-expansion-panel
     *ngIf="hideAll === true || showNcdScreeningVisit === true"
   >
     <mat-expansion-panel-header>
-      <h5>
+      <h5 *ngIf="enableCBACForm === true">
+        {{ currentLanguageSet?.existingNCDDisease }}
+      </h5>
+      <h5 *ngIf="enableCBACForm === false">
         {{
-          current_language_set?.nurseData?.visitDetailsForm?.diseaseConfirmation
+          currentLanguageSet?.nurseData?.visitDetailsForm?.diseaseConfirmation
         }}
       </h5>
     </mat-expansion-panel-header>
-    <app-diseaseconfirmation
+    <diseaseconfirmation
       [mode]="mode"
-      [diseaseFormsGroup]="patientDiseaseForm"
-    ></app-diseaseconfirmation>
+      [idrsOrCbac]="idrsOrCbac"
+      [diseaseFormsGroup]="patientVisitForm.controls.patientDiseaseForm"
+    ></diseaseconfirmation>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="visitCategory">
+    <mat-expansion-panel-header>
+      <h5>
+        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
+      </h5>
+    </mat-expansion-panel-header>
+    <patient-upload-files
+      [mode]="mode"
+      [enableFileSelection]="enableFileSelection"
+      [patientFileUploadDetailsForm]="
+        patientVisitForm.controls.patientFileUploadDetailsForm
+      "
+    ></patient-upload-files>
   </mat-expansion-panel>
 </mat-accordion>

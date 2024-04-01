@@ -23,9 +23,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { DoctorService } from '../../services/doctor.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services';
 
 @Component({
   selector: 'app-open-previous-visit-details',

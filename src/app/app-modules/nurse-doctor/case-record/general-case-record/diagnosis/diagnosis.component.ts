@@ -19,16 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  MasterdataService,
+  NurseService,
+  DoctorService,
+} from '../../../shared/services';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
-import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-diagnosis',
   templateUrl: './diagnosis.component.html',
   styleUrls: ['./diagnosis.component.css'],
 })
-export class DiagnosisComponent {
-  @Input()
+export class DiagnosisComponent implements OnInit, DoCheck {
   @Input()
   generalDiagnosisForm!: FormGroup;
 
@@ -37,5 +50,27 @@ export class DiagnosisComponent {
 
   @Input()
   caseRecordMode!: string;
-  constructor() {}
+  current_language_set: any;
+
+  constructor(
+    private fb: FormBuilder,
+    public httpServiceService: HttpServiceService,
+    private nurseService: NurseService,
+    private doctorService: DoctorService,
+    private masterdataService: MasterdataService,
+  ) {}
+
+  ngOnInit() {
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
+  }
+
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.current_language_set = getLanguageJson.currentLanguageObject;
+  }
 }

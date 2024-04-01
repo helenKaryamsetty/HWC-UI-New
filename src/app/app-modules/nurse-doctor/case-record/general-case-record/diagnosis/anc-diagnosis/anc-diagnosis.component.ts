@@ -19,14 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  MasterdataService,
+  NurseService,
+  DoctorService,
+} from '../../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { MasterdataService } from 'src/app/app-modules/core/services/masterdata.service';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-anc-diagnosis',
   templateUrl: './anc-diagnosis.component.html',
@@ -38,14 +49,15 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryRegID: any;
   visitID: any;
   visitCategory: any;
-
+  designation: any;
+  specialist = false;
   minimumDeathDate!: Date;
+  SpecialistMsg: any;
+  showHRP: any;
 
   showOtherPregnancyComplication = false;
   disableNonePregnancyComplication = false;
   showAllPregComplication = true;
-  showHRP: any;
-  complicationPregHRP = 'false';
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -53,22 +65,40 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
   caseRecordMode!: string;
   current_language_set: any;
+  complicationPregHRP = 'false';
 
   constructor(
+    private fb: FormBuilder,
+    public httpServiceService: HttpServiceService,
+
+    private nurseService: NurseService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     public beneficiaryDetailsService: BeneficiaryDetailsService,
-    private httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.today = new Date();
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(
+    //   response => (this.current_language_set = response)
+    // );
+    this.beneficiaryDetailsService.resetHRPPositive();
+
+    this.fetchHRPPositive();
     this.minimumDeathDate = new Date(
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
-    this.beneficiaryDetailsService.resetHRPPositive();
-    this.fetchHPRPositive();
-    this.getMasterData();
+    this.designation = localStorage.getItem('designation');
+    if (this.designation === 'TC Specialist') {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
+      this.specialist = true;
+    } else {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].disable();
+      this.specialist = false;
+    }
+
+    /*Setting HRP Positive*/
     this.beneficiaryDetailsService.HRPPositiveFlag$.subscribe((response) => {
       if (response > 0) {
         this.showHRP = 'true';
@@ -76,7 +106,11 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         this.showHRP = 'false';
       }
     });
+
+    /*END-Setting HRP Positive**/
+    this.getMasterData();
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -85,69 +119,97 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   ngOnDestroy() {
     if (this.nurseMasterDataSubscription)
       this.nurseMasterDataSubscription.unsubscribe();
+    if (this.diagnosisSubscription) this.diagnosisSubscription.unsubscribe();
+  }
+
+  HRPSubscription: any;
+  fetchHRPPositive() {
+    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    const visitCode = localStorage.getItem('visitCode');
+    this.HRPSubscription = this.doctorService
+      .getHRPDetails(beneficiaryRegID, visitCode)
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data) {
+          if (res.data.isHRP === true) {
+            this.showHRP = 'true';
+          } else {
+            this.showHRP = 'false';
+          }
+        }
+      });
   }
 
   nurseMasterDataSubscription: any;
   getMasterData() {
     this.nurseMasterDataSubscription =
-      this.masterdataService.nurseMasterData$.subscribe((masterData: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) this.masterData = masterData;
 
         if (this.caseRecordMode === 'view') {
           this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
           this.visitID = localStorage.getItem('visitID');
           this.visitCategory = localStorage.getItem('visitCategory');
-          this.getDiagnosisDetails(
-            this.beneficiaryRegID,
-            this.visitID,
-            this.visitCategory,
-          );
+          this.getDiagnosisDetails();
         }
       });
   }
 
-  diagnosisSubscription: any;
-  getDiagnosisDetails(beneficiaryRegID: any, visitID: any, visitCategory: any) {
-    this.diagnosisSubscription = this.doctorService
-      .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.diagnosis) {
+  diagnosisSubscription!: Subscription;
+  getDiagnosisDetails() {
+    this.diagnosisSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((res) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
           this.patchDiagnosisDetails(res.data.diagnosis);
         }
       });
   }
-
+  get specialistDaignosis() {
+    return this.generalDiagnosisForm.get('specialistDiagnosis');
+  }
   patchDiagnosisDetails(diagnosis: any) {
     if (diagnosis.dateOfDeath)
       diagnosis.dateOfDeath = new Date(diagnosis.dateOfDeath);
+
     this.generalDiagnosisForm.patchValue(diagnosis);
+
     this.patchComplicationOfCurrentPregnancyList(diagnosis);
   }
+
   patchComplicationOfCurrentPregnancyList(diagnosis: any) {
     const tempComplicationList: any = [];
-    diagnosis.complicationOfCurrentPregnancyList.map((complaintType: any) => {
-      if (this.masterData?.pregComplicationTypes) {
-        const tempComplication = this.masterData.pregComplicationTypes.filter(
-          (masterComplication: any) => {
-            return (
-              complaintType.pregComplicationType ===
-              masterComplication.pregComplicationType
-            );
-          },
-        );
-        if (tempComplication.length > 0) {
-          tempComplicationList.push(tempComplication[0]);
+    if (diagnosis.complicationOfCurrentPregnancyList !== undefined) {
+      diagnosis.complicationOfCurrentPregnancyList.map((complaintType: any) => {
+        if (
+          this.masterData !== undefined &&
+          this.masterData.pregComplicationTypes !== undefined
+        ) {
+          const tempComplication = this.masterData.pregComplicationTypes.filter(
+            (masterComplication: any) => {
+              return (
+                complaintType.pregComplicationType ===
+                masterComplication.pregComplicationType
+              );
+            },
+          );
+
+          if (tempComplication.length > 0) {
+            tempComplicationList.push(tempComplication[0]);
+          }
         }
-      }
-    });
+      });
+    }
+
     diagnosis.complicationOfCurrentPregnancyList = tempComplicationList.slice();
+    console.log('diagnosisCheck', diagnosis);
 
     this.resetOtherPregnancyComplication(tempComplicationList, diagnosis);
     this.generalDiagnosisForm.patchValue(diagnosis);
   }
+
   get highRiskStatus() {
     return this.generalDiagnosisForm.get('highRiskStatus');
   }
@@ -163,6 +225,7 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       causeOfDeath: null,
     });
   }
+
   get complicationOfCurrentPregnancyList() {
     return this.generalDiagnosisForm.controls[
       'complicationOfCurrentPregnancyList'
@@ -189,18 +252,31 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       this.disableNonePregnancyComplication = false;
       this.showAllPregComplication = true;
     }
+    console.log(
+      'checkNull.otherCurrPregComplication',
+      checkNull.otherCurrPregComplication,
+    );
+
     if (checkNull === 0) {
       if (!flag) {
         this.generalDiagnosisForm.patchValue({
           otherCurrPregComplication: null,
         });
       }
-    } else if (flag) {
-      this.generalDiagnosisForm.patchValue({
-        otherCurrPregComplication: checkNull.otherCurrPregComplication,
-      });
+    } else {
+      if (flag) {
+        console.log(
+          'checkNull.otherCurrPregComplication',
+          checkNull.otherCurrPregComplication,
+        );
+
+        this.generalDiagnosisForm.patchValue({
+          otherCurrPregComplication: checkNull.otherCurrPregComplication,
+        });
+      }
     }
   }
+
   displayPositive(complicationList: any) {
     if (
       complicationList.some(
@@ -211,22 +287,5 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       this.complicationPregHRP = 'false';
     }
-  }
-
-  HRPSubscription: any;
-  fetchHPRPositive() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
-    this.HRPSubscription = this.doctorService
-      .getHRPDetails(beneficiaryRegID, visitCode)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data) {
-          if (res?.data?.isHRP) {
-            this.showHRP = 'true';
-          } else {
-            this.showHRP = 'false';
-          }
-        }
-      });
   }
 }

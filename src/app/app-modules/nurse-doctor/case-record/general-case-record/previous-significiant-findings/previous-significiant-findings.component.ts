@@ -19,50 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import { DoctorService, MasterdataService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
   styleUrls: ['./previous-significiant-findings.component.css'],
 })
 export class PreviousSignificiantFindingsComponent
-  implements OnInit, OnDestroy, DoCheck
+  implements OnInit, DoCheck, OnDestroy
 {
-  current_language_set: any;
-
-  displayedColumns: any = ['sno', 'significantfindings', 'captureddate'];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
-
   constructor(
     private doctorService: DoctorService,
-    private httpServiceService: HttpServiceService,
+    public httpServiceService: HttpServiceService,
   ) {}
   rowsPerPage = 5;
   activePage = 1;
   pagedList = [];
   rotate = true;
+  current_language_set: any;
   ngOnInit() {
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.getPreviousSignificiantFindings();
   }
 
-  ngOnDestroy() {
-    if (this.previousSignificantFindingsSubs)
-      this.previousSignificantFindingsSubs.unsubscribe();
-  }
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -71,6 +55,12 @@ export class PreviousSignificiantFindingsComponent
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
+  ngOnDestroy() {
+    if (this.previousSignificantFindingsSubs)
+      this.previousSignificantFindingsSubs.unsubscribe();
+  }
+
   pageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -92,14 +82,19 @@ export class PreviousSignificiantFindingsComponent
       .subscribe((data: any) => {
         console.log('previousSignificantFindingsSubs', data);
         if (data.statusCode === 200) {
-          if (data?.data?.findings) {
+          if (
+            data.data !== null &&
+            data.data !== undefined &&
+            data.data.findings
+          ) {
             this.previousSignificiantFindingsList = data.data.findings;
             this.filteredPreviousSignificiantFindingsList =
               this.previousSignificiantFindingsList;
-            this.dataSource.data = [];
-            this.dataSource.data = this.previousSignificiantFindingsList;
-            this.dataSource.paginator = this.paginator;
           }
+          this.pageChanged({
+            page: this.activePage,
+            itemsPerPage: this.rowsPerPage,
+          });
         }
       });
   }
@@ -110,8 +105,6 @@ export class PreviousSignificiantFindingsComponent
         this.previousSignificiantFindingsList;
     else {
       this.filteredPreviousSignificiantFindingsList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
       this.previousSignificiantFindingsList.forEach((item) => {
         for (const key in item) {
           const value: string = '' + item[key];
@@ -122,5 +115,10 @@ export class PreviousSignificiantFindingsComponent
         }
       });
     }
+    this.activePage = 1;
+    this.pageChanged({
+      page: 1,
+      itemsPerPage: this.rowsPerPage,
+    });
   }
 }

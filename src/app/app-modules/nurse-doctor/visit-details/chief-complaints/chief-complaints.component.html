@@ -1,3 +1,4 @@
+<!-- {{patientChiefComplaintsForm.value | json}} -->
 <div
   class="row m-t-20"
   *ngIf="!benChiefComplaints"
@@ -5,168 +6,151 @@
 >
   <div class="col-xs-12" formArrayName="complaints">
     <div
-      class="row multi-row-select input_style"
+      class="row multi-row-select"
       *ngFor="
-        let complaint of getCheifComplaints();
+        let complaint of patientChiefComplaintsForm.controls.complaints[
+          'controls'
+        ];
         let i = index;
         let isLast = last;
         let isOdd = odd
       "
       [ngClass]="{ odd: !isOdd }"
     >
-      <div class="row" [formGroupName]="i">
-        <div class="col-12 row">
-          <div class="col-4 input-full-width">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+      <div [formGroupName]="i">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <mat-form-field class="input-full-width">
+            <input
+              autocomplete="off"
+              type="text"
+              matInput
+              placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails
                   ?.chiefComplaints
-              }}</mat-label>
+              }}"
+              name="chiefComplaint"
+              formControlName="chiefComplaint"
+              #complaintType
+              (keyup)="suggestChiefComplaintList(complaint, i)"
+              [matAutocomplete]="auto"
+            />
+          </mat-form-field>
 
-              <input
-                autocomplete="off"
-                type="text"
-                matInput
-                name="chiefComplaint"
-                formControlName="chiefComplaint"
-                (keyup)="suggestChiefComplaintList(complaint, i)"
-                #complaintType
-                [matAutocomplete]="auto"
-              />
-            </mat-form-field>
-
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              [displayWith]="displayChiefComplaint"
-              (optionSelected)="
-                filterComplaints($event.option.value, i);
-                getSCTid($event.option.value, i)
-              "
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayChiefComplaint"
+            (optionSelected)="
+              filterComplaints($event.option.value, i);
+              getSCTid($event.option.value, i)
+            "
+          >
+            <mat-option
+              *ngFor="let compl of suggestedChiefComplaintList[i]"
+              [value]="compl"
             >
-              <mat-option
-                *ngFor="let compl of suggestedChiefComplaintList[i]"
-                [value]="compl"
-              >
-                {{ compl.chiefComplaint }}
-              </mat-option>
-            </mat-autocomplete>
-          </div>
-          <div class="input-full-width" [hidden]="true">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+              {{ compl.chiefComplaint }}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4" [hidden]="true">
+          <mat-form-field class="input-full-width">
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              readonly="true"
+              name="SCTID"
+              formControlName="conceptID"
+              placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                readonly="true"
-                name="SCTID"
-                formControlName="conceptID"
-              />
-            </mat-form-field>
-          </div>
-          <div
-            class="col-4 input-full-width"
-            *ngIf="
-              complaint?.value?.chiefComplaint !== null &&
-              complaint?.value?.chiefComplaint !== ''
-            "
-          >
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+              }}"
+              [disableFormControl]="!complaint.value.chiefComplaint"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <mat-form-field class="input-full-width">
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              allowText="number"
+              maxlength="2"
+              name="duration"
+              formControlName="duration"
+              placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                maxlength="2"
-                formControlName="duration"
-                (selectionChange)="validateDuration(complaint)"
-              />
-            </mat-form-field>
-          </div>
+              }}"
+              [disableFormControl]="!complaint.value.chiefComplaint"
+              (change)="validateDuration(complaint)"
+            />
+          </mat-form-field>
+        </div>
 
-          <div
-            class="col-4 box input-full-width"
-            *ngIf="
-              complaint?.value?.duration !== null &&
-              complaint?.value?.duration !== ''
-            "
-          >
-            <mat-label class="mat-label-text">{{
+        <div class="col-xs-12 col-sm-6 col-md-4 box">
+          <mat-select
+            class="input-full-width"
+            name="unitOfDuration"
+            formControlName="unitOfDuration"
+            placeholder="{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails
                 ?.unitOfDuration
-            }}</mat-label>
-            <mat-select
-              class="input-full-width"
-              name="unitOfDuration"
-              formControlName="unitOfDuration"
-              (selectionChange)="validateDuration(complaint)"
-            >
-              <mat-option value="Hours">Hour(s)</mat-option>
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </div>
-        </div>
-        <div class="col-12 row">
-          <div
-            class="input-full-width"
-            *ngIf="
-              complaint?.value?.chiefComplaint !== null &&
-              complaint?.value?.chiefComplaint !== ''
-            "
+            }}"
+            [disableFormControl]="!complaint.value.duration"
+            (change)="validateDuration(complaint)"
           >
-            <mat-form-field class="textarea-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-option value="Hours">Hour(s)</mat-option>
+            <mat-option value="Days">Day(s)</mat-option>
+            <mat-option value="Weeks">Week(s)</mat-option>
+            <mat-option value="Months">Month(s)</mat-option>
+            <mat-option value="Years">Year(s)</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="col-xs-8 col-sm-4 col-md-4">
+          <mat-form-field class="textarea-full-width">
+            <textarea
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              maxRows="3"
+              minRows="6"
+              name="description"
+              formControlName="description"
+              placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails
                   ?.description
-              }}</mat-label>
-              <textarea
-                matInput
-                appDefaultNull
-                allowText="textAreaValidator"
-                mdTextareaAutosize
-                maxRows="3"
-                minRows="6"
-                name="description"
-                formControlName="description"
-                maxlength="300"
-              ></textarea>
-            </mat-form-field>
-          </div>
+              }}"
+              maxlength="300"
+              [disableFormControl]="!complaint.value.chiefComplaint"
+            ></textarea>
+          </mat-form-field>
+        </div>
 
-          <div class="">
-            <button
-              type="button"
-              mat-mini-fab
-              class=".mat_warn_circle"
-              [id]="'removeBtn' + i"
-              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint)"
-              color="warn"
-              class="mat_warn_circle"
-            >
-              <span class="material-icons">close</span>
-            </button>
-            <button
-              color="primary"
-              class="mat_blue_circle"
-              type="button"
-              mat-mini-fab
-              [id]="'addBtn' + i"
-              *ngIf="isLast"
-              [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addCheifComplaint()"
-            >
-              <span class="material-icons">add</span>
-            </button>
-          </div>
+        <div class="col-xs-4 col-sm-2 col-md-4">
+          <button
+            type="button"
+            mat-mini-fab
+            [id]="'removeBtn' + i"
+            *ngIf="i !== 0 || (i === 0 && complaint.touched)"
+            (click)="removeCheifComplaint(i, complaint)"
+            color="warn"
+          >
+            <span class="material-icons">close</span>
+          </button>
+          <button
+            type="button"
+            mat-mini-fab
+            [id]="'addBtn' + i"
+            *ngIf="isLast"
+            [disabled]="checkComplaintFormValidity(complaint)"
+            (click)="addCheifComplaint()"
+            color="primary"
+            class="button-overall-disabled"
+          >
+            <span class="material-icons">add</span>
+          </button>
         </div>
       </div>
     </div>
@@ -177,85 +161,72 @@
   <div class="col-xs-12">
     <table
       class="table table-bordered"
-      mat-table
-      [dataSource]="dataSource"
-      aria-describedby="chiefComplaints"
+      aria-describedby="benChiefComplaintsTbl"
     >
-      <ng-container matColumnDef="chiefComplaint">
-        <th
-          mat-header-cell
-          style="border-bottom: none"
-          *matHeaderCellDef
-          mat-sort-header
-        >
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails
-              ?.chiefComplaints
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.chiefComplaint }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="duration">
-        <th
-          mat-header-cell
-          style="border-bottom: none"
-          *matHeaderCellDef
-          mat-sort-header
-        >
-          {{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.duration }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="unitOfDuration">
-        <th
-          mat-header-cell
-          style="border-bottom: none"
-          *matHeaderCellDef
-          mat-sort-header
-        >
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails
-              ?.unitOfDuration
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{
-            element.unitOfDuration === "Hours"
-              ? "Hour(s)"
-              : element.unitOfDuration === "Days"
-                ? "Day(s)"
-                : element.unitOfDuration === "Weeks"
-                  ? "Week(s)"
-                  : element.unitOfDuration === "Months"
-                    ? "Month(s)"
-                    : element.unitOfDuration === "Years"
-                      ? "Year(s)"
-                      : element.unitOfDuration
-          }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="description">
-        <th
-          mat-header-cell
-          style="border-bottom: none"
-          *matHeaderCellDef
-          mat-sort-header
-        >
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.description }}
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <thead>
+        <tr>
+          <!-- <th id="SCTID">{{currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID}}</th> -->
+          <th id="">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                ?.chiefComplaints
+            }}
+          </th>
+          <th id="duration">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
+            }}
+          </th>
+          <th id="unitOfDuration">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                ?.unitOfDuration
+            }}
+          </th>
+          <th id="description">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
+            }}
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="benChiefComplaints.length >= 1">
+        <tr *ngFor="let complaint of benChiefComplaints">
+          <ng-template [ngIf]="complaint.chiefComplaint">
+            <!-- <td>{{ complaint.conceptID }}</td> -->
+            <td>{{ complaint.chiefComplaint }}</td>
+            <td>{{ complaint.duration }}</td>
+            <td>
+              {{
+                complaint.unitOfDuration === "Hours"
+                  ? "Hour(s)"
+                  : complaint.unitOfDuration === "Days"
+                    ? "Day(s)"
+                    : complaint.unitOfDuration === "Weeks"
+                      ? "Week(s)"
+                      : complaint.unitOfDuration === "Months"
+                        ? "Month(s)"
+                        : complaint.unitOfDuration === "Years"
+                          ? "Year(s)"
+                          : complaint.unitOfDuration
+              }}
+            </td>
+            <td>{{ complaint.description }}</td>
+          </ng-template>
+        </tr>
+      </tbody>
+      <tbody *ngIf="benChiefComplaints.length === 0">
+        <tr>
+          <td colspan="5" class="text-center">
+            <p>
+              {{
+                currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                  ?.noCheifComplaint
+              }}
+            </p>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>

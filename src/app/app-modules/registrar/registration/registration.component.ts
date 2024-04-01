@@ -160,7 +160,7 @@ export class RegistrationComponent
       },
     );
 
-    //  this.registrarService.GenerateOTP$.subscribe(response => (response == true ? this.disableGenerateOTP = true : this.disableGenerateOTP = false));
+    //  this.registrarService.GenerateOTP$.subscribe(response => (response === true ? this.disableGenerateOTP = true : this.disableGenerateOTP = false));
 
     this.personalDetailsForm = this.beneficiaryRegistrationForm.get(
       'personalDetailsForm',
@@ -535,7 +535,7 @@ export class RegistrationComponent
         } else if (control === 'blockID') {
           required.push(this.currentLanguageSet.block);
         }
-        // else if (control == 'religionOther') { required.push(this.currentLanguageSet.otherReligionName); }
+        // else if (control === 'religionOther') { required.push(this.currentLanguageSet.otherReligionName); }
         else if (control === 'govID') {
           govCount++;
         } else if (control === 'otherGovID') {
@@ -834,9 +834,9 @@ export class RegistrationComponent
     );
 
     // createdBy, vanID, servicePointID
-    const servicePointDetails = JSON.parse(
-      localStorage.getItem('serviceLineDetails') || '{}',
-    );
+
+    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
+
     iEMRForm['vanID'] = servicePointDetails.vanID;
     iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     iEMRForm['createdBy'] = localStorage.getItem('userName');
@@ -845,7 +845,7 @@ export class RegistrationComponent
     phoneMaps[0]['createdBy'] = localStorage.getItem('userName');
 
     console.log(JSON.stringify(iEMRForm, null, 4), ' biEMRFOrm');
-    this.registrarService.submitBeneficiary(iEMRForm).subscribe((res) => {
+    this.registrarService.submitBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res.statusCode === 200) {
         // this.confirmationService.confirm('success',res.data.response + " Do you want to proceed for family tagging process?", 'yes','No').subscribe((res)) => {
         //   if (res) {
@@ -863,9 +863,7 @@ export class RegistrationComponent
             beneficiaryID: numb,
             healthId: otherDetailsForm.controls['healthId'].value,
             healthIdNumber: otherDetailsForm.controls['healthIdNumber'].value,
-            providerServiceMapId: parseInt(
-              localStorage.getItem('providerServiceID') || '{}',
-            ),
+            providerServiceMapId: localStorage.getItem('providerServiceID'),
             authenticationMode: otherDetailsForm.controls['healthIdMode'].value,
             createdBy: localStorage.getItem('userName'),
           };
@@ -875,7 +873,7 @@ export class RegistrationComponent
             (otherDetailsForm.controls['healthIdNumber'].value !== undefined &&
               otherDetailsForm.controls['healthIdNumber'].value !== null)
           ) {
-            this.registrarService.mapHealthId(reqObj).subscribe((res) => {
+            this.registrarService.mapHealthId(reqObj).subscribe((res: any) => {
               if (res.statusCode === 200) {
                 console.log('success');
               } else {
@@ -948,7 +946,7 @@ export class RegistrationComponent
       this.beneficiaryRegistrationForm.value.personalDetailsForm,
     );
 
-    this.registrarService.updateBeneficiary(iEMRForm).subscribe((res) => {
+    this.registrarService.updateBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res && res.statusCode === 200) {
         this.confirmationService.alert(res.data.response, 'success');
         const reqObj = {
@@ -957,9 +955,7 @@ export class RegistrationComponent
           healthId: otherDetailsForm.controls['healthId'].value,
           healthIdNumber: otherDetailsForm.controls['healthIdNumber'].value,
           authenticationMode: otherDetailsForm.controls['healthIdMode'].value,
-          providerServiceMapId: parseInt(
-            localStorage.getItem('providerServiceID') || '{}',
-          ),
+          providerServiceMapId: localStorage.getItem('providerServiceID'),
           createdBy: localStorage.getItem('userName'),
         };
 
@@ -969,7 +965,7 @@ export class RegistrationComponent
           (otherDetailsForm.controls['healthIdNumber'].value !== undefined &&
             otherDetailsForm.controls['healthIdNumber'].value !== null)
         ) {
-          this.registrarService.mapHealthId(reqObj).subscribe((res) => {
+          this.registrarService.mapHealthId(reqObj).subscribe((res: any) => {
             if (res.statusCode === 200) {
               console.log('success');
             } else {
@@ -1049,7 +1045,7 @@ export class RegistrationComponent
     };
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
-      (beneficiaryDetails) => {
+      (beneficiaryDetails: any) => {
         if (beneficiaryDetails && beneficiaryDetails.length === 1) {
           const beneficiaryRegID =
             beneficiaryDetails[0].beneficiaryRegID !== undefined &&
@@ -1130,48 +1126,51 @@ export class RegistrationComponent
       iEMRForm['passToNurse'] = passToNurse;
 
       console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
-      this.registrarService.updateBeneficiary(iEMRForm).subscribe((res) => {
-        if (res && res.statusCode === 200) {
-          this.confirmationService.alert(res.data.response, 'success');
-          // var txt = res.data.response;
-          // var numb = txt.replace(/\D/g,'');
-          if (this.checkValidHealthID('save')) {
-            const reqObj = {
-              beneficiaryRegID: null,
-              beneficiaryID: personalForm.beneficiaryID,
-              healthId: otherDetailsForm.controls['healthId'].value,
-              healthIdNumber: otherDetailsForm.controls['healthIdNumber'].value,
-              authenticationMode:
-                otherDetailsForm.controls['healthIdMode'].value,
-              providerServiceMapId: parseInt(
-                localStorage.getItem('providerServiceID') || '{}',
-              ),
-              createdBy: localStorage.getItem('userName'),
-            };
-            if (
-              (otherDetailsForm.controls['healthId'].value !== undefined &&
-                otherDetailsForm.controls['healthId'].value !== null) ||
-              (otherDetailsForm.controls['healthIdNumber'].value !==
-                undefined &&
-                otherDetailsForm.controls['healthIdNumber'].value !== null)
-            ) {
-              this.registrarService.mapHealthId(reqObj).subscribe((res) => {
-                if (res.statusCode === 200) {
-                  console.log('success');
-                } else {
-                  this.confirmationService.alert(
-                    this.currentLanguageSet.alerts.info.issueInSavngData,
-                    'error',
-                  );
-                }
-              });
+      this.registrarService
+        .updateBeneficiary(iEMRForm)
+        .subscribe((res: any) => {
+          if (res && res.statusCode === 200) {
+            this.confirmationService.alert(res.data.response, 'success');
+            // var txt = res.data.response;
+            // var numb = txt.replace(/\D/g,'');
+            if (this.checkValidHealthID('save')) {
+              const reqObj = {
+                beneficiaryRegID: null,
+                beneficiaryID: personalForm.beneficiaryID,
+                healthId: otherDetailsForm.controls['healthId'].value,
+                healthIdNumber:
+                  otherDetailsForm.controls['healthIdNumber'].value,
+                authenticationMode:
+                  otherDetailsForm.controls['healthIdMode'].value,
+                providerServiceMapId: localStorage.getItem('providerServiceID'),
+                createdBy: localStorage.getItem('userName'),
+              };
+              if (
+                (otherDetailsForm.controls['healthId'].value !== undefined &&
+                  otherDetailsForm.controls['healthId'].value !== null) ||
+                (otherDetailsForm.controls['healthIdNumber'].value !==
+                  undefined &&
+                  otherDetailsForm.controls['healthIdNumber'].value !== null)
+              ) {
+                this.registrarService
+                  .mapHealthId(reqObj)
+                  .subscribe((res: any) => {
+                    if (res.statusCode === 200) {
+                      console.log('success');
+                    } else {
+                      this.confirmationService.alert(
+                        this.currentLanguageSet.alerts.info.issueInSavngData,
+                        'error',
+                      );
+                    }
+                  });
+              }
             }
+            this.router.navigate(['/registrar/search/']);
+          } else {
+            this.confirmationService.alert(res.errorMessage, 'error');
           }
-          this.router.navigate(['/registrar/search/']);
-        } else {
-          this.confirmationService.alert(res.errorMessage, 'error');
-        }
-      });
+        });
     }
   }
 
@@ -1185,9 +1184,7 @@ export class RegistrationComponent
     const iEMRForm: any = this.iEMRFormUpdate();
     const phoneMaps = iEMRForm.benPhoneMaps;
 
-    const servicePointDetails = JSON.parse(
-      localStorage.getItem('serviceLineDetails') || '{}',
-    );
+    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
 
     iEMRForm['vanID'] = servicePointDetails.vanID;
     iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
@@ -1927,7 +1924,7 @@ export class RegistrationComponent
       beneficiaryID: this.revisitData.beneficiaryID,
     };
     this.registrarService.getHealthIdDetails(reqObj).subscribe(
-      (res) => {
+      (res: any) => {
         if (res.statusCode === 200) {
           this.dialog.open(HealthIdDisplayModalComponent, {
             data: { dataList: res },

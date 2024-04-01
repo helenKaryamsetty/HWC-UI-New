@@ -19,48 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
+import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+
 @Component({
   selector: 'app-view-test-report',
   templateUrl: './view-test-report.component.html',
   styleUrls: ['./view-test-report.component.css'],
 })
 export class ViewTestReportComponent implements OnInit, DoCheck {
-  current_language_set: any;
-
-  displayedColumns: any = [
-    'procedureName',
-    'componentName',
-    'testresult',
-    'unit',
-  ];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  currentLanguageSet: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public httpServiceService: HttpServiceService,
     public matDialogRef: MatDialogRef<ViewTestReportComponent>,
-    private httpServiceService: HttpServiceService,
   ) {}
 
+  testReport = [];
   ngOnInit() {
     console.log('data', this.data);
-    this.dataSource.data = this.data;
-    console.log('this.testReport ', this.dataSource.data);
+    this.testReport = this.data;
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
+    console.log('this.testReport ', this.testReport);
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
-    this.current_language_set = getLanguageJson.currentLanguageObject;
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

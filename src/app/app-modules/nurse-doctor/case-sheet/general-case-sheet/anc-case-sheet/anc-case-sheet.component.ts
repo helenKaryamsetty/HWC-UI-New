@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
@@ -28,7 +35,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
   templateUrl: './anc-case-sheet.component.html',
   styleUrls: ['./anc-case-sheet.component.css'],
 })
-export class AncCaseSheetComponent implements OnInit {
+export class AncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()
   caseSheetData: any;
   @Input()
@@ -72,7 +79,7 @@ export class AncCaseSheetComponent implements OnInit {
   changeLanguage() {
     this.language = sessionStorage.getItem('setLanguage');
 
-    if (this.language != undefined) {
+    if (this.language !== undefined) {
       this.httpServiceService
         .getLanguage(this.language_file_path + this.language + '.json')
         .subscribe(

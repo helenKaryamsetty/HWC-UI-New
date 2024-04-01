@@ -19,24 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { Subscription } from 'rxjs';
-import { DoctorService } from '../../core/services/doctor.service';
 import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from '../../core/services';
+import { DoctorService } from '../shared/services';
 
 @Component({
   selector: 'app-birth-immunization-history',
   templateUrl: './birth-immunization-history.component.html',
   styleUrls: ['./birth-immunization-history.component.css'],
 })
-export class BirthImmunizationHistoryComponent implements OnInit {
+export class BirthImmunizationHistoryComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
   @Input()
   patientBirthImmunizationHistoryForm!: FormGroup;
 
@@ -71,11 +80,11 @@ export class BirthImmunizationHistoryComponent implements OnInit {
     this.infantBirthDetailsForm = this.patientBirthImmunizationHistoryForm.get(
       'infantBirthDetailsForm',
     ) as FormGroup;
-    if (this.mode !== undefined && this.mode !== null && this.mode == 'view') {
+    if (this.mode !== undefined && this.mode !== null && this.mode === 'view') {
       this.getNurseImmunizationHistoryDetailsFromNurse();
     }
 
-    if (this.attendant == 'nurse') {
+    if (this.attendant === 'nurse') {
       this.getPreviousVisitBirthImmunizationDetails(this.visitCategory);
     }
   }
@@ -85,7 +94,7 @@ export class BirthImmunizationHistoryComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.mode == 'update') {
+    if (this.mode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.updateBirthAndImmunizationHistoryFromDoctor(
         this.patientBirthImmunizationHistoryForm,
@@ -112,16 +121,16 @@ export class BirthImmunizationHistoryComponent implements OnInit {
 
   getNurseImmunizationHistoryDetailsFromNurse() {
     if (
-      (this.mode == 'view' || this.mode == 'update') &&
-      this.visitCategory.toLowerCase() ==
+      (this.mode === 'view' || this.mode === 'update') &&
+      this.visitCategory.toLowerCase() ===
         'neonatal and infant health care services'
     ) {
       this.doctorService.birthAndImmunizationDetailsFromNurse = null;
       this.doctorService
         .getBirthImmunizationHistoryNurseDetails()
-        .subscribe((res) => {
+        .subscribe((res: any) => {
           if (
-            res.statusCode == 200 &&
+            res.statusCode === 200 &&
             res.data !== null &&
             res.data !== undefined
           ) {
@@ -131,16 +140,16 @@ export class BirthImmunizationHistoryComponent implements OnInit {
         });
     }
     if (
-      (this.mode == 'view' || this.mode == 'update') &&
-      this.visitCategory.toLowerCase() ==
+      (this.mode === 'view' || this.mode === 'update') &&
+      this.visitCategory.toLowerCase() ===
         'childhood & adolescent healthcare services'
     ) {
       this.doctorService.birthAndImmunizationDetailsFromNurse = null;
       this.doctorService
         .getBirthImmunizationHistoryNurseDetailsForChildAndAdolescent()
-        .subscribe((res) => {
+        .subscribe((res: any) => {
           if (
-            res.statusCode == 200 &&
+            res.statusCode === 200 &&
             res.data !== null &&
             res.data !== undefined
           ) {
@@ -155,9 +164,9 @@ export class BirthImmunizationHistoryComponent implements OnInit {
     this.doctorService.birthAndImmunizationDetailsFromNurse = null;
     this.doctorService
       .getPreviousBirthImmunizationHistoryDetails(visitCategory)
-      ?.subscribe((res) => {
+      ?.subscribe((res: any) => {
         if (
-          res.statusCode == 200 &&
+          res.statusCode === 200 &&
           res.data !== null &&
           res.data !== undefined
         ) {
@@ -176,7 +185,7 @@ export class BirthImmunizationHistoryComponent implements OnInit {
       .updateBirthAndImmunizationHistory(medicalForm, visitCategory)
       ?.subscribe(
         (response: any) => {
-          if (response.statusCode == 200 && response.data != null) {
+          if (response.statusCode === 200 && response.data !== null) {
             this.confirmationService.alert(response.data.response, 'success');
             this.doctorService.BirthAndImmunizationValueChanged(false);
             this.getNurseImmunizationHistoryDetailsFromNurse();

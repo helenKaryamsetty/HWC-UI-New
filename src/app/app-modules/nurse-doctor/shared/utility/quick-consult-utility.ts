@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 export class QuickConsultUtils {
@@ -27,6 +26,7 @@ export class QuickConsultUtils {
 
   initMedicine(): FormGroup {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+
     return this.fb.group({
       specialInstruction: null,
       drug: null,
@@ -43,6 +43,7 @@ export class QuickConsultUtils {
 
   initChiefComplaint() {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+
     return this.fb.group({
       chiefComplaint: [null],
       conceptID: [null],
@@ -60,6 +61,7 @@ export class QuickConsultUtils {
 
   initMedicineWithData(prescription: any, id?: null): FormGroup {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+
     let unit;
     if (prescription.drugUnit) {
       unit = `${prescription.drugStrength}${prescription.drugUnit}`;
@@ -98,6 +100,8 @@ export class QuickConsultUtils {
       genderName: { value: null, disabled: true },
       genderID: { value: null, disabled: true },
       benVisitID: null,
+      // benChiefComplaint: [null, Validators.required  ],
+      // description: [null, Validators.required],
       chiefComplaintList: this.fb.array([this.initChiefComplaint()]),
       height_cm: { value: null, disabled: true },
       weight_Kg: { value: null, disabled: true },
@@ -114,27 +118,26 @@ export class QuickConsultUtils {
       rbsTestResult: { value: null, disabled: false },
       rbsTestRemarks: { value: null, disabled: false },
       clinicalObservation: [null, Validators.required],
-      provisionalDiagnosisList: this.fb.array([
-        this.initProvisionalDiagnosisList(),
-      ]),
       labTestOrders: [],
       radiology: [],
       test: [],
       externalInvestigation: null,
-      diagnosisProvided: [null, Validators.required],
       instruction: null,
       prescription: this.createDrugPrescriptionForm(),
+      counsellingProvided: { value: null, disabled: false },
       prescriptionID: null,
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
+      provisionalDiagnosisList: this.fb.array([
+        this.initProvisionalDiagnosisList(),
+      ]),
     });
   }
-
   initProvisionalDiagnosisList() {
     return this.fb.group({
       conceptID: [null, Validators.required],
       term: [null, Validators.required],
-      provisionalDiagnosis: [null, Validators.required],
+      viewProvisionalDiagnosisProvided: [null, Validators.required],
     });
   }
 }

@@ -19,19 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
+import { DoctorService } from '../shared/services/doctor.service';
 import { CameraService } from '../../core/services/camera.service';
+import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
-import { DoctorService } from '../../core/services/doctor.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-oncologist-worklist',
@@ -41,7 +38,7 @@ import * as moment from 'moment';
 export class OncologistWorklistComponent implements OnInit, DoCheck {
   rowsPerPage = 5;
   activePage = 1;
-  pagedList = [];
+  pagedList: any = [];
   rotate = true;
   beneficiaryList: any;
   filteredBeneficiaryList: any = [];
@@ -49,29 +46,15 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   filterTerm: any;
   currentLanguageSet: any;
   currentPage!: number;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'visitCategory',
-    'district',
-    'phoneNo',
-    'visitDate',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private dialog: MatDialog,
     private cameraService: CameraService,
     private router: Router,
     private confirmationService: ConfirmationService,
+    public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    private httpServices: HttpServiceService,
   ) {}
 
   ngOnInit() {
@@ -80,31 +63,20 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     this.removeBeneficiaryDataForVisit();
     this.loadWorklist();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-  // Ends
 
   removeBeneficiaryDataForVisit() {
     localStorage.removeItem('visitCode');
     localStorage.removeItem('beneficiaryGender');
     localStorage.removeItem('benFlowID');
     localStorage.removeItem('visitCategory');
+    localStorage.removeItem('visitReason');
     localStorage.removeItem('beneficiaryRegID');
     localStorage.removeItem('visitID');
     localStorage.removeItem('beneficiaryID');
     localStorage.removeItem('doctorFlag');
     localStorage.removeItem('nurseFlag');
     localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('caseSheetTMFlag');
+    localStorage.removeItem('specialistFlag');
   }
 
   pageChanged(event: any): void {
@@ -122,20 +94,17 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
+          this.pageChanged({
+            page: this.activePage,
+            itemsPerPage: this.rowsPerPage,
           });
           this.filterTerm = null;
+          this.currentPage = 1;
         } else {
           this.confirmationService.alert(data.errorMessage, 'error');
-          this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
         }
       },
-      (err: any) => {
+      (err) => {
         this.confirmationService.alert(err, 'error');
       },
     );
@@ -165,8 +134,6 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
     else {
       this.filteredBeneficiaryList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         for (const key in item) {
           if (
@@ -185,19 +152,18 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
               this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                },
-              );
               break;
             }
           }
         }
       });
     }
+    this.activePage = 1;
+    this.pageChanged({
+      page: 1,
+      itemsPerPage: this.rowsPerPage,
+    });
+    this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {
@@ -257,11 +223,17 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
               beneficiary.beneficiaryRegID,
             );
             localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-            this.router.navigate([
-              '/nurse-doctor/print/' + 'MMU' + '/' + 'current',
-            ]);
+            this.router.navigate(['/common/print/' + 'TM' + '/' + 'current']);
           }
         });
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

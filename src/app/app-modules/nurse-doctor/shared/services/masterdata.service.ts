@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -46,8 +45,9 @@ export class MasterdataService {
   nurseMasterDataUrl = environment.nurseMasterDataUrl;
   doctorMasterDataUrl = environment.doctorMasterDataUrl;
   snoMedDataURL = environment.snomedCTRecordURL;
-  diagnosisSnomedCTRecordUrl = environment.diagnosisSnomedCTRecordUrl;
-  diagnosisSnomedCTRecordUrl1 = environment.diagnosisSnomedCTRecordUrl1;
+  diagnosisSnomedCTRecordUrl = environment.snomedCTRecordListURL;
+  diagnosisSnomedCTRecordUrl1 = environment.snomedCTRecordListURL1;
+  getCalibrationStrips = environment.getCalibrationStrips;
   vaccinationTypeAndDoseMasterUrl = environment.vaccinationTypeAndDoseMasterUrl;
   previousCovidVaccinationUrl = environment.previousCovidVaccinationUrl;
 
@@ -69,8 +69,6 @@ export class MasterdataService {
   doctorMasterDataSource = new BehaviorSubject<any>(null);
   doctorMasterData$ = this.doctorMasterDataSource.asObservable();
 
-  getCalibrationStrips = environment.getCalibrationStrips;
-
   constructor(private http: HttpClient) {}
 
   /**
@@ -80,7 +78,7 @@ export class MasterdataService {
     return this.http
       .get(this.visitDetailMasterDataUrl)
       .subscribe((res: any) => {
-        this.visitDetailMasterDataSource.next(res.data);
+        this.visitDetailMasterDataSource.next(res.json().data);
       });
   }
 
@@ -101,7 +99,7 @@ export class MasterdataService {
         )
         // return this.http.get(this.nurseMasterDataUrl+visitID)
         .subscribe((res: any) => {
-          this.nurseMasterDataSource.next(res.data);
+          this.nurseMasterDataSource.next(res.json().data);
         })
     );
   }
@@ -128,87 +126,54 @@ export class MasterdataService {
     const gender = localStorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
-    return this.http
-      .get(
-        this.doctorMasterDataUrl +
-          visitID +
-          '/' +
-          providerServiceID +
-          '/' +
-          gender +
-          '/' +
-          facilityID +
-          '/' +
-          vanID,
-      )
-      .subscribe((res: any) => {
-        console.log('res.data', res.data);
+    return (
+      this.http
+        .get(
+          this.doctorMasterDataUrl +
+            visitID +
+            '/' +
+            providerServiceID +
+            '/' +
+            gender +
+            '/' +
+            facilityID +
+            '/' +
+            vanID,
+        )
+        //return this.http.get(this.doctorMasterDataUrl+visitID+"/"+providerServiceID)
+        .subscribe((res: any) => {
+          console.log('res.json().data', res.json().data);
 
-        this.doctorMasterDataSource.next(res.data);
-      });
-  }
-
-  getDoctorMasterDataForNurse(visitID: string, providerServiceID: any) {
-    let facilityID = 0;
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    if (
-      JSON.parse(serviceLineDetails).facilityID !== undefined &&
-      JSON.parse(serviceLineDetails).facilityID !== null
-    ) {
-      facilityID = JSON.parse(serviceLineDetails).facilityID;
-    }
-    let vanID = 0;
-    if (
-      JSON.parse(serviceLineDetails).vanID !== undefined &&
-      JSON.parse(serviceLineDetails).vanID !== null
-    ) {
-      vanID = JSON.parse(serviceLineDetails).vanID;
-    }
-    const gender = localStorage.getItem('beneficiaryGender');
-    console.log('facility', facilityID);
-
-    return this.http.get(
-      this.doctorMasterDataUrl +
-        visitID +
-        '/' +
-        providerServiceID +
-        '/' +
-        gender +
-        '/' +
-        facilityID +
-        '/' +
-        vanID,
+          this.doctorMasterDataSource.next(res.json().data);
+        })
     );
   }
 
   getSnomedCTRecord(term: any) {
     return this.http.post(this.snoMedDataURL, { term: term });
   }
-  getReportsMaster() {
-    const serviceID = localStorage.getItem('serviceID');
-    return this.http.get(environment.getReportsMasterUrl + serviceID);
-  }
-  getVanMaster() {
-    const providerServiceID = localStorage.getItem('providerServiceID');
-    return this.http.get(environment.getVanMasterUrl + providerServiceID);
-  }
-
-  getReportData(reportRequst: any) {
-    return this.http.post(environment.getReportDataUrl, reportRequst);
-  }
-
-  searchDiagnosisBasedOnPageNo(searchTerm: any, pageNo: any) {
-    const body = {
-      term: searchTerm,
-      pageNo: pageNo,
-    };
-    return this.http.post(this.diagnosisSnomedCTRecordUrl, body);
-  }
 
   reset() {
     this.visitDetailMasterDataSource.next(null);
     this.nurseMasterDataSource.next(null);
     this.doctorMasterDataSource.next(null);
+  }
+
+  getJSON(_jsonURL: any) {
+    return this.http.get(_jsonURL);
+  }
+
+  searchDiagnosisBasedOnPageNo(
+    searchTerm: any,
+    pageNo: any,
+    diagnosisType?: string,
+  ) {
+    const body = {
+      term: searchTerm,
+      pageNo: pageNo,
+      type: diagnosisType,
+    };
+    return this.http.post(this.diagnosisSnomedCTRecordUrl, body);
   }
 
   searchDiagnosisBasedOnPageNo1(searchTerm: any, pageNo: any) {
@@ -218,6 +183,7 @@ export class MasterdataService {
     };
     return this.http.post(this.diagnosisSnomedCTRecordUrl1, body);
   }
+
   fetchCalibrationStrips(providerServiceID: any, pageNo: any) {
     const body = {
       providerServiceMapID: providerServiceID,
@@ -235,5 +201,15 @@ export class MasterdataService {
       beneficiaryRegID: beneficiaryRegID,
     };
     return this.http.post(this.previousCovidVaccinationUrl, reqObj);
+  }
+  /* Neonatal immunization service masters*/
+  getVaccineList(currentImmunizationServiceID: any) {
+    const visitCategoryID = localStorage.getItem('visitCategoryId');
+    return this.http.get(
+      environment.vaccineListUrl +
+        currentImmunizationServiceID +
+        '/' +
+        visitCategoryID,
+    );
   }
 }

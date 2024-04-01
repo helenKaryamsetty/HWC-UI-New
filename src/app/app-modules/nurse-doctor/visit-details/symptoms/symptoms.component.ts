@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -27,10 +26,10 @@ import {
   EventEmitter,
   Output,
   DoCheck,
-  OnChanges,
   OnDestroy,
+  OnChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -38,6 +37,7 @@ import {
 } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+// import { NurseService, DoctorService } from '../shared/services';
 
 @Component({
   selector: 'app-symptoms',
@@ -45,20 +45,20 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
   styleUrls: ['./symptoms.component.css'],
 })
 export class SymptomsComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
   patientCovidForm!: FormGroup;
   symptomsList: any = [];
-  sympFlag = false;
+
   @Input()
   mode!: string;
 
   @Output() filter: EventEmitter<any> = new EventEmitter<any>();
-  symptomsArray!: string[];
+  symptomsArray: any = [];
   symptoms: any;
-  answer1!: any;
-  symptomsarray!: any[];
+  answer1: any;
+  symptomsarray!: [];
   currentLanguageSet: any;
 
   constructor(
@@ -66,7 +66,7 @@ export class SymptomsComponent
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    private httpServices: HttpServiceService,
+    private httpServiceService: HttpServiceService,
   ) {}
 
   disable: any = ['false', 'false', 'false', 'false'];
@@ -78,20 +78,18 @@ export class SymptomsComponent
 
     this.disable = ['false', 'false', 'false', 'false'];
     this.checked = [false, false, false, false];
+    //this.symptomsArray=["Fever","Cough","Breathing difficulties","No symptoms"];
+    // this.symptomsList=["Fever","Cough","Breathing difficulties","No symptoms"];
     this.getMasterData();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
   ngOnChanges() {
     if (this.mode === 'view') {
       const visitID = localStorage.getItem('visitID');
@@ -105,6 +103,7 @@ export class SymptomsComponent
 
     if (this.coividSymptomsHistory) this.coividSymptomsHistory.unsubscribe();
   }
+
   covidSymptoms: any;
   coividSymptomsHistory: any;
   getHistoryDetails(beneficiaryRegID: any, visitID: any) {
@@ -118,14 +117,30 @@ export class SymptomsComponent
           value.data.covidDetails !== null
         ) {
           console.log('coviddata', value.data.covidDetails.symptom);
-          this.sympFlag = true;
           this.covidSymptoms = value.data.covidDetails.symptom;
-          this.patientCovidForm.patchValue({
-            symptom: value.data.covidDetails.symptom,
-          });
+          this.patientCovidForm.patchValue({ symptom: this.covidSymptoms });
         }
       });
   }
+
+  getMMUHistoryDetails(beneficiaryRegID: any, visitID: any) {
+    this.coividSymptomsHistory = this.doctorService
+      .getVisitComplaintDetails(beneficiaryRegID, visitID)
+      .subscribe((value: any) => {
+        if (
+          value !== null &&
+          value.statusCode === 200 &&
+          value.data !== null &&
+          value.data.covidDetails !== null
+        ) {
+          console.log('coviddata', value.data.covidDetails.symptom);
+          this.covidSymptoms = value.data.covidDetails.symptom;
+          this.patientCovidForm.patchValue({ symptom: this.covidSymptoms });
+          this.symptomSelected();
+        }
+      });
+  }
+
   symptomSelected() {
     console.log('SymptomLength' + this.symptom.length);
     if (this.symptom.length !== 0) {
@@ -149,6 +164,7 @@ export class SymptomsComponent
         }
       }
       this.answer1 = localStorage.getItem('symptom');
+      //this.outputToParent.emit( this.answer1);
       this.masterdataService.filter(this.answer1);
     } else {
       this.symptomsList = this.symptomsArray;
@@ -159,12 +175,80 @@ export class SymptomsComponent
       this.masterdataService.filter(this.answer1);
     }
   }
+
+  /* onCheckboxChagen(event, value,i,symptoms) {
+          this.patientCovidForm.patchValue({ symptoms : symptoms});
+           if(event.checked)
+           {
+             this.checked[i]=true;
+             if(value=="No symptoms")
+             {
+               this.disable[1]=true;
+               this.disable[0]=true;
+               this.disable[2]=true;
+             
+             }
+             else
+             {
+               this.disable[3]=true;
+             }
+           }
+           if(!event.checked)
+           {
+             this.checked[i]=false;
+            
+            if(value=="No symptoms")
+            {
+              this.disable[1]=false;
+              this.disable[0]=false;
+              this.disable[2]=false;
+              this.disable[3]=false;
+            }
+            if(this.disable[1]==="false" && this.checked[1]===false && this.disable[0]==="false" && this.checked[0]===false && this.disable[2]==="false" && this.checked[2]===false )
+            this.disable[3]=false; 
+              }
+      
+      
+         }*/
+
+  //  patchDataToFields(benRegID, visitID) {
+  //   this.doctorService.getCovidDetails(benRegID, visitID).subscribe((pNCdata) => {
+  //     let tempPNCData = Object.assign({}, pNCdata.data.PNCCareDetail);
+
+  //     if (this.masterData.symptoms) {
+  //       tempPNCData.symptoms = this.masterData.symptoms.filter((data) => {
+  //         return data.symptoms === tempPNCData.symptoms;
+  //       })[0];
+  //     }
+  //     let patchPNCdata = Object.assign({}, tempPNCData);
+  //     this.patientCovidForm.patchValue(tempPNCData);
+  //   })
+  // }
+
+  // patchDataToFields(benRegID, visitID) {
+  //   this.doctorService.getPNCDetails(benRegID, visitID).subscribe(pNCdata => {
+  //     let tempPNCData = Object.assign({}, pNCdata.data.PNCCareDetail);
+
+  //     if (this.masterData.deliveryTypes) {
+  //       tempPNCData.covidSymptomsMaster = this.masterData.covidSymptomsMaster.filter(
+  //         data => {
+  //           return data.covidSymptomsMaster === tempPNCData.covidSymptomsMaster;
+  //         }
+  //       )[0];
+  //     }
+
+  //     let patchPNCdata = Object.assign({}, tempPNCData);
+  //     this.patientCovidForm.patchValue(tempPNCData);
+  //   });
+  // }
+
   masterData: any;
   nurseMasterDataSubscription: any;
   getMasterData() {
     this.nurseMasterDataSubscription =
-      this.masterdataService.nurseMasterData$.subscribe((masterData: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.covidSymptomsMaster) {
+          this.nurseMasterDataSubscription.unsubscribe();
           console.log('covidSymptomsMaster =' + masterData.covidSymptomsMaster);
 
           this.masterData = masterData;
@@ -181,6 +265,21 @@ export class SymptomsComponent
           console.log(masterData.covidSymptomsMaster);
           console.log(this.symptomsList[0]);
           console.log(this.symptomsList[0]['symptoms']);
+          // if (this.mode) {
+          //   let visitID = localStorage.getItem("visitID");
+          //   let benRegID = localStorage.getItem("beneficiaryRegID");
+          //   this.patchDataToFields(benRegID, visitID);
+          // }
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.getMMUHistoryDetails(benRegID, visitID);
+          }
         }
       });
   }

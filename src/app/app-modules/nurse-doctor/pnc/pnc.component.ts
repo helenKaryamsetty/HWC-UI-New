@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -36,6 +35,7 @@ import {
   NurseService,
   DoctorService,
 } from '../shared/services';
+import { ActivatedRoute } from '@angular/router';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
 
@@ -44,13 +44,14 @@ import { SetLanguageComponent } from '../../core/component/set-language.componen
   templateUrl: './pnc.component.html',
   styleUrls: ['./pnc.component.css'],
 })
-export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
+export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   @Input()
-  patientPNCDataForm!: FormGroup;
+  patientPNCForm!: FormGroup;
 
   @Input()
   mode!: string;
   currentLanguageSet: any;
+  attendant: any;
 
   constructor(
     private fb: FormBuilder,
@@ -59,11 +60,13 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    private httpServices: HttpServiceService,
+    public httpServiceService: HttpServiceService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
+    this.attendant = this.route.snapshot.params['attendant'];
     this.getMasterData();
     this.getBenificiaryDetails();
     this.today = new Date();
@@ -71,39 +74,20 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-  // Ends
+
   beneficiaryAge: any;
-  today = new Date();
-  minimumDeliveryDate = new Date();
-  dob = new Date();
+  today!: Date;
+  minimumDeliveryDate!: Date;
+  dob!: Date;
 
   ngOnChanges() {
-    if (
-      this.mode !== undefined &&
-      this.mode !== null &&
-      this.mode.toLowerCase() === 'view'
-    ) {
+    if (this.mode === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
     }
 
-    if (
-      this.mode !== undefined &&
-      this.mode !== null &&
-      this.mode.toLowerCase() === 'update'
-    ) {
-      this.updatePatientPNC(this.patientPNCDataForm);
+    if (this.mode === 'update') {
+      this.updatePatientPNC(this.patientPNCForm);
     }
   }
 
@@ -127,6 +111,15 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
               return data.deliveryPlace === tempPNCData.deliveryPlace;
             },
           )[0];
+        }
+
+        if (this.masterData.deliveryConductedByMaster) {
+          tempPNCData.deliveryConductedBy =
+            this.masterData.deliveryConductedByMaster.filter((data: any) => {
+              return (
+                data.deliveryConductedBy === tempPNCData.deliveryConductedBy
+              );
+            })[0];
         }
 
         if (this.masterData.deliveryComplicationTypes) {
@@ -176,11 +169,11 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
         tempPNCData.dDate = new Date(tempPNCData.dateOfDelivery);
 
         const patchPNCdata = Object.assign({}, tempPNCData);
-        this.patientPNCDataForm.patchValue(tempPNCData);
+        this.patientPNCForm.patchValue(tempPNCData);
       });
   }
 
-  updatePatientPNC(patientPNCDataForm: FormGroup) {
+  updatePatientPNC(patientPNCForm: any) {
     const temp = {
       beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
       benVisitID: localStorage.getItem('visitID'),
@@ -189,11 +182,11 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       visitCode: localStorage.getItem('visitCode'),
     };
 
-    this.doctorService.updatePNCDetails(patientPNCDataForm, temp).subscribe(
+    this.doctorService.updatePNCDetails(patientPNCForm, temp).subscribe(
       (res: any) => {
         if (res.statusCode === 200 && res.data !== null) {
           this.confirmationService.alert(res.data.response, 'success');
-          this.patientPNCDataForm.markAsPristine();
+          this.patientPNCForm.markAsPristine();
         } else {
           this.confirmationService.alert(res.errorMessage, 'error');
         }
@@ -233,22 +226,23 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   }
 
   checkWeight() {
-    if (this.birthWeightOfNewborn >= 6.0)
+    if (this.birthWeightOfNewborn < 500 || this.birthWeightOfNewborn > 6000)
       this.confirmationService.alert(
         this.currentLanguageSet.alerts.info.recheckValue,
       );
   }
 
   get birthWeightOfNewborn() {
-    return this.patientPNCDataForm.controls['birthWeightOfNewborn'].value;
+    return this.patientPNCForm.controls['birthWeightOfNewborn'].value;
   }
 
   get deliveryPlace() {
-    return this.patientPNCDataForm.controls['deliveryPlace'].value;
+    return this.patientPNCForm.controls['deliveryPlace'].value;
   }
 
   resetOtherPlaceOfDelivery() {
     this.selectDeliveryTypes = [];
+    const deliveryList = this.masterData.deliveryTypes;
     if (
       this.deliveryPlace.deliveryPlace === 'Home-Supervised' ||
       this.deliveryPlace.deliveryPlace === 'Home-Unsupervised'
@@ -257,22 +251,27 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
         (item: any) => {
           console.log('item', item);
 
-          return (
-            item.deliveryType !== 'Assisted Delivery' &&
-            item.deliveryType !== 'Cesarean Section (LSCS)'
-          );
+          return item.deliveryType === 'Normal Delivery';
         },
       );
       this.selectDeliveryTypes = tempDeliveryTypes;
+    } else if (
+      this.deliveryPlace.deliveryPlace === 'Subcentre' ||
+      this.deliveryPlace.deliveryPlace === 'PHC'
+    ) {
+      const deliveryType = deliveryList.filter((item: any) => {
+        return item.deliveryType !== 'Cesarean Section (LSCS)';
+      });
+      this.selectDeliveryTypes = deliveryType;
     } else {
       this.selectDeliveryTypes = this.masterData.deliveryTypes;
     }
-    this.patientPNCDataForm.patchValue({
+    this.patientPNCForm.patchValue({
       otherDeliveryPlace: null,
       deliveryType: null,
     });
-    // this.patientPNCDataForm.controls['deliveryType'].markAsUntouched();
-    // this.patientPNCDataForm.controls['deliveryType'].markAsPristine();
+    // this.patientPNCForm.controls['deliveryType'].markAsUntouched();
+    // this.patientPNCForm.controls['deliveryType'].markAsPristine();
   }
 
   masterData: any;
@@ -290,7 +289,28 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
+          if (
+            localStorage.getItem('visitReason') !== undefined &&
+            localStorage.getItem('visitReason') !== 'undefined' &&
+            localStorage.getItem('visitReason') !== null &&
+            localStorage.getItem('visitReason') === 'Follow Up' &&
+            this.attendant === 'nurse'
+          ) {
+            this.getPreviousVisitPNCDetails();
+          }
+
           if (this.mode) {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.patchDataToFields(benRegID, visitID);
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
@@ -299,27 +319,134 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       });
   }
 
+  getPreviousVisitPNCDetails() {
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+
+    this.doctorService
+      .getPreviousPNCDetails(benRegID)
+      .subscribe((previousPNCdata: any) => {
+        if (
+          previousPNCdata !== null &&
+          previousPNCdata !== undefined &&
+          previousPNCdata.statusCode === 200 &&
+          previousPNCdata.data !== null
+        ) {
+          const tempPNCData = Object.assign(
+            {},
+            previousPNCdata.data.PNCCareDetail,
+          );
+          if (tempPNCData) {
+            if (this.masterData.deliveryTypes) {
+              tempPNCData.deliveryType = this.masterData.deliveryTypes.filter(
+                (data: any) => {
+                  return data.deliveryType === tempPNCData.deliveryType;
+                },
+              )[0];
+            }
+
+            if (this.masterData.deliveryPlaces) {
+              tempPNCData.deliveryPlace = this.masterData.deliveryPlaces.filter(
+                (data: any) => {
+                  return data.deliveryPlace === tempPNCData.deliveryPlace;
+                },
+              )[0];
+            }
+
+            if (this.masterData.deliveryConductedByMaster) {
+              tempPNCData.deliveryConductedBy =
+                this.masterData.deliveryConductedByMaster.filter(
+                  (data: any) => {
+                    return (
+                      data.deliveryConductedBy ===
+                      tempPNCData.deliveryConductedBy
+                    );
+                  },
+                )[0];
+            }
+
+            if (this.masterData.deliveryComplicationTypes) {
+              tempPNCData.deliveryComplication =
+                this.masterData.deliveryComplicationTypes.filter(
+                  (data: any) => {
+                    return (
+                      data.deliveryComplicationType ===
+                      tempPNCData.deliveryComplication
+                    );
+                  },
+                )[0];
+            }
+
+            if (this.masterData.pregOutcomes) {
+              tempPNCData.pregOutcome = this.masterData.pregOutcomes.filter(
+                (data: any) => {
+                  return data.pregOutcome === tempPNCData.pregOutcome;
+                },
+              )[0];
+            }
+
+            if (this.masterData.postNatalComplications) {
+              tempPNCData.postNatalComplication =
+                this.masterData.postNatalComplications.filter((data: any) => {
+                  return (
+                    data.complicationValue === tempPNCData.postNatalComplication
+                  );
+                })[0];
+            }
+
+            if (this.masterData.gestation) {
+              tempPNCData.gestationName = this.masterData.gestation.filter(
+                (data: any) => {
+                  return data.name === tempPNCData.gestationName;
+                },
+              )[0];
+            }
+
+            if (this.masterData.newbornHealthStatuses) {
+              tempPNCData.newBornHealthStatus =
+                this.masterData.newbornHealthStatuses.filter((data: any) => {
+                  return (
+                    data.newBornHealthStatus === tempPNCData.newBornHealthStatus
+                  );
+                })[0];
+            }
+
+            tempPNCData.dDate = new Date(tempPNCData.dateOfDelivery);
+
+            this.patientPNCForm.patchValue(tempPNCData);
+          }
+        }
+      });
+  }
+
   resetOtherDeliveryComplication() {
-    this.patientPNCDataForm.patchValue({ otherDeliveryComplication: null });
+    this.patientPNCForm.patchValue({ otherDeliveryComplication: null });
   }
 
   get deliveryComplication() {
-    return this.patientPNCDataForm.controls['deliveryComplication'].value;
+    return this.patientPNCForm.controls['deliveryComplication'].value;
   }
 
   get otherDeliveryComplication() {
-    return this.patientPNCDataForm.controls['otherDeliveryComplication'].value;
+    return this.patientPNCForm.controls['otherDeliveryComplication'].value;
   }
 
   resetOtherPostNatalComplication() {
-    this.patientPNCDataForm.patchValue({ otherPostNatalComplication: null });
+    this.patientPNCForm.patchValue({ otherPostNatalComplication: null });
   }
 
   get postNatalComplication() {
-    return this.patientPNCDataForm.controls['postNatalComplication'].value;
+    return this.patientPNCForm.controls['postNatalComplication'].value;
   }
 
   get otherPostNatalComplication() {
-    return this.patientPNCDataForm.controls['otherPostNatalComplication'].value;
+    return this.patientPNCForm.controls['otherPostNatalComplication'].value;
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

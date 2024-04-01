@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Injector, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Injector,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -30,7 +37,7 @@ import { SetLanguageComponent } from '../../core/component/set-language.componen
   templateUrl: './case-sheet.component.html',
   styleUrls: ['./case-sheet.component.css'],
 })
-export class CaseSheetComponent implements OnInit, DoCheck {
+export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   QC = false;
   General = false;
   NCDScreening = false;
@@ -82,14 +89,14 @@ export class CaseSheetComponent implements OnInit, DoCheck {
 
     let type;
     if (this.previous) {
-      if (dataStore == 'previous') {
+      if (dataStore === 'previous') {
         type = localStorage.getItem('previousCaseSheetVisitCategory');
       }
     } else {
-      if (dataStore == 'current') {
+      if (dataStore === 'current') {
         type = localStorage.getItem('caseSheetVisitCategory');
       }
-      if (dataStore == 'previous') {
+      if (dataStore === 'previous') {
         type = localStorage.getItem('previousCaseSheetVisitCategory');
       }
     }

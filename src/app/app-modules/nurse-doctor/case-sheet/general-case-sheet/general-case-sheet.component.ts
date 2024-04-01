@@ -19,21 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { DoctorService } from '../../shared/services/doctor.service';
-import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material';
 import { Location } from '@angular/common';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ActivatedRoute } from '@angular/router';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-general-case-sheet',
   templateUrl: './general-case-sheet.component.html',
   styleUrls: ['./general-case-sheet.component.css'],
 })
-export class GeneralCaseSheetComponent implements OnInit {
+export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
   previous: any;
 
@@ -71,7 +80,7 @@ export class GeneralCaseSheetComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
@@ -81,7 +90,7 @@ export class GeneralCaseSheetComponent implements OnInit {
     this.dataStore = this.route.snapshot.params['printablePage'] || 'previous';
 
     let caseSheetRequest;
-    if (this.dataStore == 'current') {
+    if (this.dataStore === 'current') {
       this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
       caseSheetRequest = {
         VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
@@ -92,7 +101,7 @@ export class GeneralCaseSheetComponent implements OnInit {
       };
       this.getCasesheetData(caseSheetRequest);
     }
-    if (this.dataStore == 'previous') {
+    if (this.dataStore === 'previous') {
       this.hideBack = true;
 
       this.visitCategory = localStorage.getItem(
@@ -112,7 +121,7 @@ export class GeneralCaseSheetComponent implements OnInit {
     this.assignSelectedLanguage();
     // this.language = sessionStorage.getItem('setLanguage');
 
-    // if (this.language != undefined) {
+    // if (this.language !== undefined) {
     //   this.httpServiceService
     //     .getLanguage(this.language_file_path + this.language + ".json")
     //     .subscribe(
@@ -160,25 +169,25 @@ export class GeneralCaseSheetComponent implements OnInit {
   casesheetSubs: any;
   hideSelectQC = false;
 
-  getCasesheetData(caseSheetRequest) {
-    // if (this.visitCategory == 'General OPD (QC)' || this.previous == true) {
+  getCasesheetData(caseSheetRequest: any) {
+    // if (this.visitCategory === 'General OPD (QC)' || this.previous === true) {
     //   this.hideSelectQC = true;
     // }
-    if (this.serviceType == 'TM') {
+    if (this.serviceType === 'TM') {
       this.getTMCasesheetData(caseSheetRequest);
     }
-    if (this.serviceType == 'MMU') {
+    if (this.serviceType === 'MMU') {
       this.getMMUCasesheetData(caseSheetRequest);
     }
-    if (this.serviceType == 'HWC') {
+    if (this.serviceType === 'HWC') {
       this.getTMCasesheetData(caseSheetRequest);
     }
   }
-  getMMUCasesheetData(caseSheetRequest) {
+  getMMUCasesheetData(caseSheetRequest: any) {
     this.casesheetSubs = this.doctorService
       .getMMUCasesheetData(caseSheetRequest)
-      .subscribe((res) => {
-        if (res && res.statusCode == 200 && res.data) {
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data) {
           this.caseSheetData = res.data;
           console.log(
             'caseSheetData',
@@ -187,11 +196,11 @@ export class GeneralCaseSheetComponent implements OnInit {
         }
       });
   }
-  getTMCasesheetData(caseSheetRequest) {
+  getTMCasesheetData(caseSheetRequest: any) {
     this.casesheetSubs = this.doctorService
       .getTMCasesheetData(caseSheetRequest)
-      .subscribe((res) => {
-        if (res && res.statusCode == 200 && res.data) {
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data) {
           this.caseSheetData = res.data;
           console.log(
             'caseSheetData',
@@ -202,17 +211,15 @@ export class GeneralCaseSheetComponent implements OnInit {
   }
 
   selectPrintPage() {
-    const mdDialogRef: MdDialogRef<PrintPageSelectComponent> = this.dialog.open(
-      PrintPageSelectComponent,
-      {
+    const mdDialogRef: MatDialogRef<PrintPageSelectComponent> =
+      this.dialog.open(PrintPageSelectComponent, {
         width: '520px',
         disableClose: false,
         data: {
           printPagePreviewSelect: this.printPagePreviewSelect,
           visitCategory: this.visitCategory,
         },
-      },
-    );
+      });
 
     mdDialogRef.afterClosed().subscribe((result) => {
       if (result) {

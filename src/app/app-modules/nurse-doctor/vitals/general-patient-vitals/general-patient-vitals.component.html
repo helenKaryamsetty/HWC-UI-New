@@ -1,3 +1,4 @@
+<!-- {{ patientVitalsForm.value | json }} -->
 <section [formGroup]="patientVitalsForm">
   <mat-accordion>
     <mat-expansion-panel expanded="true">
@@ -9,41 +10,45 @@
           }}
         </h5>
       </mat-expansion-panel-header>
-
       <div class="row m-t-10">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails
-                ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+              }}"
               allowText="decimal"
               id="height_cm"
               name="height_cm"
               formControlName="height_cm"
               (change)="checkHeight(height_cm)"
-              appDefaultNull
+              defaultNull
               maxlength="6"
               allowMax="350"
               (blur)="calculateBMI()"
-              required
+              [required]="
+                visitCategory !== 'FP & Contraceptive Services' &&
+                visitCategory !== 'General OPD'
+              "
             />
           </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails
-                ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+              }}"
               (change)="checkWeight(weight_Kg)"
               (blur)="calculateBMI()"
               allowText="decimal"
@@ -52,10 +57,13 @@
               formControlName="weight_Kg"
               maxlength="6"
               allowMax="500"
-              required
+              [required]="
+                visitCategory !== 'FP & Contraceptive Services' &&
+                visitCategory !== 'General OPD'
+              "
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTWeightModel()"
             >
@@ -69,14 +77,14 @@
           *ngIf="totalMonths > 60"
         >
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails
-                ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
+              }}"
               allowText="decimal"
               [readonly]="true"
               [ngClass]="{ abnormal: !normalBMI }"
@@ -85,6 +93,7 @@
             />
           </mat-form-field>
         </div>
+
         <div
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
           *ngIf="totalMonths > 60 && totalMonths <= 228"
@@ -154,12 +163,11 @@
 
         <ng-template
           [ngIf]="
-            (totalMonths !== undefined && totalMonths > 228) ||
-            (totalMonths !== undefined &&
-              totalMonths > 60 &&
-              totalMonths <= 228 &&
-              !male &&
-              !female)
+            totalMonths !== undefined &&
+            totalMonths > 60 &&
+            totalMonths <= 228 &&
+            !male &&
+            !female
           "
         >
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -218,28 +226,108 @@
                 !female
               "
             >
-              <span style="padding: 8px; color: #b3b3b3; font-size: 12px">{{
-                currentLanguageSet?.pleaseConfirmClinically
-              }}</span>
+              <p style="padding: 8px; color: #b3b3b3; font-size: 12px">
+                {{ currentLanguageSet?.pleaseConfirmClinically }}
+              </p>
             </span>
           </div>
         </ng-template>
+
+        <ng-template [ngIf]="totalMonths !== undefined && totalMonths > 228">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI < 18.5"
+              style="color: red"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.underweight
+              }}</span>
+            </div>
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI >= 18.5 && bMI < 25"
+              style="color: green"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.normalWeight
+              }}</span>
+            </div>
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI >= 25.0 && bMI < 30.0"
+              style="color: darkorange"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.overweight
+              }}</span>
+            </div>
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI >= 30.0 && bMI <= 34.9"
+              style="color: red"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{ currentLanguageSet?.obesityClassOne }}</span>
+            </div>
+
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI >= 35.0 && bMI <= 39.9"
+              style="color: red"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{ currentLanguageSet?.obesityClassTwo }}</span>
+            </div>
+
+            <div
+              class="marker"
+              *ngIf="bMI !== null && bMI > 39.9"
+              style="color: red"
+            >
+              <span class="material-icons">brightness_1</span>
+              <span>{{ currentLanguageSet?.extremeObesity }}</span>
+            </div>
+
+            <span
+              *ngIf="
+                BMI !== null &&
+                BMI !== undefined &&
+                totalMonths !== undefined &&
+                totalMonths > 60 &&
+                totalMonths <= 228 &&
+                !male &&
+                !female
+              "
+            >
+              <p style="padding: 8px; color: #b3b3b3; font-size: 12px">
+                {{ currentLanguageSet?.pleaseConfirmClinically }}
+              </p>
+            </span>
+          </div>
+        </ng-template>
+
         <div class="clearfix"></div>
 
-        <div *ngIf="hideForANCAndQC" style="display: contents">
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            style="margin-left: 10px"
-          >
+        <!-- added conditon for waist circumference to be non-mandatory in cbac -->
+        <div *ngIf="hideForANCAndQC && benAge > 20">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.waistCircumference
-              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
-                appDefaultNull
+                defaultNull
+                placeholder="
+              {{
+                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                    ?.waistCircumference
+                }}"
                 allowText="decimal"
                 [ngClass]="{
                   abnormal:
@@ -252,154 +340,159 @@
                 formControlName="waistCircumference_cm"
                 maxlength="6"
                 allowMax="350"
-                [required]="benAge >= 30 && visitCategory === 'NCD screening'"
-              />
-            </mat-form-field>
-          </div>
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            *ngIf="visitCategory !== 'NCD screening'"
-          >
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="decimal"
-                (change)="checkHip(hipCircumference_cm)"
-                (blur)="hipWaistRatio()"
-                name="hipCircumference_cm"
-                id="hipCircumference_cm"
-                formControlName="hipCircumference_cm"
-                maxlength="6"
-                allowMax="300"
-              />
-            </mat-form-field>
-          </div>
-
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            *ngIf="visitCategory !== 'NCD screening'"
-          >
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                [ngClass]="{ abnormal: !normalWaistHipRatio }"
-                allowText="decimal"
-                [readonly]="true"
-                name="waistHipRatio"
-                formControlName="waistHipRatio"
-                id="waistHipRatio"
+                [required]="
+                  benAge >= 30 &&
+                  visitCategory === 'NCD screening' &&
+                  enableCBACForm
+                "
               />
             </mat-form-field>
           </div>
 
           <div *ngIf="visitCategory !== 'NCD screening'">
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio !== null &&
-                female !== true &&
-                waistHipRatio < 0.91
-              "
-              style="color: #43760f"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.normal }}</span>
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  placeholder="
+                {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
+                  }}"
+                  allowText="decimal"
+                  (change)="checkHip(hipCircumference_cm)"
+                  (blur)="hipWaistRatio()"
+                  name="hipCircumference_cm"
+                  id="hipCircumference_cm"
+                  formControlName="hipCircumference_cm"
+                  maxlength="6"
+                  allowMax="300"
+                />
+              </mat-form-field>
             </div>
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio !== null &&
-                female === true &&
-                waistHipRatio < 0.81
-              "
-              style="color: #43760f"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.normal }}</span>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  placeholder="
+                {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
+                  }}"
+                  [ngClass]="{ abnormal: !normalWaistHipRatio }"
+                  allowText="decimal"
+                  [readonly]="true"
+                  name="waistHipRatio"
+                  formControlName="waistHipRatio"
+                  id="waistHipRatio"
+                />
+              </mat-form-field>
             </div>
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio > 0.9 &&
-                waistHipRatio !== null &&
-                female !== true &&
-                waistHipRatio !== null &&
-                female !== true &&
-                waistHipRatio < 0.96
-              "
-              style="color: #eaaa26"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.moderate }}</span>
-            </div>
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio > 0.8 &&
-                waistHipRatio !== null &&
-                female === true &&
-                waistHipRatio !== null &&
-                female === true &&
-                waistHipRatio < 0.86
-              "
-              style="color: #eaaa26"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.moderate }}</span>
-            </div>
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio !== null &&
-                female !== true &&
-                waistHipRatio > 0.95
-              "
-              style="color: red"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.higher }}</span>
-            </div>
-            <div
-              class="marker"
-              *ngIf="
-                waistHipRatio !== null &&
-                female === true &&
-                waistHipRatio > 0.85
-              "
-              style="color: red"
-            >
-              <span class="material-icons">brightness_1</span>
-              <span>{{ currentLanguageSet?.common?.higher }}</span>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio !== null &&
+                  female !== true &&
+                  waistHipRatio < 0.91
+                "
+                style="color: #43760f"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.lowRisk }}</span>
+              </div>
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio !== null &&
+                  female === true &&
+                  waistHipRatio < 0.81
+                "
+                style="color: #43760f"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.lowRisk }}</span>
+              </div>
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio > 0.9 &&
+                  waistHipRatio !== null &&
+                  female !== true &&
+                  waistHipRatio !== null &&
+                  female !== true &&
+                  waistHipRatio <= 0.99
+                "
+                style="color: #eaaa26"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.moderateRisk }}</span>
+              </div>
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio > 0.8 &&
+                  waistHipRatio !== null &&
+                  female === true &&
+                  waistHipRatio !== null &&
+                  female === true &&
+                  waistHipRatio <= 0.84
+                "
+                style="color: #eaaa26"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.moderateRisk }}</span>
+              </div>
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio !== null &&
+                  female !== true &&
+                  waistHipRatio > 0.99
+                "
+                style="color: red"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.highRisk }}</span>
+              </div>
+              <div
+                class="marker"
+                *ngIf="
+                  waistHipRatio !== null &&
+                  female === true &&
+                  waistHipRatio > 0.84
+                "
+                style="color: red"
+              >
+                <span class="material-icons">brightness_1</span>
+                <span>{{ currentLanguageSet?.highRisk }}</span>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="clearfix"></div>
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            style="margin-left: 10px"
-            *ngIf="benAge <= 2 && visitCategory !== 'NCD screening'"
-          >
+        <div class="clearfix"></div>
+
+        <div
+          *ngIf="visitCategory !== 'ANC' && visitCategory !== 'NCD screening'"
+        >
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" *ngIf="benAge <= 2">
             <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
-              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
-                appDefaultNull
+                defaultNull
+                placeholder="
+              {{
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
+                }}"
                 allowText="decimal"
                 (change)="checkHeadCircumference(headCircumference_cm)"
                 [ngClass]="{
@@ -415,19 +508,17 @@
             </mat-form-field>
           </div>
 
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            *ngIf="benAge <= 6 && visitCategory !== 'NCD screening'"
-          >
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" *ngIf="benAge <= 6">
             <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.midUpperArmCircumference
-              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
-                appDefaultNull
+                defaultNull
+                placeholder="
+              {{
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.midUpperArmCircumference
+                }}"
                 allowText="decimal"
                 (change)="
                   checkMidUpperArmCircumference(
@@ -448,10 +539,7 @@
             </mat-form-field>
           </div>
 
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            *ngIf="visitCategory !== 'NCD screening'"
-          >
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <div
               class="marker"
               *ngIf="
@@ -491,7 +579,7 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="hideVitalsFormForNcdScreening">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -503,26 +591,30 @@
       <div class="row m-t-20">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.temperature
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
-              allowText="decimal"
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.temperature
+              }}"
+              allowText="tempDecimal"
               [ngClass]="{ abnormal: temperature < 96 || temperature > 100 }"
               name="temperature"
               id="temperature"
               formControlName="temperature"
               (change)="checkTemperature(temperature)"
-              maxlength="6"
+              maxlength="5"
               allowMax="150"
-              [required]="ncdTemperature"
+              [required]="
+                visitCategory !== 'FP & Contraceptive Services' &&
+                visitCategory !== 'General OPD'
+              "
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTTempModel()"
             >
@@ -533,15 +625,16 @@
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.pulseRate
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
-              [ngClass]="{ abnormal: pulseRate < 49 || pulseRate > 200 }"
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.pulseRate
+              }}"
+              [ngClass]="{ abnormal: pulseRate < 50 || pulseRate > 200 }"
               allowText="number"
               maxlength="3"
               allowMax="250"
@@ -550,12 +643,16 @@
               formControlName="pulseRate"
               (change)="checkPulseRate(pulseRate)"
               [required]="
-                visitCategory !== 'General OPD' &&
-                visitCategory !== 'NCD screening'
+                (visitCategory !== 'NCD screening' ===================&=&
+                  visitCategory !== 'ANC' &&
+                  visitCategory !== 'General OPD' &&
+                  visitCategory !== 'PNC' &&
+                  visitCategory !== 'FP & Contraceptive Services') ||
+                (visitCategory === 'NCD screening' && doctorScreen === true)
               "
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTPulseRateModel()"
             >
@@ -565,13 +662,11 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.sPOTwoWithUnit
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="{{ currentLanguageSet?.sPOTwoWithUnit }}"
               allowText="number"
               maxlength="3"
               name="sPO2"
@@ -581,7 +676,7 @@
               (change)="checkSpo2()"
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTSPO2Model()"
             >
@@ -589,17 +684,17 @@
             </button>
           </mat-form-field>
         </div>
-
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.systolicBP
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.systolicBP
+              }}"
               [ngClass]="{
                 abnormal:
                   systolicBP_1stReading < 110 || systolicBP_1stReading > 140
@@ -617,10 +712,15 @@
                   diastolicBP_1stReading
                 )
               "
-              [required]="benAge > 30"
+              [required]="
+                (benAge > 30 &&
+                  visitCategory !== 'FP & Contraceptive Services' &&
+                  visitCategory !== 'General OPD') ||
+                visitCategory === 'ANC'
+              "
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTBPModel()"
             >
@@ -631,14 +731,15 @@
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.diastolicBP
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
+              defaultNull
+              placeholder="
+            {{
+                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.diastolicBP
+              }}"
               [ngClass]="{
                 abnormal:
                   diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
@@ -656,10 +757,15 @@
                   diastolicBP_1stReading
                 )
               "
-              [required]="benAge > 30"
+              [required]="
+                (benAge > 30 &&
+                  visitCategory !== 'FP & Contraceptive Services' &&
+                  visitCategory !== 'General OPD') ||
+                visitCategory === 'ANC'
+              "
             />
             <button
-              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              tooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTBPModel()"
             >
@@ -668,139 +774,185 @@
           </mat-form-field>
         </div>
 
+        <div *ngIf="visitCategory !== 'NCD screening'">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+            <mat-form-field class="input-full-width">
+              <input
+                autocomplete="off"
+                matInput
+                defaultNull
+                placeholder="
+              {{
+                  currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                    ?.respiratoryRate
+                }}"
+                allowText="number"
+                [ngClass]="{
+                  abnormal: respiratoryRate < 11 || respiratoryRate > 23
+                }"
+                name="respiratoryRate"
+                id="respiratoryRate"
+                formControlName="respiratoryRate"
+                (change)="checkRespiratoryRate(respiratoryRate)"
+                allowMax="150"
+                maxlength="3"
+              />
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="showGlucoseQC" class="col-xs-12 col-sm-12 m-t-10">
+            <strong>{{
+              currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                ?.bloodGlucose
+            }}</strong>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
+                <mat-form-field class="input-full-width">
+                  <input
+                    autocomplete="off"
+                    matInput
+                    defaultNull
+                    placeholder="
+                  {{
+                      currentLanguageSet?.vitalsDetails
+                        ?.vitalsCancerscreening_QC?.fasting
+                    }}"
+                    allowText="number"
+                    allowMax="900"
+                    maxlength="3"
+                    name="bloodGlucose_Fasting"
+                    id="bloodGlucose_Fasting"
+                    formControlName="bloodGlucose_Fasting"
+                    [ngClass]="{
+                      abnormal:
+                        bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
+                    }"
+                    (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
+                  />
+                  <button
+                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matSuffix
+                    (click)="openIOTBGFastingModel()"
+                  >
+                    <span class="glyphicon glyphicon-scale"></span>
+                  </button>
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
+                <mat-form-field class="input-full-width">
+                  <input
+                    autocomplete="off"
+                    matInput
+                    defaultNull
+                    placeholder="
+                  {{
+                      currentLanguageSet?.vitalsDetails
+                        ?.vitalsCancerscreening_QC?.random
+                    }}"
+                    allowText="number"
+                    allowMax="900"
+                    maxlength="3"
+                    name="bloodGlucose_Random"
+                    id="bloodGlucose_Random"
+                    formControlName="bloodGlucose_Random"
+                    [ngClass]="{ abnormal: bloodGlucose_Random < 140 }"
+                    (change)="checkBloodSugarRandom(bloodGlucose_Random)"
+                  />
+                  <button
+                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matSuffix
+                    (click)="openIOTBGRandomModel()"
+                  >
+                    <span class="glyphicon glyphicon-scale"></span>
+                  </button>
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
+                <mat-form-field class="input-full-width">
+                  <input
+                    autocomplete="off"
+                    matInput
+                    defaultNull
+                    placeholder="
+                  {{
+                      currentLanguageSet?.vitalsDetails
+                        ?.vitalsCancerscreening_QC?.postPrandial
+                    }}"
+                    name="bloodGlucose_2hr_PP"
+                    id="bloodGlucose_2hr_PP"
+                    formControlName="bloodGlucose_2hr_PP"
+                    allowText="number"
+                    allowMax="900"
+                    maxlength="3"
+                    [ngClass]="{ abnormal: bloodGlucose_2hr_PP < 140 }"
+                    (change)="
+                      checkBloodSugar2HrPostPrandial(bloodGlucose_2hr_PP)
+                    "
+                  />
+                  <button
+                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matSuffix
+                    (click)="openIOTBGPostPrandialModel()"
+                  >
+                    <span class="glyphicon glyphicon-scale"></span>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div
+          *ngIf="visitCategory === 'ANC'"
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-          *ngIf="visitCategory !== 'NCD screening'"
         >
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.respiratoryRate
-            }}</mat-label>
             <input
               autocomplete="off"
               matInput
-              appDefaultNull
-              allowText="number"
-              [ngClass]="{
-                abnormal: respiratoryRate < 11 || respiratoryRate > 23
-              }"
-              name="respiratoryRate"
-              id="respiratoryRate"
-              formControlName="respiratoryRate"
-              (change)="checkRespiratoryRate(respiratoryRate)"
+              defaultNull
+              placeholder="{{ currentLanguageSet?.hemoglobin }}"
+              allowText="tempDecimal"
+              [ngClass]="{ abnormal: hemoglobin < 11 || hemoglobin > 15.1 }"
+              (change)="checkHemoglobin()"
+              name="hemoglobin"
+              id="hemoglobin"
+              formControlName="hemoglobin"
               allowMax="150"
-              maxlength="3"
+              maxlength="4"
             />
           </mat-form-field>
         </div>
 
-        <div
-          *ngIf="showGlucoseQC && visitCategory !== 'NCD screening'"
-          class="col-xs-12 col-sm-12 m-t-10 row"
-        >
-          <strong>{{
-            currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-              ?.bloodGlucose
-          }}</strong>
-          <div class="row col-xs-12 col-sm-12 m-t-10">
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.fasting
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  allowText="number"
-                  allowMax="900"
-                  maxlength="3"
-                  name="bloodGlucose_Fasting"
-                  id="bloodGlucose_Fasting"
-                  formControlName="bloodGlucose_Fasting"
-                  [ngClass]="{
-                    abnormal:
-                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
-                  }"
-                  (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
-                />
-                <button
-                  matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                  matSuffix
-                  (click)="openIOTBGFastingModel()"
-                >
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
-              </mat-form-field>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.random
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  allowText="number"
-                  allowMax="900"
-                  maxlength="3"
-                  name="bloodGlucose_Random"
-                  id="bloodGlucose_Random"
-                  formControlName="bloodGlucose_Random"
-                  [ngClass]="{ abnormal: bloodGlucose_Random < 140 }"
-                  (change)="checkBloodSugarRandom(bloodGlucose_Random)"
-                />
-                <button
-                  matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                  matSuffix
-                  (click)="openIOTBGRandomModel()"
-                >
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
-              </mat-form-field>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.postPrandial
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  name="bloodGlucose_2hr_PP"
-                  id="bloodGlucose_2hr_PP"
-                  formControlName="bloodGlucose_2hr_PP"
-                  allowText="number"
-                  allowMax="900"
-                  maxlength="3"
-                  [ngClass]="{ abnormal: bloodGlucose_2hr_PP < 140 }"
-                  (change)="checkBloodSugar2HrPostPrandial(bloodGlucose_2hr_PP)"
-                />
-                <button
-                  matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                  matSuffix
-                  (click)="openIOTBGPostPrandialModel()"
-                >
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
-              </mat-form-field>
-            </div>
-          </div>
+        <div class="col-xs-12 col-sm-12 m-t-10">
+          <strong>Random Glucose Test</strong>
         </div>
-      </div>
-
-      <div class="row m-t-20">
-        <strong>Random Glucose Test</strong>
-      </div>
-      <div class="row m-t-20">
+        <div
+          class="col-xs-12 col-sm-12 text-right m-t-10"
+          *ngIf="
+            referredVisitcode !== 'undefined' &&
+            referredVisitcode !== undefined &&
+            referredVisitcode !== null
+          "
+        >
+          <p class="font-history-label m-t-10">
+            {{ currentLanguageSet?.loadMMURBS }}
+          </p>
+          <button
+            type="button"
+            style="margin-right: 15px"
+            mat-icon-button
+            matTooltip="{{ currentLanguageSet?.loadMMURBS }}"
+            id="PreviousRbsHistory"
+            class="pull-right"
+            color="primary"
+            (click)="loadMMURBS()"
+          >
+            <mat-icon class="md-18">history</mat-icon>
+          </button>
+        </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <div class="col-xs-2 col-sm-2 m-t-15" *ngIf="diabetesSelected === 1">
             <mat-checkbox
@@ -810,15 +962,13 @@
             >
             </mat-checkbox>
           </div>
-          <div class="col-xs-10 col-sm-10">
+          <div class="col-xs-10 col-sm-10 col-lg-12">
             <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.rbsTestResult
-              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
-                appDefaultNull
+                defaultNull
+                placeholder="{{ currentLanguageSet?.rbsTestResult }}"
                 allowText="number"
                 [disabled]="rbsResultChange()"
                 name="rbsTestResult"
@@ -833,7 +983,7 @@
                 }"
               />
               <button
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+                tooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
                 [disabled]="checkDiasableRBS()"
                 (click)="openIOTRBSModel()"
@@ -845,14 +995,12 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.rbsTestRemarks
-            }}</mat-label>
             <input
               autocomplete="off"
-              allowText="textAreaValidator"
               matInput
-              appDefaultNull
+              allowText="textAreaValidator"
+              defaultNull
+              placeholder="{{ currentLanguageSet?.rbsTestRemarks }}"
               name="rbsTestRemarks"
               id="rbsTestRemarks"
               formControlName="rbsTestRemarks"
@@ -861,70 +1009,60 @@
             />
           </mat-form-field>
         </div>
-      </div>
 
-      <!-- Audio Recording -->
-      <div *ngIf="hideLungAssessment">
-        <div class="col-xs-12 col-sm-12 m-t-10">
-          <h4 *ngIf="!enableLungAssessment">
-            <strong>Lung Assessment</strong>
-          </h4>
-          <h4 *ngIf="enableLungAssessment">
-            <strong>Lung Assessment *</strong>
-          </h4>
+        <!-- Audio Recording -->
+        <!-- <div>
+          <div class="col-xs-12 col-sm-12 m-t-10">
+            <h4 *ngIf="!enableLungAssessment"><strong>Lung Assessment</strong></h4>
+            <h4 *ngIf="enableLungAssessment"><strong>Lung Assessment *</strong></h4>
 
-          <div class="row col-xs-12">
-            <button
-              mat-raised-button
-              class="mat_blue font-regular"
-              style="text-align: center; width: 10%; margin-left: 20px"
-              *ngIf="!isRecording && !blobUrl"
-              (click)="startRecording()"
-              [disabled]="disabledLungAssesment"
-            >
-              Start Recording
-            </button>
-            <div style="margin-top: 5px" *ngIf="disabledLungAssesment">
-              <strong
-                >*Lung Assessment can only be done for patient with age 18 years
-                and above</strong
+            <div class="row col-xs-12 m-t-10 m-b-10">
+              <button
+                mat-raised-button
+                class="font-regular start-button"
+                *ngIf="!isRecording && !blobUrl"
+                (click)="startRecording()"
+                [disabled]="disabledLungAssesment"
               >
-            </div>
+                Start Recording
+              </button>
+              <div style="margin-top: 5px;" *ngIf="disabledLungAssesment">
+                <strong>*Lung Assessment can only be done for patient with age 18 years and above</strong>
+              </div>
 
-            <button
-              mat-raised-button
-              color="warn"
-              class="font-regular"
-              *ngIf="isRecording && !blobUrl"
-              (click)="stopRecording()"
-            >
-              Stop Recording
-            </button>
-
-            <div class="m-t-5 m-b-20">
               <button
                 mat-raised-button
                 color="warn"
                 class="font-regular"
-                *ngIf="!isRecording && blobUrl"
-                (click)="clearRecordedData()"
+                *ngIf="isRecording && !blobUrl"
+                (click)="stopRecording()"
               >
-                Clear Recording
+                Stop Recording
               </button>
 
-              <button
-                mat-raised-button
-                color="primary"
-                class="font-regular"
-                style="margin-left: 10px"
-                *ngIf="!isRecording && blobUrl"
-                (click)="startAssessment()"
-              >
-                Start Assessment
-              </button>
-            </div>
+              <div class="m-t-5 m-b-20">
+                <button
+                  mat-raised-button
+                  color="warn"
+                  class="font-regular"
+                  *ngIf="!isRecording && blobUrl"
+                  (click)="clearRecordedData()"
+                >
+                  Clear Recording
+                </button>
 
-            <div class="col-xs-10 col-sm-10 col-lg-12">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="font-regular"
+                  style="margin-left: 10px"
+                  *ngIf="!isRecording && blobUrl"
+                  (click)="startAssessment()"
+                >
+                  Start Assessment
+                </button>
+              </div>
+              <div class="col-xs-10 col-sm-10 col-lg-12">
               <div *ngIf="isRecording && !blobUrl">{{ recordedTime }}</div>
               <div>
                 <audio *ngIf="!isRecording && blobUrl" controls>
@@ -935,103 +1073,46 @@
               <div class="checkbox-group" *ngIf="!isRecording && blobUrl">
                 <strong>Any Observed Symptoms:</strong>
                 <div class="col-xs-12 col-sm-12 col-md-12 m-t-15">
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="frequentCoughChecked"
-                    (change)="onCheckboxChange('frequentCough', $event)"
-                  >
-                    Frequent Cough
-                  </mat-checkbox>
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="sputumChecked"
-                    (change)="onCheckboxChange('sputum', $event)"
-                  >
-                    Sputum
-                  </mat-checkbox>
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="coughAtNightChecked"
-                    (change)="onCheckboxChange('coughAtNight', $event)"
-                  >
-                    Cough At Night
-                  </mat-checkbox>
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="wheezingChecked"
-                    (change)="onCheckboxChange('wheezing', $event)"
-                  >
-                    Wheezing
-                  </mat-checkbox>
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="painInChestChecked"
-                    (change)="onCheckboxChange('painInChest', $event)"
-                  >
-                    Pain in Chest
-                  </mat-checkbox>
-                  <mat-checkbox
-                    color="primary"
-                    class="valueCheck"
-                    name="shortnessOfBreathChecked"
-                    (change)="onCheckboxChange('shortnessOfBreath', $event)"
-                  >
-                    Shortness Of Breath
-                  </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="frequentCoughChecked" (change)="onCheckboxChange('frequentCough', $event)"> Frequent Cough </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="sputumChecked" (change)="onCheckboxChange('sputum', $event)"> Sputum </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="coughAtNightChecked" (change)="onCheckboxChange('coughAtNight', $event)"> Cough At Night </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="wheezingChecked" (change)="onCheckboxChange('wheezing', $event)"> Wheezing </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="painInChestChecked" (change)="onCheckboxChange('painInChest', $event)"> Pain in Chest </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="shortnessOfBreathChecked" (change)="onCheckboxChange('shortnessOfBreath', $event)"> Shortness Of Breath </mat-checkbox>                                
+                </div>
+                <div class="col-xs-12 m-t-15">
+                  <button mat-raised-button class="pull-right" (click)="startAssessment()" color="primary">
+                    {{currentLanguageSet?.common?.submit}}
+                  </button>
                 </div>
               </div>
 
-              <div *ngIf="enableResult">
-                <span style="text-decoration: underline; margin-top: 10px">
-                  <strong> <em>Test Result : </em> </strong>
-                </span>
-                <br />
+              <div *ngIf="enableResult"> 
+              <label style="text-decoration: underline; margin-top:10px">
+                <strong><em>Test Result : </em></strong>
+              </label>
+              <br/>
 
-                <span>
-                  <strong>Severity:</strong>
-                  {{
-                    severity !== null && severity !== undefined
-                      ? severity
-                      : "NA"
-                  }}
-                </span>
-                <br />
-                <span>
-                  <strong>Cough Severity Score:</strong>
-                  {{
-                    cough_severity_score !== null &&
-                    cough_severity_score !== undefined
-                      ? cough_severity_score
-                      : "NA"
-                  }}
-                </span>
-                <br />
-                <span>
-                  <strong>Cough Pattern:</strong>
-                  {{
-                    cough_pattern !== null && cough_pattern !== undefined
-                      ? cough_pattern
-                      : "NA"
-                  }}
-                </span>
-                <br />
-                <span>
-                  <strong>Record Time:</strong>
-                  {{
-                    record_duration !== null && record_duration !== undefined
-                      ? record_duration + "sec"
-                      : "NA"
-                  }}
-                </span>
-              </div>
+              <label>
+                <strong>Severity:</strong> {{ (severity !== null && severity !== undefined) ? severity : "NA" }}
+              </label>
+              <br/>
+              <label>
+                <strong>Cough Severity Score:</strong> {{ (cough_severity_score  !== null && cough_severity_score !== undefined) ? cough_severity_score : "NA" }}
+              </label>
+              <br/>
+              <label>
+                <strong>Cough Pattern:</strong> {{ (cough_pattern !== null && cough_pattern !== undefined) ? cough_pattern : "NA" }}
+              </label>
+              <br/>
+              <label>
+                <strong>Record Time:</strong> {{ (record_duration !== null && record_duration !== undefined) ? record_duration + "sec" : "NA"}}
+              </label>
+            </div>
             </div>
           </div>
         </div>
+      </div> -->
       </div>
     </mat-expansion-panel>
   </mat-accordion>

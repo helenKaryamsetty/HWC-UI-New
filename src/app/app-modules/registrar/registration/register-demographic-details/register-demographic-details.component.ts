@@ -21,7 +21,14 @@
  */
 import { Observable } from 'rxjs';
 import { ConfirmationService } from './../../../core/services/confirmation.service';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  OnChanges,
+} from '@angular/core';
 import { RegistrarService } from '../../shared/services/registrar.service';
 import {
   FormGroup,
@@ -43,10 +50,12 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-demographic-details',
-  templateUrl: './app-register-demographic-details.component.html',
-  styleUrls: ['./app-register-demographic-details.component.css'],
+  templateUrl: './register-demographic-details.component.html',
+  styleUrls: ['./register-demographic-details.component.css'],
 })
-export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
+export class RegisterDemographicDetailsComponent
+  implements OnInit, DoCheck, OnDestroy
+{
   masterData: any;
   masterDataSubscription: any;
 
@@ -101,7 +110,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
     }
     this.personalDataOnHealthIDSubscription =
       this.registrarService.dialogResult$.subscribe((abhaResponse) => {
-        if (abhaResponse != null && abhaResponse != undefined) {
+        if (abhaResponse !== null && abhaResponse !== undefined) {
           this.abhaSearchResponse = abhaResponse;
           this.setPersonalDetailsFromABHA(abhaResponse);
         }
@@ -142,7 +151,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
   loadMasterDataObservable() {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res) => {
-        if (res != null) {
+        if (res !== null) {
           this.masterData = res;
         }
       });
@@ -227,7 +236,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
   configState() {
     this.demographicsMaster = Object.assign(
       {},
-      JSON.parse(localStorage.getItem('location') || '{}'),
+      localStorage.getItem('location'),
       { servicePointID: localStorage.getItem('servicePointID') },
       { servicePointName: localStorage.getItem('servicePointName') },
     );
@@ -450,7 +459,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
    * Check and save location Data from Storage
    */
   loadLocationFromStorage() {
-    const location = JSON.parse(localStorage.getItem('location') || '{}');
+    const location: any = localStorage.getItem('location');
     this.demographicsMaster = Object.assign({}, location, {
       servicePointID: localStorage.getItem('servicePointID'),
       servicePointName: localStorage.getItem('servicePointName'),
@@ -547,7 +556,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
   loadVillage() {
     this.villageList =
       this.demographicsMaster.otherLoc.districtList[0].villageList;
-    if (this.villageList.length == 1) {
+    if (this.villageList.length === 1) {
       this.demographicDetailsForm.patchValue({
         villageID:
           this.demographicsMaster.otherLoc.districtList[0].villageList[0]
@@ -732,7 +741,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
     this.updateStateName(this.demographicDetailsForm.value.stateID);
     this.registrarService
       .getDistrictList(this.demographicDetailsForm.value.stateID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.districtList = res.data;
           this.emptyDistrict();
@@ -766,7 +775,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
     this.updateSubDistrictName();
     this.registrarService
       .getVillageList(this.demographicDetailsForm.value.blockID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.villageList = res.data;
           this.emptyVillage();
@@ -787,7 +796,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
     this.updateSubDistrictName();
     this.registrarService
       .getVillageList(this.demographicDetailsForm.value.blockID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.villageList = res.data;
           this.emptyVillage();
@@ -808,7 +817,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
   fetchDistrictsOnStateSelection() {
     this.registrarService
       .getDistrictList(this.demographicDetailsForm.value.stateID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.districtList = res.data;
           this.emptyDistrict();
@@ -834,7 +843,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
     this.updateDistrictName(this.demographicDetailsForm.value.districtID);
     this.registrarService
       .getSubDistrictList(this.demographicDetailsForm.value.districtID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.subDistrictList = res.data;
           this.emptySubDistrict();
@@ -862,7 +871,7 @@ export class RegisterDemographicDetailsComponent implements OnInit, OnDestroy {
   fetchSubDistrictsOnDistrictSelection() {
     this.registrarService
       .getSubDistrictList(this.demographicDetailsForm.value.districtID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.subDistrictList = res.data;
           this.emptySubDistrict();

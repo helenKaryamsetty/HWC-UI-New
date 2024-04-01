@@ -19,16 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
-
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -38,15 +37,16 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-medication-history',
   templateUrl: './medication-history.component.html',
   styleUrls: ['./medication-history.component.css'],
 })
-export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
+export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
   medicationHistoryForm!: FormGroup;
   medicationHistoryData: any;
@@ -56,7 +56,7 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
   currentLanguageSet: any;
 
   constructor(
@@ -66,8 +66,8 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
+    private beneficiaryDetailsService: BeneficiaryDetailsService,
   ) {}
 
   ngOnInit() {
@@ -76,16 +76,6 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     this.getBeneficiaryDetails();
     this.addMedicationHistory();
   }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-
   ngOnDestroy() {
     if (this.nurseMasterDataSubscription)
       this.nurseMasterDataSubscription.unsubscribe();
@@ -95,26 +85,24 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
       this.beneficiaryDetailSubscription.unsubscribe();
   }
 
-  getMedicationHistory(): AbstractControl[] | null {
-    const getMedicationHistory = this.medicationHistoryForm.get(
-      'medicationHistoryList',
-    );
-    return getMedicationHistory instanceof FormArray
-      ? getMedicationHistory.controls
-      : null;
-  }
-
   nurseMasterDataSubscription: any;
   getMasterData() {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
@@ -132,10 +120,9 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -161,36 +148,29 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   addMedicationHistory() {
-    const medicationHistoryDataList = <FormArray>(
-      this.medicationHistoryForm?.controls['medicationHistoryList']
+    const medicationHistoryList = <FormArray>(
+      this.medicationHistoryForm.controls['medicationHistoryList']
     );
-    medicationHistoryDataList?.push(this.initMedicationHistory());
+    medicationHistoryList.push(this.initMedicationHistory());
   }
 
-  removeMedicationHistory(
-    i: any,
-    medicationHistoryForm?: AbstractControl<any, any>,
-  ) {
+  removeMedicationHistory(i: any, medicationHistoryForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
         if (result) {
-          const medicationHistoryListValue = <FormArray>(
+          const medicationHistoryList = <FormArray>(
             this.medicationHistoryForm.controls['medicationHistoryList']
           );
           this.medicationHistoryForm.markAsDirty();
-          if (this.medicationHistoryForm.parent)
-            this.medicationHistoryForm.parent.markAsDirty();
-          if (
-            medicationHistoryListValue.length === 1 &&
-            !!medicationHistoryForm
-          ) {
-            medicationHistoryListValue.controls[i].patchValue({
+          //this.medicationHistoryForm.parent.markAsDirty();
+          if (medicationHistoryList.length === 1 && !!medicationHistoryForm) {
+            medicationHistoryList.controls[i].patchValue({
               currentMedication: null,
               timePeriodAgo: null,
               timePeriodUnit: null,
             });
-          } else medicationHistoryListValue.removeAt(i);
+          } else medicationHistoryList.removeAt(i);
           this.medicationHistoryForm.updateValueAndValidity();
           console.log(this.medicationHistoryForm.dirty);
         }
@@ -206,7 +186,7 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   getPreviousMedicationHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousMedicationHistory(benRegID, this.visitCategory)
+      .getPreviousMedicationHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -252,7 +232,7 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     });
   }
 
-  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
+  validateDuration(formGroup: FormGroup, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -284,5 +264,13 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     } else {
       return true;
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

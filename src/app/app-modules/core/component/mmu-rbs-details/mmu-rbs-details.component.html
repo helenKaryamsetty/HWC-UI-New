@@ -45,14 +45,14 @@
             <th id="rbsResult">{{ current_language_set?.rbsTestRemarks }}</th>
           </tr>
         </thead>
-        <tbody *ngIf="input==undefined || input ==null ||((input.rbsResult == null || input.rbsResult == undefined) && (input.rbsRemarks == null || input.rbsRemarks == undefined))">
+        <tbody *ngIf="input==undefined || input ==null ||((input.rbsResult === null || input.rbsResult === undefined) && (input.rbsRemarks === null || input.rbsRemarks === undefined))">
           <tr>
             <td colspan="2">
               <h4 class='norecord text-field-color'>{{current_language_set?.common?.noRecordFound}}</h4>
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="input !=undefined && input !=null && ((input.rbsResult != null || input.rbsResult != undefined) || (input.rbsRemarks != null || input.rbsRemarks != undefined))">
+        <tbody *ngIf="input !=undefined && input !=null && ((input.rbsResult !== null || input.rbsResult !== undefined) || (input.rbsRemarks !== null || input.rbsRemarks !== undefined))">
           <tr >
             <td>{{ input.rbsResult }}</td>
             <td>{{ input.rbsRemarks }}</td>

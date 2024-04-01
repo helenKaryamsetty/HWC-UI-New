@@ -19,22 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
   Input,
   ChangeDetectorRef,
   DoCheck,
+  OnChanges,
   OnDestroy,
 } from '@angular/core';
-import {
-  FormArray,
-  FormGroup,
-  FormBuilder,
-  AbstractControl,
-} from '@angular/forms';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
@@ -44,15 +38,19 @@ import {
 } from '../../../shared/services';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { HrpService } from '../../../shared/services/hrp.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-general-past-history',
   templateUrl: './past-history.component.html',
   styleUrls: ['./past-history.component.css'],
 })
-export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
+export class PastHistoryComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
   @Input()
   pastHistoryForm!: FormGroup;
 
@@ -60,7 +58,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   surgeryMasterData: any;
   filteredSurgeryMasterData: any;
@@ -71,7 +69,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   filteredIllnessMasterData: any;
   pastIllnessSelectList: any = [];
   previousSelectedIllnessTypeList: any = [];
-
+  illnessHRP: any = [];
   pastHistoryData: any;
   currentLanguageSet: any;
 
@@ -82,24 +80,43 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService,
+    private hrpService: HrpService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.getBeneficiaryDetails();
+    this.illnessHRP = [];
+    this.hrpService.setPastIllness(this.illnessHRP);
+    // if(parseInt(sessionStorage.getItem("specialistFlag")) === 100)
+    // {
+    //   this.getMMUMasterData();
+    // }
+    // else
+    // {
     this.getMasterData();
+    // }
   }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  // patchHistory()
+  // {
+  //   if(parseInt(sessionStorage.getItem("specialistFlag")) === 100 && this.filteredIllnessMasterData)
+  //   {
+  //   //   this.addPastIllness();
+  //   // this.addPastSurgery();
+  //      let visitID = localStorage.getItem('visitID');
+  //     let benRegID = localStorage.getItem('beneficiaryRegID')
+  //     this.getGeneralHistory(benRegID, visitID);
+  //   }
+  // }
+  ngOnChanges() {
+    if (parseInt(sessionStorage.getItem('specialistFlag') || '{}') === 100) {
+      //  let visitID = localStorage.getItem('visitID');
+      // let benRegID = localStorage.getItem('beneficiaryRegID')
+      // this.getGeneralHistory(benRegID, visitID);
+    }
   }
 
   ngOnDestroy() {
@@ -111,20 +128,6 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
     if (this.beneficiaryDetailSubscription)
       this.beneficiaryDetailSubscription.unsubscribe();
-  }
-
-  getPastIllness(): AbstractControl[] | null {
-    const pastIllnessControl = this.pastHistoryForm.get('pastIllness');
-    return pastIllnessControl instanceof FormArray
-      ? pastIllnessControl.controls
-      : null;
-  }
-
-  getPastSurgery(): AbstractControl[] | null {
-    const pastSurgeryControl = this.pastHistoryForm.get('pastSurgery');
-    return pastSurgeryControl instanceof FormArray
-      ? pastSurgeryControl.controls
-      : null;
   }
 
   beneficiaryDetailSubscription: any;
@@ -146,12 +149,15 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     'Surgery on Vagina',
     'Surgery on Cervix',
     'Dilatation & Curettage (D&C)',
-    'Cesarean Section',
+    'Cesarean Section/LSCS',
   ];
   getMasterData() {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.illnessTypes && masterData.surgeryTypes) {
+          // this.nurseMasterDataSubscription.unsubscribe();
+          console.log('Nurse Master Called==');
+
           this.illnessMasterData = masterData.illnessTypes.slice();
           this.filteredIllnessMasterData = masterData.illnessTypes.slice();
 
@@ -159,35 +165,91 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
           if (
             this.beneficiary &&
-            (this.beneficiary?.genderName?.toLowerCase() !== 'female' ||
-              this.beneficiary.ageVal <= 18)
+            (this.beneficiary.genderName.toLowerCase() === 'male' ||
+              this.beneficiary.ageVal < 12)
           ) {
             const temp = this.surgeryMasterData.filter((item: any) => {
               return this.femaleSurgeryList.indexOf(item.surgeryType) < 0;
             });
             this.surgeryMasterData = temp;
           }
-
           this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
           this.addPastIllness();
           this.addPastSurgery();
 
+          console.log('Add Past Illness Called==');
+          // if (this.mode === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
+          //   this.addPastIllness();
+          //   this.addPastSurgery();
+          // }
+
           this.changeDetectorRef.detectChanges();
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
+            console.log('General History Called==');
+          }
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
           }
         }
       });
   }
 
+  // getMMUMasterData() {
+
+  //   this.nurseMasterDataSubscription = this.masterdataService.nurseMasterData$
+  //     .subscribe(masterData => {
+  //       if (masterData && masterData.illnessTypes && masterData.surgeryTypes) {
+  //         this.illnessMasterData = masterData.illnessTypes.slice();
+  //         this.filteredIllnessMasterData = masterData.illnessTypes.slice();
+
+  //         console.log("filteredIllnessMasterData",this.filteredIllnessMasterData)
+
+  //         this.surgeryMasterData = masterData.surgeryTypes.slice();
+
+  //         if (this.beneficiary && (this.beneficiary.genderName.toLowerCase() !== "female" || this.beneficiary.ageVal <= 18)) {
+  //           let temp = this.surgeryMasterData.filter(item => {
+  //             return this.femaleSurgeryList.indexOf(item.surgeryType) < 0;
+  //           });
+  //           this.surgeryMasterData = temp;
+  //         }
+
+  //         this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
+
+  //         // if (this.mode === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
+  //         //   this.addPastIllness();
+  //         //   this.addPastSurgery();
+  //         // }
+  //         this.addPastIllness();
+  //         this.addPastSurgery();
+
+  //         this.changeDetectorRef.detectChanges();
+
+  //       // this.patchHistory();
+
+  //         if(parseInt(sessionStorage.getItem("specialistFlag")) === 100)
+  //         {
+
+  //            let visitID = localStorage.getItem('visitID');
+  //           let benRegID = localStorage.getItem('beneficiaryRegID')
+  //           this.getGeneralHistory(benRegID, visitID);
+  //         }
+
+  //       }
+  //     })
+
+  // }
+
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -218,11 +280,50 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
         k.markAsTouched();
-        this.filterPastIllnessType(temp[i].illnessType, i);
+        this.filterPastIllnessTypeInDoctor(temp[i].illnessType, i);
       }
 
       if (i + 1 < temp.length) this.addPastIllness();
     }
+  }
+
+  filterPastIllnessTypeInDoctor(
+    illness: any,
+    i: any,
+    pastIllnessForm?: FormGroup,
+  ) {
+    const previousValue = this.previousSelectedIllnessTypeList[i];
+
+    if (pastIllnessForm && illness.illnessType !== 'Other')
+      pastIllnessForm.patchValue({ otherIllnessType: null });
+
+    if (illness.illnessType === 'None') {
+      this.removeAllIllnessExceptNone();
+    } else {
+      if (previousValue) {
+        this.pastIllnessSelectList.map((item: any, t: any) => {
+          if (t !== i && previousValue.illnessType !== 'Other') {
+            item.push(previousValue);
+            this.sortIllnessList(item);
+          }
+        });
+      }
+
+      this.pastIllnessSelectList.map((item: any, t: any) => {
+        const index = item.indexOf(illness);
+        if (index !== -1 && t !== i && illness.illnessType !== 'Other') {
+          item = item.splice(index, 1);
+        }
+      });
+
+      this.previousSelectedIllnessTypeList[i] = illness;
+    }
+    if (illness !== undefined && illness.illnessType !== undefined) {
+      this.illnessHRP.push(illness.illnessType);
+      this.hrpService.setPastIllness(this.illnessHRP);
+      this.hrpService.checkHrpStatus = false;
+    }
+    console.log('IllnessMaster', this.pastIllnessSelectList);
   }
 
   handlePastHistorySurgeryData() {
@@ -245,6 +346,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
         k.markAsTouched();
         this.filterPastSurgeryType(temp[i].surgeryType, i);
       }
+
+      console.log('FormArray', formArray);
 
       if (i + 1 < temp.length) this.addPastSurgery();
     }
@@ -276,7 +379,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     pastIllnessList.push(this.initPastIllness());
   }
 
-  removePastIllness(i: any, pastIllnessForm?: AbstractControl<any, any>) {
+  removePastIllness(i: any, pastIllnessForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -288,6 +391,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (pastIllnessList.length === 1 && !!pastIllnessForm) {
             pastIllnessForm.reset();
             this.pastHistoryForm.markAsDirty();
+            this.illnessHRP = [];
+            this.hrpService.setPastIllness(this.illnessHRP);
           } else {
             const removedValue = this.previousSelectedIllnessTypeList[i];
             if (removedValue) {
@@ -312,6 +417,15 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
             this.previousSelectedIllnessTypeList.splice(i, 1);
             this.pastIllnessSelectList.splice(i, 1);
             pastIllnessList.removeAt(i);
+            this.illnessHRP = [];
+            for (let a = 0; a < pastIllnessList.length; a++) {
+              const ilnnessForm = <FormGroup>pastIllnessList.controls[a];
+              this.illnessHRP.push(
+                ilnnessForm.controls['illnessType'].value.illnessType,
+              );
+            }
+            this.hrpService.setPastIllness(this.illnessHRP);
+            this.hrpService.checkHrpStatus = true;
           }
         }
       });
@@ -337,11 +451,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.sortIllnessList(this.pastIllnessSelectList[0]);
   }
 
-  filterPastIllnessType(
-    illness: any,
-    i: any,
-    pastIllnessForm?: AbstractControl<any, any>,
-  ) {
+  filterPastIllnessType(illness: any, i: any, pastIllnessForm?: FormGroup) {
     const previousValue = this.previousSelectedIllnessTypeList[i];
 
     if (pastIllnessForm && illness.illnessType !== 'Other')
@@ -368,8 +478,27 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
       this.previousSelectedIllnessTypeList[i] = illness;
     }
+    if (
+      illness !== undefined &&
+      illness.illnessType !== undefined &&
+      illness.illnessType.toLowerCase() !== 'other'
+    ) {
+      this.illnessHRP.push(illness.illnessType);
+      this.hrpService.setPastIllness(this.illnessHRP);
+      this.hrpService.checkHrpStatus = true;
+    }
+    console.log('IllnessMaster', this.pastIllnessSelectList);
   }
 
+  otherIlnessForHrp() {
+    console.log('pastHistoryForm', this.pastHistoryForm);
+    const otherIllnessHrp = this.pastHistoryForm.controls['pastIllness'].value;
+    otherIllnessHrp.forEach((element: any) => {
+      this.illnessHRP.push(element.otherIllnessType);
+    });
+    this.hrpService.setPastIllness(this.illnessHRP);
+    this.hrpService.checkHrpStatus = true;
+  }
   addPastSurgery() {
     const pastSurgeryList = <FormArray>(
       this.pastHistoryForm.controls['pastSurgery']
@@ -382,10 +511,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (
             value.surgeryType !== null &&
             value.surgeryType.surgeryType !== 'Other'
-          ) {
+          )
             return value.surgeryType.surgeryType === item.surgeryType;
-          }
-          return false;
         });
 
         if (item.surgeryType === 'None' && temp.length > 0) return false;
@@ -397,7 +524,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     pastSurgeryList.push(this.initPastSurgery());
   }
 
-  removePastSurgery(i: any, pastSurgeryForm?: AbstractControl<any, any>) {
+  removePastSurgery(i: any, pastSurgeryForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -456,12 +583,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  filterPastSurgeryType(
-    event: any,
-    i: any,
-    pastSurgeryForm?: AbstractControl<any, any>,
-  ) {
-    const surgery: any = event.value;
+  filterPastSurgeryType(surgery: any, i: any, pastSurgeryForm?: FormGroup) {
     const previousValue = this.previousSelectedSurgeryTypeList[i];
 
     if (pastSurgeryForm && surgery.surgeryType !== 'Other')
@@ -512,7 +634,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousPastHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousPastHistory(benRegID, this.visitCategory)
+      .getPreviousPastHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -550,7 +672,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     });
   }
 
-  validateDuration(formGroup: AbstractControl<any, any>) {
+  validateDuration(formGroup: FormGroup, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -617,5 +739,13 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

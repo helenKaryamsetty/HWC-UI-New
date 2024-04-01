@@ -116,7 +116,7 @@
         <tfoot>
           <tr>
             <td colspan="3" class="text-right">
-              <div *ngIf="diagnosis$.length != 0" class="pull-left m-t-40">{{currentLanguageSet?.common?.totalPages}}: {{pageCount}}</div>
+              <div *ngIf="diagnosis$.length !== 0" class="pull-left m-t-40">{{currentLanguageSet?.common?.totalPages}}: {{pageCount}}</div>
               <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
                 <li [ngClass]="{disabled:pager.currentPage <= 0}">
                   <a (click)="checkPager(pager,0)"><

@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -31,7 +38,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   styleUrls: ['./child-and-adolescent-oral-vitamin-a-case-sheet.component.css'],
 })
 export class ChildAndAdolescentOralVitaminACaseSheetComponent
-  implements OnInit
+  implements OnChanges, OnInit, DoCheck
 {
   displayedColumns = [
     'dateOfVisit',
@@ -79,7 +86,7 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
     const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
     if (arr[1]) {
       const ageUnit = arr[1];
-      if (ageUnit.toLowerCase() == 'years') {
+      if (ageUnit.toLowerCase() === 'years') {
         return parseInt(arr[0]);
       }
     }
@@ -93,7 +100,7 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
   }
 
   ngOnChanges() {
-    if (this.caseSheetData != undefined && this.caseSheetData != null) {
+    if (this.caseSheetData !== undefined && this.caseSheetData !== null) {
       if (
         this.caseSheetData &&
         this.caseSheetData.nurseData &&

@@ -19,8 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Inject, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -34,22 +40,25 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public httpServiceService: HttpServiceService,
     public dialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent>,
-    private httpServiceService: HttpServiceService,
   ) {}
 
-  callDetails: any = [];
+  callDetails = [];
   filteredCallDetails: any = [];
   callDetailsRowsPerPage = 5;
   callDetailsActivePage = 1;
   ngOnInit() {
     this.callDetails = this.data;
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.filteredCallDetails = this.data;
     this.callDetailsPageChanged({
       page: this.callDetailsActivePage,
       itemsPerPage: this.callDetailsRowsPerPage,
     });
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -58,6 +67,7 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   filterCallHistory(searchTerm?: string) {
     if (!searchTerm) {
       this.filteredCallDetails = this.callDetails;
@@ -78,7 +88,7 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  callDetailsPagedList: any = [];
+  callDetailsPagedList = [];
   callDetailsPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;

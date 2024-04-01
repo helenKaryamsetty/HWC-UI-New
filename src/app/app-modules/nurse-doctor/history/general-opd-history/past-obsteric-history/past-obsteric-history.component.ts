@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -42,10 +41,12 @@ import {
 } from '../../../shared/services';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { GeneralUtils } from '../../../shared/utility';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { HrpService } from '../../../shared/services/hrp.service';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
@@ -53,7 +54,7 @@ import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/pr
   styleUrls: ['./past-obsteric-history.component.css'],
 })
 export class PastObstericHistoryComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
   pastObstericHistoryForm!: FormGroup;
@@ -62,7 +63,7 @@ export class PastObstericHistoryComponent
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   masterData: any;
   formUtility: any;
@@ -70,32 +71,29 @@ export class PastObstericHistoryComponent
 
   complicationOptionConstraints: any = [];
   currentLanguageSet: any;
+  pastObstetricValues: any = [];
+  setHrpStatusData: any;
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private nurseService: NurseService,
     private doctorService: DoctorService,
+    private hrpService: HrpService,
+    public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService,
+    private beneficiaryDetailsService: BeneficiaryDetailsService,
   ) {
     this.formUtility = new GeneralUtils(this.fb);
   }
 
   ngOnInit() {
     this.assignSelectedLanguage();
+    this.hrpService.setPastObstetric(this.pastObstetricValues);
     this.subscribeTotalNoofPregChanges();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     this.getMasterData();
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
   ngOnChanges(simpleChanges: SimpleChanges) {
@@ -104,7 +102,7 @@ export class PastObstericHistoryComponent
         let i = 0;
         i <
         (<FormArray>(
-          this.pastObstericHistoryForm?.controls['pastObstericHistoryList']
+          this.pastObstericHistoryForm.controls['pastObstericHistoryList']
         )).length;
         i++
       ) {
@@ -127,24 +125,6 @@ export class PastObstericHistoryComponent
         });
       }
     }
-  }
-
-  getComplicationPregList(): AbstractControl[] | null {
-    const complicationPregListControl = this.pastObstericHistoryForm.get(
-      'complicationPregList',
-    );
-    return complicationPregListControl instanceof FormArray
-      ? complicationPregListControl.controls
-      : null;
-  }
-
-  getPastObstericHistoryList(): AbstractControl[] | null {
-    const pastObstericHistoryListControl = this.pastObstericHistoryForm.get(
-      'pastObstericHistoryList',
-    );
-    return pastObstericHistoryListControl instanceof FormArray
-      ? pastObstericHistoryListControl.controls
-      : null;
   }
 
   ngOnDestroy() {
@@ -192,23 +172,30 @@ export class PastObstericHistoryComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -270,6 +257,7 @@ export class PastObstericHistoryComponent
             return temp[i].deliveryPlace === item.deliveryPlace;
           },
         )[0];
+
         const temp2: any = [];
         this.masterData.deliveryComplicationTypes.forEach((item: any) => {
           temp[i].deliveryComplicationList.forEach((p: any) => {
@@ -280,6 +268,7 @@ export class PastObstericHistoryComponent
         });
 
         temp[i].deliveryComplicationList = temp2.slice();
+
         const temp3: any = [];
         this.masterData.postpartumComplicationTypes.forEach((item: any) => {
           temp[i].postpartumComplicationList.forEach((p: any) => {
@@ -298,10 +287,12 @@ export class PastObstericHistoryComponent
             return temp[i].pregOutcome === item.pregOutcome;
           },
         )[0];
+
         temp[i].newBornComplication =
           this.masterData.newBornComplications.filter((item: any) => {
             return temp[i].newBornComplication === item.complicationValue;
           })[0];
+
         if (
           temp[i].pregOutcome &&
           temp[i].pregOutcome.pregOutcome === 'Abortion'
@@ -334,8 +325,8 @@ export class PastObstericHistoryComponent
         const k = formArray.get('' + i) as FormGroup;
         k.patchValue(temp[i]);
 
-        this.resetOtherDeliveryComplication(k, i);
-        this.resetOtherPregnancyComplication(k, i);
+        this.resetOtherDeliveryComplication(k, i, this.setHrpStatusData);
+        this.resetOtherPregnancyComplication(k, i, this.setHrpStatusData);
         this.resetOtherPostpartumComplicationType(k, i);
         if (
           temp[i].pregOutcome &&
@@ -350,7 +341,6 @@ export class PastObstericHistoryComponent
       }
     }
   }
-
   togglePastObstericHistory(event: any, i: any) {
     const pastObstericHistoryList = <FormArray>(
       this.pastObstericHistoryForm.controls['pastObstericHistoryList']
@@ -427,7 +417,7 @@ export class PastObstericHistoryComponent
   getPreviousObstetricHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousObstetricHistory(benRegID, this.visitCategory)
+      .getPreviousObstetricHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -487,8 +477,9 @@ export class PastObstericHistoryComponent
       'totalNoOfPreg'
     ].valueChanges.subscribe((value) => {
       console.log('%c status', 'color:green', value);
+
       if (value) {
-        if (this.visitCategory === 'ANC') {
+        if (this.visitType === 'ANC') {
           this.createPregnancyWithComplList(value - 1);
         } else {
           this.createPregnancyWithComplList(value);
@@ -501,27 +492,66 @@ export class PastObstericHistoryComponent
     return this.pastObstericHistoryForm.controls['totalNoOfPreg'].value;
   }
 
+  hrpPastObstetricDetails(setHrpStatus: any) {
+    console.log(
+      'pastObsteriCHistoryForm',
+      this.pastObstericHistoryForm.controls['pastObstericHistoryList'],
+    );
+    const pregList = <FormArray>(
+      this.pastObstericHistoryForm.controls['pastObstericHistoryList']
+    );
+    const ar = [];
+    for (let a = 0; a < pregList.length; a++) {
+      const pregGroup = <FormGroup>pregList.controls[a];
+      console.log('pregGroup', pregGroup);
+      if (pregGroup !== null && pregGroup !== undefined) {
+        const obj = {
+          complicationDuringPregnancy:
+            pregGroup.controls['pregComplicationList'].value,
+          durationOfPregnancy: pregGroup.controls['durationType'].value,
+          typeOfDelivery: pregGroup.controls['deliveryType'].value,
+          deliveryComplication:
+            pregGroup.controls['deliveryComplicationList'].value,
+          congenitalAnomalies: pregGroup.controls['congenitalAnomalies'].value,
+        };
+        ar.push(obj);
+        console.log('HRPObj', obj);
+      }
+    }
+    this.hrpService.setPastObstetric(ar);
+    this.hrpService.checkHrpStatus = setHrpStatus;
+  }
+
+  setCongenitalAnomalies() {
+    this.pastObstericHistoryForm.controls['congenitalAnomalies'];
+    this.hrpPastObstetricDetails(true);
+  }
+
   checkTotalPregnancy(totalNoOfPreg: any) {
     if (
       totalNoOfPreg === 0 &&
-      (this.visitCategory === 'ANC' || this.visitCategory === 'PNC')
+      (this.visitType === 'ANC' || this.visitType === 'PNC')
     ) {
       this.confirmationService.alert(
         this.currentLanguageSet.totalNumberOfPastPregnancyFor + ' ',
-        this.visitCategory,
+        this.visitType,
         ' ' + this.currentLanguageSet.cannotBeZero,
       );
     }
+    // if (this.visitType === 'ANC' && totalNoOfPreg === 0)
+    //   this.confirmationService.alert("Total number of past pregnancy for ANC(MultiGravida) can not be zero(0)");
   }
 
   resetOtherPregnancyComplication(
     pastObstericHistoryForm: AbstractControl<any, any>,
     index: any,
+    setHrpStatus: any,
   ) {
+    //console.log("pastObstericHistoryForm value",this.pastObstericHistoryForm.controls[index].controls["pregComplicationList"].value);
+    //  this.hrpService.setPregnancyComplication(this.pastObstericHistoryForm.controls["pregComplicationList"].value);
     const pregComplicationList =
       pastObstericHistoryForm.value.pregComplicationList;
     let flag = false;
-
     pregComplicationList.forEach((item: any) => {
       if (item.pregComplicationType === 'Other') {
         flag = true;
@@ -552,9 +582,11 @@ export class PastObstericHistoryComponent
 
     if (!flag)
       pastObstericHistoryForm.patchValue({ otherPregComplication: null });
+    this.hrpPastObstetricDetails(setHrpStatus);
   }
 
   resetOtherDeliveryPlace(pastObstericHistoryForm: any) {
+    const deliveryList = this.masterData.deliveryTypes;
     if (
       pastObstericHistoryForm.value.deliveryPlace.deliveryPlace ===
         'Home-Supervised' ||
@@ -563,13 +595,19 @@ export class PastObstericHistoryComponent
     ) {
       const tempDeliveryTypes = this.masterData.deliveryTypes.filter(
         (item: any) => {
-          return (
-            item.deliveryType !== 'Assisted Delivery' &&
-            item.deliveryType !== 'Cesarean Section (LSCS)'
-          );
+          return item.deliveryType === 'Normal Delivery';
         },
       );
       this.selectDeliveryTypes = tempDeliveryTypes;
+    } else if (
+      pastObstericHistoryForm.value.deliveryPlace.deliveryPlace ===
+        'Subcentre' ||
+      pastObstericHistoryForm.value.deliveryPlace.deliveryPlace === 'PHC'
+    ) {
+      const deliveryType = deliveryList.filter((item: any) => {
+        return item.deliveryType !== 'Cesarean Section (LSCS)';
+      });
+      this.selectDeliveryTypes = deliveryType;
     } else {
       this.selectDeliveryTypes = this.masterData.deliveryTypes;
     }
@@ -578,7 +616,11 @@ export class PastObstericHistoryComponent
   }
 
   showOtherDeliveryComplication = false;
-  resetOtherDeliveryComplication(pastObstericHistoryForm: any, index: any) {
+  resetOtherDeliveryComplication(
+    pastObstericHistoryForm: any,
+    index: any,
+    setHrpStatus: any,
+  ) {
     const deliveryComplicationList =
       pastObstericHistoryForm.value.deliveryComplicationList;
     let flag = false;
@@ -618,6 +660,7 @@ export class PastObstericHistoryComponent
 
     if (!flag)
       pastObstericHistoryForm.patchValue({ otherDeliveryComplication: null });
+    this.hrpPastObstetricDetails(setHrpStatus);
   }
 
   showOtherPostpartumComplication = false;
@@ -666,6 +709,12 @@ export class PastObstericHistoryComponent
     if (!flag)
       pastObstericHistoryForm.patchValue({ otherPostpartumCompType: null });
   }
+
+  // resetOtherPostNatalComplication(pastObstericHistoryForm) {
+  //   if (pastObstericHistoryForm.value.postNatalComplication.complicationValue === 'Other')
+  //     pastObstericHistoryForm.patchValue({ otherPostNatalComplication: null });
+  // }
+
   resetOtherNewBornComplications(pastObstericHistoryForm: any) {
     if (
       pastObstericHistoryForm.value.newBornComplication.complicationValue ===
@@ -673,7 +722,6 @@ export class PastObstericHistoryComponent
     )
       pastObstericHistoryForm.patchValue({ otherNewBornComplication: null });
   }
-
   resetPostComplicationType(pastObstericHistoryForm: any, index: any) {
     const postpartumComplicationList =
       pastObstericHistoryForm.value.postAbortionComplication;
@@ -728,16 +776,15 @@ export class PastObstericHistoryComponent
         congenitalAnomalies: null,
       });
     }
+    this.hrpPastObstetricDetails(true);
   }
-  onAbortionType(
-    pastObstericHistoryForm: AbstractControl<any, any>,
-    name: any,
-  ) {
+
+  onAbortionType(pastObstericHistoryForm: FormGroup, name: any) {
     if (name !== 'Induced') {
       pastObstericHistoryForm.patchValue({ typeofFacility: null });
     }
   }
-  checkDurationType(pastObstericHistoryForm: AbstractControl<any, any>) {
+  checkDurationType(pastObstericHistoryForm: FormGroup) {
     if (
       Number(pastObstericHistoryForm.value.pregDuration) > 24 ||
       Number(pastObstericHistoryForm.value.pregDuration < 4)
@@ -746,6 +793,15 @@ export class PastObstericHistoryComponent
         this.currentLanguageSet.alerts.info.pregnancyRange,
       );
       pastObstericHistoryForm.patchValue({ pregDuration: null });
+      this.hrpPastObstetricDetails(true);
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

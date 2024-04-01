@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -29,20 +28,17 @@ import {
   ViewEncapsulation,
   DoCheck,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  NgForm,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, NgForm } from '@angular/forms';
+import { MasterdataService, DoctorService } from '../../../shared/services';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { PageEvent } from '@angular/material/paginator';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
-import { MasterdataService } from 'src/app/app-modules/core/services/masterdata.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 interface prescribe {
   id: string;
   drugID: string;
@@ -69,7 +65,7 @@ interface prescribe {
   styleUrls: ['./prescription.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
+export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
   generalUtils = new GeneralUtils(this.fb);
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
@@ -79,6 +75,9 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
 
   @Input()
   caseRecordMode!: string;
+
+  @Input()
+  prescriptionCounsellingForm!: FormGroup;
 
   createdBy: any;
 
@@ -120,40 +119,40 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   drugDurationMaster: any = [];
   drugDurationUnitMaster: any;
   edlMaster: any;
+  patchedRouteId: any;
 
   beneficiaryRegID: any;
   visitID: any;
   visitCategory: any;
-  isStockAvalable!: string;
   current_language_set: any;
+  isStockAvalable!: string;
+  referredVisitCode: any;
+  counsellingProvidedList: any = [];
+  disableNoneOption = false;
 
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    private httpServiceService: HttpServiceService,
+    public httpServiceService: HttpServiceService,
+    private dialog: MatDialog,
   ) {}
 
-  getPrescribedDrugs(): AbstractControl[] | null {
-    const prescribedDrugsControl =
-      this.drugPrescriptionForm.get('prescribedDrugs');
-    return prescribedDrugsControl instanceof FormArray
-      ? prescribedDrugsControl.controls
-      : null;
-  }
-
   ngOnInit() {
+    this.assignSelectedLanguage();
+    this.visitCategory = localStorage.getItem('visitCategory');
+    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.createdBy = localStorage.getItem('userName');
+
+    if (localStorage.getItem('referredVisitCode')) {
+      this.referredVisitCode = localStorage.getItem('referredVisitCode');
+    } else {
+      this.referredVisitCode = 'undefined';
+    }
     this.setLimits();
     this.makeDurationMaster();
     this.getDoctorMasterData();
-  }
-
-  ngOnDestroy() {
-    if (this.doctorMasterDataSubscription) {
-      this.doctorMasterDataSubscription.unsubscribe();
-    }
   }
 
   ngDoCheck() {
@@ -165,6 +164,15 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
+  ngOnDestroy() {
+    if (this.doctorMasterDataSubscription) {
+      this.doctorMasterDataSubscription.unsubscribe();
+    }
+    if (this.prescriptionSubscription) {
+      this.prescriptionSubscription.unsubscribe();
+    }
+  }
+
   makeDurationMaster() {
     let i = 1;
     while (i <= 29) {
@@ -173,23 +181,37 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     }
   }
 
-  displayFn(option: any) {
+  displayFn(option: any): string | undefined {
     return option
-      ? `${option.itemName} ${option.strength}${
+      ? `${option.itemName} ${option.strength ? option.strength : ''}${
           option.unitOfMeasurement ? option.unitOfMeasurement : ''
         }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`
-      : '';
+      : undefined;
   }
 
   getFormValueChanged() {
     this.clearCurrentDetails();
     this.getFormDetails();
   }
+
+  patchRouteValues() {
+    this.drugMaster.filter((item: any) => {
+      if (item.itemID === this.currentPrescription.drugID)
+        this.patchedRouteId = item.routeID;
+    });
+    this.drugRouteMaster.filter((item: any) => {
+      if (item.routeID === this.patchedRouteId)
+        this.currentPrescription.route = item.routeName;
+    });
+  }
+
   getFormDetails() {
     this.drugFormMaster.filter((item: any) => {
       if (item.itemFormName === this.currentPrescription.formName)
         this.currentPrescription.formID = item.itemFormID;
     });
+    // this.currentPrescription["formID"] = this.tempform.itemFormID;
+    // this.currentPrescription["formName"] = this.tempform.itemFormName;
     this.filterDrugMaster();
     this.filterDoseMaster();
   }
@@ -199,7 +221,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.filteredDrugMaster = [];
     drugMasterCopy.forEach((element: any) => {
       if (this.currentPrescription.formID === element.itemFormID) {
-        element['isEDL'] = true;
+        // element["isEDL"] = true;
         this.filteredDrugMaster.push(element);
       }
     });
@@ -248,17 +270,19 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
         unitOfMeasurement: this.currentPrescription.drugUnit,
       };
     } else if (this.tempDrugName && !this.currentPrescription.drugID) {
-      this.tempDrugName = '';
+      this.tempDrugName = null;
     } else {
-      this.clearCurrentDetails();
+      // let formName = this.currentPrescription.formName;
+      // this.clearCurrentDetails();
+      // this.currentPrescription.formName = formName;
       this.getFormDetails();
     }
   }
 
   selectMedicineObject(event: any) {
-    const option = event.option.value;
+    const option = event.source.value;
     console.log('here', event);
-    if (option) {
+    if (event.isUserInput) {
       if (this.checkNotIssued(option.itemID)) {
         this.currentPrescription['id'] = option.id;
         this.currentPrescription['drugName'] = option.itemName;
@@ -280,12 +304,12 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
                 ' ' +
                 option.itemName +
                 ' ' +
-                option.strength +
-                option.unitOfMeasurement,
+                (option.strength ? option.strength : '') +
+                (option.unitOfMeasurement ? option.unitOfMeasurement : ''),
             )
-            .subscribe((res) => {
+            .subscribe((res: any) => {
               if (!res) {
-                this.tempDrugName = '';
+                this.tempDrugName = null;
                 this.currentPrescription['id'] = '';
                 this.currentPrescription['drugName'] = '';
                 this.currentPrescription['drugID'] = '';
@@ -303,6 +327,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
           this.isStockAvalable = 'primary';
         }
       }
+      this.patchRouteValues();
     }
   }
 
@@ -325,7 +350,27 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   clearCurrentDetails() {
-    this.tempDrugName = '';
+    // this.currentPrescription = {
+    //   id: null,
+    //   drugID: null,
+    //   drugName: null,
+    //   drugStrength: null,
+    //   drugUnit: null,
+    //   quantity: null,
+    //   formID: null,
+    //   qtyPrescribed: null,
+    //   formName: null,
+    //   route: null,
+    //   dose: null,
+    //   frequency: null,
+    //   duration: null,
+    //   unit: null,
+    //   instructions: null,
+    //   isEDL: false,
+    //   sctCode: null,
+    //   sctTerm: null,
+    // };
+    this.tempDrugName = null;
     this.currentPrescription.dose = '';
     this.currentPrescription.frequency = '';
     this.currentPrescription.duration = '';
@@ -333,11 +378,13 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.currentPrescription.qtyPrescribed = '';
     this.currentPrescription.route = '';
     this.currentPrescription.instructions = '';
+
     this.prescriptionForm.form.markAsUntouched();
     this.isStockAvalable = '';
   }
+
   clearCurrentaddDetails() {
-    this.tempDrugName = '';
+    this.tempDrugName = null;
     this.currentPrescription.dose = '';
     this.currentPrescription.frequency = '';
     this.currentPrescription.duration = '';
@@ -346,8 +393,6 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.currentPrescription.route = '';
     this.currentPrescription.instructions = '';
     this.currentPrescription.formName = '';
-    this.currentPrescription.drugID = '';
-    this.currentPrescription.formID = '';
 
     this.prescriptionForm.form.markAsUntouched();
     this.isStockAvalable = '';
@@ -355,8 +400,30 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
 
   submitForUpload() {
     this.addMedicine();
-    this.tempform = null;
+    // this.tempform = null;
+    // this.tempDrugName = null
+    // this.clearCurrentDetails();
     this.clearCurrentaddDetails();
+
+    // this.currentPrescription = {
+    //   id: null,
+    //   drugID: null,
+    //   drugName: null,
+    //   drugStrength: null,
+    //   drugUnit: null,
+    //   quantity: null,
+    //   formID: null,
+    //   route: null,
+    //   formName: null,
+    //   dose: null,
+    //   frequency: null,
+    //   duration: null,
+    //   unit: null,
+    //   instructions: null,
+    // }
+    // this.tempform = null;
+    // this.tempDrugName = null;
+    // this.prescriptionForm.form.markAsUntouched();
   }
 
   addMedicine() {
@@ -365,10 +432,11 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     );
     medicine.insert(
       0,
-      this.generalUtils.initMedicineWithData({
-        ...this.currentPrescription,
-        createdBy: this.createdBy,
-      }),
+      this.generalUtils.initMedicineWithData(
+        Object.assign({}, this.currentPrescription, {
+          createdBy: this.createdBy,
+        }),
+      ),
     );
     console.log(medicine.value, 'frrr');
   }
@@ -378,6 +446,80 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     this.pageLimits[1] = (+pageNo + 1) * +this.pageSize;
   }
 
+  editMedicine(i: any, id: any) {
+    const prescribedDrugs = <FormArray>(
+      this.drugPrescriptionForm.controls['prescribedDrugs']
+    );
+
+    // this.tempform = {
+    //   itemFormID: prescribedDrugs.controls[i].value.formID,
+    //   itemFormName: prescribedDrugs.controls[i].value.formName,
+    // };
+    this.currentPrescription.formName =
+      prescribedDrugs.controls[i].value.formName;
+    this.getFormDetails();
+    // this.selectMedicineObject(event);
+    this.tempDrugName = prescribedDrugs.controls[i].value.drugName;
+    this.currentPrescription.id = prescribedDrugs.controls[i].value.id;
+    this.currentPrescription.drugName =
+      prescribedDrugs.controls[i].value.drugName;
+    this.currentPrescription.drugID = prescribedDrugs.controls[i].value.drugID;
+    this.currentPrescription.quantity =
+      prescribedDrugs.controls[i].value.quantity;
+    this.currentPrescription.sctCode =
+      prescribedDrugs.controls[i].value.sctCode;
+    this.currentPrescription.sctTerm =
+      prescribedDrugs.controls[i].value.sctTerm;
+    this.currentPrescription.drugStrength =
+      prescribedDrugs.controls[i].value.drugStrength;
+    this.currentPrescription.drugUnit =
+      prescribedDrugs.controls[i].value.drugUnit;
+    this.reEnterMedicine();
+    const itemMedicine = this.subFilteredDrugMaster.filter((drug: any) => {
+      if (
+        drug.itemName.toLowerCase() === this.tempDrugName.itemName.toLowerCase()
+      ) {
+        return drug;
+      }
+      // return drug.itemName.toLowerCase().equals(this.tempDrugName.itemName.toLowerCase());
+    });
+    this.setMedicineObject(itemMedicine[0]);
+    this.currentPrescription.dose = prescribedDrugs.controls[i].value.dose;
+    this.currentPrescription.frequency =
+      prescribedDrugs.controls[i].value.frequency;
+    this.currentPrescription.duration =
+      prescribedDrugs.controls[i].value.duration;
+    this.currentPrescription.unit = prescribedDrugs.controls[i].value.unit;
+    this.currentPrescription.qtyPrescribed =
+      prescribedDrugs.controls[i].value.qtyPrescribed;
+    this.currentPrescription.route = prescribedDrugs.controls[i].value.route;
+    this.currentPrescription.instructions =
+      prescribedDrugs.controls[i].value.instructions;
+    if (id) {
+      this.deleteMedicineBackend(i, id);
+    } else if (!id) {
+      this.deleteMedicineUI(i);
+    }
+  }
+  setMedicineObject(option: any) {
+    this.currentPrescription['id'] = option.id;
+    this.currentPrescription['drugName'] = option.itemName;
+    this.currentPrescription['drugID'] = option.itemID;
+    this.currentPrescription['quantity'] = option.quantityInHand;
+    this.currentPrescription['sctCode'] = option.sctCode;
+    this.currentPrescription['sctTerm'] = option.sctTerm;
+    this.currentPrescription['drugStrength'] = option.strength;
+    this.currentPrescription['drugUnit'] = option.unitOfMeasurement;
+    this.currentPrescription['isEDL'] = option.isEDL;
+    const typeOfDrug = option.isEDL
+      ? ''
+      : this.current_language_set.nonEDLMedicine;
+    if (option.quantityInHand === 0) {
+      this.isStockAvalable = 'warn';
+    } else {
+      this.isStockAvalable = 'primary';
+    }
+  }
   deleteMedicine(i: any, id?: null) {
     this.confirmationService
       .confirm('warn', this.current_language_set.alerts.info.confirmDelete)
@@ -404,18 +546,27 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     });
   }
 
-  prescriptionSubscription: any;
-  getPrescriptionDetails(
-    beneficiaryRegID: any,
-    visitID: any,
-    visitCategory: any,
-  ) {
-    this.prescriptionSubscription = this.doctorService
-      .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.prescription) {
+  prescriptionSubscription!: Subscription;
+  getPrescriptionDetails() {
+    this.prescriptionSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((res) => {
+        if (
+          res &&
+          res.statusCode === 200 &&
+          res.data &&
+          res.data.prescription
+        ) {
           const prescription = res.data.prescription;
           this.patchPrescriptionDetails(prescription);
+        }
+        if (
+          res &&
+          res.statusCode === 200 &&
+          res.data &&
+          res.data.counsellingProvidedList
+        ) {
+          const counsellingProvidedList = res.data.counsellingProvidedList;
+          this.patchCounsellingProvided(counsellingProvidedList);
         }
       });
   }
@@ -432,6 +583,35 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     });
   }
 
+  counsellingProvidedoneOptionValidation(selectedOption: any) {
+    if (
+      selectedOption !== undefined &&
+      selectedOption !== null &&
+      selectedOption.length > 0
+    ) {
+      if (selectedOption.includes('None')) {
+        this.disableNoneOption = true;
+      } else {
+        this.disableNoneOption = false;
+      }
+    } else {
+      this.disableNoneOption = false;
+    }
+  }
+
+  patchCounsellingProvided(counsellingProvidedList: any) {
+    console.log(counsellingProvidedList, 'counsellingProvidedList');
+    if (
+      counsellingProvidedList !== undefined &&
+      counsellingProvidedList !== null
+    ) {
+      this.prescriptionCounsellingForm.patchValue({
+        counsellingProvidedList: counsellingProvidedList,
+      });
+    }
+    this.counsellingProvidedoneOptionValidation(counsellingProvidedList);
+  }
+
   doctorMasterDataSubscription: any;
   getDoctorMasterData() {
     this.doctorMasterDataSubscription =
@@ -444,98 +624,59 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
           this.drugDurationUnitMaster = masterData.drugDurationUnitMaster;
           this.drugRouteMaster = masterData.routeOfAdmin;
           this.edlMaster = masterData.NonEdlMaster;
+          this.counsellingProvidedList = masterData.counsellingProvided;
 
           if (this.caseRecordMode === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');
-            this.getPrescriptionDetails(
-              this.beneficiaryRegID,
-              this.visitID,
-              this.visitCategory,
-            );
+            this.getPrescriptionDetails();
           }
         }
       });
   }
-
-  editMedicine(i: any, id: any) {
-    const prescribedDrugs = <FormArray>(
-      this.drugPrescriptionForm.controls['prescribedDrugs']
-    );
-    this.currentPrescription.formName =
-      prescribedDrugs.controls[i].value.formName;
-    this.getFormDetails();
-    this.tempDrugName = prescribedDrugs.controls[i].value.drugName;
-    this.currentPrescription.id = prescribedDrugs.controls[i].value.id;
-    this.currentPrescription.drugName =
-      prescribedDrugs.controls[i].value.drugName;
-    this.currentPrescription.drugID = prescribedDrugs.controls[i].value.drugID;
-    this.currentPrescription.quantity =
-      prescribedDrugs.controls[i].value.quantity;
-    this.currentPrescription.sctCode =
-      prescribedDrugs.controls[i].value.sctCode;
-    this.currentPrescription.sctTerm =
-      prescribedDrugs.controls[i].value.sctTerm;
-    this.currentPrescription.drugStrength =
-      prescribedDrugs.controls[i].value.drugStrength;
-    this.currentPrescription.drugUnit =
-      prescribedDrugs.controls[i].value.drugUnit;
-    this.reEnterMedicine();
-    const itemMedicine = this.subFilteredDrugMaster.filter((drug: any) => {
-      if (
-        drug.itemName.toLowerCase() === this.tempDrugName.itemName.toLowerCase()
-      ) {
-        return drug;
-      }
-    });
-    console.log('PARTH*****' + itemMedicine[0]);
-    this.setMedicineObject(itemMedicine[0]);
-    this.currentPrescription.dose = prescribedDrugs.controls[i].value.dose;
-    this.currentPrescription.frequency =
-      prescribedDrugs.controls[i].value.frequency;
-    this.currentPrescription.duration =
-      prescribedDrugs.controls[i].value.duration;
-    this.currentPrescription.unit = prescribedDrugs.controls[i].value.unit;
-    this.currentPrescription.qtyPrescribed =
-      prescribedDrugs.controls[i].value.qtyPrescribed;
-    this.currentPrescription.route = prescribedDrugs.controls[i].value.route;
-    this.currentPrescription.instructions =
-      prescribedDrugs.controls[i].value.instructions;
-    if (id) {
-      this.deleteMedicineBackend(i, id);
-    } else if (!id) {
-      this.deleteMedicineUI(i);
+  loadMMUPrescription() {
+    const reqObj = {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('referredVisitCode'),
+      benVisitID: localStorage.getItem('referredVisitID'),
+      fetchMMUDataFor: 'Prescription',
+    };
+    if (
+      localStorage.getItem('referredVisitCode') !== 'undefined' &&
+      localStorage.getItem('referredVisitID') !== 'undefined'
+    ) {
+      this.doctorService.getMMUData(reqObj).subscribe(
+        (prescriptionDataResponse: any) => {
+          if (prescriptionDataResponse.statusCode === 200) {
+            if (prescriptionDataResponse.data.data.length > 0) {
+              this.viewMMUPrescriptionDetails(prescriptionDataResponse.data);
+            } else {
+              this.confirmationService.alert(
+                this.current_language_set.mmuPrescriptionDetailsNotAvailable,
+              );
+            }
+          } else {
+            console.log('Error in fetching MMU Prescription details');
+          }
+        },
+        (err) => {
+          console.log(err.errorMessage);
+        },
+      );
     }
   }
+  viewMMUPrescriptionDetails(prescriptionDataResponse: any) {
+    this.dialog.open(PreviousDetailsComponent, {
+      data: {
+        dataList: prescriptionDataResponse,
+        title: this.current_language_set.mmuPrescriptionDetails,
+      },
+    });
+  }
 
-  setMedicineObject(option: any) {
-    if (
-      option?.id &&
-      option?.itemName &&
-      option?.itemID &&
-      option?.quantityInHand &&
-      option?.sctCode &&
-      option?.strength &&
-      option?.unitOfMeasurement &&
-      option?.isEDL
-    ) {
-      this.currentPrescription['id'] = option.id;
-      this.currentPrescription['drugName'] = option.itemName;
-      this.currentPrescription['drugID'] = option.itemID;
-      this.currentPrescription['quantity'] = option.quantityInHand;
-      this.currentPrescription['sctCode'] = option.sctCode;
-      this.currentPrescription['sctTerm'] = option.sctTerm;
-      this.currentPrescription['drugStrength'] = option.strength;
-      this.currentPrescription['drugUnit'] = option.unitOfMeasurement;
-      this.currentPrescription['isEDL'] = option.isEDL;
-    }
-
-    option.isEDL ? '' : this.current_language_set.nonEDLMedicine;
-    if (option.quantityInHand === 0) {
-      this.isStockAvalable = 'warn';
-    } else {
-      this.isStockAvalable = 'primary';
-    }
+  get prescriptionAndCounselling() {
+    return this.prescriptionCounsellingForm.controls['counsellingProvidedList']
+      .value;
   }
 }

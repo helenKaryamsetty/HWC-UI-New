@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
-
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -38,8 +38,9 @@ import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { HrpService } from '../../../shared/services/hrp.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
@@ -47,7 +48,7 @@ import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/pre
   styleUrls: ['./comorbidity-concurrent-conditions.component.css'],
 })
 export class ComorbidityConcurrentConditionsComponent
-  implements OnInit, DoCheck, OnDestroy
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
   comorbidityConcurrentConditionsForm!: FormGroup;
@@ -56,50 +57,56 @@ export class ComorbidityConcurrentConditionsComponent
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   comorbidtyData: any;
   comorbidityMasterData: any;
   comorbidityFilteredMasterData: any;
   previousSelectedComorbidity: any = [];
   comorbiditySelectList: any = [];
-  ComorbidStatus = 'false';
   currentLanguageSet: any;
+  ComorbidStatus = 'false';
+  comorbidConditionHrp: any = [];
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private nurseService: NurseService,
+    private hrpService: HrpService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
-    private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
-  ) {}
+    private masterdataService: MasterdataService,
+  ) {
+    this.nurseService.listen().subscribe((m: any) => {
+      console.log(m);
+      this.onComorbidFilterClick(m);
+    });
+  }
+  onComorbidFilterClick(comorb: any) {
+    const comorbidstat = localStorage.getItem('setComorbid');
+
+    const visitCat = localStorage.getItem('visiCategoryANC');
+    if (comorbidstat === 'true' && visitCat === 'COVID-19 Screening') {
+      this.ComorbidStatus = 'true';
+    } else {
+      this.ComorbidStatus = 'false';
+    }
+  }
 
   ngOnInit() {
+    this.comorbidConditionHrp = [];
     this.assignSelectedLanguage();
     this.getMasterData();
     this.getBeneficiaryDetails();
-    this.onComorbidFilterClick();
+    this.hrpService.setcomorbidityConcurrentConditions(
+      this.comorbidConditionHrp,
+    );
   }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-
-  getcomorbidityConcurrentConditions(): AbstractControl[] | null {
-    const comorbidityConcurrentConditionsControl =
-      this.comorbidityConcurrentConditionsForm.get(
-        'comorbidityConcurrentConditionsList',
-      );
-    return comorbidityConcurrentConditionsControl instanceof FormArray
-      ? comorbidityConcurrentConditionsControl.controls
-      : null;
+  ngOnChanges() {
+    //this.comorbidConditionHrp=[];
+    console.log('test');
   }
 
   ngOnDestroy() {
@@ -129,25 +136,30 @@ export class ComorbidityConcurrentConditionsComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.comorbidityMasterData = masterData.comorbidConditions;
           this.comorbidityFilteredMasterData = masterData.comorbidConditions;
 
           this.addComorbidityConcurrentConditions();
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -176,6 +188,14 @@ export class ComorbidityConcurrentConditionsComponent
 
       if (comorbidityTypeArr.length > 0)
         temp[i].comorbidConditions = comorbidityTypeArr[0];
+
+      if (temp[i].isForHistory !== undefined && temp[i].isForHistory !== null) {
+        if (temp[i].isForHistory === true) {
+          temp[i].isForHistory = false;
+        } else {
+          temp[i].isForHistory = true;
+        }
+      }
 
       if (temp[i].comorbidCondition) {
         const k: any = formArray.get('' + i);
@@ -212,6 +232,8 @@ export class ComorbidityConcurrentConditionsComponent
             );
           else return false;
         });
+        // let flag = arr.length === 0 ? true : false;
+        // return flag;
         if (item.comorbidCondition === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;
@@ -226,7 +248,7 @@ export class ComorbidityConcurrentConditionsComponent
 
   removeComorbidityConcurrentConditions(
     i: any,
-    comorbidityConcurrentConditionsForm?: AbstractControl<any, any>,
+    comorbidityConcurrentConditionsForm?: FormGroup,
   ) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
@@ -248,6 +270,11 @@ export class ComorbidityConcurrentConditionsComponent
               timePeriodUnit: null,
               isForHistory: null,
             });
+            this.comorbidConditionHrp = [];
+            this.hrpService.setcomorbidityConcurrentConditions(
+              this.comorbidConditionHrp,
+            );
+            // comorbidityConcurrentConditionsForm.reset();
           } else {
             const removedValue = this.previousSelectedComorbidity[i];
 
@@ -266,6 +293,23 @@ export class ComorbidityConcurrentConditionsComponent
             this.comorbiditySelectList.splice(i, 1);
 
             comorbidityConcurrentConditionsList.removeAt(i);
+            this.comorbidConditionHrp = [];
+            for (
+              let a = 0;
+              a < comorbidityConcurrentConditionsList.length;
+              a++
+            ) {
+              const comorbidityConditionForm = <FormGroup>(
+                comorbidityConcurrentConditionsList.controls[a]
+              );
+              this.comorbidConditionHrp.push(
+                comorbidityConditionForm.controls['comorbidConditions'].value
+                  .comorbidCondition,
+              );
+            }
+            this.hrpService.setcomorbidityConcurrentConditions(
+              this.comorbidConditionHrp,
+            );
           }
           this.comorbidityConcurrentConditionsForm.markAsDirty();
         }
@@ -275,7 +319,7 @@ export class ComorbidityConcurrentConditionsComponent
   filterComorbidityConcurrentConditionsType(
     comorbidityConcurrentConditions: any,
     i: any,
-    comorbidityConcurrentConditionsForm?: AbstractControl<any, any>,
+    comorbidityConcurrentConditionsForm?: FormGroup,
   ) {
     const previousValue = this.previousSelectedComorbidity[i];
     if (comorbidityConcurrentConditions.comorbidCondition === 'None') {
@@ -288,7 +332,6 @@ export class ComorbidityConcurrentConditionsComponent
       comorbidityConcurrentConditionsForm.patchValue({
         otherComorbidCondition: null,
       });
-
     if (previousValue) {
       this.comorbiditySelectList.map((item: any, t: any) => {
         if (t !== i && previousValue.comorbidCondition !== 'Other') {
@@ -309,6 +352,27 @@ export class ComorbidityConcurrentConditionsComponent
     });
 
     this.previousSelectedComorbidity[i] = comorbidityConcurrentConditions;
+    if (
+      comorbidityConcurrentConditionsForm !== undefined &&
+      comorbidityConcurrentConditions !== undefined &&
+      comorbidityConcurrentConditions.comorbidCondition !== undefined
+    ) {
+      this.comorbidConditionHrp.push(
+        comorbidityConcurrentConditions.comorbidCondition,
+      );
+      this.hrpService.setcomorbidityConcurrentConditions(
+        this.comorbidConditionHrp,
+      );
+    }
+    if (
+      comorbidityConcurrentConditionsForm === undefined &&
+      comorbidityConcurrentConditions !== undefined
+    ) {
+      this.comorbidConditionHrp.push(comorbidityConcurrentConditions);
+      this.hrpService.setcomorbidityConcurrentConditions(
+        this.comorbidConditionHrp,
+      );
+    }
   }
 
   removeComorbidityExecptNone() {
@@ -335,7 +399,7 @@ export class ComorbidityConcurrentConditionsComponent
   getPreviousComorbidityHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousComorbidityHistory(benRegID, this.visitCategory)
+      .getPreviousComorbidityHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -384,7 +448,7 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
 
-  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
+  validateDuration(formGroup: FormGroup, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -425,12 +489,19 @@ export class ComorbidityConcurrentConditionsComponent
       return true;
     }
   }
-  onComorbidFilterClick() {
-    const visitCat = localStorage.getItem('visiCategoryANC');
-    if (visitCat === 'COVID-19 Screening') {
-      this.ComorbidStatus = 'true';
-    } else {
-      this.ComorbidStatus = 'false';
-    }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  setInactiveForHistory(event: any) {
+    // if (event.checked) {
+    // } else {
+    // }
   }
 }

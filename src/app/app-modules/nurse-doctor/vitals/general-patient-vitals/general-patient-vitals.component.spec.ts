@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   async,
   ComponentFixture,
@@ -810,13 +809,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.hipCircumference_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkHip).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         expect(component.female).toEqual(true);
         console.log(component.female);
         console.log(component.normalHip);
@@ -842,7 +841,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.showGlucoseQC).toEqual(false);
         expect(component.benAge).toEqual(data.maleBeneficiary.ageVal);
         expect(component.female).toEqual(false);
-        //fixture.detectChanges();
+        fixture.detectChanges();
         spyOn(component, 'checkHip').and.callThrough();
         component.patientVitalsForm.patchValue({ hipCircumference_cm: '100' });
         debugElement = fixture.debugElement.query(
@@ -852,13 +851,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.hipCircumference_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkHip).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         console.log(component.normalHip);
         expect(component.female).toEqual(false);
@@ -884,7 +883,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.showGlucoseQC).toEqual(false);
         expect(component.benAge).toEqual(data.maleBeneficiary.ageVal);
         expect(component.female).toEqual(false);
-        //fixture.detectChanges();
+        fixture.detectChanges();
         spyOn(component, 'checkHip').and.callThrough();
         component.patientVitalsForm.patchValue({ hipCircumference_cm: '90' });
         debugElement = fixture.debugElement.query(
@@ -894,13 +893,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.hipCircumference_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkHip).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         console.log(component.normalHip);
         expect(component.female).toEqual(false);
@@ -938,13 +937,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.headCircumference_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkHeadCircumference).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -972,7 +971,7 @@ describe('GeneralPatientVitalsComponent', () => {
           data.femaleChildBeneficiaryage_6.ageVal,
         );
         expect(component.female).toEqual(true);
-        //fixture.detectChanges();
+        fixture.detectChanges();
         spyOn(component, 'checkMidUpperArmCircumference').and.callThrough();
         component.patientVitalsForm.patchValue({
           midUpperArmCircumference_MUAC_cm: '4',
@@ -984,13 +983,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.midUpperArmCircumference_MUAC_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkMidUpperArmCircumference).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1026,13 +1025,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.headCircumference_cm).toEqual(
           debugElement.nativeElement.value,
         );
         fixture.detectChanges();
         expect(component.checkHeadCircumference).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1060,7 +1059,7 @@ describe('GeneralPatientVitalsComponent', () => {
           data.femaleChildBeneficiaryage_6.ageVal,
         );
         expect(component.female).toEqual(true);
-        //fixture.detectChanges();
+        fixture.detectChanges();
         spyOn(component, 'checkMidUpperArmCircumference').and.callThrough();
         component.patientVitalsForm.patchValue({
           midUpperArmCircumference_MUAC_cm: '7',
@@ -1072,13 +1071,13 @@ describe('GeneralPatientVitalsComponent', () => {
         const el = debugElement.nativeElement as HTMLElement;
         el.dispatchEvent(new Event('input'));
         el.dispatchEvent(new Event('change'));
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.midUpperArmCircumference_MUAC_cm).toEqual(
           debugElement.nativeElement.value,
         );
-        //fixture.detectChanges();
+        fixture.detectChanges();
         expect(component.checkMidUpperArmCircumference).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1698,7 +1697,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugarFasting).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1740,7 +1739,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugarRandom).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1782,7 +1781,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugar2HrPostPrandial).toHaveBeenCalled();
-        //fixture.detectChanges;
+        fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');

@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Injectable } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { SpinnerService } from '../../../core/services/spinner.service';
+import { NcdScreeningService } from './ncd-screening.service';
 import { shareReplay } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class NurseService {
@@ -34,6 +34,9 @@ export class NurseService {
   private _listners = new Subject<any>();
   ncdTemp = new BehaviorSubject(this.temp);
   ncdTemp$ = this.ncdTemp.asObservable();
+  enableLAssessment = new BehaviorSubject(this.temp);
+  enableLAssessment$ = this.enableLAssessment.asObservable();
+
   rbsSelectedInvestigation = false;
   rbsSelectedInInvestigation = new BehaviorSubject(
     this.rbsSelectedInvestigation,
@@ -43,9 +46,18 @@ export class NurseService {
   rbsCurrentTestResult: any = null;
   rbsTestResultCurrent = new BehaviorSubject(this.rbsCurrentTestResult);
   rbsTestResultCurrent$ = this.rbsTestResultCurrent.asObservable();
+
+  getnurse104referredworklisturls = environment.getnurse104referredworklisturls;
+
+  ismmutc = new BehaviorSubject('no');
+  ismmutc$ = this.ismmutc.asObservable();
+  mmuVisitData = false;
+
+  diabetesResponse: any;
+  ncdScreeningidrsDetails: any;
+  ncdScreeningVisitDetails: any;
+  comorbidityConcurrentCondition: any;
   isAssessmentDone = false;
-  enableLAssessment = new BehaviorSubject(this.temp);
-  enableLAssessment$ = this.enableLAssessment.asObservable();
   enableProvisionalDiag = new BehaviorSubject(this.temp);
   enableProvisionalDiag$ = this.enableProvisionalDiag.asObservable();
 
@@ -56,12 +68,26 @@ export class NurseService {
   filter(filterBy: string) {
     this._listners.next(filterBy);
   }
-
+  contactfilter(filterBy: string) {
+    this._listners.next(filterBy);
+  }
   fileData: any; // To store fileIDs
+  diseaseFileUpload = false;
+
+  lmpFetosenseTest: any = null;
+
+  lmpFetosenseTestValue = new BehaviorSubject(this.lmpFetosenseTest);
+  lmpFetosenseTestValue$ = this.lmpFetosenseTestValue.asObservable();
+
+  hrpStatusUpdate = false;
+
+  hrpStatusUpdateValue = new BehaviorSubject<boolean>(this.hrpStatusUpdate);
+  hrpStatusUpdateCheck$ = this.hrpStatusUpdateValue.asObservable();
 
   constructor(
     private http: HttpClient,
     private spinnerService: SpinnerService,
+    private ncdScreeningService: NcdScreeningService,
   ) {}
 
   getNurseWorklist() {
@@ -76,315 +102,37 @@ export class NurseService {
       `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.nurseWorklist + fetchUrl);
   }
-  getPreviousDiabetesHistory(benRegID: string, visitCategory: any) {
-    return this.http.post(environment.previousDiabetesHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-  getPreviousVisitData(obj: any) {
-    return this.http.post(environment.previousVisitDataUrl, obj);
-  }
-  getNurseWorklistTMreferred() {
-    console.log(
-      'getNurseWorklistUrl',
-      localStorage.getItem('providerServiceID'),
-    );
+
+  getNurseTMFutureWorklist() {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl);
+    return this.http.get(environment.getNurseTMFutureWorklistUrl + fetchUrl);
   }
-  postNurseCancerVisitForm(
-    medicalForm: any,
-    imageCoordinates: any,
-    sendToDoctorWorklist: any,
-  ) {
-    const temp = {
-      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      createdBy: localStorage.getItem('userName'),
-    };
-
-    let cancerVisitDetails = {};
-
-    if (
-      medicalForm.controls.patientVisitForm.controls.patientVisitDetailsForm
-        .dirty
-    ) {
-      const visitDetails = Object.assign(
-        {},
-        medicalForm.controls.patientVisitForm.controls.patientVisitDetailsForm
-          .value,
-        medicalForm.controls.patientVisitForm.controls
-          .patientFileUploadDetailsForm.value,
-        temp,
-      );
-      cancerVisitDetails = Object.assign(cancerVisitDetails, { visitDetails });
-    }
-
-    if (medicalForm.controls['patientVitalsForm'].dirty) {
-      const vitalsDetails = Object.assign(
-        {},
-        medicalForm.controls['patientVitalsForm'].value,
-        temp,
-      );
-      cancerVisitDetails = Object.assign(cancerVisitDetails, { vitalsDetails });
-    }
-
-    if (medicalForm.controls['patientExaminationForm'].dirty) {
-      const examinationDetails = this.postCancerExaminationDetails(
-        medicalForm.controls['patientExaminationForm'],
-        temp,
-        imageCoordinates,
-      );
-      cancerVisitDetails = Object.assign(cancerVisitDetails, {
-        examinationDetails,
-      });
-    }
-
-    if (medicalForm.controls['patientHistoryForm'].dirty) {
-      const historyDetails = this.postCancerHistoryDetails(
-        medicalForm.controls['patientHistoryForm'],
-        temp,
-      );
-      cancerVisitDetails = Object.assign(cancerVisitDetails, {
-        historyDetails,
-      });
-    }
-
+  getNurseTMWorklist() {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-
     const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const serviceID = localStorage.getItem('serviceID');
-    const createdBy = localStorage.getItem('userName');
-
-    cancerVisitDetails = Object.assign(
-      cancerVisitDetails,
-      { sendToDoctorWorklist },
-      {
-        benFlowID: localStorage.getItem('benFlowID'),
-        beneficiaryID: localStorage.getItem('beneficiaryID'),
-        sessionID: localStorage.getItem('sessionID'),
-        parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
-        serviceID: serviceID,
-        createdBy: createdBy,
-      },
-    );
-
-    console.log(
-      'Cancer Screening',
-      JSON.stringify(cancerVisitDetails, null, 4),
-    );
-
-    return this.http.post(
-      environment.saveNurseCancerScreeningDetails,
-      cancerVisitDetails,
-    );
-    // return Observable.of({});
+    const fetchUrl =
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
+    return this.http.get(environment.getNurseTMWorklistUrl + fetchUrl);
+  }
+  getMMUNurseWorklist() {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const fetchUrl =
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
+    return this.http.get(environment.mmuNurseWorklist + fetchUrl);
   }
 
-  postCancerHistoryDetails(historyForm: any, otherDetails: any) {
-    let historyDetails = {};
-
-    if (historyForm.controls.cancerPatientFamilyMedicalHistoryForm.dirty) {
-      const familyDiseases = JSON.parse(
-        JSON.stringify(
-          historyForm.value.cancerPatientFamilyMedicalHistoryForm.diseases,
-        ),
-      );
-
-      for (const disease of familyDiseases) {
-        if (disease.cancerDiseaseType) {
-          disease.cancerDiseaseType =
-            disease.cancerDiseaseType.cancerDiseaseType;
-          //   disease.snomedCode = disease.cancerDiseaseType.snomedCode;
-          // disease.snomedTerm = disease.cancerDiseaseType.snomedTerm;
-          if (disease.cancerDiseaseType === 'Any other Cancer')
-            disease.cancerDiseaseType = disease.otherDiseaseType;
-        }
-        disease.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-        disease.providerServiceMapID =
-          localStorage.getItem('providerServiceID');
-        disease.createdBy = localStorage.getItem('userName');
-      }
-
-      const familyHistory = Object.assign(
-        {},
-        { diseases: familyDiseases },
-        otherDetails,
-      );
-      historyDetails = Object.assign(historyDetails, { familyHistory });
-    }
-
-    if (historyForm.controls.cancerPatientPerosnalHistoryForm.dirty) {
-      const personalHistory = Object.assign(
-        {},
-        historyForm.value.cancerPatientPerosnalHistoryForm,
-        otherDetails,
-      );
-      historyDetails = Object.assign(historyDetails, { personalHistory });
-    }
-
-    if (historyForm.controls.cancerPatientObstetricHistoryForm.dirty) {
-      const pastObstetricHistory = Object.assign(
-        {},
-        historyForm.value.cancerPatientObstetricHistoryForm,
-        otherDetails,
-      );
-      historyDetails = Object.assign(historyDetails, { pastObstetricHistory });
-    }
-
-    return historyDetails;
+  getPreviousVisitData(obj: any) {
+    return this.http.post(environment.previousVisitDataUrl, obj);
   }
 
-  postCancerExaminationDetails(
-    cancerExaminationForm: any,
-    otherDetails: any,
-    imageCoordinates: any,
-  ) {
-    let examinationDetails = {};
-
-    if (cancerExaminationForm.controls.signsForm.dirty) {
-      const signsForm = cancerExaminationForm.controls.signsForm as FormGroup;
-      const lymphsArray = (<FormArray>(
-        signsForm.controls['lymphNodes']
-      )).controls.filter((item) => {
-        return item.dirty;
-      });
-
-      const lymphs = lymphsArray.map((item) =>
-        Object.assign({}, item.value, otherDetails),
-      );
-
-      const cancerSignAndSymptoms = Object.assign(
-        {},
-        signsForm.value,
-        { lymphNodes: undefined },
-        otherDetails,
-      );
-      const signsDetails = Object.assign(
-        {},
-        {
-          cancerSignAndSymptoms: cancerSignAndSymptoms,
-          cancerLymphNodeDetails: lymphs,
-        },
-      );
-
-      examinationDetails = Object.assign({}, examinationDetails, {
-        signsDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.oralExaminationForm.dirty) {
-      const oralExaminationDetails = JSON.parse(
-        JSON.stringify(
-          cancerExaminationForm.controls.oralExaminationForm.value,
-        ),
-      );
-      if (oralExaminationDetails.preMalignantLesionTypeList !== null) {
-        const index =
-          oralExaminationDetails.preMalignantLesionTypeList.indexOf(
-            'Any other lesion',
-          );
-        if (
-          index > -1 &&
-          index === oralExaminationDetails.preMalignantLesionTypeList.length - 1
-        ) {
-          oralExaminationDetails.preMalignantLesionTypeList.pop();
-          oralExaminationDetails.preMalignantLesionTypeList.push(
-            oralExaminationDetails.otherLesionType,
-          );
-        }
-      }
-      const oralDetails = Object.assign(
-        {},
-        oralExaminationDetails,
-        { otherLesionType: undefined },
-        { image: undefined },
-        otherDetails,
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        oralDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.breastExaminationForm.dirty) {
-      const breastExaminationDetails =
-        cancerExaminationForm.controls.breastExaminationForm.value;
-      const breastDetails = Object.assign(
-        {},
-        breastExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        breastDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.abdominalExaminationForm.dirty) {
-      const abdominalExaminationDetails =
-        cancerExaminationForm.controls.abdominalExaminationForm.value;
-      const abdominalDetails = Object.assign(
-        {},
-        abdominalExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        abdominalDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.gynecologicalExaminationForm.dirty) {
-      const gynecologicalExaminationDetails =
-        cancerExaminationForm.controls.gynecologicalExaminationForm.value;
-      const gynecologicalDetails = Object.assign(
-        {},
-        gynecologicalExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        gynecologicalDetails,
-      });
-    }
-    examinationDetails = Object.assign({}, examinationDetails, {
-      imageCoordinates,
-    });
-    // console.log("Nurse examination Details", JSON.stringify(examinationDetails, null, 4));
-    return examinationDetails;
-  }
-
-  getPreviousCancerFamilyHistory(benRegID: string) {
-    return this.http.post(environment.previousCancerFamilyHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-
-  getPreviousCancerPersonalHabitHistory(benRegID: string) {
-    return this.http.post(environment.previousCancerPersonalHabitHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-
-  getPreviousCancerPersonalDietHistory(benRegID: string) {
-    return this.http.post(environment.previousCancerPersonalDietHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-
-  getPreviousCancerPastObstetricHistory(benRegID: string) {
-    return this.http.post(environment.previousCancerPastObstetricHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-
-  postNurseGeneralQCVisitForm(medicalForm: any) {
+  postNurseGeneralQCVisitForm(medicalForm: any, tcRequest: any) {
     const temp = {
       beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
       providerServiceMapID: localStorage.getItem('providerServiceID'),
@@ -401,6 +149,11 @@ export class NurseService {
         .value,
       medicalForm.controls.patientVisitForm.controls
         .patientFileUploadDetailsForm.value,
+      medicalForm.controls.patientVisitForm.controls.cdssForm.controls
+        .presentChiefComplaintDb.value,
+      medicalForm.controls.patientVisitForm.controls.cdssForm.controls
+        .diseaseSummaryDb.value,
+
       temp,
     );
     const vitalsDetails = Object.assign(
@@ -420,6 +173,9 @@ export class NurseService {
         vanID: vanID,
         serviceID: serviceID,
         createdBy: createdBy,
+        tcRequest: tcRequest,
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
       },
     );
 
@@ -439,6 +195,7 @@ export class NurseService {
     benVisitID: any,
     visitCategory: any,
     benAge: any,
+    tcRequest: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -450,6 +207,7 @@ export class NurseService {
         medicalForm.controls.patientVisitForm,
         benVisitID,
         visitCategory,
+        false,
       ),
       ancDetails: this.postANCForm(
         medicalForm.controls.patientANCForm,
@@ -476,6 +234,9 @@ export class NurseService {
       vanID: vanID,
       serviceID: serviceID,
       createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
 
     console.log(
@@ -490,6 +251,300 @@ export class NurseService {
     );
   }
 
+  //Nurse Save - FP & Contraceptive Services
+  postNurseFamilyPlanningVisitForm(
+    medicalForm: any,
+    benVisitID: any,
+    visitCategory: any,
+    benAge: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const serviceID = localStorage.getItem('serviceID');
+    const createdBy = localStorage.getItem('userName');
+    const nurseFamilyPlanningVisitDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        medicalForm.controls.patientVisitForm,
+        benVisitID,
+        visitCategory,
+        false,
+      ),
+      vitalDetails: this.postGenericVitalForm(
+        medicalForm.controls.patientVitalsForm,
+        benVisitID,
+      ),
+      familyPlanningReproductiveDetails: this.postFpAndReproductiveForm(
+        medicalForm.controls.familyPlanningForm.controls[
+          'familyPlanningAndReproductiveForm'
+        ].value,
+        benVisitID,
+      ),
+      iecAndCounsellingDetails: this.postIecDetailsForm(
+        medicalForm.controls.familyPlanningForm.controls['IecCounsellingForm']
+          .value,
+        benVisitID,
+      ),
+      dispensationDetails: this.postDispensationDetailsForm(
+        medicalForm.controls.familyPlanningForm.controls[
+          'dispensationDetailsForm'
+        ].value,
+        benVisitID,
+      ),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      serviceID: serviceID,
+      createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+
+    console.log(
+      'Nurse Family Planning Visit Details',
+      JSON.stringify(nurseFamilyPlanningVisitDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveNurseFamilyPlanningDetails,
+      nurseFamilyPlanningVisitDetails,
+    );
+  }
+
+  //Nurse Save -  Neonatal and Infant Services Details
+  postNurseNeoatalAndInfantVisitForm(
+    medicalForm: any,
+    benVisitID: any,
+    visitCategory: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const serviceID = localStorage.getItem('serviceID');
+    const createdBy = localStorage.getItem('userName');
+    const nurseNeonatalAndInfantDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        medicalForm.controls.patientVisitForm,
+        benVisitID,
+        visitCategory,
+        false,
+      ),
+      vitalDetails: this.postGenericVitalForm(
+        medicalForm.controls.patientVitalsForm,
+        benVisitID,
+      ),
+      infantBirthDetails: this.postInfantBirthDetailsForm(
+        medicalForm.controls.patientBirthImmunizationHistoryForm.controls[
+          'infantBirthDetailsForm'
+        ].value,
+        benVisitID,
+      ),
+      immunizationHistory: this.postImmunizationHistoryForm(
+        medicalForm.controls.patientBirthImmunizationHistoryForm.controls[
+          'immunizationHistory'
+        ].value,
+        benVisitID,
+      ),
+      immunizationServices: this.postImmunizationServiceForm(
+        medicalForm.controls.patientImmunizationServicesForm.controls
+          .immunizationServicesForm,
+        benVisitID,
+      ),
+
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      serviceID: serviceID,
+      createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+
+    console.log(
+      'Nurse Neonatal And Infant Details',
+      JSON.stringify(nurseNeonatalAndInfantDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveNurseNeonatalAndInfantDetails,
+      nurseNeonatalAndInfantDetails,
+    );
+  }
+
+  //Nurse Save - Child And Adolesent
+  postNurseChildAndAdolescentVisitForm(
+    medicalForm: any,
+    benVisitID: any,
+    visitCategory: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const serviceID = localStorage.getItem('serviceID');
+    const createdBy = localStorage.getItem('userName');
+    const nurseChildAndAdolescentDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        medicalForm.controls.patientVisitForm,
+        benVisitID,
+        visitCategory,
+        false,
+      ),
+      vitalDetails: this.postGenericVitalForm(
+        medicalForm.controls.patientVitalsForm,
+        benVisitID,
+      ),
+      infantBirthDetails: this.postInfantBirthDetailsForm(
+        medicalForm.controls.patientBirthImmunizationHistoryForm.controls[
+          'infantBirthDetailsForm'
+        ].value,
+        benVisitID,
+      ),
+      immunizationHistory: this.postImmunizationHistoryForm(
+        medicalForm.controls.patientBirthImmunizationHistoryForm.controls[
+          'immunizationHistory'
+        ].value,
+        benVisitID,
+      ),
+      immunizationServices: this.postImmunizationServiceForm(
+        medicalForm.controls.patientImmunizationServicesForm.controls
+          .immunizationServicesForm,
+        benVisitID,
+      ),
+      oralVitaminAProphylaxis: this.postOralVitaminImmunizationServiceForm(
+        medicalForm.controls.patientImmunizationServicesForm.controls
+          .oralVitaminAForm,
+        benVisitID,
+      ),
+
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      serviceID: serviceID,
+      createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+
+    console.log(
+      'Nurse child And Health Details',
+      JSON.stringify(nurseChildAndAdolescentDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveNurseChildAndAdloescentDetails,
+      nurseChildAndAdolescentDetails,
+    );
+  }
+
+  postOralVitaminImmunizationServiceForm(
+    oralVitaminAForm: any,
+    benVisitID: any,
+  ) {
+    const oralVitaminADetails = Object.assign({}, oralVitaminAForm.value, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+    return oralVitaminADetails;
+  }
+
+  /**
+   * Neonatal and Infant Health Care Services
+   */
+  postInfantBirthDetailsForm(infantBirthDetailsForm: any, benVisitID: any) {
+    const infantBirthDetails = Object.assign({}, infantBirthDetailsForm, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+    return infantBirthDetails;
+  }
+
+  postImmunizationHistoryForm(
+    immunizationHistoryDetailsForm: any,
+    benVisitID: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
+    const immunizationHistoryDetails = Object.assign(
+      {},
+      immunizationHistoryDetailsForm,
+      {
+        vanID: vanID,
+        parkingPlaceID: parkingPlaceID,
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: benVisitID,
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        createdBy: localStorage.getItem('userName'),
+      },
+    );
+    return immunizationHistoryDetails;
+  }
+
+  postImmunizationServiceForm(immunizationServiceForm: any, benVisitID: any) {
+    const immunizationServicesDetails = Object.assign(
+      {},
+      immunizationServiceForm.value,
+      {
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: benVisitID,
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        createdBy: localStorage.getItem('userName'),
+      },
+    );
+    return immunizationServicesDetails;
+  }
+
+  /**
+   * Family planning Details Form -KA40094929, AN40085822
+   */
+
+  postFpAndReproductiveForm(familyPlanningForm: any, benVisitID: any) {
+    const fpAndReproductiveForm = Object.assign({}, familyPlanningForm, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+    return fpAndReproductiveForm;
+  }
+
+  postIecDetailsForm(familyPlanningForm: any, benVisitID: any) {
+    const iecAndCousellingForm = Object.assign({}, familyPlanningForm, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+    return iecAndCousellingForm;
+  }
+
+  postDispensationDetailsForm(familyPlanningForm: any, benVisitID: any) {
+    const dispensationDetailsForm = Object.assign({}, familyPlanningForm, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+    return dispensationDetailsForm;
+  }
+
   /**
    * Visit Details Form for All Components after Visit ID is Generated
    */
@@ -497,9 +552,10 @@ export class NurseService {
     patientVisitForm: any,
     benVisitID: any,
     visitCategory: any,
-  ): Observable<any> {
+    showIDRS: any,
+  ) {
     if (visitCategory === 'ANC') {
-      const visitDeatilsData: any = {
+      return {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
           patientVisitForm.controls.patientFileUploadDetailsForm.value,
@@ -512,15 +568,19 @@ export class NurseService {
           patientVisitForm.controls.patientAdherenceForm.value,
           benVisitID,
         ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
         investigation: this.postInvestigationForm(
           patientVisitForm.controls.patientInvestigationsForm.value,
           benVisitID,
         ),
       };
-      return visitDeatilsData;
     }
     if (visitCategory === 'General OPD') {
-      const visitDeatilsData: any = {
+      console.log(patientVisitForm.controls.cdssForm, 'cdssForm');
+      return {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
           patientVisitForm.controls.patientFileUploadDetailsForm.value,
@@ -529,11 +589,18 @@ export class NurseService {
           patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
           benVisitID,
         ),
+        adherence: this.postAdherenceForm(
+          patientVisitForm.controls.patientAdherenceForm.value,
+          benVisitID,
+        ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
       };
-      return visitDeatilsData;
     }
     if (visitCategory === 'PNC') {
-      const visitDeatilsData: any = {
+      return {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
           patientVisitForm.controls.patientFileUploadDetailsForm.value,
@@ -542,11 +609,76 @@ export class NurseService {
           patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
           benVisitID,
         ),
+        adherence: this.postAdherenceForm(
+          patientVisitForm.controls.patientAdherenceForm.value,
+          benVisitID,
+        ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
       };
-      return visitDeatilsData;
+    }
+    if (visitCategory === 'FP & Contraceptive Services') {
+      return {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value,
+        ),
+        chiefComplaints: this.postCheifComplaintForm(
+          patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
+          benVisitID,
+        ),
+        adherence: this.postAdherenceForm(
+          patientVisitForm.controls.patientAdherenceForm.value,
+          benVisitID,
+        ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
+      };
+    }
+    if (
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    ) {
+      return {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value,
+        ),
+        chiefComplaints: this.postCheifComplaintForm(
+          patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
+          benVisitID,
+        ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
+      };
+    }
+
+    if (
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      return {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value,
+        ),
+        chiefComplaints: this.postCheifComplaintForm(
+          patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
+          benVisitID,
+        ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
+      };
     }
     if (visitCategory === 'NCD care') {
-      const visitDeatilsData: any = {
+      return {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
           patientVisitForm.controls.patientFileUploadDetailsForm.value,
@@ -559,11 +691,14 @@ export class NurseService {
           patientVisitForm.controls.patientInvestigationsForm.value,
           benVisitID,
         ),
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
+          benVisitID,
+        ),
       };
-      return visitDeatilsData;
     }
     if (visitCategory === 'COVID-19 Screening') {
-      const visitDeatilsData: any = {
+      return {
         visitDetails: this.postPatientVisitDetails(
           patientVisitForm.controls.patientVisitDetailsForm.value,
           patientVisitForm.controls.patientFileUploadDetailsForm.value,
@@ -572,25 +707,42 @@ export class NurseService {
           patientVisitForm.controls.patientCovidForm.value,
           benVisitID,
         ),
-      };
-      return visitDeatilsData;
-    }
-    if (visitCategory === 'NCD screening') {
-      const visitDeatilsData: any = {
-        visitDetails: this.postPatientVisitDetails(
-          patientVisitForm.controls.patientVisitDetailsForm.value,
-          patientVisitForm.controls.patientFileUploadDetailsForm.value,
-        ),
-        chiefComplaints: this.postCheifComplaintForm(
-          patientVisitForm.controls.patientChiefComplaintsForm.value.complaints,
+        cdss: this.postCdssForm(
+          patientVisitForm.controls.cdssForm.value,
           benVisitID,
         ),
       };
-      return visitDeatilsData;
     }
-    return new Observable((observer) => {
-      observer.complete();
-    });
+    if (visitCategory === 'NCD screening') {
+      if (showIDRS === true) {
+        return {
+          visitDetails: this.postPatientVisitDetails(
+            patientVisitForm.controls.patientVisitDetailsForm.value,
+            patientVisitForm.controls.patientFileUploadDetailsForm.value,
+          ),
+          chiefComplaints: this.postCheifComplaintForm(
+            patientVisitForm.controls.patientChiefComplaintsForm.value
+              .complaints,
+            benVisitID,
+          ),
+          cdss: this.postCdssForm(
+            patientVisitForm.controls.cdssForm.value,
+            benVisitID,
+          ),
+        };
+      } else {
+        return {
+          visitDetails: this.postPatientVisitDetails(
+            patientVisitForm.controls.patientVisitDetailsForm.value,
+            patientVisitForm.controls.patientFileUploadDetailsForm.value,
+          ),
+          cdss: this.postCdssForm(
+            patientVisitForm.controls.cdssForm.value,
+            benVisitID,
+          ),
+        };
+      }
+    }
   }
 
   postPatientVisitDetails(visitForm: any, files: any) {
@@ -599,7 +751,7 @@ export class NurseService {
       providerServiceMapID: localStorage.getItem('providerServiceID'),
       createdBy: localStorage.getItem('userName'),
     });
-    console.log('visit details', JSON.stringify(patientVisitDetails, null, 4));
+    // console.log('visit details', JSON.stringify(patientVisitDetails, null, 4));
     return patientVisitDetails;
   }
 
@@ -633,6 +785,16 @@ export class NurseService {
     return adherenceForm;
   }
 
+  postCdssForm(cdssForm: any, benVisitID: any) {
+    const nurseCdssForm = Object.assign({}, cdssForm, {
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: benVisitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    });
+
+    return nurseCdssForm;
+  }
   postInvestigationForm(patientInvestigationsForm: any, benVisitID: any) {
     const investigationsForm = Object.assign({}, patientInvestigationsForm, {
       beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
@@ -679,8 +841,9 @@ export class NurseService {
       providerServiceMapID: localStorage.getItem('providerServiceID'),
       createdBy: localStorage.getItem('userName'),
       gravida_G: obstetricFormula.gravida_G,
-      termDeliveries_T: obstetricFormula.termDeliveries_T,
-      pretermDeliveries_P: obstetricFormula.pretermDeliveries_P,
+      // termDeliveries_T: obstetricFormula.termDeliveries_T,
+      // pretermDeliveries_P: obstetricFormula.pretermDeliveries_P,
+      para: obstetricFormula.para,
       abortions_A: obstetricFormula.abortions_A,
       stillBirth: obstetricFormula.stillBirth,
       livebirths_L: obstetricFormula.livebirths_L,
@@ -719,9 +882,9 @@ export class NurseService {
     patientExaminationForm: any,
     benVisitID: any,
     visitCategory: any,
-  ): Observable<any> {
+  ) {
     if (visitCategory === 'ANC') {
-      const examDetailsData: any = {
+      return {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
           benVisitID,
@@ -760,11 +923,10 @@ export class NurseService {
           benVisitID,
         ),
       };
-      return examDetailsData;
     }
 
     if (visitCategory === 'General OPD') {
-      const examDetailsData: any = {
+      return {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
           benVisitID,
@@ -773,6 +935,10 @@ export class NurseService {
           patientExaminationForm.headToToeExaminationForm,
           benVisitID,
         ),
+        // oralDetails: this.postOralExaminationForm(
+        //   patientExaminationForm.oralExaminationForm,
+        //   benVisitID
+        // ),
         gastroIntestinalExamination: this.postGastroIntestinalSystemForm(
           patientExaminationForm.systemicExaminationForm
             .gastroIntestinalSystemForm,
@@ -803,11 +969,10 @@ export class NurseService {
           benVisitID,
         ),
       };
-      return examDetailsData;
     }
 
     if (visitCategory === 'PNC') {
-      const examDetailsData: any = {
+      return {
         generalExamination: this.postGeneralExaminationForm(
           patientExaminationForm.generalExaminationForm,
           benVisitID,
@@ -846,11 +1011,7 @@ export class NurseService {
           benVisitID,
         ),
       };
-      return examDetailsData;
     }
-    return new Observable((observer) => {
-      observer.complete();
-    });
   }
 
   /**
@@ -881,6 +1042,39 @@ export class NurseService {
     });
     // console.log('General Head to Toe examination', JSON.stringify(headToToeExaminationForm, null, 4));
     return headToToeExaminationForm;
+  }
+
+  /**
+   * Oral Examination Form ** Part of Examination Form for Non-Cancer (Generic)
+   *
+   */
+  postOralExaminationForm(examinationForm: any, benVisitID: any) {
+    if (examinationForm) {
+      if (examinationForm.preMalignantLesionTypeList !== null) {
+        const index =
+          examinationForm.preMalignantLesionTypeList.indexOf(
+            'Any other lesion',
+          );
+        if (
+          index > -1 &&
+          index === examinationForm.preMalignantLesionTypeList.length - 1
+        ) {
+          examinationForm.preMalignantLesionTypeList.pop();
+          examinationForm.preMalignantLesionTypeList.push(
+            examinationForm.otherLesionType,
+          );
+        }
+      }
+
+      examinationForm = Object.assign({}, examinationForm, {
+        otherLesionType: undefined,
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        createdBy: localStorage.getItem('userName'),
+      });
+    }
+    // console.log('General Head to Toe examination', JSON.stringify(oralExaminationForm, null, 4));
+    return examinationForm;
   }
 
   /**
@@ -1127,7 +1321,16 @@ export class NurseService {
         item.comorbidConditions = undefined;
         item.comorbidCondition = temp.comorbidCondition;
         item.comorbidConditionID = '' + temp.comorbidConditionID;
-        item.isForHistory = !temp.isForHistory;
+        // item.isForHistory = !temp.isForHistory;
+        if (
+          item.isForHistory !== undefined &&
+          item.isForHistory !== null &&
+          item.isForHistory === true
+        ) {
+          item.isForHistory = false;
+        } else {
+          item.isForHistory = true;
+        }
       }
     });
     const comorbidityData = Object.assign(
@@ -1369,8 +1572,8 @@ export class NurseService {
     }
 
     if (temp.complicationAtBirth) {
-      temp.complicationAtBirthID = temp.complicationAtBirth.birthComplicationID;
-      temp.complicationAtBirth = temp.complicationAtBirth.name;
+      temp.complicationAtBirthID = temp.complicationAtBirth.complicationID;
+      temp.complicationAtBirth = temp.complicationAtBirth.complicationValue;
     }
     const perinatalHistoryData = Object.assign({}, temp, otherDetails);
     console.log(
@@ -1423,10 +1626,11 @@ export class NurseService {
       personalHistoryFormValue,
       otherDetails,
       {
-        riskySexualPracticesStatus: personalHistoryForm.value
-          .riskySexualPracticesStatus
-          ? +personalHistoryForm.value.riskySexualPracticesStatus
-          : null,
+        riskySexualPracticesStatus:
+          personalHistoryForm.value.riskySexualPracticesStatus !== undefined &&
+          personalHistoryForm.value.riskySexualPracticesStatus !== null
+            ? +personalHistoryForm.value.riskySexualPracticesStatus
+            : null,
         tobaccoList: tobaccoList,
         alcoholList: alcoholList,
         allergicList: allergyList,
@@ -1502,6 +1706,12 @@ export class NurseService {
     });
   }
 
+  getPreviousImmunizationServicesData(benRegID: any) {
+    return this.http.post(environment.previousImmunizationServiceDataUrl, {
+      benRegID: benRegID,
+    });
+  }
+
   getPreviousPerinatalHistory(benRegID: string, visitCategory: any) {
     return this.http.post(environment.previousPerinatalHistory, {
       benRegID: benRegID,
@@ -1519,13 +1729,31 @@ export class NurseService {
       benRegID: benRegID,
     });
   }
-
   getPreviousPhysicalActivityHistory(benRegID: string, visitCategory: any) {
     return this.http.post(environment.previousPhyscialactivityHistoryUrl, {
       benRegID: benRegID,
     });
   }
-  postNCDScreeningForm(medicalForm: any, visitCategory: any) {
+  getPreviousDiabetesHistory(benRegID: string, visitCategory: any) {
+    return this.http.post(environment.previousDiabetesHistoryUrl, {
+      benRegID: benRegID,
+    });
+  }
+  getPreviousReferredHistory(benRegID: string, visitCategory: any) {
+    return this.http.post(environment.previousReferredHistoryUrl, {
+      benRegID: benRegID,
+    });
+  }
+
+  postNCDScreeningForm(
+    medicalForm: any,
+    visitCategory: any,
+    beneficiary: any,
+    tcRequest: any,
+    showIDRS: any,
+  ) {
+    this.ncdScreeningidrsDetails = null;
+    this.ncdScreeningVisitDetails = null;
     const serviceDetails = {
       beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
       benVisitID: null,
@@ -1533,123 +1761,143 @@ export class NurseService {
       createdBy: localStorage.getItem('userName'),
     };
 
-    // WDF requirement
-    // let postNCDScreeningFormValue = JSON.parse(JSON.stringify(medicalForm.controls['NCDScreeningForm'].value));
-    // console.log('postNCDScreeningFormValue', JSON.stringify(postNCDScreeningFormValue, null, 4));
-
-    // // if (postNCDScreeningFormValue.screeningCondition) {
-    // //   postNCDScreeningFormValue.ncdScreeningConditionID = postNCDScreeningFormValue.screeningCondition.ncdScreeningConditionID;
-    // //   postNCDScreeningFormValue.screeningCondition = postNCDScreeningFormValue.screeningCondition.ncdScreeningCondition;
-    // // }
-
-    // if (postNCDScreeningFormValue.reasonForScreening) {
-    //   postNCDScreeningFormValue.ncdScreeningReasonID = postNCDScreeningFormValue.reasonForScreening.ncdScreeningReasonID;
-    //   postNCDScreeningFormValue.reasonForScreening = postNCDScreeningFormValue.reasonForScreening.ncdScreeningReason;
-    // }
-
-    // if (postNCDScreeningFormValue.diabeticStatus) {
-    //   postNCDScreeningFormValue.diabeticStatusID = postNCDScreeningFormValue.diabeticStatus.bpAndDiabeticStatusID;
-    //   postNCDScreeningFormValue.diabeticStatus = postNCDScreeningFormValue.diabeticStatus.bpAndDiabeticStatus;
-    // }
-
-    // if (postNCDScreeningFormValue.bloodPressureStatus) {
-    //   postNCDScreeningFormValue.bloodPressureStatusID = postNCDScreeningFormValue.bloodPressureStatus.bpAndDiabeticStatusID;
-    //   postNCDScreeningFormValue.bloodPressureStatus = postNCDScreeningFormValue.bloodPressureStatus.bpAndDiabeticStatus;
-    // }
-
-    // if (postNCDScreeningFormValue.labTestOrders) {
-    //   // procedureName
-    //   let bP = false;
-    //   let bG = false;
-
-    //   postNCDScreeningFormValue.labTestOrders.filter((item) => {
-    //     if (item.procedureName === 'BP Measurement') {
-    //       bP = true;
-    //     }
-    //     if (item.procedureName === 'Blood Glucose Measurement') {
-    //       bG = true;
-    //     }
-    //   })
-    //   postNCDScreeningFormValue.isBloodGlucosePrescribed = bG;
-    //   postNCDScreeningFormValue.isBPPrescribed = bP;
-    // }
-
-    const laboratoryList = [
-      {
-        procedureID: 31,
-        procedureName: 'BP Measurement',
-      },
-      {
-        procedureID: 31,
-        procedureName: 'Blood Glucose Measurement',
-      },
-    ];
-
-    // postNCDScreeningFormValue.labTestOrders = postNCDScreeningFormValue.screeningTestList;
-    // postNCDScreeningFormValue.screeningTestList = undefined;
-
     // ncdScreeningVisitDetails
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    // let visitDetails = Object.assign({}, medicalForm.controls.patientVisitForm.controls.patientVisitDetailsForm.value, medicalForm.controls.patientVisitForm.controls.patientFileUploadDetailsForm.value, serviceDetails);
-    // let ncdScreeningDetails = Object.assign({}, postNCDScreeningFormValue, serviceDetails);
-    const ncdScreeningVitalDetails = Object.assign(
-      {},
-      medicalForm.controls.patientVitalsForm.value,
-    );
-    const ncdScreeningidrsDetails = Object.assign(
-      {},
-      medicalForm.controls.idrsScreeningForm.value,
-      serviceDetails,
-    );
-    // let ncdScreeningVisitDetails = Object.assign({}, { 'visitDetails': visitDetails }, { 'ncdScreeningDetails': ncdScreeningDetails }, {
-    //   benFlowID: localStorage.getItem('benFlowID'), beneficiaryID: localStorage.getItem('beneficiaryID'), sessionID: localStorage.getItem('sessionID'),
-    //   parkingPlaceID: parkingPlaceID, vanID: vanID
-    // });
 
-    // let chiefComplaints=  Object.assign({}, medicalForm.controls.patientVisitForm.controls.patientChiefComplaintsForm.value);
+    if (showIDRS === true) {
+      medicalForm.removeControl('diabetes');
+      medicalForm.removeControl('hypertension');
+      medicalForm.removeControl('oral');
+      medicalForm.removeControl('breast');
+      medicalForm.removeControl('cervical');
+      this.ncdScreeningidrsDetails = Object.assign(
+        {},
+        medicalForm.controls.idrsScreeningForm.value,
+        serviceDetails,
+      );
 
-    const ncdScreeningVisitDetails = Object.assign(
-      {},
-      {
-        visitDetails: this.postGenericVisitDetailForm(
-          medicalForm.controls.patientVisitForm,
-          null,
-          visitCategory,
-        ),
-      },
-      {
-        vitalDetails: this.postGenericVitalForm(
-          medicalForm.controls.patientVitalsForm,
-          null,
-        ),
-      },
-      {
-        historyDetails: this.postNCDScreeningHistoryForm(
-          medicalForm.controls.patientHistoryForm,
-          null,
-          visitCategory,
-        ),
-      },
-      { idrsDetails: ncdScreeningidrsDetails },
-      {
-        benFlowID: localStorage.getItem('benFlowID'),
-        beneficiaryID: localStorage.getItem('beneficiaryID'),
-        sessionID: localStorage.getItem('sessionID'),
-        parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
-      },
-    );
-
+      this.ncdScreeningVisitDetails = Object.assign(
+        {},
+        {
+          visitDetails: this.postGenericVisitDetailForm(
+            medicalForm.controls.patientVisitForm,
+            null,
+            visitCategory,
+            false,
+          ),
+        },
+        {
+          vitalDetails: this.postGenericVitalForm(
+            medicalForm.controls.patientVitalsForm,
+            null,
+          ),
+        },
+        {
+          historyDetails: this.postNCDScreeningHistoryForm(
+            medicalForm.controls.patientHistoryForm,
+            beneficiary,
+            visitCategory,
+          ),
+        },
+        { idrsDetails: this.ncdScreeningidrsDetails },
+        {
+          benFlowID: localStorage.getItem('benFlowID'),
+          beneficiaryID: localStorage.getItem('beneficiaryID'),
+          sessionID: localStorage.getItem('sessionID'),
+          parkingPlaceID: parkingPlaceID,
+          createdBy: localStorage.getItem('userName'),
+          tcRequest: tcRequest,
+          vanID: vanID,
+          beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+          benVisitID: null,
+          providerServiceMapID: localStorage.getItem('providerServiceID'),
+        },
+      );
+    } else {
+      this.setNCDConfirmedDiseases(medicalForm);
+      medicalForm.controls['patientVisitForm'].removeControl(
+        'patientChiefComplaintsForm',
+      );
+      // medicalForm.removeControl("patientHistoryForm");
+      medicalForm.removeControl('idrsScreeningForm');
+      this.ncdScreeningVisitDetails = Object.assign(
+        {},
+        {
+          visitDetails: this.postGenericVisitDetailForm(
+            medicalForm.controls.patientVisitForm,
+            null,
+            visitCategory,
+            showIDRS,
+          ),
+        },
+        {
+          vitalDetails: this.postGenericVitalForm(
+            medicalForm.controls.patientVitalsForm,
+            null,
+          ),
+        },
+        {
+          historyDetails: this.postNCDScreeningHistoryFormForCbac(
+            medicalForm.controls.patientHistoryForm,
+            beneficiary,
+            visitCategory,
+          ),
+        },
+        {
+          cbac: medicalForm.controls.patientVisitForm.controls.cbacScreeningForm
+            .value,
+        },
+        { diabetes: medicalForm.controls.diabetes.value },
+        { hypertension: medicalForm.controls.hypertension.value },
+        { oral: medicalForm.controls.oral.value },
+        { breast: medicalForm.controls.breast.value },
+        { cervical: medicalForm.controls.cervical.value },
+        {
+          benFlowID: localStorage.getItem('benFlowID'),
+          beneficiaryID: localStorage.getItem('beneficiaryID'),
+          sessionID: localStorage.getItem('sessionID'),
+          parkingPlaceID: parkingPlaceID,
+          createdBy: localStorage.getItem('userName'),
+          tcRequest: tcRequest,
+          vanID: vanID,
+          beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+          benVisitID: null,
+          providerServiceMapID: localStorage.getItem('providerServiceID'),
+        },
+      );
+    }
     console.log(
       'postNCDScreeningFormData',
-      JSON.stringify(ncdScreeningVisitDetails, null, 4),
+      JSON.stringify(this.ncdScreeningVisitDetails, null, 4),
     );
 
     return this.http.post(
       environment.postNCDScreeningDetails,
-      ncdScreeningVisitDetails,
+      this.ncdScreeningVisitDetails,
+    );
+  }
+
+  setNCDConfirmedDiseases(medicalForm: any) {
+    medicalForm.controls.diabetes.controls['confirmed'].setValue(
+      this.ncdScreeningService.isDiabetesConfirmed,
+    );
+
+    medicalForm.controls.hypertension.controls['confirmed'].setValue(
+      this.ncdScreeningService.isHypertensionConfirmed,
+    );
+
+    medicalForm.controls.oral.controls['confirmed'].setValue(
+      this.ncdScreeningService.isOralConfirmed,
+    );
+
+    medicalForm.controls.breast.controls['confirmed'].setValue(
+      this.ncdScreeningService.isBreastConfirmed,
+    );
+
+    medicalForm.controls.cervical.controls['confirmed'].setValue(
+      this.ncdScreeningService.isCervicalConfirmed,
     );
   }
 
@@ -1657,6 +1905,7 @@ export class NurseService {
     medicalForm: any,
     visitCategory: any,
     beneficiary: any,
+    tcRequest: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1668,6 +1917,7 @@ export class NurseService {
         medicalForm.controls.patientVisitForm,
         null,
         visitCategory,
+        false,
       ),
       vitalDetails: this.postGenericVitalForm(
         medicalForm.controls.patientVitalsForm,
@@ -1689,6 +1939,9 @@ export class NurseService {
       vanID: vanID,
       serviceID: serviceID,
       createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
 
     console.log(
@@ -1789,6 +2042,7 @@ export class NurseService {
     medicalForm: any,
     visitCategory: any,
     beneficiary: any,
+    tcRequest: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1800,6 +2054,7 @@ export class NurseService {
         medicalForm.controls.patientVisitForm,
         null,
         visitCategory,
+        false,
       ),
       vitalDetails: this.postGenericVitalForm(
         medicalForm.controls.patientVitalsForm,
@@ -1816,6 +2071,9 @@ export class NurseService {
       vanID: vanID,
       serviceID: serviceID,
       createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
 
     console.log(
@@ -1829,10 +2087,11 @@ export class NurseService {
     );
   }
 
-  postNurseCovidCareVisitForm(
+  postNurseCovidVisitForm(
     medicalForm: any,
     visitCategory: any,
     beneficiary: any,
+    tcRequest: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1844,6 +2103,7 @@ export class NurseService {
         medicalForm.controls.patientVisitForm,
         null,
         visitCategory,
+        false,
       ),
       vitalDetails: this.postGenericVitalForm(
         medicalForm.controls.patientVitalsForm,
@@ -1860,15 +2120,18 @@ export class NurseService {
       vanID: vanID,
       serviceID: serviceID,
       createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
 
     console.log(
-      'Nurse Covid CARE Visit Details',
+      'Nurse Covid-19 Visit Details',
       JSON.stringify(nurseGeneralOPDVisitDetails, null, 4),
     );
 
     return this.http.post(
-      environment.saveNurseCovidCareDetails,
+      environment.saveNurseCovidDetails,
       nurseGeneralOPDVisitDetails,
     );
   }
@@ -1877,6 +2140,7 @@ export class NurseService {
     medicalForm: any,
     visitCategory: any,
     beneficiary: any,
+    tcRequest: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1888,6 +2152,7 @@ export class NurseService {
         medicalForm.controls.patientVisitForm,
         null,
         visitCategory,
+        false,
       ),
       pNCDeatils: this.postPNCDetailForm(
         medicalForm.controls.patientPNCForm,
@@ -1914,6 +2179,9 @@ export class NurseService {
       vanID: vanID,
       serviceID: serviceID,
       createdBy: createdBy,
+      tcRequest: tcRequest,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
 
     console.log(
@@ -1937,6 +2205,12 @@ export class NurseService {
     if (temp.deliveryType) {
       temp.deliveryTypeID = temp.deliveryType.deliveryTypeID;
       temp.deliveryType = temp.deliveryType.deliveryType;
+    }
+
+    if (temp.deliveryConductedBy) {
+      temp.deliveryConductedByID =
+        temp.deliveryConductedBy.deliveryConductedByID;
+      temp.deliveryConductedBy = temp.deliveryConductedBy.deliveryConductedBy;
     }
 
     if (temp.deliveryComplication) {
@@ -1984,12 +2258,6 @@ export class NurseService {
       environment.getNcdScreeningVisitCountUrl + beneficiaryRegID,
     );
   }
-  getCountryName() {
-    return this.http.get(environment.getCountryName);
-  }
-  getCityName(countryID: any) {
-    return this.http.get(environment.getCityName + countryID + '/');
-  }
   getStateName(value: any) {
     return this.http.get(environment.getStateName + value);
   }
@@ -1999,7 +2267,12 @@ export class NurseService {
   getSubDistrictName(districtID: any) {
     return this.http.get(environment.getSubDistrictName + districtID);
   }
-
+  getCountryName() {
+    return this.http.get(environment.getCountryName);
+  }
+  getCityName(countryID: any) {
+    return this.http.get(environment.getCityName + countryID + '/');
+  }
   postNCDScreeningHistoryForm(
     medicalForm: any,
     beneficiary: any,
@@ -2028,6 +2301,26 @@ export class NurseService {
     };
   }
 
+  postNCDScreeningHistoryFormForCbac(
+    medicalForm: any,
+    beneficiary: any,
+    visitCategory: any,
+  ) {
+    const temp = {
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      benVisitID: null,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+    };
+
+    return {
+      personalHistory: this.postGeneralPersonalHistory(
+        medicalForm.controls.personalHistory,
+        temp,
+      ),
+    };
+  }
+
   postPhyscialActivityHistory(physicalActivityHistory: any, otherDetails: any) {
     const physicalActivityHistoryForm = Object.assign(
       {},
@@ -2037,29 +2330,60 @@ export class NurseService {
     // console.log('General examination', JSON.stringify(generalExaminationForm, null, 4));
     return physicalActivityHistoryForm;
   }
-
-  getPreviousReferredHistory(benRegID: string, visitCategory: any) {
-    return this.http.post(environment.previousReferredHistoryUrl, {
-      benRegID: benRegID,
-    });
-  }
-
   setNCDTemp(score: any) {
     this.temp = score;
     this.ncdTemp.next(score);
   }
-
-  clearMessage() {
+  clearNCDTemp() {
     this.temp = false;
     this.ncdTemp.next(false);
   }
-  getTMReferredCasesheetData(reqObj: any) {
-    return this.http.post(environment.getTMCasesheetData, reqObj);
+  setEnableLAssessment(score: any) {
+    this.temp = score;
+    this.enableLAssessment.next(score);
+  }
+  clearEnableLAssessment() {
+    this.temp = false;
+    this.enableLAssessment.next(false);
+  }
+  setIsMMUTC(isMMUTC: any) {
+    this.ismmutc.next(isMMUTC);
+  }
+
+  /**
+   * (C)
+   * DE40034072
+   *25-06-21
+   */
+
+  /*ANC Fetosense Test service*/
+
+  sendTestDetailsToFetosense(reqObj: any) {
+    return this.http.post(environment.savefetosenseTestDetailsUrl, reqObj);
+  }
+
+  fetchPrescribedFetosenseTests(benFlowId: any) {
+    return this.http.get(environment.getPrescribedFetosenseTests + benFlowId);
+  }
+
+  getESanjeevaniDetails(benRegID: any) {
+    return this.http.get(environment.getESanjeevaniDetailsUrl + benRegID);
+  }
+
+  setLMPForFetosenseTest(value: any) {
+    this.lmpFetosenseTest = value;
+    this.lmpFetosenseTestValue.next(value);
+  }
+
+  clearLMPForFetosenseTest() {
+    this.lmpFetosenseTest = null;
+    this.lmpFetosenseTestValue.next(null);
   }
 
   calculateBmiStatus(obj: any) {
     return this.http.post(environment.calculateBmiStatus, obj);
   }
+  /*END*/
 
   setRbsSelectedInInvestigation(score: any) {
     this.rbsSelectedInvestigation = score;
@@ -2121,13 +2445,31 @@ export class NurseService {
     );
   }
 
-  setEnableLAssessment(score: any) {
-    this.temp = score;
-    this.enableLAssessment.next(score);
+  getDiabetesStatus(findDiabeticStatus: any) {
+    return this.http.post(environment.diabetesStatusUrl, findDiabeticStatus);
   }
-  clearEnableLAssessment() {
-    this.temp = false;
-    this.enableLAssessment.next(false);
+
+  getBloodPressureStatus(findBPStatus: any) {
+    return this.http.post(environment.bloodPressureStatusUrl, findBPStatus);
+  }
+
+  getCbacDetailsFromNurse(request: any) {
+    return this.http.post(environment.confirmedDiseaseUrl, request);
+  }
+
+  getPreviousVisitConfirmedDiseases(request: any) {
+    return this.http.post(environment.previousVisitConfirmedUrl, request);
+  }
+
+  setUpdateForHrpStatus(value: any) {
+    this.hrpStatusUpdate = value;
+    this.hrpStatusUpdateValue.next(value);
+  }
+
+  loadNursePatientDetails(vanId: any) {
+    return this.http.get(this.getnurse104referredworklisturls + '/' + vanId);
+
+    // return this.http.get(this.getnurse104referredworklistURL/uptsu/getWorklistByVanID+"/"+vanId).map((res:any)=>res.json().data);
   }
 
   setNCDScreeningProvision(score: any) {

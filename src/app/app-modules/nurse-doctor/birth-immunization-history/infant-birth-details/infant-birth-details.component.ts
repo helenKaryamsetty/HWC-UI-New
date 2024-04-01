@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
@@ -29,15 +36,16 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { MasterdataService } from 'src/app/app-modules/core/services/masterdata.service';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+import { DoctorService, MasterdataService } from '../../shared/services';
 
 @Component({
   selector: 'app-infant-birth-details',
   templateUrl: './infant-birth-details.component.html',
   styleUrls: ['./infant-birth-details.component.css'],
 })
-export class InfantBirthDetailsComponent implements OnInit, DoCheck {
+export class InfantBirthDetailsComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
   @Input()
   visitType: any;
 
@@ -93,7 +101,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
     this.getBeneficiaryDetails();
 
     this.doctorService.fetchInfantDataCheck$.subscribe((responsevalue) => {
-      if (responsevalue == true) {
+      if (responsevalue === true) {
         this.getNurseFetchDetails();
       }
     });
@@ -104,7 +112,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
   }
 
   ngOnChanges() {
-    // if (this.mode == "view") {
+    // if (this.mode === "view") {
     //   this.getNurseFetchDetails();
     // }
     console.log('success');
@@ -127,12 +135,12 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
           this.gestationList = res.gestation;
           this.deliveryConductedByList = res.deliveryConductedByMaster;
           this.congenitalAnomaliesList = res.m_congenitalanomalies;
-          if (this.mode == 'view') {
+          if (this.mode === 'view') {
             this.getNurseFetchDetails();
           }
 
           //for fetching previous visit immunization history
-          if (this.attendant == 'nurse') {
+          if (this.attendant === 'nurse') {
             this.getPreviousInfantBirthDetails();
           }
         } else {
@@ -166,7 +174,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
         );
       }
     });
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -180,7 +188,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
         this.infantBirthDetailsForm.controls['gestation'].setValue(item.name);
       }
     });
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -196,13 +204,13 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
         );
       }
     });
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
 
   otherPlaceOfDelivery(isFetch: any) {
-    if (isFetch == true) {
+    if (isFetch === true) {
       this.infantBirthDetailsForm.get('deliveryTypeID')?.reset();
       this.infantBirthDetailsForm.get('deliveryType')?.reset();
     }
@@ -218,19 +226,19 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
       }
     });
     if (
-      this.infantBirthDetailsForm.controls['deliveryPlace'].value ==
+      this.infantBirthDetailsForm.controls['deliveryPlace'].value ===
         'Home-Supervised' ||
-      this.infantBirthDetailsForm.controls['deliveryPlace'].value ==
+      this.infantBirthDetailsForm.controls['deliveryPlace'].value ===
         'Home-Unsupervised'
     ) {
       const deliveryType = this.deliveryTypeList.filter((item: any) => {
-        return item.deliveryType == 'Normal Delivery';
+        return item.deliveryType === 'Normal Delivery';
       });
       this.deliveryTypeList = deliveryType;
     } else if (
-      this.infantBirthDetailsForm.controls['deliveryPlace'].value ==
+      this.infantBirthDetailsForm.controls['deliveryPlace'].value ===
         'Subcentre' ||
-      this.infantBirthDetailsForm.controls['deliveryPlace'].value == 'PHC'
+      this.infantBirthDetailsForm.controls['deliveryPlace'].value === 'PHC'
     ) {
       const deliveryType = deliveryList.filter((item: any) => {
         return item.deliveryType !== 'Cesarean Section (LSCS)';
@@ -247,7 +255,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
       this.enableOtherDeliveryPlace = false;
       this.infantBirthDetailsForm.get('otherDeliveryPlace')?.reset();
     }
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -272,7 +280,7 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
       this.enableOtherBirthComplication = false;
       this.infantBirthDetailsForm.get('otherDeliveryComplication')?.reset();
     }
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -289,13 +297,13 @@ export class InfantBirthDetailsComponent implements OnInit, DoCheck {
         this.currentLanguageSet.alerts.info.recheckValue,
       );
     }
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
 
   onValueChange() {
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }

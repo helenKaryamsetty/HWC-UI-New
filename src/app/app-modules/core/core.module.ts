@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // import { HttpInterceptor } from './services/http-interceptor.service';
 import { SpinnerService } from './services/spinner.service';
-import { ConfirmationService } from './services/confirmation.service';
 import { CameraService } from './services/camera.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
@@ -43,7 +42,6 @@ import { HttpServiceService } from './services/http-service.service';
 import { AllergenSearchComponent } from './component/allergen-search/allergen-search.component';
 import { SpecialistLoginComponent } from './component/specialist-login/specialist-login.component';
 // import { AppFooterComponent } from './component/app-footer/app-footer.component';
-import { MasterdataService } from './services/masterdata.service';
 import { AppHeaderComponent } from './component/app-header/app-header.component';
 import { BeneficiaryDetailsComponent } from './component/beneficiary-details/beneficiary-details.component';
 import { CalibrationComponent } from './component/calibration/calibration.component';
@@ -64,6 +62,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { IotService } from './services/iot.service';
 import { AppFooterComponent } from './component/app-footer/app-footer.component';
 import { HealthIdDisplayModalComponent } from './component/health-id-display-modal/health-id-display-modal.component';
+import { ConfirmationService } from './services/confirmation.service';
 // import { HealthIdDisplayModalComponent } from './components/health-id-display-modal/health-id-display-modal.component';
 // import { myHealthId } from './directives/myHealthId/myHealthId.directive';
 
@@ -169,6 +168,7 @@ export class CoreModule {
       providers: [
         //         HttpInterceptor,
         //         HttpServiceService,
+
         ConfirmationService,
         //         CameraService,
         TextareaDialog,
@@ -183,7 +183,6 @@ export class CoreModule {
         TelemedicineService,
         IotService,
         HttpServiceService,
-        MasterdataService,
         //         {
         //           provide: Http,
         //           useFactory: HttpInterceptorFactory,

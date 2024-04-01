@@ -9,3 +9,8 @@ md-card {
 .overflow {
     overflow-x: auto;
 }
+
+embed{
+    height:500px;
+    width:100%;
+}

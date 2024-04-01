@@ -19,8 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MasterdataService,
@@ -28,10 +34,10 @@ import {
   DoctorService,
 } from '../../../shared/services';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-development-history',
@@ -43,7 +49,7 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   developmentHistoryForm!: FormGroup;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   @Input()
   mode!: string;
@@ -52,26 +58,20 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   currentLanguageSet: any;
 
   constructor(
+    private fb: FormBuilder,
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
     private doctorService: DoctorService,
+    public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
     private confirmationService: ConfirmationService,
-    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
-    this.assignSelectedLanguage();
     this.getMasterData();
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    this.httpServiceService.currentLangugae$.subscribe(
+      (response) => (this.currentLanguageSet = response),
+    );
   }
 
   ngOnDestroy() {
@@ -87,12 +87,19 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           console.log('this.masterData ', this.masterData);
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
@@ -100,10 +107,9 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   developmentHistoryData: any;
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -122,10 +128,10 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   getPreviousDevelopmentalHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
-    console.log('here checkig', this.visitCategory);
+    console.log('here checkig', this.visitType);
 
     this.nurseService
-      .getPreviousDevelopmentalHistory(benRegID, this.visitCategory)
+      .getPreviousDevelopmentalHistory(benRegID, this.visitType)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {
@@ -162,5 +168,49 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
             .developmentalhistorydetails,
       },
     });
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  resetGrossMotorMilestoneAttaintedStatus() {
+    if (
+      this.developmentHistoryForm.controls['grossMotorMilestones'].value
+        .length <= 0
+    ) {
+      //this.developmentHistoryForm.get('isGrossMotorMilestones').reset();
+    }
+  }
+
+  resetfineMotorMilestonesAttaintedStatus() {
+    if (
+      this.developmentHistoryForm.controls['fineMotorMilestones'].value
+        .length <= 0
+    ) {
+      //this.developmentHistoryForm.get('isFineMotorMilestones').reset();
+    }
+  }
+
+  resetsocialMilestonesAttaintedStatus() {
+    if (
+      this.developmentHistoryForm.controls['socialMilestones'].value.length <= 0
+    ) {
+      //this.developmentHistoryForm.get('isSocialMilestones').reset();
+    }
+  }
+
+  resetlanguageMilestonesAttaintedStatus() {
+    if (
+      this.developmentHistoryForm.controls['languageMilestones'].value.length <=
+      0
+    ) {
+      //this.developmentHistoryForm.get('isLanguageMilestones').reset();
+    }
   }
 }

@@ -19,35 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import {
-  MatDialogRef,
-  MatDialog,
-  MatDialogConfig,
-} from '@angular/material/dialog';
-
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  DoCheck,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-
 import { CameraService } from '../../core/services/camera.service';
-
-import { environment } from 'src/environments/environment';
-
 import * as moment from 'moment';
-import { SchedulerComponent } from './../scheduler/scheduler.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MasterdataService } from '../../core/services/masterdata.service';
-import { DoctorService } from '../../core/services/doctor.service';
+import { DoctorService, MasterdataService } from '../shared/services';
+import { SchedulerComponent } from '../scheduler/scheduler.component';
+
 @Component({
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
   styleUrls: ['./doctor-worklist.component.css'],
 })
-export class DoctorWorklistComponent implements OnInit, OnDestroy {
+export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   rowsPerPage = 5;
   activePage = 1;
   pagedList: any[] = [];
@@ -155,8 +152,8 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
     this.filterTerm = null;
     this.beneficiaryMetaData = [];
     this.doctorService.getDoctorWorklist().subscribe(
-      (data) => {
-        if (data && data.statusCode == 200 && data.data) {
+      (data: any) => {
+        if (data && data.statusCode === 200 && data.data) {
           console.log('doctor worklist', JSON.stringify(data.data, null, 4));
           this.beneficiaryMetaData = data.data;
           data.data.map((item: any) => {
@@ -230,18 +227,18 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
         console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
           if (
-            key != 'agentId' &&
-            (key == 'beneficiaryID' ||
-              key == 'benName' ||
-              key == 'genderName' ||
-              key == 'age' ||
-              key == 'statusMessage' ||
-              key == 'VisitCategory' ||
-              key == 'benVisitNo' ||
-              key == 'districtName' ||
-              key == 'preferredPhoneNum' ||
-              key == 'villageName' ||
-              key == 'beneficiaryRegID' ||
+            key !== 'agentId' &&
+            (key === 'beneficiaryID' ||
+              key === 'benName' ||
+              key === 'genderName' ||
+              key === 'age' ||
+              key === 'statusMessage' ||
+              key === 'VisitCategory' ||
+              key === 'benVisitNo' ||
+              key === 'districtName' ||
+              key === 'preferredPhoneNum' ||
+              key === 'villageName' ||
+              key === 'beneficiaryRegID' ||
               key ||
               'visitDate')
           ) {
@@ -266,7 +263,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
   patientImageView(benregID: any) {
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benregID)
-      .subscribe((data) => {
+      .subscribe((data: any) => {
         if (data?.benImage) this.cameraService.viewImage(data.benImage);
         else
           this.confirmationService.alert(
@@ -278,21 +275,21 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
   loadDoctorExaminationPage(beneficiary: any) {
     console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
     localStorage.setItem('visitCode', beneficiary.visitCode);
-    if (beneficiary.statusCode == 1) {
+    if (beneficiary.statusCode === 1) {
       this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.statusCode == 2) {
+    } else if (beneficiary.statusCode === 2) {
       this.confirmationService.alert(beneficiary.statusMessage);
-    } else if (beneficiary.statusCode == 3) {
+    } else if (beneficiary.statusCode === 3) {
       this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.statusCode == 4) {
+    } else if (beneficiary.statusCode === 4) {
       this.checkDoctorStatusAtTcCancelled(beneficiary);
-    } else if (beneficiary.statusCode == 5) {
+    } else if (beneficiary.statusCode === 5) {
       this.confirmationService.alert(beneficiary.statusMessage);
-    } else if (beneficiary.statusCode == 9) {
+    } else if (beneficiary.statusCode === 9) {
       this.viewAndPrintCaseSheet(beneficiary);
-    } else if (beneficiary.statusCode == 10) {
+    } else if (beneficiary.statusCode === 10) {
       this.confirmationService.alert(beneficiary.statusMessage);
-    } else if (beneficiary.statusCode == 11) {
+    } else if (beneficiary.statusCode === 11) {
       this.routeToWorkArea(beneficiary);
     }
   }
@@ -325,34 +322,34 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
       .getCBACDetails(beneficiary.beneficiaryRegID)
       .subscribe(
         (res: any) => {
-          if (res.statusCode == 200 && res.data != null) {
+          if (res.statusCode === 200 && res.data !== null) {
             if (
-              res.data.benRegID != undefined &&
-              res.data.benRegID != null &&
-              ((res.data.suspectedTB != undefined &&
-                res.data.suspectedTB != null) ||
-                (res.data.suspectedNCD != undefined &&
-                  res.data.suspectedNCD != null) ||
-                (res.data.suspectedHRP != undefined &&
-                  res.data.suspectedHRP != null) ||
-                (res.data.suspectedNCDDiseases != undefined &&
-                  res.data.suspectedNCDDiseases != null))
+              res.data.benRegID !== undefined &&
+              res.data.benRegID !== null &&
+              ((res.data.suspectedTB !== undefined &&
+                res.data.suspectedTB !== null) ||
+                (res.data.suspectedNCD !== undefined &&
+                  res.data.suspectedNCD !== null) ||
+                (res.data.suspectedHRP !== undefined &&
+                  res.data.suspectedHRP !== null) ||
+                (res.data.suspectedNCDDiseases !== undefined &&
+                  res.data.suspectedNCDDiseases !== null))
             ) {
               if (
-                res.data.suspectedHRP != undefined &&
-                res.data.suspectedHRP != null &&
+                res.data.suspectedHRP !== undefined &&
+                res.data.suspectedHRP !== null &&
                 res.data.suspectedHRP.toLowerCase() === 'yes'
               )
                 this.cbacData.push('High Risk Pregnancy');
               if (
-                res.data.suspectedTB != undefined &&
-                res.data.suspectedTB != null &&
+                res.data.suspectedTB !== undefined &&
+                res.data.suspectedTB !== null &&
                 res.data.suspectedTB.toLowerCase() === 'yes'
               )
                 this.cbacData.push('Tuberculosis');
               if (
-                res.data.suspectedNCDDiseases != undefined &&
-                res.data.suspectedNCDDiseases != null &&
+                res.data.suspectedNCDDiseases !== undefined &&
+                res.data.suspectedNCDDiseases !== null &&
                 res.data.suspectedNCDDiseases.length > 0
               ) {
                 const diseases = res.data.suspectedNCDDiseases.split(',');
@@ -374,8 +371,8 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
               }
               this.beneficiaryDetailsService.cbacData = this.cbacData;
               if (
-                this.cbacData != undefined &&
-                this.cbacData != null &&
+                this.cbacData !== undefined &&
+                this.cbacData !== null &&
                 this.cbacData.length > 0
               ) {
                 this.confirmationService
@@ -456,13 +453,13 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
   }
 
   checkDoctorStatusAtTcCancelled(beneficiary: any) {
-    if (beneficiary.doctorFlag == 2 || beneficiary.nurseFlag == 2) {
+    if (beneficiary.doctorFlag === 2 || beneficiary.nurseFlag === 2) {
       this.confirmationService.alert(beneficiary.statusMessage);
-    } else if (beneficiary.doctorFlag == 1) {
+    } else if (beneficiary.doctorFlag === 1) {
       this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.doctorFlag == 3) {
+    } else if (beneficiary.doctorFlag === 3) {
       this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.doctorFlag == 9) {
+    } else if (beneficiary.doctorFlag === 9) {
       this.viewAndPrintCaseSheet(beneficiary);
     }
   }
@@ -483,7 +480,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.beneficiaryList.forEach((benef: any, i: any) => {
-            if (benef.benFlowID == benFlowID) {
+            if (benef.benFlowID === benFlowID) {
               filteredBenIndex = i;
             }
           });
@@ -508,7 +505,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
                 modifiedBy: localStorage.getItem('userName'),
               })
               .subscribe(
-                (res) => {
+                (res: any) => {
                   if (res && res.statusCode && res.data) {
                     // this.confirmationService.alert(res.data.response, "success");
                     this.confirmationService.alert(
@@ -542,18 +539,18 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
       statusMessage: '',
     };
 
-    if (beneficiaryVisitDetials.specialist_flag == 0) {
+    if (beneficiaryVisitDetials.specialist_flag === 0) {
       if (beneficiaryVisitDetials.lab_technician_flag === 2) {
         status.statusCode = 10;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.fetosenseTest_pending;
       } else if (
-        beneficiaryVisitDetials.nurseFlag == 2 ||
-        beneficiaryVisitDetials.doctorFlag == 2
+        beneficiaryVisitDetials.nurseFlag === 2 ||
+        beneficiaryVisitDetials.doctorFlag === 2
       ) {
         status.statusCode = 2;
         status.statusMessage = this.currentLanguageSet.alerts.info.pending;
-      } else if (beneficiaryVisitDetials.doctorFlag == 1) {
+      } else if (beneficiaryVisitDetials.doctorFlag === 1) {
         status.statusCode = 1;
         status.statusMessage =
           this.currentLanguageSet.common.pendingForConsultation;
@@ -561,16 +558,16 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
         status.statusCode = 11;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.fetosenseTest_done;
-      } else if (beneficiaryVisitDetials.doctorFlag == 3) {
+      } else if (beneficiaryVisitDetials.doctorFlag === 3) {
         status.statusCode = 3;
         status.statusMessage = this.currentLanguageSet.alerts.info.labtestDone;
-      } else if (beneficiaryVisitDetials.doctorFlag == 9) {
+      } else if (beneficiaryVisitDetials.doctorFlag === 9) {
         status.statusCode = 9;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.consultation_done;
       }
     } else {
-      if (beneficiaryVisitDetials.specialist_flag == 9) {
+      if (beneficiaryVisitDetials.specialist_flag === 9) {
         status.statusCode = 9;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.consultation_done;
@@ -579,30 +576,30 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
         status.statusMessage =
           this.currentLanguageSet.alerts.info.fetosenseTest_pending;
       } else if (
-        beneficiaryVisitDetials.doctorFlag == 2 ||
-        beneficiaryVisitDetials.nurseFlag == 2
+        beneficiaryVisitDetials.doctorFlag === 2 ||
+        beneficiaryVisitDetials.nurseFlag === 2
       ) {
         status.statusCode = 2;
         status.statusMessage = this.currentLanguageSet.alerts.info.pending;
       } else if (
-        beneficiaryVisitDetials.specialist_flag == 1 ||
-        beneficiaryVisitDetials.specialist_flag == 2 ||
-        beneficiaryVisitDetials.specialist_flag == 3
+        beneficiaryVisitDetials.specialist_flag === 1 ||
+        beneficiaryVisitDetials.specialist_flag === 2 ||
+        beneficiaryVisitDetials.specialist_flag === 3
       ) {
         status.statusCode = 5;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.pendingForConsultation;
-      } else if (beneficiaryVisitDetials.specialist_flag == 4) {
+      } else if (beneficiaryVisitDetials.specialist_flag === 4) {
         status.statusCode = 4; // MMUFloW
         status.statusMessage = this.currentLanguageSet.alerts.info.teleCancel;
       } else if (beneficiaryVisitDetials.lab_technician_flag === 3) {
         status.statusCode = 11;
         status.statusMessage =
           this.currentLanguageSet.alerts.info.fetosenseTest_done;
-      } else if (beneficiaryVisitDetials.doctorFlag == 3) {
+      } else if (beneficiaryVisitDetials.doctorFlag === 3) {
         status.statusCode = 3;
         status.statusMessage = this.currentLanguageSet.alerts.info.labtestDone;
-      } else if (beneficiaryVisitDetials.doctorFlag == 1) {
+      } else if (beneficiaryVisitDetials.doctorFlag === 1) {
         status.statusCode = 1;
         status.statusMessage =
           this.currentLanguageSet.common.pendingForConsultation;
@@ -630,7 +627,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
               modifiedBy: localStorage.getItem('userName'),
             })
             .subscribe(
-              (res) => {
+              (res: any) => {
                 if (res && res.statusCode && res.data) {
                   this.confirmationService.alert(res.data.response, 'success');
                   this.loadWorklist();
@@ -669,10 +666,10 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
       tcRequest: tcRequest,
     };
     this.doctorService.scheduleTC(scedulerRequest).subscribe(
-      (res) => {
+      (res: any) => {
         console.log('res', res);
 
-        if (res.statusCode == 200) {
+        if (res.statusCode === 200) {
           this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.beneficiaryDetails,
             'success',
@@ -694,8 +691,8 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy {
       this.doctorService
         .invokeSwymedCall(beneficiary.tCSpecialistUserID)
         .subscribe(
-          (res) => {
-            if (res.statusCode == 200 && res.data) {
+          (res: any) => {
+            if (res.statusCode === 200 && res.data) {
               window.location.href = res.data.response;
               this.updateTCStartTime(beneficiary);
             } else {

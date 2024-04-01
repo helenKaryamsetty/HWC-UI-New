@@ -195,7 +195,7 @@ export class SearchDialogComponent implements OnInit, DoCheck {
    * get states from localstorage and set default state
    */
   getStatesData() {
-    const location = JSON.parse(localStorage.getItem('location') || '{}');
+    const location: any = localStorage.getItem('location');
     console.log(location, 'gotit');
     if (location) {
       this.states = location.stateMaster;

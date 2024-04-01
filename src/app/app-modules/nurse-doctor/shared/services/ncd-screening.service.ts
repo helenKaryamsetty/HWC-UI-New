@@ -20,7 +20,6 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Injectable } from '@angular/core';
-import { nextTick } from 'process';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -37,13 +36,13 @@ export class NcdScreeningService {
   valueChanged = false;
   /// Change this variable according to the nurse response of cbac screening
   fetchCBACResponseFromNurse = false;
-  enableDiseaseConfirm: string | any = '';
+  enableDiseaseConfirm = false;
 
-  isDiabetesConfirmed: boolean | any = null;
-  isHypertensionConfirmed: boolean | any = null;
-  isOralConfirmed: boolean | any = null;
-  isCervicalConfirmed: boolean | any = null;
-  isBreastConfirmed: boolean | any = null;
+  isDiabetesConfirmed = false;
+  isHypertensionConfirmed = false;
+  isOralConfirmed = false;
+  isCervicalConfirmed = false;
+  isBreastConfirmed = false;
   diabetesScreeningValidationOnSave = false;
   hypertensionScreeningValidationOnSave = false;
   breastScreeningValidationOnSave = false;
@@ -73,13 +72,13 @@ export class NcdScreeningService {
   valueChangedForNCD = new BehaviorSubject<boolean>(this.valueChanged);
   valueChangedForNCD$ = this.valueChangedForNCD.asObservable();
 
-  enableDiseaseConfirmForm = new BehaviorSubject<any>(
+  enableDiseaseConfirmForm = new BehaviorSubject<boolean>(
     this.enableDiseaseConfirm,
   );
   enableDiseaseConfirmForm$ = this.enableDiseaseConfirmForm.asObservable();
 
-  confirmedDiseasesLists = [];
-  confirmedDiseasesListCheck = new BehaviorSubject<any>(
+  confirmedDiseasesLists: any = [];
+  confirmedDiseasesListCheck = new BehaviorSubject<boolean>(
     this.confirmedDiseasesLists,
   );
   confirmedDiseasesListCheck$ = this.confirmedDiseasesListCheck.asObservable();
@@ -98,66 +97,66 @@ export class NcdScreeningService {
   fetchScreeningDataCheck$ = this.fetchScreeningData.asObservable();
 
   constructor() {}
-  diabetesSuspectStatus(diabetesStatus: boolean) {
+  diabetesSuspectStatus(diabetesStatus: any) {
     this.diabetesScreeningStatus.next(diabetesStatus);
   }
-  hypertensionSuspectStatus(hypertensionStatus: boolean) {
+  hypertensionSuspectStatus(hypertensionStatus: any) {
     this.hypertensionScreeningStatus.next(hypertensionStatus);
   }
-  oralSuspectStatus(suspectStatus: boolean) {
+  oralSuspectStatus(suspectStatus: any) {
     this.oralScreeningStatus.next(suspectStatus);
   }
-  breastSuspectStatus(breastStatus: boolean) {
+  breastSuspectStatus(breastStatus: any) {
     this.breastScreeningStatus.next(breastStatus);
   }
-  cervicalSuspectStatus(cervicalStatus: boolean) {
+  cervicalSuspectStatus(cervicalStatus: any) {
     this.cervicalScreeningStatus.next(cervicalStatus);
   }
 
   /* Enabling History Screen*/
-  enableHistoryScreenOnIdrs(enablingIdrs: boolean) {
+  enableHistoryScreenOnIdrs(enablingIdrs: any) {
     this.enableIdrsForm.next(enablingIdrs);
   }
 
   /* Enabling Disease confirmed Screen*/
-  enableDiseaseConfirmationScreen(enablingDisease: string) {
+  enableDiseaseConfirmationScreen(enablingDisease: any) {
     this.enableDiseaseConfirmForm.next(enablingDisease);
   }
 
   clearDiseaseConfirmationScreenFlag() {
-    this.enableDiseaseConfirm = null;
-    this.enableDiseaseConfirmForm.next(null);
+    this.enableDiseaseConfirm = false;
+    this.enableDiseaseConfirmForm.next(false);
   }
 
   /* Setting confirmed diseases*/
-  setConfirmedDiseasesForScreening(confirmedDiseasesList: any[]) {
+  setConfirmedDiseasesForScreening(confirmedDiseasesList: any) {
     this.confirmedDiseasesListCheck.next(confirmedDiseasesList);
   }
 
   clearConfirmedDiseasesForScreening() {
     this.confirmedDiseasesLists = [];
-    this.confirmedDiseasesListCheck.next(null);
+    this.confirmedDiseasesListCheck.next(false);
   }
 
   /* Hiding Vitals form*/
-  disableViatlsFormOnCbac(enablingCbac: boolean) {
+  disableViatlsFormOnCbac(enablingCbac: any) {
     this.checkIfCbacForm.next(enablingCbac);
   }
 
   /* Enable history form after adding control to the medical form */
-  enableHistoryFormAfterInitialization(historyFormControlAdded: boolean) {
+  enableHistoryFormAfterInitialization(historyFormControlAdded: any) {
     this.enableHistoryFormafterFormInit.next(historyFormControlAdded);
   }
 
-  checkIfCbac(cbacIdrsValue: boolean) {
+  checkIfCbac(cbacIdrsValue: any) {
     this.checkIfCbacForm.next(cbacIdrsValue);
   }
 
-  screeningValueChanged(valueChanged: boolean) {
+  screeningValueChanged(valueChanged: any) {
     this.valueChangedForNCD.next(valueChanged);
   }
 
-  setScreeningDataFetch(screeningData: boolean) {
+  setScreeningDataFetch(screeningData: any) {
     this.fetchScreeningData.next(screeningData);
   }
 }

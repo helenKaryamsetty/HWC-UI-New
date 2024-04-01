@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -27,16 +26,16 @@ import { BehaviorSubject } from 'rxjs';
 export class TestInVitalsService {
   constructor() {}
 
-  vitalRBSTest: any = null;
+  vitalRBSTest: any = false;
 
   vitalRBSTestResult = new BehaviorSubject(this.vitalRBSTest);
   vitalRBSTestResult$ = this.vitalRBSTestResult.asObservable();
 
-  vitalRBSTestUpdate: any = null;
+  vitalRBSTestUpdate: any = false;
   vitalRBSTestResultInUpdate = new BehaviorSubject(this.vitalRBSTestUpdate);
   vitalRBSTestResultInUpdate$ = this.vitalRBSTestResultInUpdate.asObservable();
 
-  //change in systolic Bp
+  //Change in Vitals RBS Test result during fetch
   setVitalsRBSValueInReports(value: any) {
     this.vitalRBSTest = value;
     this.vitalRBSTestResult.next(value);

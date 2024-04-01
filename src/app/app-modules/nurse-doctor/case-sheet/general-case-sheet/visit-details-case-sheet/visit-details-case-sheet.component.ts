@@ -19,17 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
-import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
-import { NurseService } from 'app/app-modules/nurse-doctor/shared/services';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NurseService } from '../../../shared/services';
 
 @Component({
   selector: 'app-visit-details-case-sheet',
   templateUrl: './visit-details-case-sheet.component.html',
   styleUrls: ['./visit-details-case-sheet.component.css'],
 })
-export class VisitDeatilsCaseSheetComponent implements OnInit {
+export class VisitDeatilsCaseSheetComponent
+  implements OnChanges, OnInit, DoCheck
+{
   @Input()
   caseSheetData: any;
 
@@ -70,7 +79,7 @@ export class VisitDeatilsCaseSheetComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.caseSheetData != undefined && this.caseSheetData != null) {
+    if (this.caseSheetData !== undefined && this.caseSheetData !== null) {
       if (
         this.caseSheetData &&
         this.caseSheetData.nurseData &&
@@ -112,7 +121,7 @@ export class VisitDeatilsCaseSheetComponent implements OnInit {
     }
   }
 
-  loadConfirmedDiseasesFromNCD(benRegId) {
+  loadConfirmedDiseasesFromNCD(benRegId: any) {
     this.previousConfirmedDiseasesList = [];
     this.enableConfirmedDiseases = false;
     const obj = {
@@ -121,8 +130,8 @@ export class VisitDeatilsCaseSheetComponent implements OnInit {
 
     this.nurseService
       .getPreviousVisitConfirmedDiseases(obj)
-      .subscribe((value) => {
-        if (value != null && value.statusCode == 200 && value.data != null) {
+      .subscribe((value: any) => {
+        if (value !== null && value.statusCode === 200 && value.data !== null) {
           this.previousConfirmedDiseasesList = [];
 
           if (

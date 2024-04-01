@@ -195,9 +195,9 @@
               <td>{{element.familyName | titlecase}}</td>
               <td>{{element.noOfmembers}}</td>
               <td>
-                <md-icon mdTooltip="Edit" class="mat-icon material-icons" *ngIf="benFamilyId !== null && benFamilyId == element.familyId" (click)="getFamilyMembers(true,element)" role="img" aria-hidden="true" style="cursor: pointer" 
+                <md-icon mdTooltip="Edit" class="mat-icon material-icons" *ngIf="benFamilyId !== null && benFamilyId === element.familyId" (click)="getFamilyMembers(true,element)" role="img" aria-hidden="true" style="cursor: pointer" 
                 >edit</md-icon>
-                <md-icon mdTooltip="Add Member" class="mat-icon material-icons" *ngIf="benFamilyId == null" (click)="getFamilyMembers(false,element)" role="img" aria-hidden="true" style="cursor: pointer"
+                <md-icon mdTooltip="Add Member" class="mat-icon material-icons" *ngIf="benFamilyId === null" (click)="getFamilyMembers(false,element)" role="img" aria-hidden="true" style="cursor: pointer"
                 >add</md-icon>
               </td>
 
@@ -299,7 +299,7 @@
                     >
                   </td>
                 </ng-container>
-                <ng-template [ngIf]="familySearchList?.length === 0">
+                <ng-template [ngIf]="familySearchList.length === 0">
                   <tr *ngFor="let row of blankTable">
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>

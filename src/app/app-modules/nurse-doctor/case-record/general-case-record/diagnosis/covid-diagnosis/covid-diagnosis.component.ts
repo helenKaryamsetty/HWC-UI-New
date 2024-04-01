@@ -19,19 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  OnChanges,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DoctorService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-covid-diagnosis',
   templateUrl: './covid-diagnosis.component.html',
   styleUrls: ['./covid-diagnosis.component.css'],
 })
-export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
+export class CovidDiagnosisComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
   utils = new GeneralUtils(this.fb);
 
   @Input()
@@ -39,20 +49,28 @@ export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
 
   @Input()
   caseRecordMode!: string;
-
-  designation: any;
-  specialist!: boolean;
-  doctorDiagnosis: any;
   current_language_set: any;
+  designation: any;
+  specialist = false;
+  doctorDiagnosis: any;
 
   constructor(
     private fb: FormBuilder,
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.designation = localStorage.getItem('designation');
+    if (this.designation === 'TC Specialist') {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
+      this.specialist = true;
+    } else {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].disable();
+      this.specialist = false;
+    }
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['doctorDiagnosis'].disable();
       this.specialist = true;
@@ -61,13 +79,7 @@ export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
       this.specialist = false;
     }
   }
-  get specialistDaignosis() {
-    return this.generalDiagnosisForm.get('specialistDiagnosis');
-  }
 
-  get doctorDaignosis() {
-    return this.generalDiagnosisForm.get('doctorDiagnosis');
-  }
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -76,21 +88,26 @@ export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
+  get specialistDaignosis() {
+    return this.generalDiagnosisForm.get('specialistDiagnosis');
+  }
+
+  get doctorDaignosis() {
+    return this.generalDiagnosisForm.get('doctorDiagnosis');
+  }
+
   ngOnChanges() {
     if (this.caseRecordMode === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
-      this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
+      this.getDiagnosisDetails();
     }
   }
 
-  diagnosisSubscription: any;
-  getDiagnosisDetails(beneficiaryRegID: any, visitID: any, visitCategory: any) {
-    this.diagnosisSubscription = this.doctorService
-      .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.diagnosis) {
+  diagnosisSubscription!: Subscription;
+  getDiagnosisDetails() {
+    this.diagnosisSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((res) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
           console.log('caserecord', res.data.diagnosis);
 
           this.patchDiagnosisDetails(res.data.diagnosis);
@@ -104,5 +121,10 @@ export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
       doctorDiagnosis: diagnosis.doctorDiagnonsis,
     });
     this.generalDiagnosisForm.patchValue(diagnosis);
+  }
+  ngOnDestroy() {
+    if (this.diagnosisSubscription) {
+      this.diagnosisSubscription.unsubscribe();
+    }
   }
 }

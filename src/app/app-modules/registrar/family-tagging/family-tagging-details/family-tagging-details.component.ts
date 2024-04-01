@@ -19,7 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
@@ -37,7 +45,9 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './family-tagging-details.component.html',
   styleUrls: ['./family-tagging-details.component.css'],
 })
-export class FamilyTaggingDetailsComponent implements OnInit {
+export class FamilyTaggingDetailsComponent
+  implements OnInit, DoCheck, OnDestroy
+{
   @ViewChild('sidenav')
   sidenav: any;
 
@@ -334,7 +344,7 @@ export class FamilyTaggingDetailsComponent implements OnInit {
   PatientRevistData() {
     this.revisitDataSubscription =
       this.registrarService.beneficiaryEditDetails.subscribe((res: any) => {
-        if (res != null) {
+        if (res !== null) {
           this.revisitData = Object.assign({}, res);
         }
       });
@@ -351,7 +361,7 @@ export class FamilyTaggingDetailsComponent implements OnInit {
 
     this.familyTaggingService.getFamilyMemberDetails(memberReqObj).subscribe(
       (res: any) => {
-        if (res.statusCode == 200 && res.data) {
+        if (res.statusCode === 200 && res.data) {
           const familyMembersList = res.data;
           this.openFamilyTagDialog(isEdit, familyDetails, familyMembersList);
         } else {
@@ -422,7 +432,7 @@ export class FamilyTaggingDetailsComponent implements OnInit {
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
       (beneficiaryDetails: any) => {
-        if (beneficiaryDetails && beneficiaryDetails.length == 1) {
+        if (beneficiaryDetails && beneficiaryDetails.length === 1) {
           this.benFamilyId =
             beneficiaryDetails[0].familyId !== undefined &&
             beneficiaryDetails[0].familyId !== null

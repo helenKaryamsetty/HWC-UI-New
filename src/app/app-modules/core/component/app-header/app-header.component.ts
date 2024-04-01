@@ -66,8 +66,8 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
         { link: "/registrar/search", label: "Search" }
       ]
     },
-    { role: "Nurse", link: "/nurse-doctor/nurse-worklist", label: "Nurse" },
-    { role: "Doctor", link: "/nurse-doctor/doctor-worklist", label: "Doctor" },
+    { role: "Nurse", link: "/common/nurse-worklist", label: "Nurse" },
+    { role: "Doctor", link: "/common/doctor-worklist", label: "Doctor" },
     { role: "Lab Technician", link: "/lab/worklist", label: "Lab Technician" },
     {
       role: "Pharmacist",
@@ -76,18 +76,18 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     },
     {
       role: "Radiologist",
-      link: "/nurse-doctor/radiologist-worklist",
+      link: "/common/radiologist-worklist",
       label: "Radiologist"
     },
     {
       role: "Oncologist",
-      link: "/nurse-doctor/oncologist-worklist",
+      link: "/common/oncologist-worklist",
       label: "Oncologist"
     },
     {
       role: "TC Specialist",
       work: [
-        { link: "/nurse-doctor/tcspecialist-worklist", label: "Worklist" },
+        { link: "/common/tcspecialist-worklist", label: "Worklist" },
         {
           // link: this.telemedicineService.routeToTeleMedecine(),
           label: "Timesheet"
@@ -240,12 +240,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
       {
         role: 'Nurse',
-        link: '/nurse-doctor/nurse-worklist',
+        link: '/common/nurse-worklist',
         label: this.currentLanguageSet.role_selection.Nurse,
       },
       {
         role: 'Doctor',
-        link: '/nurse-doctor/doctor-worklist',
+        link: '/common/doctor-worklist',
         label: this.currentLanguageSet.role_selection.Doctor,
       },
       {
@@ -260,12 +260,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
       {
         role: 'Radiologist',
-        link: '/nurse-doctor/radiologist-worklist',
+        link: '/common/radiologist-worklist',
         label: this.currentLanguageSet.role_selection.Radiologist,
       },
       {
         role: 'Oncologist',
-        link: '/nurse-doctor/oncologist-worklist',
+        link: '/common/oncologist-worklist',
         label: this.currentLanguageSet.role_selection.Oncologist,
       },
       {
@@ -273,7 +273,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
         label: this.currentLanguageSet.common.TCSpecialist,
         work: [
           {
-            link: '/nurse-doctor/tcspecialist-worklist',
+            link: '/common/tcspecialist-worklist',
             label: 'Worklist',
             labelName: this.currentLanguageSet.common.Worklist,
           },
@@ -291,7 +291,8 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
     ];
     if (this.showRoles) {
-      this.roles = JSON.parse(localStorage.getItem('role') || '{}');
+      const role: any = localStorage.getItem('role');
+      this.roles = JSON.parse(role);
       this.filteredNavigation = this.navigation.filter((item: any) => {
         return this.roles.includes(item.role);
       });
@@ -311,11 +312,8 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       });
     });
   }
-
   getSwymedLogout() {
-    //commented by Arun
-
-    this.auth.getSwymedLogout().subscribe((res: any) => {
+    this.auth.getSwymedLogout().subscribe((res) => {
       window.location.href = res.data.response;
       this.logout();
     });

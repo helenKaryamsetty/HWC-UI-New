@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
@@ -28,7 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   templateUrl: './screening-case-sheet.component.html',
   styleUrls: ['./screening-case-sheet.component.css'],
 })
-export class ScreeningCaseSheetComponent implements OnInit {
+export class ScreeningCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()
   caseSheetData: any;
 

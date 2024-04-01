@@ -292,24 +292,26 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   fetchDistrictsOnStateSelection(stateID: any) {
     console.log('stateID', stateID); // Add this log statement
-    this.registrarService.getDistrictList(this.stateID).subscribe((res) => {
-      if (res && res.statusCode === 200) {
-        this.districtList = res.data;
-        this.blockID = null;
-        this.districtBranchID = null;
-      } else {
-        this.confirmationService.alert(
-          this.current_language_set.alerts.info.IssuesInFetchingDemographics,
-          'error',
-        );
-      }
-    });
+    this.registrarService
+      .getDistrictList(this.stateID)
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200) {
+          this.districtList = res.data;
+          this.blockID = null;
+          this.districtBranchID = null;
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.alerts.info.IssuesInFetchingDemographics,
+            'error',
+          );
+        }
+      });
   }
 
   fetchSubDistrictsOnDistrictSelection(districtID: any) {
     this.registrarService
       .getSubDistrictList(this.districtID.districtID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.subDistrictList = res.data;
           this.districtBranchID = null;
@@ -325,7 +327,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   onSubDistrictChange(blockID: any) {
     this.registrarService
       .getVillageList(this.blockID.blockID)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.villageList = res.data;
           this.districtBranchID = null;

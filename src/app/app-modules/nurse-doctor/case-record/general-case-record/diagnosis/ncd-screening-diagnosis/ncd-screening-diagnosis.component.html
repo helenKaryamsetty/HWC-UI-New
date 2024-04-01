@@ -1,87 +1,421 @@
-<div class="m-t-10" [formGroup]="generalDiagnosisForm">
-  <div class="row">
-    <div class="col-xs-12 col-sm-6">
-      <header class="mat-expansion-panel-header m-t-5">
-        <h4 *ngIf="enableProvisionalDiag">
-          {{ current_language_set?.casesheet?.provisionalDiag }}*
-        </h4>
-        <h4 *ngIf="!enableProvisionalDiag">
-          {{ current_language_set?.casesheet?.provisionalDiag }}
-        </h4>
+<!-- {{ generalDiagnosisForm.value | json}} -->
+<div class="row" [formGroup]="generalDiagnosisForm">
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 m-t-6">
+    <header class="mat-expansion-panel-header">
+      <h4 *ngIf="enableProvisionalDiag">
+        {{ current_language_set?.casesheet?.provisionalDiag }}*
+      </h4>
+      <h4 *ngIf="!enableProvisionalDiag">
+        {{ current_language_set?.casesheet?.provisionalDiag }}
+      </h4>
+    </header>
+    <ng-container formArrayName="provisionalDiagnosisList">
+      <div
+        *ngFor="
+          let diagnosis of generalDiagnosisForm.controls[
+            'provisionalDiagnosisList'
+          ]['controls'];
+          let i = index;
+          let isLast = last
+        "
+      >
+        <ng-container [formGroupName]="i">
+          <div class="col-xs-12 col-sm-9">
+            <mat-form-field class="input-full-width">
+              <input
+                matInput
+                allowText="inputFieldValidator"
+                appDiagnosisSearch
+                [diagnosisListForm]="diagnosis"
+                name="viewDiagnosisProvided"
+                formControlName="viewProvisionalDiagnosisProvided"
+                maxlength="100"
+                minlength="3"
+                [previousSelected]="
+                  generalDiagnosisForm?.value?.provisionalDiagnosisList
+                "
+              />
+              <mat-icon
+                class="search-btn cursorPointer"
+                *ngIf="
+                  !diagnosis.controls['viewProvisionalDiagnosisProvided']
+                    .disabled
+                "
+                matSuffix
+                appDiagnosisSearch
+                [diagnosisListForm]="diagnosis"
+                [previousSelected]="
+                  generalDiagnosisForm?.value?.provisionalDiagnosisList
+                "
+                >search</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-3 m-t-10" style="padding: 0px">
+            <button
+              mat-mini-fab
+              type="button"
+              class="pull-left"
+              color="warn"
+              *ngIf="
+                diagnosis.controls['viewProvisionalDiagnosisProvided']
+                  .disabled ||
+                i !== 0 ||
+                (i === 0 &&
+                  generalDiagnosisForm.controls['provisionalDiagnosisList']
+                    .controls[i].controls.viewProvisionalDiagnosisProvided
+                    .value !== null &&
+                  generalDiagnosisForm.controls['provisionalDiagnosisList']
+                    .controls[i].controls.viewProvisionalDiagnosisProvided
+                    .value !== '')
+              "
+              (click)="removeDiagnosisFromList(i, diagnosis)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <button
+              mat-mini-fab
+              type="button"
+              class="pull-right button-overall-disabled"
+              color="primary"
+              *ngIf="isLast"
+              [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+              (click)="addDiagnosis()"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 m-t-6">
+    <header class="mat-expansion-panel-header tabcolor">
+      <h4>{{ current_language_set?.DiagnosisDetails?.specialistssdvice }}</h4>
+    </header>
+    <mat-form-field class="input-full-width">
+      <textarea
+        matInput
+        defaultNull
+        matTextareaAutosize
+        maxlength="300"
+        name="specialistAdvice"
+        formControlName="instruction"
+      >
+      </textarea>
+    </mat-form-field>
+  </div>
+  <div
+    *ngIf="designation === 'TC Specialist' && confirmDiseaseArray.length === 0"
+  >
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 m-t-20">
+      <header class="mat-expansion-panel-header">
+        <h4>{{ current_language_set?.finalDiagnosis }}*</h4>
       </header>
-      <ng-container formArrayName="provisionalDiagnosisList">
-        <div
-          class="col-12 row"
-          *ngFor="
-            let diagnosis of getProvisionalDiagnosisList();
-            let i = index;
-            let isLast = last
+      <div class="col-xs-6 col-sm-6 align">
+        <label for="diabetesConfirmed">{{
+          current_language_set?.isDiabetesConfirmed
+        }}</label>
+      </div>
+      <div class="col-xs-6 col-sm-6 align" style="margin-left: -30px">
+        <mat-radio-group
+          name="diabetesConfirmed"
+          formControlName="diabetesConfirmed"
+          id="diabetesConfirmed"
+          (change)="
+            addToConfirmDisease(
+              this.generalDiagnosisForm.value.diabetesConfirmed
+            )
+          "
+          required
+        >
+          <mat-radio-button
+            color="primary"
+            [checked]="diabetesChecked"
+            [value]="true"
+            style="margin-left: 40px"
+            >{{ current_language_set?.common?.yes }}</mat-radio-button
+          >
+          <mat-radio-button color="primary" class="radio-btn" [value]="false">{{
+            current_language_set?.common?.no
+          }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="col-xs-6 col-sm-6 align">
+        <p>{{ current_language_set?.isHypertensionConfirmed }}</p>
+      </div>
+      <div class="col-xs-6 col-sm-6 align">
+        <mat-radio-group
+          name="hypertensionConfirmed"
+          formControlName="hypertensionConfirmed"
+          id="hypertensionConfirmed"
+          (change)="
+            addHyperTensionToConfirmDisease(
+              this.generalDiagnosisForm.value.hypertensionConfirmed
+            )
+          "
+          required
+        >
+          <mat-radio-button
+            color="primary"
+            [checked]="hyperTensionChecked"
+            style="margin-left: 10px"
+            [value]="true"
+            >{{ current_language_set?.common?.yes }}</mat-radio-button
+          >
+          <mat-radio-button color="primary" class="radio-btn" [value]="false">{{
+            current_language_set?.common?.no
+          }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 m-t-20">
+      <header
+        class="mat-expansion-panel-header"
+        *ngIf="
+          (confirmDiseaseArray !== null && confirmDiseaseArray.length > 0) ||
+          diabetesSuspected ||
+          hypertensionSuspected ||
+          oralSuspected ||
+          breastSuspected ||
+          cervicalSuspected
+        "
+      >
+        <h4>{{ current_language_set?.finalDiagnosis }}*</h4>
+      </header>
+
+      <div>
+        <ng-container
+          *ngIf="
+            diabetesSuspected ||
+            (confirmDiseaseArray2 !== null &&
+              confirmDiseaseArray2.includes(diabetes))
           "
         >
-          <ng-container [formGroupName]="i">
-            <div class="col-6 m-t-10">
-              <mat-form-field class="input-full-width">
-                <input
-                  matInput
-                  appOpenModal
-                  allowText="inputFieldValidator"
-                  [diagnosisListForm]="diagnosis"
-                  formControlName="provisionalDiagnosis"
-                  name="diagnosisProvided"
-                  maxlength="100"
-                  minlength="3"
-                  [previousSelected]="
-                    generalDiagnosisForm.value.provisionalDiagnosisList
-                  "
-                  required
-                />
-                <mat-icon
-                  class="search-btn"
-                  matSuffix
-                  appOpenModal
-                  [diagnosisListForm]="diagnosis"
-                  [previousSelected]="
-                    generalDiagnosisForm.value.provisionalDiagnosisList
-                  "
-                  >search</mat-icon
-                >
-              </mat-form-field>
-            </div>
-            <div class="col-6" style="text-align: center; margin-top: 15px">
-              <button
-                mat-mini-fab
-                type="button"
-                style="margin-right: 3px"
-                *ngIf="isLast"
-                [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+          <div class="col-xs-6 col-sm-6 align">
+            <label for="diabetesScreeningConfirmed">{{
+              current_language_set?.isDiabetesConfirmed
+            }}</label>
+          </div>
+          <div class="col-xs-6 col-sm-6 align" style="margin-left: -30px">
+            <mat-radio-group
+              name="diabetesScreeningConfirmed"
+              formControlName="diabetesScreeningConfirmed"
+              id="diabetesScreeningConfirmed"
+              (change)="
+                addToConfirmScreeningDisease(
+                  this.generalDiagnosisForm.value.diabetesScreeningConfirmed,
+                  diabetes
+                )
+              "
+              [disabled]="confirmDiseaseArray.includes(diabetes)"
+              required
+            >
+              <mat-radio-button
                 color="primary"
-                class="mat_blue_circle"
-                (click)="addDiagnosis()"
+                [checked]="diabetesChecked"
+                [value]="true"
+                style="margin-left: 40px"
+                >{{ current_language_set?.common?.yes }}</mat-radio-button
               >
-                <mat-icon>add</mat-icon>
-              </button>
-              <button
-                mat-mini-fab
-                type="button"
-                color="warn"
-                class="mat_warn_circle"
-                *ngIf="
-                  diagnosis.get('provisionalDiagnosis')?.disabled ||
-                  i !== 0 ||
-                  (i === 0 &&
-                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                      .provisionalDiagnosis !== null &&
-                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                      .provisionalDiagnosis !== '')
-                "
-                (click)="deleteDiagnosis(i, diagnosis)"
+              <mat-radio-button
+                color="primary"
+                class="radio-btn"
+                [value]="false"
+                >{{ current_language_set?.common?.no }}</mat-radio-button
               >
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-          </ng-container>
-        </div>
-      </ng-container>
+            </mat-radio-group>
+          </div>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            hypertensionSuspected ||
+            (confirmDiseaseArray2 !== null &&
+              confirmDiseaseArray2.includes(hypertension))
+          "
+        >
+          <div class="col-xs-6 col-sm-6 align">
+            <p>{{ current_language_set?.isHypertensionConfirmed }}</p>
+          </div>
+          <div class="col-xs-6 col-sm-6 align">
+            <mat-radio-group
+              name="hypertensionScreeningConfirmed"
+              formControlName="hypertensionScreeningConfirmed"
+              id="hypertensionScreeningConfirmed"
+              (change)="
+                addToConfirmScreeningDisease(
+                  this.generalDiagnosisForm.value
+                    .hypertensionScreeningConfirmed,
+                  hypertension
+                )
+              "
+              [disabled]="confirmDiseaseArray.includes(hypertension)"
+              required
+            >
+              <mat-radio-button
+                color="primary"
+                [checked]="hyperTensionChecked"
+                style="margin-left: 10px"
+                [value]="true"
+                >{{ current_language_set?.common?.yes }}</mat-radio-button
+              >
+              <mat-radio-button
+                color="primary"
+                class="radio-btn"
+                [value]="false"
+                >{{ current_language_set?.common?.no }}</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+        </ng-container>
+        <!--  isOralConfirmed -->
+        <ng-container
+          *ngIf="
+            oralSuspected ||
+            (confirmDiseaseArray2 !== null &&
+              confirmDiseaseArray2.includes(oralCancer))
+          "
+        >
+          <div class="clearfix"></div>
+          <div class="col-xs-6 col-sm-6 align">
+            <label for="oralCancerConfirmed">{{
+              current_language_set?.isOralConfirmed
+            }}</label>
+          </div>
+          <div class="col-xs-6 col-sm-6 align" style="margin-left: -30px">
+            <mat-radio-group
+              name="oralCancerConfirmed"
+              formControlName="oralCancerConfirmed"
+              id="oralCancerConfirmed"
+              (change)="
+                addToConfirmScreeningDisease(
+                  this.generalDiagnosisForm.value.oralCancerConfirmed,
+                  oralCancer
+                )
+              "
+              [disabled]="confirmDiseaseArray.includes(oralCancer)"
+              required
+            >
+              <mat-radio-button
+                color="primary"
+                [checked]="oralChecked"
+                [value]="true"
+                style="margin-left: 40px"
+                >{{ current_language_set?.common?.yes }}</mat-radio-button
+              >
+              <mat-radio-button
+                color="primary"
+                class="radio-btn"
+                [value]="false"
+                >{{ current_language_set?.common?.no }}</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+        </ng-container>
+        <!-- isBreastConfirmed -->
+        <ng-container
+          *ngIf="
+            breastSuspected ||
+            (confirmDiseaseArray2 !== null &&
+              confirmDiseaseArray2.includes(breastCancer))
+          "
+        >
+          <div class="clearfix"></div>
+          <div class="col-xs-6 col-sm-6 align">
+            <label for="breastCancerConfirmed">{{
+              current_language_set?.isBreastConfirmed
+            }}</label>
+          </div>
+          <div class="col-xs-6 col-sm-6 align" style="margin-left: -30px">
+            <mat-radio-group
+              name="breastCancerConfirmed"
+              formControlName="breastCancerConfirmed"
+              id="breastCancerConfirmed"
+              (change)="
+                addToConfirmScreeningDisease(
+                  this.generalDiagnosisForm.value.breastCancerConfirmed,
+                  breastCancer
+                )
+              "
+              [disabled]="confirmDiseaseArray.includes(breastCancer)"
+              required
+            >
+              <mat-radio-button
+                color="primary"
+                [checked]="breastChecked"
+                [value]="true"
+                style="margin-left: 40px"
+                >{{ current_language_set?.common?.yes }}</mat-radio-button
+              >
+              <mat-radio-button
+                color="primary"
+                class="radio-btn"
+                [value]="false"
+                >{{ current_language_set?.common?.no }}</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+        </ng-container>
+        <!-- isCervicalConfirmed -->
+        <ng-container
+          *ngIf="
+            cervicalSuspected ||
+            (confirmDiseaseArray2 !== null &&
+              confirmDiseaseArray2.includes(cervicalCancer))
+          "
+        >
+          <div class="clearfix"></div>
+          <div
+            class="col-xs-6 col-sm-6 align"
+            *ngIf="
+              benGender.toLowerCase().trim() === 'female' ||
+              benGender.toLowerCase().trim() === 'transgender'
+            "
+          >
+            <label for="cervicalCancerConfirmed">{{
+              current_language_set?.isCervicalConfirmed
+            }}</label>
+          </div>
+          <div
+            class="col-xs-6 col-sm-6 align"
+            style="margin-left: -30px"
+            *ngIf="
+              benGender.toLowerCase().trim() === 'female' ||
+              benGender.toLowerCase().trim() === 'transgender'
+            "
+          >
+            <mat-radio-group
+              name="cervicalCancerConfirmed"
+              formControlName="cervicalCancerConfirmed"
+              id="cervicalCancerConfirmed"
+              (change)="
+                addToConfirmScreeningDisease(
+                  this.generalDiagnosisForm.value.cervicalCancerConfirmed,
+                  cervicalCancer
+                )
+              "
+              [disabled]="confirmDiseaseArray.includes(cervicalCancer)"
+              required
+            >
+              <mat-radio-button
+                color="primary"
+                [checked]="cervicalChecked"
+                [value]="true"
+                style="margin-left: 40px"
+                >{{ current_language_set?.common?.yes }}</mat-radio-button
+              >
+              <mat-radio-button
+                color="primary"
+                class="radio-btn"
+                [value]="false"
+                >{{ current_language_set?.common?.no }}</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>

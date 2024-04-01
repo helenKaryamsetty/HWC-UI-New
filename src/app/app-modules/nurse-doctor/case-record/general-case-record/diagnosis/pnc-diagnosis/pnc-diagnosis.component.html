@@ -2,58 +2,70 @@
   <section>
     <div class="row">
       <div class="col-xs-12 col-sm-6">
-        <header class="mat-expansion-panel-header m-t-5">
+        <header class="mat-expansion-panel-header m-t-5 tabcolor">
           <h4>{{ current_language_set?.casesheet?.provisionalDiag }}</h4>
         </header>
         <ng-container formArrayName="provisionalDiagnosisList">
           <div
             *ngFor="
-              let diagnosis of getProvisionalDiagnosisList();
+              let diagnosis of generalDiagnosisForm.controls[
+                'provisionalDiagnosisList'
+              ]['controls'];
               let i = index;
               let isLast = last
             "
-            class="m-t-20"
           >
             <ng-container [formGroupName]="i">
               <div class="col-xs-12 col-sm-9 box">
                 <mat-form-field class="input-full-width">
                   <input
                     matInput
-                    appOpenModal
                     allowText="inputFieldValidator"
+                    appDiagnosisSearch
                     [diagnosisListForm]="diagnosis"
-                    name="provisionalDiagnosis"
-                    formControlName="provisionalDiagnosis"
+                    name="viewProvisionalDiagnosisProvided"
+                    formControlName="viewProvisionalDiagnosisProvided"
                     maxlength="100"
                     minlength="3"
                     [previousSelected]="
-                      generalDiagnosisForm.value.provisionalDiagnosisList
+                      generalDiagnosisForm?.value?.provisionalDiagnosisList
                     "
                   />
                   <mat-icon
                     class="search-btn"
-                    *ngIf="!diagnosis.get('provisionalDiagnosis')?.disabled"
+                    *ngIf="
+                      !diagnosis.controls['viewProvisionalDiagnosisProvided']
+                        .disabled
+                    "
                     matSuffix
-                    appOpenModal
+                    appDiagnosisSearch
                     [diagnosisListForm]="diagnosis"
                     [previousSelected]="
-                      generalDiagnosisForm.value.provisionalDiagnosisList
+                      generalDiagnosisForm?.value?.provisionalDiagnosisList
                     "
                     >search</mat-icon
                   >
                 </mat-form-field>
               </div>
-              <div class="col-xs-12 col-sm-3 box pull-right">
+              <div
+                class="col-xs-12 col-sm-3 box pull-right"
+                style="padding: 0px"
+              >
                 <button
                   mat-mini-fab
                   type="button"
                   color="warn"
-                  class="mat_warn_circle"
                   *ngIf="
+                    diagnosis.controls['viewProvisionalDiagnosisProvided']
+                      .disabled ||
                     i !== 0 ||
                     (i === 0 &&
-                      (diagnosis.touched ||
-                        diagnosis.get('provisionalDiagnosis')?.disabled))
+                      generalDiagnosisForm.controls['provisionalDiagnosisList']
+                        .controls[i].controls.viewProvisionalDiagnosisProvided
+                        .value !== null &&
+                      generalDiagnosisForm.controls['provisionalDiagnosisList']
+                        .controls[i].controls.viewProvisionalDiagnosisProvided
+                        .value !== '')
                   "
                   (click)="removeProvisionalDiagnosis(i, diagnosis)"
                 >
@@ -62,7 +74,7 @@
                 <button
                   mat-mini-fab
                   type="button"
-                  class="mat_blue_circle"
+                  class="pull-right button-overall-disabled"
                   color="primary"
                   *ngIf="isLast"
                   [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
@@ -77,17 +89,18 @@
       </div>
 
       <div class="col-xs-12 col-sm-6">
-        <header class="mat-expansion-panel-header m-t-5">
+        <header class="mat-expansion-panel-header m-t-5 tabcolor">
           <h4>{{ current_language_set?.common?.confirmDiagnosis }}</h4>
         </header>
         <ng-container formArrayName="confirmatoryDiagnosisList">
           <div
             *ngFor="
-              let confirmatoryDiagnosis of getConfirmatoryDiagnosisList();
+              let confirmatoryDiagnosis of generalDiagnosisForm.controls[
+                'confirmatoryDiagnosisList'
+              ]['controls'];
               let i = index;
               let isLast = last
             "
-            class="m-t-20"
           >
             <ng-container [formGroupName]="i">
               <div class="col-xs-12 col-sm-9 box">
@@ -96,42 +109,46 @@
                     matInput
                     appConfirmatoryDiagnosis
                     [diagnosisListForm]="confirmatoryDiagnosis"
-                    name="confirmatoryDiagnosis"
-                    formControlName="confirmatoryDiagnosis"
+                    name="viewConfirmatoryDiagnosisProvided"
+                    formControlName="viewConfirmatoryDiagnosisProvided"
                     maxlength="100"
                     minlength="3"
                     [previousSelected]="
-                      generalDiagnosisForm.value.confirmatoryDiagnosisList
+                      generalDiagnosisForm?.value?.confirmatoryDiagnosisList
                     "
                   />
                   <mat-icon
                     class="search-btn"
                     *ngIf="
-                      !confirmatoryDiagnosis.get('confirmatoryDiagnosis')
-                        ?.disabled
+                      !confirmatoryDiagnosis.controls[
+                        'viewConfirmatoryDiagnosisProvided'
+                      ].disabled
                     "
                     matSuffix
                     appConfirmatoryDiagnosis
                     [diagnosisListForm]="confirmatoryDiagnosis"
                     [previousSelected]="
-                      generalDiagnosisForm.value.confirmatoryDiagnosisList
+                      generalDiagnosisForm?.value?.confirmatoryDiagnosisList
                     "
                     >search</mat-icon
                   >
                 </mat-form-field>
               </div>
-              <div class="col-xs-12 col-sm-3 box pull-right">
+              <div
+                class="col-xs-12 col-sm-3 box pull-right"
+                style="padding: 0px"
+              >
                 <button
                   mat-mini-fab
                   type="button"
-                  class="mat_warn_circle"
                   color="warn"
                   *ngIf="
                     i !== 0 ||
                     (i === 0 &&
                       (confirmatoryDiagnosis.touched ||
-                        confirmatoryDiagnosis.get('confirmatoryDiagnosis')
-                          ?.disabled))
+                        confirmatoryDiagnosis.controls[
+                          'viewConfirmatoryDiagnosisProvided'
+                        ].disabled))
                   "
                   (click)="
                     removeConfirmatoryDiagnosis(i, confirmatoryDiagnosis)
@@ -142,7 +159,7 @@
                 <button
                   mat-mini-fab
                   type="button"
-                  class="mat_blue_circle"
+                  class="pull-right button-overall-disabled"
                   color="primary"
                   *ngIf="isLast"
                   [disabled]="
@@ -160,14 +177,11 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
         <div class="form-group">
-          <mat-label
-            class="mat-label-text"
-            class="control-label"
-            for="deathDuringPNCCaseRecord"
-            >{{ current_language_set?.casesheet?.matDeath }}</mat-label
-          >
+          <label class="control-label" for="deathDuringPNCCaseRecord">{{
+            current_language_set?.casesheet?.matDeath
+          }}</label>
           <div class="clearfix"></div>
           <mat-radio-group
             name="isMaternalDeath"
@@ -184,14 +198,32 @@
           </mat-radio-group>
         </div>
       </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <header class="mat-expansion-panel-header tabcolor">
+          <h4>
+            {{ current_language_set?.DiagnosisDetails?.specialistdignosis }}
+          </h4>
+        </header>
+        <mat-form-field class="input-full-width">
+          <textarea
+            [readonly]="!specialist"
+            matInput
+            allowText="textAreaValidator"
+            defaultNull
+            matTextareaAutosize
+            maxlength="300"
+            name="specialistAdvice"
+            formControlName="specialistDiagnosis"
+            readonly
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
     </div>
 
     <div class="row" *ngIf="isMaternalDeath">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
-            current_language_set?.casesheet?.placeOfDeath
-          }}</mat-label>
           <input
             autocomplete="off"
             matInput
@@ -201,15 +233,13 @@
             id="placeOfDeath"
             formControlName="placeOfDeath"
             maxlength="50"
+            placeholder="{{ current_language_set?.casesheet?.placeOfDeath }}"
           />
         </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
-            current_language_set?.casesheet?.causeOfDeath
-          }}</mat-label>
           <input
             autocomplete="off"
             matInput
@@ -219,6 +249,7 @@
             id="causeOfDeath"
             formControlName="causeOfDeath"
             maxlength="50"
+            placeholder="{{ current_language_set?.casesheet?.causeOfDeath }}"
           />
         </mat-form-field>
       </div>

@@ -19,17 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { DoctorService } from '../../../shared/services';
 
 @Component({
   selector: 'app-examination-case-sheet',
   templateUrl: './examination-case-sheet.component.html',
   styleUrls: ['./examination-case-sheet.component.css'],
 })
-export class ExaminationCaseSheetComponent implements OnInit {
+export class ExaminationCaseSheetComponent
+  implements OnChanges, OnInit, DoCheck
+{
   @Input()
   previous: any;
 
@@ -76,7 +85,7 @@ export class ExaminationCaseSheetComponent implements OnInit {
   // getReferDetails(beneficiaryRegID, visitID, visitCategory) {
   //   this.referSubscription = this.doctorService.getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
   //     .subscribe(res => {
-  //       if (res && res.statusCode == 200 && res.data && res.data.Refer) {
+  //       if (res && res.statusCode === 200 && res.data && res.data.Refer) {
   //         this.patchReferDetails(res.data.Refer);
   //       }
   //     })
@@ -193,7 +202,7 @@ export class ExaminationCaseSheetComponent implements OnInit {
   changeLanguage() {
     this.language = sessionStorage.getItem('setLanguage');
 
-    if (this.language != undefined) {
+    if (this.language !== undefined) {
       this.httpServiceService
         .getLanguage(this.language_file_path + this.language + '.json')
         .subscribe(

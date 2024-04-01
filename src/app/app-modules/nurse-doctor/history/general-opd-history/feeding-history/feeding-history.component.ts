@@ -19,10 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import {
   MasterdataService,
@@ -30,10 +35,10 @@ import {
   DoctorService,
 } from '../../../shared/services';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-feeding-history',
@@ -45,7 +50,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   feedingHistoryForm!: FormGroup;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   @Input()
   mode!: string;
@@ -53,31 +58,23 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   masterData: any;
   age = 0;
   currentLanguageSet: any;
+  foodIntoleranceTypes: any = [];
+  enableOthersTextField = false;
 
   constructor(
-    private fb: FormBuilder,
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
     private doctorService: DoctorService,
+    public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
-    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.getMasterData();
     this.getBeneficiaryDetails();
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
   ngOnDestroy() {
@@ -96,11 +93,18 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
@@ -108,10 +112,9 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   feedingHistoryData: any;
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -119,8 +122,13 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
           history.data.FeedingHistory
         ) {
           this.feedingHistoryData = history.data.FeedingHistory;
-          if (this.feedingHistoryData)
+          if (this.feedingHistoryData) {
+            this.masterFoodIntolerance();
             this.feedingHistoryForm.patchValue(this.feedingHistoryData);
+            this.checkForOthersOption(
+              this.feedingHistoryForm.controls['typeOfFoodIntolerances'].value,
+            );
+          }
         }
       });
   }
@@ -130,14 +138,13 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.beneficiaryDetailSubscription =
       this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
         (beneficairy) => {
-          if (beneficairy) {
+          if (
+            beneficairy &&
+            beneficairy.age !== undefined &&
+            beneficairy.age !== null
+          ) {
             const temp = beneficairy.age.split('-');
-            if (
-              temp !== undefined &&
-              temp !== null &&
-              temp.length > 0 &&
-              temp[0].indexOf('years') >= 0
-            ) {
+            if (temp[0].indexOf('years') >= 0) {
               const years = +temp[0]
                 .substring(0, temp[0].indexOf('years'))
                 .trim();
@@ -145,12 +152,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
                 .substring(0, temp[1].indexOf('months'))
                 .trim();
               this.age = years * 12 + months;
-            } else if (
-              temp !== undefined &&
-              temp !== null &&
-              temp.length > 0 &&
-              temp[0].indexOf('months') >= 0
-            ) {
+            } else if (temp[0].indexOf('months') >= 0) {
               const months = +temp[0]
                 .substring(0, temp[0].indexOf('months'))
                 .trim();
@@ -164,7 +166,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousFeedingHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFeedingHistory(benRegID, this.visitCategory)
+      .getPreviousFeedingHistory(benRegID, this.visitType)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {
@@ -198,7 +200,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
         dataList: data,
         title:
           this.currentLanguageSet.historyData.Perinatalhistorydetails
-            .developmentalhistorydetails,
+            .previousFeedingHistoryDetails,
       },
     });
   }
@@ -216,6 +218,39 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   resetTypeofFoodIntolerance() {
-    this.feedingHistoryForm.patchValue({ typeofFoodIntolerance: null });
+    this.feedingHistoryForm.patchValue({
+      typeOfFoodIntolerances: null,
+      otherFoodIntolerance: null,
+    });
+    this.enableOthersTextField = false;
+    this.masterFoodIntolerance();
+  }
+  masterFoodIntolerance() {
+    if (
+      this.masterData !== undefined &&
+      this.masterData.foodIntoleranceStatus !== undefined
+    ) {
+      this.foodIntoleranceTypes = this.masterData.foodIntoleranceStatus;
+    }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+  checkForOthersOption(selectedFoodTntolerance: any) {
+    if (
+      selectedFoodTntolerance !== undefined &&
+      selectedFoodTntolerance !== null &&
+      selectedFoodTntolerance.includes('Others')
+    ) {
+      this.enableOthersTextField = true;
+    } else {
+      this.enableOthersTextField = false;
+      this.feedingHistoryForm.patchValue({ otherFoodIntolerance: null });
+    }
   }
 }

@@ -65,7 +65,7 @@ export class AppFooterComponent implements OnInit, DoCheck {
   // ngDoCheck() {
   //   let currentUrl = this.activatedRoute.snapshot['_routerState'].url
   //   let urlCheck = '/common/attendant/tcspecialist/patient/' + localStorage.getItem('beneficiaryRegID')
-  //   if (currentUrl == urlCheck) {
+  //   if (currentUrl === urlCheck) {
   //     this.isSpecialist = true;
   //   }else{
   //     this.isSpecialist = false

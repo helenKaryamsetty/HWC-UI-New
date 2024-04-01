@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab label="{{ current_language_set?.Reports?.labtestreports }}">
     <div *ngIf="labResults?.length > 0" class="m-t-20">
-      <mat-form-field id="filterbox" class="pull-right">
+      <mat-input-container id="filterbox" class="pull-right">
         <input
           autocomplete="off"
           matInput
@@ -10,28 +10,28 @@
           (keyup)="filterProcedures(filterTerm.value)"
         />
         <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+      </mat-input-container>
     </div>
 
     <div class="clearfix"></div>
 
-    <section class="m-t-20">
+    <section class="m-t-20 overflow">
       <table
-        class="table table-responsive-report table-bordered"
-        aria-describedby="labTechnician"
+        class="table table-responsive table-bordered"
+        aria-describedby="LabPagedtbl"
       >
         <thead>
           <tr>
             <th style="width: 20%" id="date">
               {{ current_language_set?.common?.date }}
             </th>
-            <th style="width: 15%" id="testName">
+            <th style="width: 20%" id="testName">
               {{ current_language_set?.labTechnicianData?.testName }}
             </th>
             <th style="width: 20%" id="componentName">
               {{ current_language_set?.labTechnicianData?.componentName }}
             </th>
-            <th style="width: 20%" id="result">
+            <th style="width: 10%" id="result">
               {{ current_language_set?.common?.result }}
             </th>
             <th style="width: 10%" id="measurementUnit">
@@ -88,29 +88,9 @@
                 {{ component?.componentName }}
               </td>
               <td
-                *ngIf="!component?.componentName?.includes('ECG')"
                 style="width: 110px; word-break: normal; vertical-align: middle"
               >
                 {{ component?.testResultValue }}
-              </td>
-              <td
-                *ngIf="
-                  component?.componentName?.includes('ECG') &&
-                  component?.testResultValue !== 'Abnormal'
-                "
-                style="width: 110px; word-break: normal; vertical-align: middle"
-              >
-                {{ component?.testResultValue }}
-              </td>
-              <td
-                *ngIf="
-                  component?.componentName?.includes('ECG') &&
-                  component?.testResultValue === 'Abnormal'
-                "
-                style="width: 110px; word-break: normal; vertical-align: middle"
-              >
-                {{ component?.testResultValue }} -
-                {{ component?.ecgAbnormalities.join(",") }}
               </td>
               <td
                 style="width: 150px; word-break: normal; vertical-align: middle"
@@ -138,15 +118,20 @@
               </div>
             </td>
             <td colspan="7">
-              <pagination-controls
+              <pagination
                 class="pull-right"
+                [boundaryLinks]="true"
                 (pageChanged)="currentLabPageChanged($event)"
                 *ngIf="filteredLabResults.length"
+                [totalItems]="filteredLabResults.length"
+                [itemsPerPage]="currentLabRowsPerPage"
+                [maxSize]="currentLabRowsPerPage"
+                [rotate]="rotate"
                 previousText="&lsaquo;"
                 nextText="&rsaquo;"
                 firstText="&laquo;"
                 lastText="&raquo;"
-              ></pagination-controls>
+              ></pagination>
             </td>
           </tr>
         </tfoot>
@@ -154,11 +139,102 @@
     </section>
   </mat-tab>
 
+  <mat-tab *ngIf="visitCategory === 'ANC'" label="FetoSense Reports">
+    <div class="m-t-20 overflow">
+      <table
+        class="table table-responsive table-bordered"
+        aria-describedby="fetosensetbl"
+      >
+        <tr>
+          <th style="width: 20%" id="testdate">
+            {{ current_language_set?.testDate }}
+          </th>
+          <th style="width: 20%" id="testName">
+            {{ current_language_set?.labTechnicianData.testName }}
+          </th>
+          <th style="width: 20%" id="visitcode">
+            {{ current_language_set?.Reports?.visitcode }}
+          </th>
+          <th style="width: 20%" id="view">
+            {{ current_language_set?.Reports?.view }}
+          </th>
+        </tr>
+        <tbody *ngIf="fetosenseData?.length === 0">
+          <tr>
+            <td colspan="3">
+              <h4 class="norecord text-field-color">
+                {{ current_language_set?.common?.noRecordFound }}
+              </h4>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="fetosenseData?.length > 0">
+          <tr *ngFor="let fetosenseDataToShow of fetosenseData">
+            <td>{{ fetosenseDataToShow.testTime }}</td>
+            <td>{{ fetosenseDataToShow.testName }}</td>
+            <td>{{ fetosenseDataToShow.visitCode }}</td>
+            <td>
+              <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
+              <em
+                class="material-icons cursorPointer"
+                tabindex="{0}"
+                (click)="showFetosenseReport(fetosenseDataToShow)"
+                >visibility</em
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="clearfix"></div>
+    </div>
+    <div *ngIf="enableFetosenseView">
+      <div class="m-t-20">
+        <div class="clearfix"></div>
+        <div
+          class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
+          *ngIf="fetosenseView?.length > 0"
+        >
+          <h4>{{ fetosenseTestName }}</h4>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <section class="m-t-20 overflow">
+        <table
+          class="table table-responsive table-bordered"
+          aria-describedby="fetosenseViewTbl"
+        >
+          <tbody *ngIf="fetosenseView?.length > 0">
+            <tr *ngFor="let fetosenseViewToShow of fetosenseView">
+              <th style="width: 20%" id="name">
+                {{ fetosenseViewToShow.name }}
+              </th>
+              <td style="width: 20%">{{ fetosenseViewToShow.value }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <div class="m-t-20">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <button
+            *ngIf="imgUrl === undefined || imgUrl === null"
+            mat-raised-button
+            color="primary"
+            (click)="showFetosenseGraph()"
+          >
+            {{ current_language_set?.clickToViewGraph }}
+          </button>
+
+          <embed [src]="imgUrl" type="application/pdf" *ngIf="imgUrl" />
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
   <mat-tab label="{{ current_language_set?.Reports?.radiologyreports }}">
     <div class="m-t-20 overflow">
       <table
         class="table table-responsive table-bordered"
-        aria-describedby="testResults"
+        aria-describedby="radiologyResultTbl"
       >
         <tr>
           <th style="width: 20%" id="testName">
@@ -240,7 +316,7 @@
     <div class="m-t-20 overflow">
       <table
         class="table table-responsive table-bordered"
-        aria-describedby="visitCode"
+        aria-describedby="archivedResultstbl"
       >
         <tr>
           <th id="date">{{ current_language_set?.casesheet?.date }}</th>
@@ -293,7 +369,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
-          <mat-form-field id="filterbox" class="pull-right">
+          <mat-input-container id="filterbox" class="pull-right">
             <input
               autocomplete="off"
               matInput
@@ -304,7 +380,7 @@
               (keyup)="filterArchivedProcedures(filterTerm.value)"
             />
             <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
+          </mat-input-container>
         </div>
       </div>
 
@@ -313,7 +389,7 @@
       <section class="m-t-20 overflow">
         <table
           class="table table-responsive table-bordered"
-          aria-describedby="componentDetails"
+          aria-describedby="LabPagedListTbl"
         >
           <thead>
             <tr>
@@ -385,7 +461,6 @@
                   {{ component?.componentName }}
                 </td>
                 <td
-                  *ngIf="!component?.componentName?.includes('ECG')"
                   style="
                     width: 110px;
                     word-break: normal;
@@ -393,33 +468,6 @@
                   "
                 >
                   {{ component?.testResultValue }}
-                </td>
-                <td
-                  *ngIf="
-                    component?.componentName?.includes('ECG') &&
-                    component?.testResultValue !== 'Abnormal'
-                  "
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  "
-                >
-                  {{ component?.testResultValue }}
-                </td>
-                <td
-                  *ngIf="
-                    component?.componentName?.includes('ECG') &&
-                    component?.testResultValue === 'Abnormal'
-                  "
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  "
-                >
-                  {{ component?.testResultValue }} -
-                  {{ component?.ecgAbnormalities.join(",") }}
                 </td>
                 <td
                   style="
@@ -451,15 +499,20 @@
                 </div>
               </td>
               <td colspan="7">
-                <mat-paginator
+                <pagination
                   class="pull-right"
+                  [boundaryLinks]="true"
                   (pageChanged)="previousLabPageChanged($event)"
                   *ngIf="filteredArchivedLabResults.length"
+                  [totalItems]="filteredArchivedLabResults.length"
+                  [itemsPerPage]="previousLabRowsPerPage"
+                  [maxSize]="previousLabRowsPerPage"
+                  [rotate]="rotate"
                   previousText="&lsaquo;"
                   nextText="&rsaquo;"
                   firstText="&laquo;"
                   lastText="&raquo;"
-                ></mat-paginator>
+                ></pagination>
               </td>
             </tr>
           </tfoot>

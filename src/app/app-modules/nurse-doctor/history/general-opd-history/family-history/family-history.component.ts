@@ -19,14 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import {
-  FormBuilder,
-  FormArray,
-  FormGroup,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, FormArray, FormGroup, FormControl } from '@angular/forms';
 
 import {
   MasterdataService,
@@ -36,8 +30,8 @@ import {
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-family-history',
@@ -52,7 +46,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   masterData: any;
   familyHistoryData: any;
@@ -62,6 +56,8 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   previousSelectedDiseaseList: any = [];
   diseaseSelectList: any = [];
   currentLanguageSet: any;
+  snomedCode: any;
+  snomedTerm: any;
 
   constructor(
     private fb: FormBuilder,
@@ -69,22 +65,13 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
+    private masterdataService: MasterdataService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.getMasterData();
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
   ngOnDestroy() {
@@ -95,38 +82,69 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.generalHistorySubscription.unsubscribe();
   }
 
-  getFamilyDiseases(): AbstractControl[] | null {
-    const familyDiseaseControl =
-      this.familyHistoryForm.get('familyDiseaseList');
-    return familyDiseaseControl instanceof FormArray
-      ? familyDiseaseControl.controls
-      : null;
-  }
-
   nurseMasterDataSubscription: any;
   getMasterData() {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
-          this.familyMemeberMasterData = masterData.familyMemberTypes;
+          // this.snomedCode = masterData.DiseaseTypes.snomedCode;
+          // this.snomedTerm = masterData.DiseaseTypes.snomedTerm;
+          // this.familyMemeberMasterData = masterData.familyMemberTypes;
+
+          this.familyMemeberMasterData = masterData.familyMemberTypes.filter(
+            (item: any) => {
+              if (item.benRelationshipType.toLowerCase() === 'brother') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+              if (item.benRelationshipType.toLowerCase() === 'daughter') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+              if (item.benRelationshipType.toLowerCase() === 'father') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+              if (item.benRelationshipType.toLowerCase() === 'mother') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+              if (item.benRelationshipType.toLowerCase() === 'sister') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+              if (item.benRelationshipType.toLowerCase() === 'son') {
+                this.masterData.familyMemberTypes.push(item);
+                return item.benRelationshipID;
+              }
+            },
+          );
+
           this.addFamilyDisease();
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -152,6 +170,10 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       });
 
       if (diseaseType.length > 0) temp[i].diseaseType = diseaseType[0];
+      // temp[i].snomedCode = this.snomedCode[0];
+      // temp[i].snomedTerm = this.snomedTerm[0];
+      // console.log("diseaseType",   temp[i].diseaseType)
+      // console.log("snomedTerm", temp[i].snomedTerm)
 
       if (temp[i].diseaseType) {
         const k: any = formArray.get('' + i);
@@ -183,29 +205,30 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
         if (item.diseaseType === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;
+        // let flag = arr.length === 0 ? true : false;
+        // return flag;
       });
       this.diseaseSelectList.push(result.slice());
     }
     familyDiseaseList.push(this.initFamilyDiseaseList());
   }
 
-  filterFamilyDiseaseList(
-    event: any,
-    i: any,
-    familyDiseaseForm?: AbstractControl<any, any>,
-  ) {
-    const disease: any = event.value;
-    const previousValue: any = this.previousSelectedDiseaseList[i];
+  filterFamilyDiseaseList(disease: any, i: any, familyDiseaseForm?: FormGroup) {
+    const previousValue = this.previousSelectedDiseaseList[i];
     if (disease.diseaseType === 'None') {
       this.removeFamilyDiseaseExecptNone();
     }
-
-    if (familyDiseaseForm && disease.diseaseType !== 'Other')
-      familyDiseaseForm.patchValue({
-        otherDiseaseType: null,
-        snomedCode: disease.snomedCode,
-        snomedTerm: disease.snomedTerm,
-      });
+    if (familyDiseaseForm !== undefined && familyDiseaseForm !== null) {
+      if (familyDiseaseForm && disease.diseaseType !== 'Other') {
+        familyDiseaseForm.patchValue({
+          otherDiseaseType: null,
+          snomedCode: disease.snomedCode,
+          snomedTerm: disease.snomedTerm,
+        });
+      } else {
+        familyDiseaseForm.patchValue({ snomedCode: null, snomedTerm: null });
+      }
+    }
 
     if (previousValue) {
       this.diseaseSelectList.map((item: any, t: any) => {
@@ -215,6 +238,10 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
     }
+
+    // if(disease.snomedCode){
+    // familyDiseaseForm.patchValue({c})
+    // }
 
     this.diseaseSelectList.map((item: any, t: any) => {
       const index = item.indexOf(disease);
@@ -242,7 +269,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  removeFamilyDisease(i: any, familyHistoryForm?: AbstractControl<any, any>) {
+  removeFamilyDisease(i: any, familyHistoryForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -276,7 +303,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousFamilyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFamilyHistory(benRegID, this.visitCategory)
+      .getPreviousFamilyHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -309,8 +336,8 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       data: {
         dataList: data,
         title:
-          this.currentLanguageSet.historyData.familyhistory
-            .previousfamilyhistory,
+          this.currentLanguageSet.historyData.ancHistory
+            .familyHistoryDataANC_OPD_NCD_PNC.previousFamilyHistory,
       },
     });
   }
@@ -349,5 +376,14 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Inject,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
@@ -32,7 +39,7 @@ import { RegistrarService } from '../shared/services/registrar.service';
   templateUrl: './generate-mobile-otp-generation.component.html',
   styleUrls: ['./generate-mobile-otp-generation.component.css'],
 })
-export class GenerateMobileOtpGenerationComponent implements OnInit {
+export class GenerateMobileOtpGenerationComponent implements OnInit, DoCheck {
   generateMobileOTPForm!: FormGroup;
   currentLanguageSet: any;
   showProgressBar = false;
@@ -94,7 +101,7 @@ export class GenerateMobileOtpGenerationComponent implements OnInit {
       };
       this.registrarService.checkAndGenerateMobileOTPHealthId(reqObj).subscribe(
         (res: any) => {
-          if (res.statusCode == 200 && res.data) {
+          if (res.statusCode === 200 && res.data) {
             this.showProgressBar = false;
             if (
               res.data.mobileLinked === false ||
@@ -136,7 +143,7 @@ export class GenerateMobileOtpGenerationComponent implements OnInit {
     };
     this.registrarService.checkAndGenerateMobileOTPHealthId(reqObj).subscribe(
       (res: any) => {
-        if (res.statusCode == 200 && res.data) {
+        if (res.statusCode === 200 && res.data) {
           this.showProgressBar = false;
         } else {
           this.showProgressBar = false;
@@ -164,7 +171,7 @@ export class GenerateMobileOtpGenerationComponent implements OnInit {
       this.registrarService
         .verifyMobileOTPForAadhar(reqObj)
         .subscribe((res: any) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode === 200) {
             this.dialogSucRef.close(res.data);
           } else {
             this.confirmationService.alert(res.errorMessage, 'error');

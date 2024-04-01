@@ -19,11 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -31,8 +35,9 @@ import {
 } from '../../../shared/services';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-menstrual-history',
@@ -47,21 +52,22 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   menstrualHistoryData: any;
   masterData: any;
   today: any;
   minimumLMPDate: any;
   currentLanguageSet: any;
-
+  disableNoneMenstrualProblem = false;
   constructor(
+    private fb: FormBuilder,
     private dialog: MatDialog,
     private nurseService: NurseService,
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
@@ -71,15 +77,6 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.minimumLMPDate = new Date(
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
   ngOnDestroy() {
@@ -101,19 +98,27 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           masterData.menstrualCycleBloodFlowDuration &&
           masterData.menstrualProblem
         ) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
-          this.checkvisitCategory();
+          this.checkVisitType();
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
-  checkvisitCategory() {
-    if (this.visitCategory === 'ANC') {
+  checkVisitType() {
+    if (this.visitType === 'ANC') {
       let temp = 'Amenorrhea';
       temp = this.masterData.menstrualCycleStatus.filter((item: any) => {
         return item.name === temp;
@@ -123,10 +128,9 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -140,6 +144,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
             this.masterData.menstrualCycleStatus.filter((item: any) => {
               return item.name === temp.menstrualCycleStatus;
             })[0];
+          // this.menstrualHistoryForm.controls['menstrualCycleStatus'].setValue(status[0]);
           temp.cycleLength = this.masterData.menstrualCycleLengths.filter(
             (item: any) => {
               return item.menstrualCycleRange === temp.cycleLength;
@@ -151,6 +156,9 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
                 return item.menstrualCycleRange === temp.bloodFlowDuration;
               },
             )[0];
+          // temp.problemName = this.masterData.menstrualProblem.filter(item => {
+          //   return item.name === temp.problemName;
+          // })[0];
           const tempMenstrualProblem: any = [];
           if (
             temp.menstrualProblemList &&
@@ -176,6 +184,8 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           temp.lMPDate = new Date(temp.lMPDate);
 
           this.menstrualHistoryForm.patchValue(temp);
+
+          this.resetOtherMenstrualProblems();
         }
       });
   }
@@ -183,7 +193,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousMenstrualHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousMenstrualHistory(benRegID, this.visitCategory)
+      .getPreviousMenstrualHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -222,7 +232,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   get menstrualCycleStatus() {
-    return this.menstrualHistoryForm?.controls['menstrualCycleStatus'].value;
+    return this.menstrualHistoryForm.controls['menstrualCycleStatus'].value;
   }
 
   get lMPDate() {
@@ -231,7 +241,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   checkMenstrualCycleStatus() {
     console.log('here in to check');
 
-    if (this.visitCategory === 'ANC') {
+    if (this.visitType === 'ANC') {
       this.menstrualHistoryForm.patchValue({
         menstrualCycleStatusID: null,
         regularity: null,
@@ -255,5 +265,30 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
         lMPDate: null,
       });
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  resetOtherMenstrualProblems() {
+    const menstrualProblemList =
+      this.menstrualHistoryForm.value.menstrualProblemList;
+    let flag = false;
+    if (menstrualProblemList.length <= 0) {
+      flag = false;
+    } else {
+      menstrualProblemList.forEach((item: any) => {
+        if (item.problemName === 'None') {
+          flag = true;
+        }
+      });
+    }
+
+    this.disableNoneMenstrualProblem = flag;
   }
 }

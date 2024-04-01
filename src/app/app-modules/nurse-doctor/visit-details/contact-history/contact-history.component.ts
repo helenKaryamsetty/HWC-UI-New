@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -31,12 +30,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  DoctorService,
-  MasterdataService,
-  NurseService,
-} from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
@@ -45,7 +40,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
   styleUrls: ['./contact-history.component.css'],
 })
 export class ContactHistoryComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
   patientCovidForm!: FormGroup;
@@ -54,10 +49,12 @@ export class ContactHistoryComponent
   mode!: string;
   @Output() filter: EventEmitter<any> = new EventEmitter<any>();
   question3!: string;
-  TravelPlaces_flag!: boolean;
-  feverCoughBreath_flag!: boolean;
-  confirmedCaseCOVID_flag!: boolean;
+  TravelPlaces_flag = false;
+  feverCoughBreath_flag = false;
+  confirmedCaseCOVID_flag = false;
   contactArray: any;
+  // contactData = ["Is a confirmed case of COVID-19 2020","Is having symptoms of Fever, Cough or breathing difficulty","Has a history of travel to places reporting local transmission","None of the above"]
+  // contactList = ["Is a confirmed case of COVID-19 2020","Is having symptoms of Fever, Cough or breathing difficulty","Has a history of travel to places reporting local transmission","None of the above"]
   contactList: any;
   contactData: any;
   cont: any;
@@ -67,10 +64,9 @@ export class ContactHistoryComponent
   contactFlag = false;
   currentLanguageSet: any;
   constructor(
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    private nurseService: NurseService,
-    private httpServices: HttpServiceService,
   ) {
     this.masterdataService.listen().subscribe((m: any) => {
       console.log(m);
@@ -82,19 +78,16 @@ export class ContactHistoryComponent
     localStorage.setItem('contact', 'null');
     console.log('contactvalue' + this.patientCovidForm.value);
     this.getContactHistoryMasterData();
+    // this.getContactDetails(benRegID, visitID);
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
   ngOnChanges() {
     if (this.mode === 'view') {
       const visitID = localStorage.getItem('visitID');
@@ -116,7 +109,8 @@ export class ContactHistoryComponent
         if (
           value !== null &&
           value.statusCode === 200 &&
-          value?.data?.covidDetails !== null
+          value.data !== null &&
+          value.data.covidDetails !== null
         ) {
           console.log('contactStatus', value.data.covidDetails.contactStatus);
           this.patientCovidForm.patchValue({
@@ -128,18 +122,49 @@ export class ContactHistoryComponent
       });
   }
 
+  getMMUContactDetails(beneficiaryRegID: any, visitID: any) {
+    this.covidContactHistory = this.doctorService
+      .getVisitComplaintDetails(beneficiaryRegID, visitID)
+      .subscribe((value: any) => {
+        if (
+          value !== null &&
+          value.statusCode === 200 &&
+          value.data !== null &&
+          value.data.covidDetails !== null
+        ) {
+          this.contactResponseList = value.data.covidDetails.contactStatus;
+          this.patientCovidForm.patchValue({
+            contactStatus: this.contactResponseList,
+          });
+          this.contactSelected();
+        }
+      });
+  }
+
   contactHistoryMasterData: any;
   getContactHistoryMasterData() {
     this.contactHistoryMasterData =
-      this.masterdataService.nurseMasterData$.subscribe((response: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((response) => {
         if (response !== null) {
           console.log('contactmaster', response.covidContactHistoryMaster);
+          //this.contactData = response.covidContactHistoryMaster;
           this.contactArray = response.covidContactHistoryMaster;
           const selectedContact = this.contactArray.map(
             ({ contactHistory }: any) => contactHistory,
           );
           this.contactData = selectedContact;
           this.contactList = selectedContact;
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.getMMUContactDetails(benRegID, visitID);
+          }
         }
       });
   }
@@ -153,6 +178,7 @@ export class ContactHistoryComponent
         this.contactData = this.contactList.filter((item: any) => {
           return item === 'None of the above';
         });
+        //this.answer1=true;
       } else {
         localStorage.setItem('contact', 'true');
         this.contactData = this.contactList.filter((item: any) => {
@@ -160,12 +186,14 @@ export class ContactHistoryComponent
         });
       }
       this.cont = localStorage.getItem('contact');
-      this.nurseService.filter(this.cont);
+      //this.outputToParent.emit( this.answer1);
+      this.httpServiceService.filter(this.cont);
     } else {
       this.contactData = this.contactList;
       localStorage.setItem('contact', 'null');
       this.cont = localStorage.getItem('contact');
-      this.nurseService.filter(this.cont);
+      //this.outputToParent.emit( this.answer1);
+      this.httpServiceService.filter(this.cont);
     }
   }
 
@@ -178,6 +206,53 @@ export class ContactHistoryComponent
       this.contactReqiured = 'true';
     }
   }
+  /*contactStatuschange(contactStatus) {
+    this.confirmedCaseCOVID_flag = false;
+    this.feverCoughBreath_flag = false;
+    this.TravelPlaces_flag = false;
+console.log("contactStatus value " + contactStatus);
+
+    this.patientCovidForm.patchValue({ contactStatus : contactStatus});
+
+
+    if (contactStatus.length > 0) {
+      localStorage.setItem('contact',"true");//change
+      //this.covidFill_flag=true;
+      this.question3 = "yes";
+      this.contactArray = contactStatus;
+      for (let a = 0; a < contactStatus.length; a++) {
+       
+
+        if (contactStatus[a] === "Is a confirmed case of COVID-19") {
+          this.confirmedCaseCOVID_flag = true;
+        }
+
+        if (
+          contactStatus[a] ==
+          "Is having symptoms of Fever, Cough or breathing difficulty"
+        ) {
+          this.feverCoughBreath_flag = true;
+        }
+
+        if (
+          contactStatus[a] ==
+          "Has a history of travel to places reporting local transmission"
+        ) {
+          this.TravelPlaces_flag = true;
+        }
+
+        //this.contactArray.push(obj)
+      }
+    } else {
+      localStorage.setItem('contact',"false");//change
+      this.question3 = "no";
+    }
+    this.cont=localStorage.getItem("contact");
+    //this.outputToParent.emit( this.answer1);
+    this.httpServiceService.filter( this.cont);
+    //this.populate();
+    //this.changeSuspectedCovid();
+  }*/
   get contactStatus() {
     return this.patientCovidForm.controls['contactStatus'].value;
   }

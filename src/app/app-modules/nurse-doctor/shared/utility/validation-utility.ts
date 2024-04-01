@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 export class ValidationUtils {
   validateDuration(duration: any, durationUnit: any, beneficiaryAge: any) {
     let totalDays = 0;
@@ -32,13 +31,25 @@ export class ValidationUtils {
       case 'Days':
         totalDays = duration;
         break;
+      case 'Day':
+        totalDays = duration;
+        break;
       case 'Weeks':
+        totalDays = duration * 7;
+        break;
+      case 'Week':
         totalDays = duration * 7;
         break;
       case 'Months':
         totalDays = duration * 30;
         break;
+      case 'Month':
+        totalDays = duration * 30;
+        break;
       case 'Years':
+        totalDays = duration * 365;
+        break;
+      case 'Year':
         totalDays = duration * 365;
         break;
     }
@@ -56,7 +67,7 @@ export class ValidationUtils {
   getAgeValue(age: any) {
     if (!age) return 0;
 
-    const arr = age.trim().split(' ');
+    const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
     const ageUnit = arr[1];
     if (ageUnit.toLowerCase() === 'years') return parseInt(arr[0]) * 365;
     else if (ageUnit.toLowerCase() === 'months') return parseInt(arr[0]) * 30;

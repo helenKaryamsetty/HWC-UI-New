@@ -1,0 +1,1473 @@
+<div [formGroup]="cbacScreeningForm">
+  <br />
+  <div>
+    <p
+      class="option1 option2"
+      *ngIf="
+        (totalCbacScore !== null && totalCbacScore >= 0) ||
+        (totalScore !== null && totalScore >= 0)
+      "
+    >
+      <strong>{{ currentLanguageSet?.cbacScore }} :</strong>&nbsp;&nbsp;{{
+        totalScore +
+          ageScore +
+          consumeGutkaScore +
+          cbacAlcoholScore +
+          cbacWaistMaleScore +
+          cbacWaistFemaleScore +
+          cbacPhysicalActivityScore +
+          cbacFamilyHistoryBpdiabetesScore
+      }}
+    </p>
+    <p
+      class="option1 pull-right"
+      style="color: red"
+      *ngIf="totalCbacScore >= 4 || totalScore >= 4"
+    >
+      <strong>** {{ currentLanguageSet?.suspectedNCDCase }}</strong>
+    </p>
+  </div>
+  <br />
+  <div>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h4>
+            <strong
+              >{{ currentLanguageSet?.partA }}:
+              {{ currentLanguageSet?.riskAssesment }}</strong
+            >
+          </h4>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-responsive">
+          <table aria-describedby="cbacTable" class="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  {{ currentLanguageSet?.coreComponents?.sno }}.
+                </th>
+                <th scope="col">{{ currentLanguageSet?.common?.question }}</th>
+                <th scope="col" style="padding-left: 65px">
+                  {{ currentLanguageSet?.common?.answer }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container>
+                <tr>
+                  <td>1.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.whatIsYourAge }}
+                  </td>
+                  <td>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                      <mat-select
+                        [style.width]="'100%'"
+                        name="cbacAge"
+                        class="answer"
+                        formControlName="cbacAge"
+                        (change)="calculateAgeScore()"
+                      >
+                        <mat-option
+                          *ngFor="let cbacAgeValues of cbacAgeOptions"
+                          [value]="cbacAgeValues.option"
+                          >{{ cbacAgeValues.option }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>2.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.doYouSmokeOrConsumeSmokelessProductsSuchAsGutkaOrKhaini
+                    }}
+                  </td>
+                  <td>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                      <mat-select
+                        [style.width]="'100%'"
+                        name="cbacConsumeGutka"
+                        class="answer"
+                        formControlName="cbacConsumeGutka"
+                        (change)="calculatecbacConsumeGutka()"
+                      >
+                        <mat-option
+                          *ngFor="
+                            let cbacConsumeGutkaValues of cbacConsumeGutkaOptions
+                          "
+                          [value]="cbacConsumeGutkaValues.option"
+                          >{{ cbacConsumeGutkaValues.option }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>3.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.doYouConsumeAlchoholDaily }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacAlcohol"
+                      class="radioButton"
+                      name="cbacAlcohol"
+                      (change)="calculatecbacAlcohol()"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>4.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.measurementOfWaist }}
+                  </td>
+                  <td *ngIf="beneficiaryGender === 'male'">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                      <mat-select
+                        [style.width]="'100%'"
+                        name="cbacWaistMale"
+                        class="answer"
+                        formControlName="cbacWaistMale"
+                        (change)="calculatecbacWaistMaleScore()"
+                      >
+                        <mat-option
+                          *ngFor="
+                            let cbacWaistMaleValues of cbacWaistMaleOptions
+                          "
+                          [value]="cbacWaistMaleValues.option"
+                          >{{ cbacWaistMaleValues.option }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </td>
+
+                  <td
+                    *ngIf="
+                      beneficiaryGender === 'female' ||
+                      beneficiaryGender === 'transgender'
+                    "
+                  >
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                      <mat-select
+                        [style.width]="'100%'"
+                        name="cbacWaistFemale"
+                        class="answer"
+                        formControlName="cbacWaistFemale"
+                        (change)="calculatecbacWaistFemaleScore()"
+                      >
+                        <mat-option
+                          *ngFor="
+                            let cbacWaistFemaleValues of cbacWaistFemaleOptions
+                          "
+                          [value]="cbacWaistFemaleValues.option"
+                          >{{ cbacWaistFemaleValues.option }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>5.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.doYouUndertakeAnyPhysicalActivitiesForMinimumOf150MinutesInaWeek
+                    }}
+                  </td>
+                  <td>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+                      <mat-select
+                        [style.width]="'100%'"
+                        name="cbacPhysicalActivity"
+                        class="answer"
+                        formControlName="cbacPhysicalActivity"
+                        (change)="calculateCbacPhysicalActivity()"
+                      >
+                        <mat-option
+                          *ngFor="
+                            let cbacPhysicalActivityValues of cbacPhysicalActivityOptions
+                          "
+                          [value]="cbacPhysicalActivityValues.option"
+                          >{{ cbacPhysicalActivityValues.option }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>6.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.doYouHaveaFamilyHistoryOfHighBloodPressureDiabetesAndHeartDisease
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacFamilyHistoryBpdiabetes"
+                      class="radioButton"
+                      name="cbacFamilyHistoryBpdiabetes"
+                      (change)="calculateCbacFamilyHistoryBpdiabetes()"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </mat-card-content>
+      <mat-card-header>
+        <mat-card-title>
+          <h4>
+            <strong
+              >{{ currentLanguageSet?.partB }}:
+              {{ currentLanguageSet?.symptomsAssesment }}</strong
+            >
+          </h4>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-responsive">
+          <table aria-describedby="cbacTableQuestions" class="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  {{ currentLanguageSet?.coreComponents?.sno }}
+                </th>
+                <th scope="col">{{ currentLanguageSet?.common?.question }}</th>
+                <th scope="col" style="padding-left: 35px">
+                  {{ currentLanguageSet?.common?.answer }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container>
+                <tr>
+                  <td>1.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.ExaminationData
+                        ?.cancerScreeningExamination?.symptoms
+                        ?.shortnessofbreath
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacShortnessBreath"
+                      name="cbacShortnessBreath"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>2.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.coughingMoreThan2Weeks }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacCough2weeks"
+                      name="cbacCough2weeks"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>3.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.ExaminationData
+                        ?.cancerScreeningExamination?.symptoms?.bloodinsputum
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBloodsputum"
+                      name="cbacBloodsputum"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>4.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.feverFor2Weeks }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacFever2weeks"
+                      name="cbacFever2weeks"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>5.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.lossOfWeight }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacWeightLoss"
+                      name="cbacWeightLoss"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>6.</td>
+                  <td class="onHover">{{ currentLanguageSet?.nightSweats }}</td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacNightSweats"
+                      name="cbacNightSweats"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>7.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.areYouTakingCurrentlyAnti }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacAntiTBDrugs"
+                      name="cbacAntiTBDrugs"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>8.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.anyoneInFamilyCurrentlySufferingFromTB
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group formControlName="cbacTb" name="cbacTb">
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>9.</td>
+                  <td class="onHover">{{ currentLanguageSet?.historyOfTB }}</td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacTBHistory"
+                      name="cbacTBHistory"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>10.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.recurrentUlcerationOnPalmOrSole }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacUlceration"
+                      name="cbacUlceration"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>11.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.recurrentTinglingonPalmsorSoles }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacRecurrentTingling"
+                      name="cbacRecurrentTingling"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>12.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.historyofFits }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacFitsHistory"
+                      name="cbacFitsHistory"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>13.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.difficultyInOpeningMouth }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacMouthopeningDifficulty"
+                      name="cbacMouthopeningDifficulty"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>14.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.anyUlcersInMouthThatHasNotHealedInTwoWeeks
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacMouthUlcers"
+                      name="cbacMouthUlcers"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>15.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.anyGrowthInMouthThatHasNotHealedIntWoweeks
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacMouthUlcersGrowth"
+                      name="cbacMouthUlcersGrowth"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>16.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.AnyRedorWhitePatchinMouthThatHasNotHealedInTwoweeks
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacMouthredpatch"
+                      name="cbacMouthredpatch"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>17.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.painWhileChewing }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacPainchewing"
+                      name="cbacPainchewing"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>18.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.anyChangeInTheToneOfYourVoice }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacTonechange"
+                      name="cbacTonechange"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>19.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.anyHypopigmentedPatchorDiscoloredLesionWithLossOfSensation
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacHypopigmentedpatches"
+                      name="cbacHypopigmentedpatches"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>20.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.anyThickenedSkin }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacThickenedskin"
+                      name="cbacThickenedskin"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>21.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.anyNodulesOnSkin }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacNodulesonskin"
+                      name="cbacNodulesonskin"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>22.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.recurrentNumbnessOnPalmorSole }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacRecurrentNumbness"
+                      name="cbacRecurrentNumbness"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>23.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.cloudyOrBlurredVision }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBlurredVision"
+                      name="cbacBlurredVision"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>24.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.difficultyInReading }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacDifficultyreading"
+                      name="cbacDifficultyreading"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>25.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.rednessInEyesLastingForMoreThanaWeek
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacRednessPain"
+                      name="cbacRednessPain"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>26.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.difficultyInHearing }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacDifficultyHearing"
+                      name="cbacDifficultyHearing"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>27.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.clawingOfFingersInHandOrFeet }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacClawingfingers"
+                      name="cbacClawingfingers"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>28.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.tinglingorNumbnessinHandsorAndorFeet
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacHandTingling"
+                      name="cbacHandTingling"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>29.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.inabilitytoCloseEyelid }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacInabilityCloseeyelid"
+                      name="cbacInabilityCloseeyelid"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>30.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.difficultyInHoldingObjectsWithFingers
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacDifficultHoldingObjects"
+                      name="cbacDifficultHoldingObjects"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>31.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.weaknessinFeetThatCausesDifficultyInWalking
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacFeetweakness"
+                      name="cbacFeetweakness"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>32.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.lumpintheBreast }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacLumpBreast"
+                      name="cbacLumpBreast"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>33.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.bloodStainedDischargeFromTheNipple }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBloodnippleDischarge"
+                      name="cbacBloodnippleDischarge"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>34.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.ExaminationData
+                        ?.cancerScreeningExamination?.symptoms
+                        ?.changeinshapeandsizeofbreasts
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBreastsizechange"
+                      name="cbacBreastsizechange"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>35.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.bleedingBetweenPeriods }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBleedingPeriods"
+                      name="cbacBleedingPeriods"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>36.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.bleedingAfterMenopause }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBleedingMenopause"
+                      name="cbacBleedingMenopause"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>37.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.bleedingAfterIntercourse }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacBleedingIntercourse"
+                      name="cbacBleedingIntercourse"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    beneficiaryGender === 'female' ||
+                    beneficiaryGender === 'transgender'
+                  "
+                >
+                  <td>38.</td>
+                  <td class="onHover">
+                    {{ currentLanguageSet?.foulSmellVaginalDischarge }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacVaginalDischarge"
+                      name="cbacVaginalDischarge"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr *ngIf="beneficiaryAge >= 60">
+                  <td
+                    *ngIf="
+                      beneficiaryGender === 'female' ||
+                      beneficiaryGender === 'transgender'
+                    "
+                  >
+                    39.
+                  </td>
+                  <td *ngIf="beneficiaryGender === 'male'">32.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.feelingUnsteadyWhileStandingorWalking
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacFeelingUnsteady"
+                      name="cbacFeelingUnsteady"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr *ngIf="beneficiaryAge >= 60">
+                  <td
+                    *ngIf="
+                      beneficiaryGender === 'female' ||
+                      beneficiaryGender === 'transgender'
+                    "
+                  >
+                    40.
+                  </td>
+                  <td *ngIf="beneficiaryGender === 'male'">33.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.sufferingFromAnyDisabilityThatRestrictsMovement
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacPhysicalDisabilitySuffering"
+                      name="cbacPhysicalDisabilitySuffering"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr *ngIf="beneficiaryAge >= 60">
+                  <td
+                    *ngIf="
+                      beneficiaryGender === 'female' ||
+                      beneficiaryGender === 'transgender'
+                    "
+                  >
+                    41.
+                  </td>
+                  <td *ngIf="beneficiaryGender === 'male'">34.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.Needinghelpingfromotherstoperformeverydayactivitiessuchaseatinggettingdressedgroomingbathingwalkingorusingtoilet
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacNeedhelpEverydayActivities"
+                      name="cbacNeedhelpEverydayActivities"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+
+                <tr *ngIf="beneficiaryAge >= 60">
+                  <td
+                    *ngIf="
+                      beneficiaryGender === 'female' ||
+                      beneficiaryGender === 'transgender'
+                    "
+                  >
+                    42.
+                  </td>
+                  <td *ngIf="beneficiaryGender === 'male'">35.</td>
+                  <td class="onHover">
+                    {{
+                      currentLanguageSet?.forgettingNamesofYourNearsOnesOrYourHomeAddress
+                    }}
+                  </td>
+                  <td>
+                    <mat-radio-group
+                      formControlName="cbacForgetnearones"
+                      name="cbacForgetnearones"
+                    >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="yes"
+                        >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
+                      >
+                      <mat-radio-button
+                        color="primary"
+                        class="radio-button"
+                        value="no"
+                        >{{ currentLanguageSet?.common?.no }}</mat-radio-button
+                      >
+                    </mat-radio-group>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

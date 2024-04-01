@@ -19,7 +19,7 @@
 }
 
 .radio-button {
-    margin-left: 15px;
+    margin-left: 0px;
 }
 
 .previous-history{
@@ -27,7 +27,7 @@
     align-items: baseline;
 }
 
-::ng-deep.mat-select-placeholder {
+:host /deep/ .mat-select-placeholder {
     font-size: 2em;
  }
 
@@ -35,19 +35,22 @@
      margin-bottom: 10px;
  }
 
- .mat_form_field  >>>
-.mdc-text-field--filled, .mdc-text-field--focused {
-    background-color: #f0f5f5 !important;
-}
-.mat_form_field >>> .mat-mdc-text-field-wrapper {
-    height:unset !important;
+ .lineheight {
+    line-height: 12px;
+ }
+
+button#previousAllergyHistory .mat-icon.material-icons {
+    color: #52575C !important;
 }
 
-.mat_form_field_length >>> .input-full-width[_ngcontent-ng-c1820935159] {
-    width: 75% !important;
+button#previousAlcoholHistory .mat-icon.material-icons {
+    color: #52575C !important;
 }
 
-.mat_form_field_length >>> .mdc-text-field__input {
-    width: 51% !important;
-    
+button#previousTobaccoHistory .mat-icon.material-icons {
+    color: #52575C !important;
+}
+
+md-icon.search-btn {
+    color: #52575C !important;
 }

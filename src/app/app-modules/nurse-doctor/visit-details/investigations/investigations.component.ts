@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -31,15 +30,15 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import {
   MasterdataService,
   DoctorService,
   NurseService,
 } from '../../shared/services';
+import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-patient-investigations',
@@ -64,8 +63,8 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private httpServices: HttpServiceService,
     private nurseService: NurseService,
   ) {}
 
@@ -75,29 +74,38 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     this.getNurseMasterData();
     this.rbsTestValidation();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
 
   nurseMasterDataSubscription: any;
   getNurseMasterData() {
     this.nurseMasterDataSubscription =
-      this.masterdataService.nurseMasterData$.subscribe((masterData: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.procedures) {
+          // this.nurseMasterDataSubscription.unsubscribe();
+
           this.selectLabTest = masterData.procedures.filter((item: any) => {
             return item.procedureType === 'Laboratory';
           });
 
           if (this.mode === 'view') {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.getInvestigation(benRegID, visitID);
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getInvestigation(benRegID, visitID);
@@ -165,7 +173,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
 
   rbsTestValidation() {
     this.rbsTestResultSubscription =
-      this.nurseService.rbsTestResultCurrent$.subscribe((response: any) => {
+      this.nurseService.rbsTestResultCurrent$.subscribe((response) => {
         if (response !== undefined && response !== null) {
           this.RBSTestScore = response;
           this.RBStestDone = true;
@@ -185,13 +193,12 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     ) {
       return true;
     }
-    return false;
   }
 
   checkTestName(event: any) {
     console.log('testName', event);
     this.RBStestDone = false;
-    const item = event.value;
+    let item = event.value;
     let oneSelected = 0;
     this.nurseService.setRbsSelectedInInvestigation(false);
     item.forEach((element: any) => {
@@ -199,7 +206,21 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
         this.RBStestDone = true;
         this.nurseService.setRbsSelectedInInvestigation(true);
         oneSelected++;
+        const hbTest = this.selectLabTest.find(
+          (test: any) =>
+            test.procedureName.toLowerCase() ===
+            environment.haemoglobinTest.toLowerCase(),
+        );
+        // this.hemoglobbinSelected = true;
+        if (hbTest && !item.includes(hbTest)) {
+          item.push(hbTest);
+        }
       }
     });
+    // Remove duplicates
+    item = Array.from(new Set(item));
+
+    // Update form control value
+    this.patientInvestigationsForm.controls['laboratoryList'].setValue(item);
   }
 }

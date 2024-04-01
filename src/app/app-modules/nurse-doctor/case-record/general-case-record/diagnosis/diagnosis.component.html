@@ -1,8 +1,17 @@
+<!-- {{ generalDiagnosisForm.value | json }} -->
 <section class="m-t-20">
   <app-general-opd-diagnosis
-    *ngIf="visitCategory === 'General OPD'"
+    *ngIf="
+      visitCategory === 'Gener===================al OPD' ||
+      visitCategory === 'FP & ===================Contraceptive Services' ||
+      visitCategory.toLowerCase() ===
+        'neona=========================================================================================tal and infant health care services' ||
+      visitCategory.toLowerCase() ===
+        'child=========================================================================================hood & adolescent healthcare services'
+    "
     [caseRecordMode]="caseRecordMode"
     [generalDiagnosisForm]="generalDiagnosisForm"
+    [visitCategory]="visitCategory"
   ></app-general-opd-diagnosis>
   <app-anc-diagnosis
     *ngIf="visitCategory === 'ANC'"

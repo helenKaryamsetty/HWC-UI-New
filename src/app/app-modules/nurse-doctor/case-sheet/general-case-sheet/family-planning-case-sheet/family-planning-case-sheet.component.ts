@@ -19,16 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
-import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
   selector: 'app-family-planning-case-sheet',
   templateUrl: './family-planning-case-sheet.component.html',
   styleUrls: ['./family-planning-case-sheet.component.css'],
 })
-export class FamilyPlanningCaseSheetComponent implements OnInit {
+export class FamilyPlanningCaseSheetComponent
+  implements OnChanges, OnInit, DoCheck
+{
   @Input()
   caseSheetData: any;
 
@@ -73,7 +82,7 @@ export class FamilyPlanningCaseSheetComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.caseSheetData != undefined && this.caseSheetData != null) {
+    if (this.caseSheetData !== undefined && this.caseSheetData !== null) {
       if (
         this.caseSheetData &&
         this.caseSheetData.nurseData &&
@@ -88,7 +97,7 @@ export class FamilyPlanningCaseSheetComponent implements OnInit {
             undefined &&
           this.familyPlanningAndReproductiveCasesheet.fertilityStatus !==
             null &&
-          this.familyPlanningAndReproductiveCasesheet.fertilityStatus.toLowerCase() ==
+          this.familyPlanningAndReproductiveCasesheet.fertilityStatus.toLowerCase() ===
             'fertile'
         ) {
           this.enableFPDetails = true;

@@ -1,11 +1,11 @@
+<!-- {{ referForm.value | json}} -->
 <mat-expansion-panel [formGroup]="referForm" expanded="true">
   <mat-expansion-panel-header>
     <h5>{{ currentLanguageSet?.Referdetails?.revisitAndRefer }}</h5>
   </mat-expansion-panel-header>
   <div class="m-t-20">
-    <div *ngIf="visitCategory === 'NCD screening'">
-      <mat-label
-        class="mat-label-text"
+    <div class="p-l-10" *ngIf="visitCategory === 'NCD screening'">
+      <p
         *ngIf="showMsg > 0 && !healthCareReferred && instituteFlag === true"
         style="color: red"
       >
@@ -13,23 +13,34 @@
         {{
           currentLanguageSet?.Referdetails
             ?.pleaseReferthePatientToHigherHealthCareCenter
-        }}</mat-label
-      ><br />
-      <mat-label
-        class="mat-label-text"
-        *ngIf="tmcSuggested > 0"
-        style="color: red"
-      >
-        *
-        {{
-          currentLanguageSet?.Referdetails?.teleConsultationIsSuggested
-        }}</mat-label
-      >
+        }}
+      </p>
+      <br />
+    </div>
+
+    <div
+      class="row m-t-5"
+      *ngIf="
+        referredVisitcode !== 'undefined' &&
+        referredVisitcode !== undefined &&
+        referredVisitcode !== null
+      "
+    >
+      <div class="col-sm-12 step-btn m-b-10">
+        <button
+          mat-raised-button
+          color="primary"
+          class="pull-right"
+          (click)="loadMMUReferDeatils()"
+        >
+          {{ currentLanguageSet?.Referdetails?.mMUReferralDetails }}
+        </button>
+      </div>
     </div>
 
     <div *ngIf="visitCategory === 'NCD screening'">
-      <div class="col-12" style="text-align: end">
-        <mat-label class="mat-label-text" class="font-history-label">{{
+      <div class="row text-right">
+        <mat-label class="font-history-label m-t-10">{{
           currentLanguageSet?.Referdetails?.previousReferralHistory
         }}</mat-label>
         <button
@@ -37,7 +48,7 @@
           mat-icon-button
           matTooltip="{{ currentLanguageSet?.previousReferredDetails }}"
           id="PreviousReferralHistory"
-          class="mat_icon_blue"
+          class="pull-right"
           color="primary"
           (click)="getPreviousReferralHistory()"
         >
@@ -45,76 +56,107 @@
         </button>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}
-        {{ showMsg > 0 && instituteFlag === true ? "*" : "" }}
+        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter
+        }}{{ showMsg > 0 && instituteFlag === true ? "*" : "" }}
       </div>
+
       <div class="col-sm-6 col-md-3 box">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label class="mat-label-text">{{
+        <mat-select
+          class="inputFieldWidth"
+          placeholder="{{
             currentLanguageSet?.Referdetails?.referredtoinstitute
-          }}</mat-label>
-          <mat-select
-            style="width: 220px"
-            (ngModelChange)="higherhealthcarecenter($event)"
-            name="referredToInstituteName"
-            formControlName="referredToInstituteName"
+          }}"
+          (ngModelChange)="higherhealthcarecenter($event)"
+          name="referredToInstituteName"
+          formControlName="referredToInstituteName"
+        >
+          <mat-option (click)="setInstituteNameValue()" value="select none"
+            >Select None</mat-option
           >
-            <mat-option
-              *ngFor="let center of higherHealthcareCenter"
-              [value]="center"
-              >{{ center.institutionName }}
-            </mat-option>
-          </mat-select>
+          <mat-option
+            *ngFor="let center of higherHealthcareCenter"
+            [value]="center"
+            >{{ center.institutionName }}</mat-option
+          >
+        </mat-select>
+      </div>
+
+      <div
+        class="box col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-right"
+        *ngIf="
+          enableOtherHigherInstitute &&
+          visitCategory.toLowerCase() === 'fp & contraceptive services'
+        "
+      >
+        <mat-form-field class="input-full-width">
+          <input
+            autocomplete="off"
+            matInput
+            defaultNull
+            maxlength="100"
+            placeholder="{{ currentLanguageSet?.other }}"
+            allowText="alphaspace"
+            formControlName="otherReferredToInstituteName"
+            name="otherReferredToInstituteName"
+          />
         </mat-form-field>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+      *ngIf="visitCategory.toLowerCase() !== 'fp & contraceptive services'"
+    >
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
         {{ currentLanguageSet?.Referdetails?.additionalservices }}
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label class="mat-label-text">{{
+        <mat-select
+          class="inputFieldWidth"
+          placeholder="{{
             currentLanguageSet?.Referdetails?.additionalservices
-          }}</mat-label>
-          <mat-select
-            style="width: 220px"
-            (ngModelChange)="additionalservices($event)"
-            multiple="true"
-            name="refrredToAdditionalServiceList"
-            formControlName="refrredToAdditionalServiceList"
+          }}"
+          (ngModelChange)="additionalservices($event)"
+          multiple="true"
+          name="refrredToAdditionalServiceList"
+          formControlName="refrredToAdditionalServiceList"
+        >
+          <mat-option
+            *ngFor="let service of additionalServices"
+            [value]="service.serviceName"
+            [disabled]="canDisable(service)"
           >
-            <mat-option
-              *ngFor="let service of additionalServices"
-              [value]="service"
-              [disabled]="canDisable(service)"
-            >
-              {{ service.serviceName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+            {{ service.serviceName }}</mat-option
+          >
+        </mat-select>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+      *ngIf="
+        visitCategory.toLowerCase() !== 'fp & contraceptive services' &&
+        visitCategory.toLowerCase() !== 'ncd screening'
+      "
+    >
       <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
         *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
       >
         {{ currentLanguageSet?.Referdetails?.referralReason }}*
       </div>
-
       <ng-template #elseBlock>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
           {{ currentLanguageSet?.Referdetails?.referralReason }}
         </div>
       </ng-template>
       <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
         *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
       >
-        <mat-form-field [style.width]="'100%'">
+        <mat-input-container class="referreason" class="inputFieldWidth">
           <textarea
             matInput
             allowText="textAreaValidator"
@@ -124,11 +166,12 @@
             name="Remarks"
             maxLength="300"
           ></textarea>
-        </mat-form-field>
+        </mat-input-container>
       </div>
+
       <ng-template #elseBlockText>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-          <mat-form-field [style.width]="'100%'">
+          <mat-input-container class="referreason" style="width: 220px">
             <textarea
               matInput
               allowText="textAreaValidator"
@@ -137,12 +180,93 @@
               name="Remarks"
               maxLength="300"
             ></textarea>
-          </mat-form-field>
+          </mat-input-container>
         </div>
       </ng-template>
     </div>
-    <!--Revisit Date Added-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20"
+      *ngIf="
+        visitCategory.toLowerCase() === 'fp & contraceptive services' ||
+        visitCategory.toLowerCase() === 'ncd screening'
+      "
+    >
+      <div
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
+      >
+        {{ currentLanguageSet?.Referdetails?.referralReason }}*
+      </div>
+      <ng-template #elseBlock>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </div>
+      </ng-template>
+
+      <div
+        class="col-xs-6 col-sm-6 col-md-3 col-lg-3"
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
+      >
+        <mat-select
+          multiple
+          class="inputFieldWidth"
+          name="referralReasonList"
+          formControlName="referralReasonList"
+          (change)="
+            checkForOthersOption(referForm.controls.referralReasonList.value)
+          "
+          placeholder="{{ currentLanguageSet?.Referdetails?.referralReason }}"
+          required
+        >
+          <mat-option *ngFor="let refer of fpReferral" [value]="refer.name">
+            {{ refer.name }}
+          </mat-option>
+        </mat-select>
+      </div>
+      <ng-template #elseBlockText>
+        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+          <mat-select
+            multiple
+            class="inputFieldWidth"
+            name="referralReasonList"
+            formControlName="referralReasonList"
+            (change)="
+              checkForOthersOption(referForm.controls.referralReasonList.value)
+            "
+            placeholder="{{ currentLanguageSet?.Referdetails?.referralReason }}"
+          >
+            <mat-option
+              class="dropdownHeight"
+              *ngFor="let refer of fpReferral"
+              [value]="refer.name"
+            >
+              {{ refer.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </ng-template>
+
+      <div
+        class="box col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-right"
+        *ngIf="enableOthersReferralTextField"
+      >
+        <mat-form-field class="input-full-width">
+          <input
+            autocomplete="off"
+            matInput
+            defaultNull
+            maxlength="100"
+            placeholder="{{ currentLanguageSet?.other }}"
+            allowText="alphaspace"
+            formControlName="otherReferralReason"
+            name="otherReferralReason"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10">
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
         {{ currentLanguageSet?.Referdetails?.revisitDate }}
       </div>

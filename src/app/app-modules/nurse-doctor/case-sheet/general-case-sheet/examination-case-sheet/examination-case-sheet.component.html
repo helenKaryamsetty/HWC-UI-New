@@ -424,7 +424,7 @@
     </div>
   </div>
 
-  <!-- <div class="row m-t-10" *ngIf="visitCategory == 'General OPD'">
+  <!-- <div class="row m-t-10" *ngIf="visitCategory === 'General OPD'">
     <div class="col-xs-12">
       <h4>{{current_language_set?.casesheet?.oralExamination}}:</h4>
     </div>
@@ -438,8 +438,8 @@
             </td>
             <th id="premalignantLesions">{{current_language_set?.ExaminationData?.cancerScreeningExamination?.oral?.premalignantLesions}}:</th>
             <td>
-              <span *ngIf="oralExamination?.premalignantLesions == true">{{current_language_set?.common?.yes}}</span>
-              <span *ngIf="oralExamination?.premalignantLesions == false">{{current_language_set?.common?.no}}</span>
+              <span *ngIf="oralExamination?.premalignantLesions === true">{{current_language_set?.common?.yes}}</span>
+              <span *ngIf="oralExamination?.premalignantLesions === false">{{current_language_set?.common?.no}}</span>
             </td>
           </tr>
 
@@ -450,16 +450,16 @@
             </td>
             <th id="prolongedirritation">{{current_language_set?.ExaminationData?.cancerScreeningExamination?.oral?.prolongedirritation}}:</th>
             <td>
-              <span *ngIf="oralExamination?.prolongedIrritation == true">{{current_language_set?.common?.yes}}</span>
-              <span *ngIf="oralExamination?.prolongedIrritation == false">{{current_language_set?.common?.no}}</span>
+              <span *ngIf="oralExamination?.prolongedIrritation === true">{{current_language_set?.common?.yes}}</span>
+              <span *ngIf="oralExamination?.prolongedIrritation === false">{{current_language_set?.common?.no}}</span>
             </td>
           </tr>
 
           <tr>
             <th id="chronicburningsensation">{{current_language_set?.ExaminationData?.cancerScreeningExamination?.oral?.chronicburningsensation}}:</th>
             <td>
-              <span *ngIf="oralExamination?.chronicBurningSensation == true">{{current_language_set?.common?.yes}}</span>
-              <span *ngIf="oralExamination?.chronicBurningSensation == false">{{current_language_set?.common?.no}}</span>
+              <span *ngIf="oralExamination?.chronicBurningSensation === true">{{current_language_set?.common?.yes}}</span>
+              <span *ngIf="oralExamination?.chronicBurningSensation === false">{{current_language_set?.common?.no}}</span>
             </td>
             <th id="observation">
               {{

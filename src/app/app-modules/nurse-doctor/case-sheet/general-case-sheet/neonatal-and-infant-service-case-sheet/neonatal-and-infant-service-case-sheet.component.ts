@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -30,7 +37,9 @@ import { Timestamp } from 'rxjs';
   templateUrl: './neonatal-and-infant-service-case-sheet.component.html',
   styleUrls: ['./neonatal-and-infant-service-case-sheet.component.css'],
 })
-export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
+export class NeonatalAndInfantServiceCaseSheetComponent
+  implements OnChanges, OnInit, DoCheck
+{
   @Input()
   caseSheetData: any;
 
@@ -49,16 +58,16 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
   formImmunizationHistoryDetails: any;
   immunizationServiceCasesheet: any;
   immunizationServicesCasesheet: any;
-  vaccinetaken = [];
-  serviceVaccinetaken = [];
+  vaccinetaken: any = [];
+  serviceVaccinetaken: any = [];
   immunizationDataList: any;
   immunizationVaccine: any;
   beneficiaryAge = 0;
   beneficiary: any;
   enableImmunizationServiceVaccine = false;
   benAge: any;
-  visitCategory: string;
-  birthTime: Date;
+  visitCategory: any;
+  birthTime!: Date;
 
   constructor(
     private httpServiceService: HttpServiceService,
@@ -80,12 +89,12 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
-  getAgeValueNew(age) {
+  getAgeValueNew(age: any) {
     if (!age) return 0;
     const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
     if (arr[1]) {
       const ageUnit = arr[1];
-      if (ageUnit.toLowerCase() == 'years') {
+      if (ageUnit.toLowerCase() === 'years') {
         return parseInt(arr[0]);
       }
     }
@@ -93,7 +102,7 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.caseSheetData != undefined && this.caseSheetData != null) {
+    if (this.caseSheetData !== undefined && this.caseSheetData !== null) {
       if (
         this.caseSheetData &&
         this.caseSheetData.nurseData &&
@@ -139,9 +148,9 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
           this.caseSheetData.nurseData.history.immunizationHistory.immunizationList;
 
         this.immunizationVaccine = [];
-        this.immunizationDataList.forEach((vaccineList) => {
+        this.immunizationDataList.forEach((vaccineList: any) => {
           this.immunizationVaccine = [];
-          vaccineList.vaccines.forEach((vaccine) => {
+          vaccineList.vaccines.forEach((vaccine: any) => {
             if (vaccine.status === true) {
               this.immunizationVaccine.push(vaccine.vaccine);
             }
@@ -173,7 +182,7 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
             .vaccines;
 
         let serviceVaccineName = [];
-        immunizationServiceData.forEach((vaccine) => {
+        immunizationServiceData.forEach((vaccine: any) => {
           serviceVaccineName = [];
           if (
             vaccine.vaccineName !== undefined &&
@@ -226,7 +235,7 @@ export class NeonatalAndInfantServiceCaseSheetComponent implements OnInit {
   }
 }
 
-function toTime(timeString) {
+function toTime(timeString: any) {
   const timeTokens = timeString.split(':');
   return new Date(1970, 0, 1, timeTokens[0], timeTokens[1]);
 }

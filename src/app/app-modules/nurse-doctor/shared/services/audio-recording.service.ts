@@ -19,11 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import moment from 'moment';
-import RecordRTC from 'recordrtc';
+import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 

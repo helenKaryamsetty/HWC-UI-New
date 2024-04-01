@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
@@ -31,7 +31,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './quick-search.component.html',
   styleUrls: ['./quick-search.component.css'],
 })
-export class QuickSearchComponent implements OnInit {
+export class QuickSearchComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   @ViewChild('newSearchForm') form: any;
   searchIdForm!: FormGroup;

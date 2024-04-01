@@ -4,7 +4,7 @@
  *
  * Copyright (C) "Piramal Swasthya Management and Research Institute"
  *
- * This file is part of AMRIT..
+ * This file is part of AMRIT.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
@@ -33,18 +32,17 @@ import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { NurseService } from '../../shared/services/nurse.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
+import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+
 @Component({
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
   styleUrls: ['./upload-files.component.css'],
 })
-export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
+export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   fileList!: FileList;
   file: any;
   fileContent: any;
@@ -65,6 +63,7 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   disableFileSelection = false;
   enableForNCDScreening = false;
   maxFileSize = 5;
+  disableViewFiles = false;
 
   @Input()
   patientFileUploadDetailsForm!: FormGroup;
@@ -73,36 +72,59 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   mode!: string;
 
   @Input()
-  enableFileSelection!: boolean;
-  languageComponent!: SetLanguageComponent;
+  enableFileSelection = false;
   currentLanguageSet: any;
 
   constructor(
     private nurseService: NurseService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    //private labService: LabService,
     private fb: FormBuilder,
-    private httpServiceService: HttpServiceService,
-    private labService: LabService,
     private confirmationService: ConfirmationService,
-    private doctorService: DoctorService,
     private dialog: MatDialog,
+    public httpServiceService: HttpServiceService,
+    private doctorService: DoctorService,
   ) {}
 
   ngOnInit() {
-    this.fetchLanguageResponse();
+    this.assignSelectedLanguage();
   }
-
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
   ngOnChanges() {
+    const specialistFlagString = localStorage.getItem('specialistFlag');
+
     if (this.mode === 'view' && !this.enableFileSelection) {
       this.disableFileSelection = true;
     } else if (this.mode === 'view' && this.enableFileSelection) {
       this.enableForNCDScreening = true;
-      this.disableFileSelection = false;
+    } else if (
+      specialistFlagString !== null &&
+      parseInt(specialistFlagString) === 100
+    ) {
+      this.enableForNCDScreening = true;
     } else {
       this.disableFileSelection = false;
     }
-  }
 
+    if (
+      this.mode === 'view' &&
+      this.doctorService.fileIDs !== null &&
+      this.doctorService.fileIDs !== undefined &&
+      this.doctorService.fileIDs.length > 0 &&
+      this.doctorService.fileIDs.length[0] !== null
+    ) {
+      this.disableViewFiles = false;
+    } else {
+      this.disableViewFiles = true;
+    }
+  }
   uploadFile(event: any) {
     this.fileList = event.target.files;
     if (this.fileList.length > 0) {
@@ -110,9 +132,11 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
 
       const fileNameExtension = this.file.name.split('.');
       const fileName = fileNameExtension[0];
+
       if (fileName !== undefined && fileName !== null && fileName !== '') {
         const validFormat = this.checkExtension(this.file);
         if (!validFormat) {
+          // this.invalid_file_extensions_flag = true;
           this.confirmationService.alert(
             this.currentLanguageSet.invalidFileExtensionSupportedFileFormats,
             'error',
@@ -129,10 +153,23 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
               'error',
             );
           } else if (this.file) {
+            console.log('File Size' + this.fileList[0].size / 1000 / 1000);
             const myReader: FileReader = new FileReader();
             myReader.onloadend = this.onLoadFileCallback.bind(this);
             myReader.readAsDataURL(this.file);
           }
+
+          // if (this.fileList.length === 0) {
+          //   this.confirmationService.alert("Please choose a file to upload", 'info');
+          // }
+          // else if (this.fileList.length > 0 && this.fileList[0].size / 1000 / 1000 <= this.maxFileSize) {
+          //   console.log(this.fileList[0].size / 1000 / 1000);
+          //   this.confirmationService.alert("File size should not exceed" + this.maxFileSize + "MB", 'error');
+          // }
+          // else if (this.fileList.length > 0 && this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
+          //   console.log(this.fileList[0].size / 1000 / 1000);
+          //   this.confirmationService.alert("File size should not exceed" + this.maxFileSize + "MB", 'error');
+          // }
         }
       } else
         this.confirmationService.alert(
@@ -181,17 +218,35 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   fileObj: any = [];
   assignFileObject(fileContent: any) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
     const kmFileManager = {
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
       userID: localStorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      createdBy: localStorage.getItem('userName'),
+      vanID: vanID,
       isUploaded: false,
     };
     this.fileObj.push(kmFileManager);
     this.nurseService.fileData = this.fileObj;
+    console.log('kmFileManager', this.fileObj);
+  }
+  /*
+   *  Remove file
+   */
+  remove(file: any) {
+    const index = this.fileObj.indexOf(file);
+
+    if (index >= 0) {
+      this.fileObj.splice(index, 1);
+    }
+    console.log(this.fileObj);
+    this.nurseService.fileData = null;
   }
   savedFileData: any = [];
   fileIDs: any = [];
@@ -199,41 +254,31 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     return this.patientFileUploadDetailsForm.controls['fileIDs'].value;
   }
   saveUploadDetails(fileObj: any) {
-    this.labService.saveFile(fileObj).subscribe(
-      (res: any) => {
-        if (res.statusCode === 200) {
-          res.data.forEach((file: any) => {
-            this.savedFileData.push(file);
-            this.fileIDs.push(file.filePath);
-            this.confirmationService.alert(
-              'File Uploaded successfully',
-              'success',
-            );
-          });
-          this.fileObj.map((file: any) => {
-            file.isUploaded = true;
-          });
-          this.savedFileData.map((file: any) => {
-            file.isUploaded = true;
-          });
-        }
-      },
-      (err: any) => {
-        this.confirmationService.alert(err.errorMessage, 'err');
-      },
-    );
-    console.log('fileIDs', this.fileIDs);
-    if (this.fileIDs !== null) {
-      this.patientFileUploadDetailsForm.patchValue({
-        fileIDs: this.fileIDs,
-      });
-    } else {
-      this.patientFileUploadDetailsForm.patchValue({
-        fileIDs: [],
-      });
-    }
-
-    this.nurseService.fileData = null;
+    // this.labService.saveFile(fileObj).subscribe(
+    //   (res: any) => {
+    //     if (res.statusCode === 200) {
+    //       this.disableViewFiles = false;
+    //       res.data.forEach((file: any) => {
+    //         this.savedFileData.push(file);
+    //         this.fileIDs.push(file.kmFileManagerID);
+    //       });
+    //       this.fileObj.map((file: any) => {
+    //         file.isUploaded = true;
+    //       });
+    //       this.savedFileData.map((file: any) => {
+    //         file.isUploaded = true;
+    //       });
+    //     }
+    //   },
+    //   (err: any) => {
+    //     this.confirmationService.alert(err.errorMessage, 'err');
+    //   },
+    // );
+    // console.log('fileIDs', this.fileIDs);
+    // this.patientFileUploadDetailsForm.patchValue({
+    //   fileIDs: this.fileIDs,
+    // });
+    // this.nurseService.fileData = null;
   }
   checkForDuplicateUpload() {
     if (this.fileObj !== undefined) {
@@ -258,13 +303,13 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
             this.saveUploadDetails(result);
           } else {
             this.confirmationService.alert(
-              this.currentLanguageSet.alerts.info.pleaseselectfiletoupload,
+              this.currentLanguageSet.alerts.info.selectNewFile,
               'info',
             );
           }
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.pleaseselectfiletoupload,
+            this.currentLanguageSet.alerts.info.selectNewFile,
             'info',
           );
         }
@@ -273,74 +318,62 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
       }
     } else {
       this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.pleaseselectfiletoupload,
+        this.currentLanguageSet.alerts.info.selectNewFile,
         'info',
       );
     }
   }
   viewNurseSelectedFiles() {
-    console.log('this.doc', this.doctorService.fileIDs);
-    const file_Ids = this.doctorService.fileIDs;
-    const ViewTestReport = this.dialog.open(
-      ViewRadiologyUploadedFilesComponent,
-      {
-        width: '40%',
-        data: {
-          filesDetails: file_Ids,
-          // width: 0.8 * window.innerWidth + "px",
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
-      },
-    );
-    ViewTestReport.afterClosed().subscribe((result) => {
-      if (result) {
-        this.labService.viewFileContent(result).subscribe((res: any) => {
-          const blob = new Blob([res], { type: res.type });
-          console.log(blob, 'blob');
-          const url = window.URL.createObjectURL(blob);
-          // window.open(url);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = result.fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        });
-      }
-    });
-  }
-
-  /*
-   *  Remove file
-   */
-  remove(file: any) {
-    const index = this.fileObj.indexOf(file);
-
-    if (index >= 0) {
-      this.fileObj.splice(index, 1);
-    }
-    console.log(this.fileObj);
-    this.nurseService.fileData = null;
+    // console.log('this.doc', this.doctorService.fileIDs);
+    // const file_Ids = this.doctorService.fileIDs;
+    // const ViewTestReport = this.dialog.open(
+    //   ViewRadiologyUploadedFilesComponent,
+    //   {
+    //     width: '40%',
+    //     data: {
+    //       filesDetails: file_Ids,
+    //       panelClass: 'dialog-width',
+    //       disableClose: false,
+    //     },
+    //   },
+    // );
+    // ViewTestReport.afterClosed().subscribe((result) => {
+    //   if (result) {
+    //     const fileID = {
+    //       fileID: result,
+    //     };
+    //     this.labService.viewFileContent(fileID).subscribe(
+    //       (res: any) => {
+    //         if (res.data.statusCode === 200) {
+    //           const fileContent = res.data.data.response;
+    //           location.href = fileContent;
+    //         }
+    //       },
+    //       (err: any) => {
+    //         this.confirmationService.alert(err.errorMessage, 'err');
+    //       },
+    //     );
+    //   }
+    // });
   }
   triggerLog(event: any) {
     console.log(event.clientX);
     //this.key=event.clientX;
     if (event.clientX !== 0) {
-      const x = document.getElementById('fileUpload');
-      x?.click();
+      const x: any = document.getElementById('fileUpload');
+      x.click();
     }
   }
-
-  //AN40085822 13/10/2021 Integrating Multilingual Functionality --Start--
-  ngDoCheck() {
-    this.fetchLanguageResponse();
-  }
-
-  fetchLanguageResponse() {
-    this.languageComponent = new SetLanguageComponent(this.httpServiceService);
-    this.languageComponent.setLanguage();
-    this.currentLanguageSet = this.languageComponent.currentLanguageObject;
-  }
-  //--End--
 }
+/*Validation to check special characters in file name*/
+// let uploadFileFlag = false;
+// let regex = /^[A-Za-z0-9 ]+$/;
+// if (this.file && this.file.name) {
+//   let isValid = regex.test(this.file.name);
+//   if (!isValid) {
+//     this.confirmationService.alert("Filename contains special characters");
+//     uploadFileFlag = true;
+//   } else {
+//     uploadFileFlag = false;
+//   }
+// }

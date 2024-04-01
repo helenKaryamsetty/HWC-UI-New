@@ -117,9 +117,7 @@ export class RegistrarService {
 
   getResgistartionMasterData(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http
-      .post(environment.registrarMasterDataUrl, tmpSPID)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.registrarMasterDataUrl, tmpSPID);
   }
 
   subject = new BehaviorSubject(this.consentGranted);
@@ -144,30 +142,22 @@ export class RegistrarService {
   }
 
   getPatientData(benRegID: any) {
-    return this.http
-      .post(environment.getCompleteBeneficiaryDetail, {
-        beneficiaryRegID: benRegID,
-      })
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.getCompleteBeneficiaryDetail, {
+      beneficiaryRegID: benRegID,
+    });
   }
 
   registerBeneficiary(beneficiary: any) {
     const benData = { benD: beneficiary };
-    return this.http
-      .post(environment.registerBeneficiaryUrl, benData)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.registerBeneficiaryUrl, benData);
   }
 
   quickSearch(searchTerm: any) {
-    return this.http
-      .post(environment.quickSearchUrl, searchTerm)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.quickSearchUrl, searchTerm);
   }
 
   identityQuickSearch(searchTerm: any) {
-    return this.http
-      .post(environment.identityQuickSearchUrl, searchTerm)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.identityQuickSearchUrl, searchTerm);
   }
 
   // quickSearchByPhoneNO(searchTerm: any) {
@@ -184,180 +174,134 @@ export class RegistrarService {
   }
 
   advanceSearch(searchTerms: any) {
-    return this.http
-      .post(environment.advanceSearchUrl, searchTerms)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.advanceSearchUrl, searchTerms);
   }
 
   advanceSearchIdentity(searchTerms: any) {
-    return this.http
-      .post(environment.advanceSearchIdentityUrl, searchTerms)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.advanceSearchIdentityUrl, searchTerms);
   }
 
   externalSearchIdentity(searchTerms: any) {
-    return this.http
-      .post(environment.externalSearchIdentityUrl, searchTerms)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.externalSearchIdentityUrl, searchTerms);
   }
 
   migrateBenToAmrit(benDetails: any) {
-    return this.http
-      .post(environment.externalSearchIdentityUrl, benDetails)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.externalSearchIdentityUrl, benDetails);
   }
 
   loadMasterData(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http
-      .post(environment.registrarMasterDataUrl, tmpSPID)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.registrarMasterDataUrl, tmpSPID);
   }
 
   patientRevisit(benRegID: any) {
-    return this.http
-      .post(environment.patientRevisitSubmitToNurse, benRegID)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.patientRevisitSubmitToNurse, benRegID);
   }
 
   identityPatientRevisit(ben: any) {
-    return this.http
-      .post(environment.identityPatientRevisitSubmitToNurseURL, ben)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.identityPatientRevisitSubmitToNurseURL,
+      ben,
+    );
   }
 
   updatePatientData(beneficiary: any) {
-    return this.http
-      .post(environment.updateBeneficiaryUrl, beneficiary)
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.updateBeneficiaryUrl, beneficiary);
   }
 
   getDistrictBlocks(servicePointID: any) {
-    return this.http
-      .post(environment.servicePointVillages, {
-        servicePointID: servicePointID,
-      })
-      .pipe(map((res: any) => res.json().data));
+    return this.http.post(environment.servicePointVillages, {
+      servicePointID: servicePointID,
+    });
   }
 
   submitBeneficiary(iEMRForm: any) {
-    return this.http
-      .post(environment.submitBeneficiaryIdentityUrl, iEMRForm)
-      .pipe(
-        map((res: any) => res.json()),
-        shareReplay(1),
-      );
+    return this.http.post(environment.submitBeneficiaryIdentityUrl, iEMRForm);
   }
 
   updateBeneficiary(iEMRForm: any) {
-    return this.http
-      .post(environment.updateBeneficiaryIdentityUrl, iEMRForm)
-      .pipe(
-        map((res: any) => res.json()),
-        shareReplay(1),
-      );
+    return this.http.post(environment.updateBeneficiaryIdentityUrl, iEMRForm);
   }
 
   getVillageList(blockId: any) {
-    return this.http
-      .get(`${environment.getVillageListUrl}${blockId}`)
-      .pipe(map((res: any) => res.json()));
+    return this.http.get(`${environment.getVillageListUrl}${blockId}`);
   }
 
   getSubDistrictList(districtId: any) {
-    return this.http
-      .get(`${environment.getSubDistrictListUrl}${districtId}`)
-      .pipe(map((res: any) => res.json()));
+    return this.http.get(`${environment.getSubDistrictListUrl}${districtId}`);
   }
 
   getDistrictList(stateId: any) {
-    return this.http
-      .get(`${environment.getDistrictListUrl}${stateId}`)
-      .pipe(map((res: any) => res.json()));
+    return this.http.get(`${environment.getDistrictListUrl}${stateId}`);
   }
 
   generateOTP(mobileNo: any, mode: any) {
     if (mode === 'MOBILE') {
-      return this.http
-        .post(environment.otpGenerationUrl, mobileNo)
-        .pipe(map((res: any) => res.json()));
+      return this.http.post(environment.otpGenerationUrl, mobileNo);
     } else if (mode === 'AADHAR') {
-      return this.http
-        .post(environment.otpGenerationWithUIDUrl, mobileNo)
-        .pipe(map((res: any) => res.json()));
+      return this.http.post(environment.otpGenerationWithUIDUrl, mobileNo);
     }
   }
 
   generateHealthId(reqObj: any) {
-    return this.http
-      .post(environment.healthIdGenerationUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.healthIdGenerationUrl, reqObj);
   }
 
   generateHealthIdWithUID(reqObj: any) {
-    return this.http
-      .post(environment.healthIdGenerationWithUIDUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.healthIdGenerationWithUIDUrl, reqObj);
   }
   verifyOTPForAadharHealthId(reqObj: any) {
-    return this.http
-      .post(environment.verifyOTPUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.verifyOTPUrl, reqObj);
   }
 
   checkAndGenerateMobileOTPHealthId(reqObj: any) {
-    return this.http
-      .post(environment.checkAndGenerateMobileOTPUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.checkAndGenerateMobileOTPUrl, reqObj);
   }
 
   verifyMobileOTPForAadhar(reqObj: any) {
-    return this.http
-      .post(environment.verifyMobileOTPUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.verifyMobileOTPUrl, reqObj);
   }
 
   mapHealthId(reqObj: any) {
-    return this.http
-      .post(environment.mapHealthIdUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.mapHealthIdUrl, reqObj);
   }
 
   getHealthIdDetails(reqObj: any) {
-    return this.http
-      .post(environment.gethealthIdDetailsUrl, reqObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.gethealthIdDetailsUrl, reqObj);
   }
   generateOtpForMappingCareContext(reqObjForMapping: any) {
-    return this.http
-      .post(environment.careContextGenerateOtpUrl, reqObjForMapping)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.careContextGenerateOtpUrl,
+      reqObjForMapping,
+    );
   }
   verifyOtpForMappingCarecontext(reqObjForVerifyOtp: any) {
-    return this.http
-      .post(environment.verifyOtpForMappingContextUrl, reqObjForVerifyOtp)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.verifyOtpForMappingContextUrl,
+      reqObjForVerifyOtp,
+    );
   }
   generateOTPValidateHealthID(healthID: any) {
-    return this.http
-      .post(environment.generateOTPForHealthIDValidation, healthID)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.generateOTPForHealthIDValidation,
+      healthID,
+    );
   }
   verifyOTPForHealthIDValidation(reqObjForValidateOTP: any) {
-    return this.http
-      .post(environment.verifyOTPForHealthIDValidation, reqObjForValidateOTP)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.verifyOTPForHealthIDValidation,
+      reqObjForValidateOTP,
+    );
   }
 
   generateHealthIDCard(healthID: any) {
-    return this.http
-      .post(environment.generateOTPForHealthIDCard, healthID)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.generateOTPForHealthIDCard, healthID);
   }
   verifyOTPForHealthIDCard(reqObjForValidateOTP: any) {
-    return this.http
-      .post(environment.verifyOTPAndGenerateHealthCard, reqObjForValidateOTP)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(
+      environment.verifyOTPAndGenerateHealthCard,
+      reqObjForValidateOTP,
+    );
   }
 
   passIDsToFetchOtp(id: any) {
@@ -376,8 +320,6 @@ export class RegistrarService {
   }
 
   updateBenDetailsInMongo(amritID: any) {
-    return this.http
-      .post(environment.updateAmritIDInMongo, amritID)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.updateAmritIDInMongo, amritID);
   }
 }

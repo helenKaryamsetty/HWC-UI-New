@@ -64,9 +64,8 @@ export class ServicePointService {
   }
 
   getMMUDemographics() {
-    const vanID = JSON.parse(
-      localStorage.getItem('serviceLineDetails') || '{}',
-    ).vanID;
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
     const spPSMID = localStorage.getItem('providerServiceID');
 
     return this.http

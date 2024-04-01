@@ -21,11 +21,11 @@
  */
 import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MasterdataService } from '../../services/masterdata.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 
 @Component({
   selector: 'app-diagnosis-search',
@@ -196,7 +196,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
       this.masterdataService
         .searchDiagnosisBasedOnPageNo(term, pageNo)
         .subscribe(
-          (res) => {
+          (res: any) => {
             if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
@@ -226,7 +226,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
       this.masterdataService
         .searchDiagnosisBasedOnPageNo(term, pageNo, diagnosisType)
         .subscribe(
-          (res) => {
+          (res: any) => {
             if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {

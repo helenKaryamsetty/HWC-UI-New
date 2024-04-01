@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
   Input,
   DoCheck,
-  ViewChild,
+  OnChanges,
   OnDestroy,
 } from '@angular/core';
 import {
@@ -42,13 +41,11 @@ import {
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ValidationUtils } from '../../shared/utility/validation-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
+import { Observable } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
@@ -70,63 +67,61 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   chiefComplaintMaster: any;
   chiefComplaintTemporarayList: any = [];
   selectedChiefComplaintList: any = [];
-  suggestedChiefComplaintList: any[] = [];
-  currentLanguageSet: any;
-  enableLungAssessment = false;
-  enableProvisionalDiag = false;
-  displayedColumns: any = [
-    'chiefComplaint',
-    'duration',
-    'unitOfDuration',
-    'description',
-  ];
+  suggestedChiefComplaintList: any = [];
+  jsonObj = [];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  public jsonObj$!: Observable<any[]>;
+  currentLanguageSet: any;
+  visitComplaintDet: any;
+  ncdTemperature = false;
+  // enableLungAssessment: boolean = false;
+  enableProvisionalDiag = false;
 
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
-    private nurseService: NurseService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    public httpServiceService: HttpServiceService,
+    private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    private httpServices: HttpServiceService,
   ) {
     this.formUtility = new VisitDetailUtils(this.fb);
   }
 
   ngOnInit() {
+    this.ncdTemperature = false;
+    // this.enableLungAssessment = false;
     this.assignSelectedLanguage();
-    this.getNurseMasterData();
+    const specialistFlagString = localStorage.getItem('specialistFlag');
+
+    if (
+      specialistFlagString !== null &&
+      parseInt(specialistFlagString) === 100
+    ) {
+      this.getMMUNurseMasterData();
+    } else {
+      this.getNurseMasterData();
+    }
     this.getBeneficiaryDetails();
-    this.enableLungAssessment = false;
     this.enableProvisionalDiag = false;
     this.nurseService.clearNCDScreeningProvision();
   }
-
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-
-  getCheifComplaints(): AbstractControl[] | null {
-    const chiefComplaintsControl =
-      this.patientChiefComplaintsForm.get('complaints');
-    return chiefComplaintsControl instanceof FormArray
-      ? chiefComplaintsControl.controls
-      : null;
-  }
-
   nurseMasterDataSubscription: any;
   getNurseMasterData() {
     this.nurseMasterDataSubscription =
-      this.masterdataService.nurseMasterData$.subscribe((data: any) => {
-        if (data?.chiefComplaintMaster) {
+      this.masterdataService.nurseMasterData$.subscribe((data) => {
+        if (data && data.chiefComplaintMaster) {
+          // this.nurseMasterDataSubscription.unsubscribe();
+
           this.chiefComplaintMaster = data.chiefComplaintMaster.slice();
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
@@ -136,8 +131,88 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
+          // if(parseInt(localStorage.getItem("specialistFlag")) === 100)
+          // {
+          //    let visitID = localStorage.getItem('visitID');
+          //   let benRegID = localStorage.getItem('beneficiaryRegID')
+          //   this.getMMUChiefComplaints(benRegID, visitID);
+
+          // }
         }
       });
+  }
+
+  getMMUNurseMasterData() {
+    this.nurseMasterDataSubscription =
+      this.masterdataService.nurseMasterData$.subscribe((data) => {
+        if (data && data.chiefComplaintMaster) {
+          this.nurseMasterDataSubscription.unsubscribe();
+
+          this.chiefComplaintMaster = data.chiefComplaintMaster.slice();
+          this.chiefComplaintTemporarayList[0] =
+            this.chiefComplaintMaster.slice();
+
+          if (this.mode === 'view') {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.getChiefComplaints(benRegID, visitID);
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            this.getMMUChiefComplaints(benRegID, visitID);
+          }
+        }
+      });
+  }
+
+  getMMUChiefComplaintDetails: any;
+  getMMUChiefComplaints(benRegID: any, visitID: any) {
+    this.getMMUChiefComplaintDetails = this.doctorService
+      .getVisitComplaintDetails(benRegID, visitID)
+      .subscribe((value: any) => {
+        if (value !== null && value.statusCode === 200 && value.data !== null) {
+          this.visitComplaintDet = value.data.BenChiefComplaints;
+          // this.addChiefComplaint();
+          this.handleChiefComplaintData();
+        }
+      });
+  }
+
+  handleChiefComplaintData() {
+    const formArray = this.patientChiefComplaintsForm.controls[
+      'complaints'
+    ] as FormArray;
+    let temp: any = [];
+    if (this.visitComplaintDet) temp = this.visitComplaintDet.slice();
+
+    for (let i = 0; i < temp.length; i++) {
+      const chiefComplaintType = this.chiefComplaintMaster.filter(
+        (item: any) => {
+          return item.chiefComplaint === temp[i].chiefComplaint;
+        },
+      );
+
+      if (chiefComplaintType.length > 0)
+        temp[i].chiefComplaint = chiefComplaintType[0];
+
+      if (temp[i].chiefComplaint) {
+        const k: any = formArray.get('' + i);
+        k.patchValue(temp[i]);
+        k.markAsTouched();
+        this.filterComplaints(temp[i].chiefComplaint, i);
+      }
+
+      if (i + 1 < temp.length)
+        // this.addChiefComplaint();
+        this.addCheifComplaint();
+    }
   }
 
   getChiefComplaintDetails: any;
@@ -149,11 +224,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           const visitComplaintDetail = value.data;
           if (visitComplaintDetail)
             this.benChiefComplaints = visitComplaintDetail.BenChiefComplaints;
-          this.dataSource.data = [];
-          this.dataSource.data = visitComplaintDetail.BenChiefComplaints;
-          this.dataSource.paginator = this.paginator;
-          let flag = false;
-          this.enableLungAssessment = false;
+          this.ncdTemperature = false;
+          // this.enableLungAssessment = false;
           this.enableProvisionalDiag = false;
           if (
             this.benChiefComplaints !== undefined &&
@@ -162,58 +234,36 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             for (let i = 0; i < this.benChiefComplaints.length; i++) {
               this.enableProvisionalDiag = true;
               if (
-                this.benChiefComplaints[i]?.chiefComplaint?.toLowerCase() ===
-                'fever'
+                this.benChiefComplaints[i] !== undefined &&
+                this.benChiefComplaints[i] !== null &&
+                this.benChiefComplaints[i].chiefComplaint !== undefined &&
+                this.benChiefComplaints[i].chiefComplaint !== null &&
+                this.benChiefComplaints[i].chiefComplaint.toLowerCase() ===
+                  'fever'
               ) {
-                flag = true;
+                this.ncdTemperature = true;
                 break;
               }
-              if (environment.isMMUOfflineSync) {
-                if (
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('fever') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('cough') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('congestion') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('breathing problems') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('asthma') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('copd') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('influenza') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('pneumonia') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('tuberculosis') ||
-                  this.benChiefComplaints[i]?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('lung cancer')
-                ) {
-                  this.enableLungAssessment = true;
-                  break;
-                }
-              }
+              //  if(this.benChiefComplaints[i] !=undefined &&
+              //   this.benChiefComplaints[i] !=null && this.benChiefComplaints[i].chiefComplaint !=undefined && this.benChiefComplaints[i].chiefComplaint !=null &&
+              //   (this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("fever") || this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("cough") ||
+              //     this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("congestion") || this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("breathing problems") ||
+              //     this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("asthma") || this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("copd") ||
+              //     this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("influenza") || this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("pneumonia") ||
+              //     this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("tuberculosis") || this.benChiefComplaints[i].chiefComplaint.toLowerCase().includes("lung cancer")))
+              //  {
+              //   this.enableLungAssessment=true;
+              //  break;
+              //  }
             }
           }
-          if (flag) this.nurseService.setNCDTemp(true);
+          if (this.ncdTemperature) this.nurseService.setNCDTemp(true);
           else this.nurseService.setNCDTemp(false);
 
-          if (this.enableLungAssessment)
-            this.nurseService.setEnableLAssessment(true);
-          else this.nurseService.setEnableLAssessment(false);
-
+          // if(this.enableLungAssessment)
+          // this.nurseService.setEnableLAssessment(true);
+          // else
+          // this.nurseService.setEnableLAssessment(false);
           if (this.enableProvisionalDiag)
             this.nurseService.setNCDScreeningProvision(true);
           else this.nurseService.setNCDScreeningProvision(false);
@@ -228,7 +278,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           this.loadConceptID(res.data, index);
         }
       },
-      (error: any) => {},
+      (error) => {},
     );
   }
 
@@ -248,8 +298,12 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     if (this.getChiefComplaintDetails)
       this.getChiefComplaintDetails.unsubscribe();
 
+    if (this.getMMUChiefComplaintDetails)
+      this.getMMUChiefComplaintDetails.unsubscribe();
+
     if (this.beneficiaryDetailSubscription)
       this.beneficiaryDetailSubscription.unsubscribe();
+    this.selectedChiefComplaintList = [];
   }
 
   beneficiaryDetailSubscription: any;
@@ -268,11 +322,12 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
       this.fb.group({ chiefComplaint: chiefComplaintValue }),
       i,
     );
+
     const arr = this.chiefComplaintMaster.filter((item: any) => {
       return item.chiefComplaint === chiefComplaintValue.chiefComplaint;
     });
 
-    if (this.selectedChiefComplaintList?.[i]) {
+    if (this.selectedChiefComplaintList && this.selectedChiefComplaintList[i]) {
       this.chiefComplaintTemporarayList.map((item: any, t: any) => {
         if (t !== i) {
           item.push(this.selectedChiefComplaintList[i]);
@@ -284,13 +339,13 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     if (arr.length > 0) {
       this.chiefComplaintTemporarayList.map((item: any, t: any) => {
         const index = item.indexOf(arr[0]);
-        if (index !== -1 && t !== i) item.splice(index, 1);
+        if (index !== -1 && t !== i) item = item.splice(index, 1);
       });
       this.selectedChiefComplaintList[i] = arr[0];
     }
-    this.enableLungAssessment = false;
+    this.ncdTemperature = false;
+    // this.enableLungAssessment = false;
     this.enableProvisionalDiag = false;
-    let flag = false;
     if (
       this.selectedChiefComplaintList !== null &&
       this.selectedChiefComplaintList !== undefined &&
@@ -298,30 +353,31 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     ) {
       this.selectedChiefComplaintList.forEach((val: any) => {
         this.enableProvisionalDiag = true;
-        if (val?.chiefComplaint?.toLowerCase() === 'fever') flag = true;
-        if (environment.isMMUOfflineSync) {
-          if (
-            val?.chiefComplaint?.toLowerCase().includes('fever') ||
-            val?.chiefComplaint?.toLowerCase().includes('cough') ||
-            val?.chiefComplaint?.toLowerCase().includes('congestion') ||
-            val?.chiefComplaint
-              ?.toLowerCase()
-              .includes('breathing difficulty') ||
-            val?.chiefComplaint?.toLowerCase().includes('asthma') ||
-            val?.chiefComplaint?.toLowerCase().includes('copd') ||
-            val?.chiefComplaint?.toLowerCase().includes('influenza') ||
-            val?.chiefComplaint?.toLowerCase().includes('pneumonia') ||
-            val?.chiefComplaint?.toLowerCase().includes('tuberculosis') ||
-            val?.chiefComplaint?.toLowerCase().includes('lung cancer')
-          )
-            this.enableLungAssessment = true;
-        }
+        if (
+          val !== undefined &&
+          val !== null &&
+          val.chiefComplaint !== undefined &&
+          val.chiefComplaint !== null &&
+          val.chiefComplaint.toLowerCase() === 'fever'
+        )
+          this.ncdTemperature = true;
+        // if(val !=undefined && val !=null && val.chiefComplaint !=undefined && val.chiefComplaint !=null &&
+        //   (val.chiefComplaint.toLowerCase().includes("fever") || val.chiefComplaint.toLowerCase().includes("cough") ||
+        //   val.chiefComplaint.toLowerCase().includes("congestion") || val.chiefComplaint.toLowerCase().includes("breathing difficulty") ||
+        //   val.chiefComplaint.toLowerCase().includes("asthma") || val.chiefComplaint.toLowerCase().includes("copd") ||
+        //   val.chiefComplaint.toLowerCase().includes("influenza") || val.chiefComplaint.toLowerCase().includes("pneumonia") ||
+        //   val.chiefComplaint.toLowerCase().includes("tuberculosis") || val.chiefComplaint.toLowerCase().includes("lung cancer")))
+        // this.enableLungAssessment=true;
       });
     }
-    if (flag) this.nurseService.setNCDTemp(true);
+    if (this.ncdTemperature) this.nurseService.setNCDTemp(true);
     else this.nurseService.setNCDTemp(false);
-    if (this.enableLungAssessment) this.nurseService.setEnableLAssessment(true);
-    else this.nurseService.setEnableLAssessment(false);
+
+    // if(this.enableLungAssessment)
+    // this.nurseService.setEnableLAssessment(true);
+    // else
+    // this.nurseService.setEnableLAssessment(false);
+
     if (this.enableProvisionalDiag)
       this.nurseService.setNCDScreeningProvision(true);
     else this.nurseService.setNCDScreeningProvision(false);
@@ -347,7 +403,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     );
   }
 
-  removeCheifComplaint(i: number, complaintForm: AbstractControl) {
+  removeCheifComplaint(i: number, complaintForm: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -370,7 +426,6 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintTemporarayList.forEach(
               (element: any, t: any) => {
                 if (t !== i) element.push(arr[0]);
-
                 this.sortChiefComplaintList(element);
               },
             );
@@ -378,52 +433,54 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           if (this.selectedChiefComplaintList[i])
             this.selectedChiefComplaintList[i] = null;
 
+          if (this.suggestedChiefComplaintList[i])
+            this.suggestedChiefComplaintList[i] = null;
+
           if (complaintFormArray.length === 1 && complaintForm)
             complaintForm.reset();
           else complaintFormArray.removeAt(i);
-          let flag = false;
-          this.enableLungAssessment = false;
-          this.enableProvisionalDiag = false;
-          if (
-            this.selectedChiefComplaintList !== null &&
-            this.selectedChiefComplaintList !== undefined &&
-            this.selectedChiefComplaintList.length > 0
-          ) {
-            this.selectedChiefComplaintList.forEach((val: any) => {
-              this.enableProvisionalDiag = true;
-              if (val?.chiefComplaint?.toLowerCase() === 'fever') flag = true;
-              if (environment.isMMUOfflineSync) {
-                if (
-                  val?.chiefComplaint?.toLowerCase().includes('fever') ||
-                  val?.chiefComplaint?.toLowerCase().includes('cough') ||
-                  val?.chiefComplaint?.toLowerCase().includes('congestion') ||
-                  val?.chiefComplaint
-                    ?.toLowerCase()
-                    .includes('breathing problems') ||
-                  val?.chiefComplaint?.toLowerCase().includes('asthma') ||
-                  val?.chiefComplaint?.toLowerCase().includes('copd') ||
-                  val?.chiefComplaint?.toLowerCase().includes('influenza') ||
-                  val?.chiefComplaint?.toLowerCase().includes('pneumonia') ||
-                  val?.chiefComplaint?.toLowerCase().includes('tuberculosis') ||
-                  val?.chiefComplaint?.toLowerCase().includes('lung cancer')
-                )
-                  this.enableLungAssessment = true;
-              }
-            });
-          }
-          if (flag) this.nurseService.setNCDTemp(true);
-          else this.nurseService.setNCDTemp(false);
         }
-        if (this.enableLungAssessment)
-          this.nurseService.setEnableLAssessment(true);
-        else this.nurseService.setEnableLAssessment(false);
+        this.ncdTemperature = false;
+        // this.enableLungAssessment = false;
+        this.enableProvisionalDiag = false;
+        if (
+          this.selectedChiefComplaintList !== null &&
+          this.selectedChiefComplaintList !== undefined &&
+          this.selectedChiefComplaintList.length > 0
+        ) {
+          this.selectedChiefComplaintList.forEach((val: any) => {
+            this.enableProvisionalDiag = true;
+            if (
+              val !== undefined &&
+              val !== null &&
+              val.chiefComplaint !== undefined &&
+              val.chiefComplaint !== null &&
+              val.chiefComplaint.toLowerCase() === 'fever'
+            )
+              this.ncdTemperature = true;
+            // if(val !=undefined && val !=null && val.chiefComplaint !=undefined && val.chiefComplaint !=null &&
+            //   (val.chiefComplaint.toLowerCase().includes("fever") || val.chiefComplaint.toLowerCase().includes("cough") ||
+            //     val.chiefComplaint.toLowerCase().includes("congestion") || val.chiefComplaint.toLowerCase().includes("breathing problems") ||
+            //     val.chiefComplaint.toLowerCase().includes("asthma") || val.chiefComplaint.toLowerCase().includes("copd") ||
+            //     val.chiefComplaint.toLowerCase().includes("influenza") || val.chiefComplaint.toLowerCase().includes("pneumonia") ||
+            //     val.chiefComplaint.toLowerCase().includes("tuberculosis") || val.chiefComplaint.toLowerCase().includes("lung cancer")))
+            // this.enableLungAssessment=true;
+          });
+        }
+        if (this.ncdTemperature) this.nurseService.setNCDTemp(true);
+        else this.nurseService.setNCDTemp(false);
+
+        // if(this.enableLungAssessment)
+        // this.nurseService.setEnableLAssessment(true);
+        // else
+        // this.nurseService.setEnableLAssessment(false);
         if (this.enableProvisionalDiag)
           this.nurseService.setNCDScreeningProvision(true);
         else this.nurseService.setNCDScreeningProvision(false);
       });
   }
 
-  validateDuration(formGroup: AbstractControl, event?: Event) {
+  validateDuration(formGroup: FormGroup, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -449,43 +506,40 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   displayChiefComplaint(complaint: any) {
-    return complaint?.chiefComplaint;
+    return complaint && complaint.chiefComplaint;
   }
 
-  suggestChiefComplaintList(complaintForm: AbstractControl, i: number) {
+  suggestChiefComplaintList(complaintForm: FormGroup, i: any) {
     const complaint = complaintForm.value.chiefComplaint;
-    console.log('complaintForm' + complaintForm);
-    console.log('complaint' + complaint);
-    console.log('i', i);
-
-    if (typeof complaint === 'string') {
-      if (
-        this.chiefComplaintTemporarayList !== undefined &&
-        this.chiefComplaintTemporarayList !== null
-      ) {
-        this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
-          i
-        ].filter(
-          (compl: any) =>
-            compl.chiefComplaint
-              .toLowerCase()
-              .indexOf(complaint.toLowerCase().trim()) >= 0,
-        );
-      }
-    } else if (typeof complaint === 'object' && complaint) {
-      if (
-        this.chiefComplaintTemporarayList !== undefined &&
-        this.chiefComplaintTemporarayList !== null
-      ) {
-        this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
-          i
-        ].filter(
-          (compl: any) =>
-            compl.chiefComplaint
-              .toLowerCase()
-              .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
-        );
-      }
+    if (
+      complaint !== undefined &&
+      complaint !== null &&
+      typeof complaint === 'string'
+    ) {
+      this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
+        i
+      ].filter(
+        (compl: any) =>
+          compl.chiefComplaint
+            .toLowerCase()
+            .indexOf(complaint.toLowerCase().trim()) >= 0,
+      );
+    } else if (
+      complaint !== undefined &&
+      complaint !== null &&
+      typeof complaint === 'object' &&
+      complaint &&
+      complaint.chiefComplaint !== undefined &&
+      complaint.chiefComplaint !== null
+    ) {
+      this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
+        i
+      ].filter(
+        (compl: any) =>
+          compl.chiefComplaint
+            .toLowerCase()
+            .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
+      );
     }
 
     if (this.suggestedChiefComplaintList[i].length === 0) complaintForm.reset();

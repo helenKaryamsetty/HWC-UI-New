@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 export * from './cancer-utility';
 export * from './general-utility';
 export * from './quick-consult-utility';
 export * from './visit-detail-utility';
 export * from './ncd-screening-utility';
+export * from './family-planning-utlity';

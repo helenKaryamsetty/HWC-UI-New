@@ -35,9 +35,9 @@ import { ConfirmationService } from '../../services';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from '../set-language.component';
-import { RegistrarService } from '../../services/registrar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 
 @Component({
   selector: 'app-beneficiary-details',
@@ -132,10 +132,11 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getBenDetails() {
+    const benFlowID: any = localStorage.getItem('benFlowID');
     this.route.params.subscribe((param) => {
       this.beneficiaryDetailsService.getBeneficiaryDetails(
         param['beneficiaryRegID'],
-        localStorage.getItem('benFlowID') || '{}',
+        benFlowID,
       );
       this.beneficiaryDetailsSubscription =
         this.beneficiaryDetailsService.beneficiaryDetails$.subscribe((res) => {
@@ -182,9 +183,9 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
           .format('DD-MM-YYYY hh:mm A');
       }
     });
-
+    const benFlowID: any = localStorage.getItem('beneficiaryRegID');
     this.beneficiaryDetailsService
-      .getBeneficiaryImage(localStorage.getItem('beneficiaryRegID') || '{}')
+      .getBeneficiaryImage(benFlowID)
       .subscribe((data: any) => {
         if (data && data.benImage) {
           this.beneficiary.benImage = data.benImage;

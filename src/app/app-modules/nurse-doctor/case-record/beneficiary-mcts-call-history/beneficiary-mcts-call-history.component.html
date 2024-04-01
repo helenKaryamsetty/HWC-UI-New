@@ -7,23 +7,23 @@
 <section class="row message modal_Scroll">
   <mat-dialog-content>
     <div *ngIf="callDetails?.length > 0" class="m-t-20">
-      <mat-form-field id="filterbox" class="pull-right">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.common?.question
-        }}</mat-label>
+      <mat-input-container id="filterbox" class="pull-right">
         <input
           autocomplete="off"
           matInput
+          placeholder="{{ current_language_set?.common?.question }}"
           #filterCall
           (keyup)="filterCallHistory(filterCall.value)"
         />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+        <mat-icon matSuffix>{{
+          current_language_set?.common?.search
+        }}</mat-icon>
+      </mat-input-container>
     </div>
 
     <table
       class="table table-responsive table-bordered"
-      aria-describedby="questionarie"
+      aria-describedby="mctscalldetails"
     >
       <thead>
         <tr>
@@ -44,9 +44,34 @@
           </td>
         </tr>
       </tbody>
-      <tbody *ngIf="callDetails.length > 0"></tbody>
+      <tbody *ngIf="callDetails?.length > 0">
+        <ng-container *ngFor="let call of callDetailsPagedList; let i = index">
+          <tr>
+            <td
+              style="
+                width: 300px;
+                max-width: 120px;
+                word-break: normal;
+                vertical-align: middle;
+              "
+            >
+              {{ call?.questionnaireDetail?.question }}
+            </td>
+            <td
+              style="
+                width: 300px;
+                max-width: 120px;
+                word-break: normal;
+                vertical-align: middle;
+              "
+            >
+              {{ call?.answer }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
       <tfoot>
-        <tr *ngIf="callDetails.length > 0">
+        <tr *ngIf="callDetails?.length > 0">
           <td colspan="1">
             <div class="totalCount">
               {{ current_language_set?.common?.totalCount }} :
@@ -54,16 +79,20 @@
             </div>
           </td>
           <td colspan="1">
-            <pagination-controls
+            <pagination
               class="pull-right"
+              [boundaryLinks]="true"
               (pageChanged)="callDetailsPageChanged($event)"
               *ngIf="filteredCallDetails.length"
+              [totalItems]="filteredCallDetails.length"
+              [itemsPerPage]="callDetailsRowsPerPage"
               [maxSize]="callDetailsRowsPerPage"
+              [rotate]="rotate"
               previousText="&lsaquo;"
               nextText="&rsaquo;"
               firstText="&laquo;"
               lastText="&raquo;"
-            ></pagination-controls>
+            ></pagination>
           </td>
         </tr>
       </tfoot>

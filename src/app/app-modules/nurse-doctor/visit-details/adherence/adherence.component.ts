@@ -19,19 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-patient-adherence',
   templateUrl: './adherence.component.html',
   styleUrls: ['./adherence.component.css'],
 })
-export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
+export class AdherenceComponent implements OnChanges, OnInit, DoCheck {
   @Input()
   patientAdherenceForm!: FormGroup;
 
@@ -43,27 +49,34 @@ export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
 
   constructor(
     private fb: FormBuilder,
+    public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private httpServices: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
   ngOnChanges() {
     if (this.mode === 'view') {
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
+      this.getAdherenceDetails(benRegID, visitID);
+    }
+
+    const specialistFlagString = localStorage.getItem('specialistFlag');
+
+    if (
+      specialistFlagString !== null &&
+      parseInt(specialistFlagString) === 100
+    ) {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getAdherenceDetails(benRegID, visitID);
@@ -77,7 +90,8 @@ export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
         if (
           value !== null &&
           value.statusCode === 200 &&
-          value?.data?.BenAdherence !== null
+          value.data !== null &&
+          value.data.BenAdherence !== null
         )
           this.patientAdherenceForm.patchValue(value.data.BenAdherence);
       });

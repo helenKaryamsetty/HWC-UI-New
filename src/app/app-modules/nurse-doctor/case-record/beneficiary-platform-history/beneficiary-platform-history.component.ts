@@ -19,18 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DoctorService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
 import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
@@ -38,76 +37,26 @@ import { DoctorService } from 'src/app/app-modules/core/services/doctor.service'
 })
 export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;
-  filterMMU: any;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
-
-  @ViewChild(MatPaginator) TmPaginator: MatPaginator | null = null;
-  historyOfTM = new MatTableDataSource<any>();
-
-  @ViewChild(MatPaginator) paginator104: MatPaginator | null = null;
-  historyOf104 = new MatTableDataSource<any>();
-
-  @ViewChild(MatPaginator) MctsPaginator: MatPaginator | null = null;
-  historyOfMCTS = new MatTableDataSource<any>();
-
-  displayedColumns = [
-    'visitnommu',
-    'date',
-    'visitreasonmmu',
-    'visitcategorymmu',
-    'visitDetails',
-    'visitcodemmu',
-    'medicationmmu',
-    'previewmmu',
-    'printpreviewmmu',
-  ];
-
-  displayedTMColumns = [
-    'visitnommu',
-    'date',
-    'visitreasonmmu',
-    'visitcategorymmu',
-    'visitcodemmu',
-    'previewmmu',
-    'printpreviewmmu',
-  ];
-
-  displayedMCTSColumns = [
-    'calltypemcts',
-    'calldatetimemcts',
-    'dataupdatemcts',
-    'callstatusmcts',
-    'callgrouptypemcts',
-    'remarks',
-    'actions',
-  ];
-
-  displayed104Columns = [
-    'id',
-    'name104',
-    'age104',
-    'ChiefComplaint104',
-    'symptoms',
-    'provisionalSelected104',
-    'recommendedaction104',
-    'actionByHao',
-    'actionByMo',
-    'actionByCoPd',
-    'date',
-  ];
-
+  higherHealthFacility = 'Higher Health Facility';
+  previousHWCHistoryRowsPerPage = 5;
+  previousHWCHistoryActivePage = 1;
+  historyOfHWC: any = [];
+  filteredHWCHistory: any = [];
+  hideHWCFetch = false;
   constructor(
     private doctorService: DoctorService,
+    public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
+    private router: Router,
     private dialog: MatDialog,
-    private httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.getServiceOnState();
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -116,8 +65,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   serviceOnState: any = [];
-  filteredHistory: any = [];
   getServiceOnState() {
     this.doctorService.getServiceOnState().subscribe((res: any) => {
       console.log('resinstate', res);
@@ -130,15 +79,22 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     const services: any = [];
     serviceOnState.forEach((service: any) => {
       if (service.serviceID !== 1 && service.serviceID !== 5) {
-        service = {
+        service = Object.assign({
           serviceID: service.serviceID,
           serviceName: service.serviceName,
           serviceLoaded: false,
-        };
+        });
         services.push(service);
       }
     });
-    console.log(services, 'services');
+    //console.log(services, "services");
+    // services.push(
+    //   Object.assign({
+    //     serviceName: this.higherHealthFacility,
+    //     serviceLoaded: false,
+    //   })
+    // );
+    //uncomment to see bahmni clinical records
     return services;
   }
 
@@ -155,31 +111,52 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     if (service === 6) {
       this.getMCTSHistory();
     }
+    if (service === 9) {
+      this.getHWCHistory();
+    }
   }
 
   previousMMUHistoryRowsPerPage = 5;
   previousMMUHistoryActivePage = 1;
   rotate = true;
+  historyOfMMU: any = [];
   filteredMMUHistory: any = [];
   hideMMUFetch = false;
 
   getMMUHistory() {
-    this.doctorService.getMMUHistory().subscribe((data: any) => {
-      console.log('data', data);
-      if (data.statusCode === 200) {
-        this.hideMMUFetch = true;
-        const services = this.serviceOnState;
-        this.serviceOnState = [];
-        this.serviceOnState = this.checkServiceLoader(services, 2);
-        console.log('dataget', JSON.stringify(data, null, 4));
-        this.dataSource.data = data.data;
-        this.dataSource.paginator = this.paginator;
-        this.getEachVisitData();
-      }
-    });
+    this.doctorService.getMMUHistory().subscribe(
+      (data: any) => {
+        console.log('data', data);
+        if (data.statusCode === 200) {
+          this.hideMMUFetch = true;
+          const services = this.serviceOnState;
+          this.serviceOnState = [];
+          this.serviceOnState = this.checkServiceLoader(services, 2);
+          console.log('dataget', JSON.stringify(data, null, 4));
+          this.historyOfMMU = data.data;
+          this.filteredMMUHistory = data.data;
+          this.previousMMUHistoryPageChanged({
+            page: this.previousMMUHistoryActivePage,
+            itemsPerPage: this.previousMMUHistoryRowsPerPage,
+          });
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.unableToLoadData,
+            'error',
+          );
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(
+          this.current_language_set.unableToLoadData,
+          'error',
+        );
+      },
+    );
   }
+
   getEachVisitData() {
-    this.dataSource.data.forEach((item: any, i: any) => {
+    this.historyOfHWC.forEach((item: any, i: any) => {
       if (item.visitCode) {
         const reqObj = {
           VisitCategory: item.VisitCategory,
@@ -187,25 +164,27 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           beneficiaryRegID: item.beneficiaryRegID,
           visitCode: item.visitCode,
         };
-        this.doctorService.getMMUCasesheetData(reqObj).subscribe((res: any) => {
+        this.doctorService.getTMCasesheetData(reqObj).subscribe((res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            this.dataSource.data[i]['benPreviousData'] = res.data;
-            this.dataSource.paginator = this.paginator;
-            this.filteredMMUHistory = res.data;
-            this.previousMMUHistoryPageChanged({
-              page: this.previousMMUHistoryActivePage,
-              itemsPerPage: this.previousMMUHistoryRowsPerPage,
+            this.historyOfHWC[i]['benPreviousData'] = res.data;
+            //this.previousVisitData.push({ 'benPreviousData': res.data});
+            this.filteredHWCHistory = res.data;
+            this.previousHWCHistoryPageChanged({
+              page: this.previousHWCHistoryActivePage,
+              itemsPerPage: this.previousHWCHistoryRowsPerPage,
             });
           }
         });
       }
     });
-    console.log('previous data', this.dataSource.data);
+    console.log('previous data', this.historyOfHWC);
   }
   checkServiceLoader(services: any, serviceID: any) {
     services.forEach((service: any) => {
       if (serviceID === service.serviceID) {
         service.serviceLoaded = true;
+      } else {
+        console.log('test');
       }
     });
     console.log(services, 'servicechane');
@@ -214,15 +193,13 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
   filterMMUHistory(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredMMUHistory = this.dataSource.data;
+      this.filteredMMUHistory = this.historyOfMMU;
     } else {
       this.filteredMMUHistory = [];
-      this.dataSource.data.forEach((item: any) => {
+      this.historyOfMMU.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredMMUHistory.push(item);
-          this.dataSource.data.push(item);
-          this.dataSource.paginator = this.paginator;
         }
       });
     }
@@ -234,12 +211,12 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  previousMMUHistoryPagedList: any = [];
+  previousMMUHistoryPagedList = [];
   previousMMUHistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
-    this.previousMMUHistoryPagedList = this.dataSource.data.slice(
+    this.previousMMUHistoryPagedList = this.filteredMMUHistory.slice(
       startItem,
       endItem,
     );
@@ -247,6 +224,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   getVisitDetails(serviceType: any, visit: any, print: any) {
+    // if (visit.VisitCategory !== 'NCD screening') {
     this.confirmationService
       .confirm('info', this.current_language_set.alerts.info.viewCasesheet)
       .subscribe((res) => {
@@ -266,7 +244,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           if (print) {
             const url = environment.newTaburl;
             window.open(
-              url + '/#/nurse-doctor/print/' + serviceType + '/' + 'previous',
+              url + '#/common/print/' + serviceType + '/' + 'previous',
             );
           } else {
             this.dialog.open(CaseSheetComponent, {
@@ -279,50 +257,60 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
               },
             });
           }
-        } else {
-          this.confirmationService.alert(
-            this.current_language_set.alerts.info.noCasesheet,
-          );
         }
       });
+    // } else {
+    //   this.confirmationService.alert(this.current_language_set.alerts.info.noCasesheet)
+    // }
   }
 
   hideMCTSFetch = false;
   previousMCTSHistoryRowsPerPage = 5;
   previousMCTSHistoryActivePage = 1;
+  historyOfMCTS: any = [];
   filteredMCTSHistory: any = [];
   getMCTSHistory() {
-    this.doctorService.getMCTSHistory().subscribe((data: any) => {
-      console.log('data', data);
+    this.doctorService.getMCTSHistory().subscribe(
+      (data: any) => {
+        console.log('data', data);
 
-      if (data.statusCode === 200) {
-        this.hideMCTSFetch = true;
-        console.log('dataget', data);
-        const services = this.serviceOnState;
-        this.serviceOnState = [];
-        this.serviceOnState = this.checkServiceLoader(services, 6);
-        this.historyOfMCTS.data = data.data;
-        this.filteredMCTSHistory = data.data;
-        this.historyOfMCTS.paginator = this.MctsPaginator;
-        this.previousMCTSHistoryPageChanged({
-          page: this.previousMCTSHistoryActivePage,
-          itemsPerPage: this.previousMCTSHistoryRowsPerPage,
-        });
-      }
-    });
+        if (data.statusCode === 200) {
+          this.hideMCTSFetch = true;
+          console.log('dataget', data);
+          const services = this.serviceOnState;
+          this.serviceOnState = [];
+          this.serviceOnState = this.checkServiceLoader(services, 6);
+          this.historyOfMCTS = data.data;
+          this.filteredMCTSHistory = data.data;
+          this.previousMCTSHistoryPageChanged({
+            page: this.previousMCTSHistoryActivePage,
+            itemsPerPage: this.previousMCTSHistoryRowsPerPage,
+          });
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.unableToLoadData,
+            'error',
+          );
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(
+          this.current_language_set.unableToLoadData,
+          'error',
+        );
+      },
+    );
   }
 
   filterMCTSHistory(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredMCTSHistory = this.historyOfMCTS.data;
+      this.filteredMCTSHistory = this.historyOfMCTS;
     } else {
       this.filteredMCTSHistory = [];
-      this.historyOfMCTS.data.forEach((item: any) => {
+      this.historyOfMCTS.forEach((item: any) => {
         const value: string = '' + item.mctsOutboundCall.displayOBCallType;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredMCTSHistory.push(item);
-          this.historyOfMCTS.data.push(item);
-          this.historyOfMCTS.paginator = this.MctsPaginator;
         }
       });
     }
@@ -349,39 +337,50 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   hide104Fetch = false;
   previous104HistoryRowsPerPage = 5;
   previous104HistoryActivePage = 1;
+  historyOf104: any = [];
   filtered104History: any = [];
   get104History() {
-    this.doctorService.get104History().subscribe((data: any) => {
-      console.log('data', data);
+    this.doctorService.get104History().subscribe(
+      (data: any) => {
+        console.log('data', data);
 
-      if (data.statusCode === 200) {
-        this.hide104Fetch = true;
-        const services = this.serviceOnState;
-        this.serviceOnState = [];
-        this.serviceOnState = this.checkServiceLoader(services, 3);
-        console.log('dataget', data);
-        this.historyOf104.data = data.data;
-        this.filtered104History = data.data;
-        this.historyOf104.paginator = this.paginator104;
-        this.previous104HistoryPageChanged({
-          page: this.previous104HistoryActivePage,
-          itemsPerPage: this.previous104HistoryRowsPerPage,
-        });
-      }
-    });
+        if (data.statusCode === 200) {
+          this.hide104Fetch = true;
+          const services = this.serviceOnState;
+          this.serviceOnState = [];
+          this.serviceOnState = this.checkServiceLoader(services, 3);
+          console.log('dataget', data);
+          this.historyOf104 = data.data;
+          this.filtered104History = data.data;
+          this.previous104HistoryPageChanged({
+            page: this.previous104HistoryActivePage,
+            itemsPerPage: this.previous104HistoryRowsPerPage,
+          });
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.unableToLoadData,
+            'error',
+          );
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(
+          this.current_language_set.unableToLoadData,
+          'error',
+        );
+      },
+    );
   }
 
   filter104History(searchTerm?: string) {
     if (!searchTerm) {
-      this.filtered104History = this.historyOf104.data;
+      this.filtered104History = this.historyOf104;
     } else {
       this.filtered104History = [];
-      this.historyOf104.data.forEach((item: any) => {
+      this.historyOf104.forEach((item: any) => {
         const value: string = '' + item.diseaseSummary;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filtered104History.push(item);
-          this.historyOf104.data.push(item);
-          this.historyOf104.paginator = this.paginator104;
         }
       });
     }
@@ -408,6 +407,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   callData: any;
   getPatientMCTSCallHistory(call: any) {
     const callDetailID = { callDetailID: call.callDetailID };
+    // let callDetailID={ "callDetailID": "19099" }
     this.doctorService
       .getPatientMCTSCallHistory(callDetailID)
       .subscribe((data: any) => {
@@ -419,56 +419,67 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   showCallDetails(CallDetails: any) {
-    const mdDialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent> =
+    const matDialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent> =
       this.dialog.open(BeneficiaryMctsCallHistoryComponent, {
         width: '70%',
         panelClass: 'preview-casesheet',
         data: CallDetails,
       });
 
-    mdDialogRef.afterClosed().subscribe((result) => {
+    matDialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // result will be displayed here
+        //resul will be displayed in future
       }
     });
   }
   previousTMHistoryRowsPerPage = 5;
   previousTMHistoryActivePage = 1;
+  historyOfTM: any = [];
   filteredTMHistory: any = [];
   hideTMFetch = false;
 
   getTMHistory() {
-    this.doctorService.getTMHistory().subscribe((data: any) => {
-      console.log('data', data);
+    this.doctorService.getTMHistory().subscribe(
+      (data: any) => {
+        console.log('data', data);
 
-      if (data.statusCode === 200) {
-        this.hideTMFetch = true;
-        const services = this.serviceOnState;
-        this.serviceOnState = [];
-        this.serviceOnState = this.checkServiceLoader(services, 4);
-        console.log('dataget', JSON.stringify(data, null, 4));
-        this.historyOfTM.data = data.data;
-        this.filteredTMHistory = data.data;
-        this.historyOfTM.paginator = this.TmPaginator;
-        this.previousTMHistoryPageChanged({
-          page: this.previousTMHistoryActivePage,
-          itemsPerPage: this.previousTMHistoryRowsPerPage,
-        });
-      }
-    });
+        if (data.statusCode === 200) {
+          this.hideTMFetch = true;
+          const services = this.serviceOnState;
+          this.serviceOnState = [];
+          this.serviceOnState = this.checkServiceLoader(services, 4);
+          console.log('dataget', JSON.stringify(data, null, 4));
+          this.historyOfTM = data.data;
+          this.filteredTMHistory = data.data;
+          this.previousTMHistoryPageChanged({
+            page: this.previousTMHistoryActivePage,
+            itemsPerPage: this.previousTMHistoryRowsPerPage,
+          });
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.unableToLoadData,
+            'error',
+          );
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(
+          this.current_language_set.unableToLoadData,
+          'error',
+        );
+      },
+    );
   }
 
   filterTMHistory(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredTMHistory = this.historyOfTM.data;
+      this.filteredTMHistory = this.historyOfTM;
     } else {
       this.filteredTMHistory = [];
-      this.historyOfTM.data.forEach((item: any) => {
+      this.historyOfTM.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredTMHistory.push(item);
-          this.historyOfTM.data.push(item);
-          this.historyOfTM.paginator = this.TmPaginator;
         }
       });
     }
@@ -477,6 +488,26 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     this.previousTMHistoryPageChanged({
       page: 1,
       itemsPerPage: this.previousTMHistoryRowsPerPage,
+    });
+  }
+
+  filterHWCHistory(searchTerm?: string) {
+    if (!searchTerm) {
+      this.filteredHWCHistory = this.historyOfHWC;
+    } else {
+      this.filteredHWCHistory = [];
+      this.historyOfHWC.forEach((item: any) => {
+        const value: string = '' + item.VisitCategory;
+        if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
+          this.filteredHWCHistory.push(item);
+        }
+      });
+    }
+
+    this.previousHWCHistoryActivePage = 1;
+    this.previousHWCHistoryPageChanged({
+      page: 1,
+      itemsPerPage: this.previousHWCHistoryRowsPerPage,
     });
   }
 
@@ -490,5 +521,46 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       endItem,
     );
     console.log('list', this.previousTMHistoryPagedList);
+  }
+
+  getHWCHistory() {
+    this.doctorService.getTMHistory().subscribe(
+      (data: any) => {
+        console.log('data', data);
+
+        if (data.statusCode === 200) {
+          this.hideHWCFetch = true;
+          const services = this.serviceOnState;
+          this.serviceOnState = [];
+          this.serviceOnState = this.checkServiceLoader(services, 9);
+          console.log('dataget', JSON.stringify(data, null, 4));
+          this.historyOfHWC = data.data;
+          this.getEachVisitData();
+          // this.filteredHWCHistory = data.data;
+        } else {
+          this.confirmationService.alert(
+            this.current_language_set.unableToLoadData,
+            'error',
+          );
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(
+          this.current_language_set.unableToLoadData,
+          'error',
+        );
+      },
+    );
+  }
+  previousHWCHistoryPagedList = [];
+  previousHWCHistoryPageChanged(event: any): void {
+    console.log('called', event);
+    const startItem = (event.page - 1) * event.itemsPerPage;
+    const endItem = event.page * event.itemsPerPage;
+    this.previousHWCHistoryPagedList = this.historyOfHWC.slice(
+      startItem,
+      endItem,
+    );
+    console.log('list', this.previousHWCHistoryPagedList);
   }
 }

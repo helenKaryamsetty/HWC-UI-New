@@ -107,7 +107,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="searchDetails == null || searchDetails?.length==0">
+          <tr *ngIf="searchDetails === null || searchDetails?.length==0">
             <td colspan="6" class="record-not-found text-field-color">
               {{currentLanguageSet?.casesheet?.noRecordFound}} 
             </td>

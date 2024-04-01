@@ -37,3 +37,10 @@ md-card {
 .mat-card-header{
     justify-content: space-between;
 }
+
+button#previousANCPastObstetricHistory .mat-icon.material-icons {
+    color: #52575C !important;
+}
+.mat-option{
+    padding: 0px 5px;
+}

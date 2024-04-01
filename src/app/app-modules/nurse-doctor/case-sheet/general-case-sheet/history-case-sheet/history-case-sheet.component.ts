@@ -19,17 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Input } from '@angular/core';
-import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import * as moment from 'moment';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
   selector: 'app-history-case-sheet',
   templateUrl: './history-case-sheet.component.html',
   styleUrls: ['./history-case-sheet.component.css'],
 })
-export class HistoryCaseSheetComponent implements OnInit {
+export class HistoryCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()
   previous: any;
   @Input()
@@ -229,12 +236,12 @@ export class HistoryCaseSheetComponent implements OnInit {
     }
   }
 
-  getAgeValueNew(age) {
+  getAgeValueNew(age: any) {
     if (!age) return 0;
     const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
     if (arr[1]) {
       const ageUnit = arr[1];
-      if (ageUnit.toLowerCase() == 'years') {
+      if (ageUnit.toLowerCase() === 'years') {
         return parseInt(arr[0]);
       }
     }
@@ -247,11 +254,11 @@ export class HistoryCaseSheetComponent implements OnInit {
   changeLanguage() {
     this.language = sessionStorage.getItem('setLanguage');
 
-    if (this.language != undefined) {
+    if (this.language !== undefined) {
       this.httpServiceService
         .getLanguage(this.language_file_path + this.language + '.json')
         .subscribe(
-          (response) => {
+          (response: any) => {
             if (response) {
               this.current_language_set = response[this.language];
             } else {

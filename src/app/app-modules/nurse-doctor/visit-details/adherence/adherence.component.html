@@ -1,9 +1,10 @@
+<!--{{patientAdherenceForm.value | json}}-->
 <div [formGroup]="patientAdherenceForm">
   <div class="row m-t-20">
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-      <mat-label class="mat-label-text" class="control-label" for="drug">{{
+      <label class="control-label" for="drug">{{
         currentLanguageSet?.nurseData?.adherenceDetails?.drugs
-      }}</mat-label>
+      }}</label>
       <div class="clearfix"></div>
       <mat-radio-group
         name="toDrugs"
@@ -27,31 +28,27 @@
       *ngIf="toDrugs !== null && !toDrugs"
     >
       <mat-form-field class="input-full-width" class="textarea-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.nurseData?.adherenceDetails?.reason
-        }}</mat-label>
         <textarea
           matInput
-          appDefaultNull
-          mdTextareaAutosize
           allowText="textAreaValidator"
+          defaultNull
+          matTextareaAutosize
           name="drugReason"
           formControlName="drugReason"
           maxlength="300"
-        >
-        </textarea>
+          placeholder="{{
+            currentLanguageSet?.nurseData?.adherenceDetails?.reason
+          }}"
+        ></textarea>
       </mat-form-field>
     </div>
   </div>
 
   <div class="row">
-    <div
-      class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-      style="margin-top: 20px"
-    >
-      <mat-label class="mat-label-text" class="control-label" for="drug">{{
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+      <label class="control-label" for="drug">{{
         currentLanguageSet?.nurseData?.adherenceDetails?.referral
-      }}</mat-label>
+      }}</label>
       <div class="clearfix"></div>
       <mat-radio-group
         name="toReferral"
@@ -72,46 +69,42 @@
 
     <div
       class="col-xs-12 col-sm-6 col-md-8 col-lg-8 box"
-      style="margin-top: 20px"
       *ngIf="toReferral !== null && !toReferral"
     >
       <mat-form-field class="input-full-width" class="textarea-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.nurseData?.adherenceDetails?.reason
-        }}</mat-label>
         <textarea
           matInput
-          appDefaultNull
-          mdTextareaAutosize
           allowText="textAreaValidator"
+          defaultNull
+          matTextareaAutosize
           name="referralReason"
           maxlength="300"
           formControlName="referralReason"
-        >
-        </textarea>
+          placeholder="{{
+            currentLanguageSet?.nurseData?.adherenceDetails?.reason
+          }}"
+        ></textarea>
       </mat-form-field>
     </div>
   </div>
 
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
+      <mat-select
+        class="input-full-width"
+        name="progress"
+        formControlName="progress"
+        placeholder="{{
           currentLanguageSet?.nurseData?.adherenceDetails?.progress
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
-          name="progress"
-          formControlName="progress"
+        }}"
+      >
+        <mat-option
+          *ngFor="let progress of adherenceProgressData"
+          [value]="progress"
         >
-          <mat-option
-            *ngFor="let progress of adherenceProgressData"
-            [value]="progress"
-          >
-            {{ progress }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          {{ progress }}
+        </mat-option>
+      </mat-select>
     </div>
   </div>
 </div>

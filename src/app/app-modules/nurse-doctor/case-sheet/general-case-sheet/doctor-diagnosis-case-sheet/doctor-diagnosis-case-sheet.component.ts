@@ -22,18 +22,10 @@
 import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MasterdataService } from 'src/app/app-modules/core/services/masterdata.service';
-import { RegistrarService } from 'src/app/app-modules/core/services/registrar.service';
-// import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
-// import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-// import { RegistrarService } from 'app/app-modules/registrar/shared/services/registrar.service';
-// import { ConfirmationService } from 'app/app-modules/core/services';
-// import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
-// import { MasterdataService } from 'app/app-modules/nurse-doctor/shared/services/masterdata.service';
+import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 import { environment } from 'src/environments/environment';
-// import { NurseService } from 'app/app-modules/nurse-doctor/shared/services';
+import { DoctorService, MasterdataService } from '../../../shared/services';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -154,7 +146,7 @@ export class DoctorDiagnosisCaseSheetComponent
     this.getVaccinationTypeAndDoseMaster();
     // this.getAssessmentID();
 
-    // if (this.language != undefined) {
+    // if (this.language !== undefined) {
     //   this.httpServiceService
     //     .getLanguage(this.language_file_path + this.language + ".json")
     //     .subscribe(
@@ -571,20 +563,20 @@ export class DoctorDiagnosisCaseSheetComponent
     return len > 0 ? new Array(len).join('0') + this : this;
   }
   downloadSign() {
-    if (this.beneficiaryDetails && this.beneficiaryDetails.tCSpecialistUserID) {
-      const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
-      this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
-        (response) => {
-          const blob = new Blob([response], { type: response.type });
-          this.showSign(blob);
-        },
-        (err) => {
-          console.log('error');
-        },
-      );
-    } else {
-      console.log('No tCSpecialistUserID found');
-    }
+    // if (this.beneficiaryDetails && this.beneficiaryDetails.tCSpecialistUserID) {
+    //   const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
+    //   this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
+    //     (response:any) => {
+    //       const blob = new Blob([response], { type: response.type });
+    //       this.showSign(blob);
+    //     },
+    //     (err:any) => {
+    //       console.log('error');
+    //     },
+    //   );
+    // } else {
+    //   console.log('No tCSpecialistUserID found');
+    // }
   }
   showSign(blob: any) {
     const reader = new FileReader();
@@ -601,7 +593,7 @@ export class DoctorDiagnosisCaseSheetComponent
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data) {
-          if (res.data.isHRP == true) {
+          if (res.data.isHRP === true) {
             this.showHRP = 'true';
           } else {
             this.showHRP = 'false';
@@ -615,7 +607,7 @@ export class DoctorDiagnosisCaseSheetComponent
       beneficiaryID: null,
     };
     this.registrarService.getHealthIdDetails(data).subscribe(
-      (healthIDDetails) => {
+      (healthIDDetails: any) => {
         if (healthIDDetails.statusCode === 200) {
           console.log('healthID', healthIDDetails);
           if (
@@ -651,7 +643,7 @@ export class DoctorDiagnosisCaseSheetComponent
           );
         }
       },
-      (err) => {
+      (err: any) => {
         this.confirmationService.alert(
           this.current_language_set.issueInGettingBeneficiaryABHADetails,
           'error',
@@ -667,7 +659,7 @@ export class DoctorDiagnosisCaseSheetComponent
     ) {
       if (this.beneficiaryDetails.ben_age_val >= 12) {
         this.masterdataService.getVaccinationTypeAndDoseMaster().subscribe(
-          (res) => {
+          (res: any) => {
             if (res.statusCode === 200) {
               if (res.data) {
                 const doseTypeList = res.data.doseType;
@@ -679,7 +671,7 @@ export class DoctorDiagnosisCaseSheetComponent
               }
             }
           },
-          (err) => {
+          (err: any) => {
             console.log('error', err.errorMessage);
           },
         );
@@ -695,7 +687,7 @@ export class DoctorDiagnosisCaseSheetComponent
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(
-        (res) => {
+        (res: any) => {
           if (res.statusCode === 200) {
             if (res.data.covidVSID) {
               this.covidVaccineDetails = res.data;
@@ -721,7 +713,7 @@ export class DoctorDiagnosisCaseSheetComponent
             }
           }
         },
-        (err) => {
+        (err: any) => {
           console.log('error', err.errorMessage);
         },
       );

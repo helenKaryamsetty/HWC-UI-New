@@ -19,61 +19,55 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
 @Component({
   selector: 'app-nurse-vitals',
   templateUrl: './vitals.component.html',
   styleUrls: ['./vitals.component.css'],
 })
-export class VitalsComponent implements OnInit, OnChanges, DoCheck {
+export class VitalsComponent implements OnChanges {
   @Input()
-  patientVitalsDataForm!: FormGroup;
+  patientVitalsForm!: FormGroup;
 
   @Input()
   visitCategory!: string;
 
   @Input()
-  vitalsMode!: string;
+  mode!: string;
 
   @Input()
   pregnancyStatus!: string;
 
   showGeneralOPD = false;
-  showCancer = false;
-  languageComponent!: SetLanguageComponent;
-  currentLanguageSet: any;
+  showNeonatal = false;
+  showChildAndAdolescent = false;
 
-  constructor(
-    private httpServiceService: HttpServiceService,
-    private fb: FormBuilder,
-  ) {}
-
-  ngOnInit() {
-    this.fetchLanguageResponse();
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnChanges() {
     if (this.visitCategory) {
-      this.showCancer =
-        this.visitCategory === 'Cancer Screening' ? true : false;
       this.showGeneralOPD =
-        this.visitCategory !== 'Cancer Screening' ? true : false;
+        this.visitCategory !== 'Neonatal and Infant Health Care Services' &&
+        this.visitCategory !== 'Childhood & Adolescent Healthcare Services'
+          ? true
+          : false;
+      this.showNeonatal =
+        this.visitCategory === 'Neonatal and Infant Health Care Services'
+          ? true
+          : false;
+      this.showChildAndAdolescent =
+        this.visitCategory === 'Childhood & Adolescent Healthcare Services'
+          ? true
+          : false;
     }
   }
-
-  //AN40085822 13/10/2021 Integrating Multilingual Functionality --Start--
-  ngDoCheck() {
-    this.fetchLanguageResponse();
-  }
-
-  fetchLanguageResponse() {
-    this.languageComponent = new SetLanguageComponent(this.httpServiceService);
-    this.languageComponent.setLanguage();
-    this.currentLanguageSet = this.languageComponent.currentLanguageObject;
-  }
-  //--End--
 }

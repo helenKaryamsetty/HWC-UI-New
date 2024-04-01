@@ -19,21 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 
-import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DoctorService } from '../shared/services/doctor.service';
 
 @Component({
   selector: 'app-case-record',
   templateUrl: './case-record.component.html',
   styleUrls: ['./case-record.component.css'],
 })
-export class CaseRecordComponent implements OnInit {
+export class CaseRecordComponent implements OnInit, OnDestroy {
   @Input()
   patientCaseRecordForm!: FormGroup;
 
   @Input()
+  provideCounselling!: FormGroup;
+
+  @Input()
   visitCategory!: string;
+
+  @Input()
+  visitReason!: string;
 
   @Input()
   caseRecordMode!: string;
@@ -46,26 +61,56 @@ export class CaseRecordComponent implements OnInit {
 
   @Input()
   pregnancyStatus: any;
+  attendant: any;
 
   showGeneralOPD = false;
-  showCancer = false;
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private doctorService: DoctorService,
+  ) {}
 
   ngOnInit() {
     if (this.visitCategory) {
-      console.log('case record', this.visitCategory);
       this.showGeneralOPD =
         this.visitCategory === 'General OPD' ||
         this.visitCategory === 'ANC' ||
         this.visitCategory === 'NCD care' ||
         this.visitCategory === 'PNC' ||
         this.visitCategory === 'COVID-19 Screening' ||
-        this.visitCategory === 'NCD screening'
+        this.visitCategory === 'NCD screening' ||
+        this.visitCategory === 'FP & Contraceptive Services' ||
+        this.visitCategory.toLowerCase() ===
+          'neonatal and infant health care services' ||
+        this.visitCategory.toLowerCase() ===
+          'childhood & adolescent healthcare services'
           ? true
           : false;
-      this.showCancer =
-        this.visitCategory === 'Cancer Screening' ? true : false;
     }
+    this.attendant = this.route.snapshot.params['attendant'];
+    this.doctorService.setCapturedCaserecordDeatilsByDoctor(null);
+
+    if (this.attendant !== 'nurse') this.fetchCaseRecordDetails();
+  }
+
+  ngOnDestroy() {
+    this.doctorService.setCapturedCaserecordDeatilsByDoctor(null);
+  }
+  fetchCaseRecordDetails() {
+    const visitID = localStorage.getItem('visitID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
+    this.doctorService
+      .getCaseRecordAndReferDetails(benRegID, visitID, this.visitCategory)
+      .subscribe((caserecordResponse: any) => {
+        if (
+          caserecordResponse &&
+          caserecordResponse.statusCode === 200 &&
+          caserecordResponse.data !== undefined
+        ) {
+          this.doctorService.setCapturedCaserecordDeatilsByDoctor(
+            caserecordResponse,
+          );
+        }
+      });
   }
 }

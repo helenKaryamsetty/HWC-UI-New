@@ -19,27 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormArray,
   AbstractControl,
 } from '@angular/forms';
-
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import {
   MasterdataService,
   NurseService,
   DoctorService,
 } from '../../../shared/services';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { ValidationUtils } from '../../../shared/utility/validation-utility';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-other-vaccines',
@@ -54,40 +60,70 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
   masterData: any;
+  registrarMasterData: any;
   otherVaccineData: any;
 
-  vaccineMasterData = [];
+  vaccineMasterData: any = [];
+  // vaccineMasterData = [
+  //   {
+  //     vaccineID: 1,
+  //     vaccineName: "PCV"
+  //   },
+  //   {
+  //     vaccineID: 2,
+  //     vaccineName: "MMR"
+  //   },
+  //   {
+  //     vaccineID: 3,
+  //     vaccineName: "Hepatitis-A Vaccine"
+  //   },
+  //   {
+  //     vaccineID: 4,
+  //     vaccineName: "Varicella Vaccine"
+  //   },
+  //   {
+  //     vaccineID: 5,
+  //     vaccineName: "Typhoid Vaccine"
+  //   },
+  //   {
+  //     vaccineID: 6,
+  //     vaccineName: "Meningococcal Vaccine"
+  //   },
+  //   {
+  //     vaccineID: 6,
+  //     vaccineName: "Other"
+  //   },
+  //   {
+  //     vaccineID: 7,
+  //     vaccineName: "Nil"
+  //   }
+  // ];
   previousSelectedVaccineList: any = [];
   vaccineSelectList: any = [];
-  count = 0;
   currentLanguageSet: any;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private nurseService: NurseService,
     private doctorService: DoctorService,
+    private registrarService: RegistrarService,
+    public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.getMasterData();
     this.getBeneficiaryDetails();
-  }
+    this.callMasterDataObservable();
 
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
   }
 
   ngOnDestroy() {
@@ -101,13 +137,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
       this.beneficiaryDetailSubscription.unsubscribe();
   }
 
-  getOtherVaccines(): AbstractControl[] | null {
-    const otherVaccinesControl = this.otherVaccinesForm.get('otherVaccines');
-    return otherVaccinesControl instanceof FormArray
-      ? otherVaccinesControl.controls
-      : null;
-  }
-
   beneficiaryDetailSubscription: any;
   beneficiary: any;
   getBeneficiaryDetails() {
@@ -119,30 +148,54 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
       );
   }
 
+  onAgeUnitEntered(index: any, vaccineForm: AbstractControl<any, any>) {
+    const ageUnit = this.registrarMasterData.ageUnit;
+    console.log('ageUnit', ageUnit);
+    ageUnit.forEach((element: any, i: any) => {
+      if (element.name === vaccineForm.value.ageUnit) {
+        vaccineForm.patchValue({
+          ageUnit: element.name,
+          ageUnitID: element.id,
+        });
+      }
+    });
+    this.validateAge(vaccineForm);
+    // if (this.personalDetailsForm.value.age !== null) {
+    //   this.onAgeEntered();
+    // }
+  }
+
   nurseMasterDataSubscription: any;
   getMasterData() {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.vaccineMasterData = masterData.vaccineMasterData;
 
           this.addOtherVaccine();
 
           if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
+            this.getGeneralHistory();
+          }
+
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
 
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -154,7 +207,26 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
   }
+  callMasterDataObservable() {
+    this.registrarService.getRegistrationMaster(1);
+    this.loadMasterDataObservable();
+  }
 
+  /**
+   *
+   * Load Master Data of Id Cards as Observable
+   */
+  masterDataSubscription: any;
+  loadMasterDataObservable() {
+    this.masterDataSubscription =
+      this.registrarService.registrationMasterDetails$.subscribe((res) => {
+        console.log('Registrar master data', res);
+        if (res !== null) {
+          this.registrarMasterData = Object.assign({}, res);
+          console.log('master data', this.registrarMasterData);
+        }
+      });
+  }
   handleOtherVaccinesData() {
     const formArray = this.otherVaccinesForm.controls[
       'otherVaccines'
@@ -177,6 +249,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
 
       if (i + 1 < temp.length) this.addOtherVaccine();
     }
+    console.log('this.othervaccine', this.otherVaccinesForm);
   }
 
   addOtherVaccine() {
@@ -184,7 +257,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
       this.otherVaccinesForm.controls['otherVaccines']
     );
     const temp = otherVaccineList.value;
-    let result: any = [];
+    let result = [];
 
     if (this.vaccineMasterData) {
       result = this.vaccineMasterData.filter((item: any) => {
@@ -194,7 +267,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
             value.vaccineName.vaccineName !== 'Other'
           )
             return value.vaccineName.vaccineName === item.vaccineName;
-          else return false;
         });
         const flag = arr.length === 0 ? true : false;
         return flag;
@@ -204,15 +276,12 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     otherVaccineList.push(this.initOtherVaccinesForm());
   }
 
-  filterOtherVaccineList(
-    event: any,
-    i: any,
-    vaccineForm?: AbstractControl<any, any>,
-  ) {
-    const vaccine: any = event.value;
+  filterOtherVaccineList(vaccine: any, i: any, vaccineForm?: FormGroup) {
     const previousValue = this.previousSelectedVaccineList[i];
     const snomedCTCode = vaccine.sctCode;
     const snomedCTTerm = vaccine.sctTerm;
+    //snomedCTCode=vaccineForm.sctCode;
+    //console.log("count:", snomedCTCode);
     if (vaccineForm && vaccine.vaccineName !== 'Other') {
       vaccineForm.patchValue({ otherVaccineName: null });
       if (vaccine.sctCode !== null) {
@@ -224,6 +293,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
         vaccineForm.patchValue({ sctCode: null, sctTerm: null });
       }
     }
+
     if (previousValue) {
       this.vaccineSelectList.map((item: any, t: any) => {
         if (t !== i && previousValue.vaccineName !== 'Other') {
@@ -242,7 +312,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     this.previousSelectedVaccineList[i] = vaccine;
   }
 
-  removeOtherVaccine(i: any, vaccineForm?: AbstractControl<any, any>) {
+  removeOtherVaccine(i: any, vaccineForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -282,14 +352,16 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
       sctTerm: null,
       otherVaccineName: null,
       actualReceivingAge: null,
+      ageUnit: null,
+      ageUnitID: null,
       receivedFacilityName: null,
     });
   }
 
   getPreviousOtherVaccineDetails() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID') || '{}';
     this.nurseService
-      .getPreviousOtherVaccines(benRegID, this.visitCategory)
+      .getPreviousOtherVaccines(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -326,13 +398,42 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   validateAge(formGroup: any) {
-    const actualReceivingAge = formGroup.value.actualReceivingAge;
-
-    if (this.beneficiary && this.beneficiary.ageVal < actualReceivingAge) {
-      this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.ageOfReceivingVaccine,
+    if (
+      formGroup.value.actualReceivingAge !== undefined &&
+      formGroup.value.actualReceivingAge !== null &&
+      formGroup.value.ageUnit !== undefined &&
+      formGroup.value.ageUnit !== null
+    ) {
+      const actualReceivingAge = formGroup.value.actualReceivingAge;
+      const ageUnit = formGroup.value.ageUnit;
+      const flag = new ValidationUtils().validateDuration(
+        actualReceivingAge,
+        ageUnit,
+        this.beneficiary.age,
       );
-      formGroup.patchValue({ actualReceivingAge: null });
+
+      // if (this.beneficiary && (this.beneficiary.ageVal *365) < actualReceivingAge) {
+      //   this.confirmationService.alert(this.currentLanguageSet.alerts.info.ageOfReceivingVaccine);
+      //   formGroup.patchValue({ actualReceivingAge: null });
+      //   formGroup.patchValue({ ageUnitID: null });
+      //   formGroup.patchValue({ ageUnit: null });
+      // }
+      if (!flag) {
+        this.confirmationService.alert(
+          this.currentLanguageSet.alerts.info.ageOfReceivingVaccine,
+        );
+        formGroup.patchValue({ actualReceivingAge: null });
+        formGroup.patchValue({ ageUnitID: null });
+        formGroup.patchValue({ ageUnit: null });
+      }
+    } else if (
+      (formGroup.value.actualReceivingAge === undefined ||
+        formGroup.value.actualReceivingAge === null) &&
+      formGroup.value.ageUnit !== undefined &&
+      formGroup.value.ageUnit !== null
+    ) {
+      formGroup.patchValue({ ageUnitID: null });
+      formGroup.patchValue({ ageUnit: null });
     }
   }
 
@@ -355,5 +456,13 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

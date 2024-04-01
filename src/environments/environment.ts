@@ -1,35 +1,39 @@
+/*
+ * AMRIT – Accessible Medical Records via Integrated Technology
+ * Integrated EHR (Electronic Health Records) Solution
+ *
+ * Copyright (C) "Piramal Swasthya Management and Research Institute"
+ *
+ * This file is part of AMRIT.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see https://www.gnu.org/licenses/.
+ */
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-// https://amritwprdev.piramalswasthya.org/
-
-const commonIP = 'http://183.82.107.186:8080';
-const inventoryIP = 'http://183.82.107.186:8080';
-const mmuIP = 'http://183.82.107.186:8080';
-const FHIRIP = 'http://183.82.107.186:8080';
-
-// const commonIP = 'https://amritwprdev.piramalswasthya.org/';
-// const inventoryIP = 'https://amritwprdev.piramalswasthya.org/';
-// const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
-// const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
-
-// const commonIP = 'https://amritwprdev.piramalswasthya.org/';
-const identityIP = 'http://183.82.107.186:8080';
-const tmIP = 'http://183.82.107.186:8080';
-const IP104 = 'http://183.82.107.186:8080';
-// const tmIP = 'http://localhost:8080/';
-// const mmuIP = 'http://183.82.107.186:8080/';
-const schedulerIP = 'http://183.82.107.186:8080';
-const adminIP = 'http://183.82.107.186:8080';
-// const FHIRIP = 'http://183.82.107.186:8080/';
-
-// const SERVER_IP = '10.208.122.69';
-
+const commonIP = 'https://amritwprdev.piramalswasthya.org/';
+const identityIP = 'https://amritwprdev.piramalswasthya.org/';
+const tmIP = 'https://amritwprdev.piramalswasthya.org/';
+const IP104 = 'https://amritwprdev.piramalswasthya.org/';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
+const adminIP = 'https://amritwprdev.piramalswasthya.org/';
+const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
 const SERVER_IP = '10.208.122.39';
-
-const SWYMED_IP = 'swymed://14.143.13.109';
+const SWYMED_IP = '14.143.13.109';
 
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
@@ -39,28 +43,26 @@ const SWYMED_IP = 'swymed://14.143.13.109';
 // const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
-const COMMON_API = `${commonIP}/commonapi-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}/commonapi-v0.1/`;
+const COMMON_API = `${commonIP}/commonapi-v0.1/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 // const COMMON_API_OPEN = `http://localhost:8080/`;
 // const COMMON_API = `http://localhost:8080/`;
-// const TM_API = `${tmIP}/hwc-tmapi-v1.0/`;
-const TM_API = `${tmIP}/hwc-facility-service/`;
+const TM_API = `${tmIP}/hwc-facility-service-v1.1/`;
 // const TM_API = `${tmIP}/hwc-facility-service/`;
 
 const API104 = `${IP104}/104api-v1.0/`;
 // const TM_API = `http://localhost:8082/`;
-const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
+const MMU_API = `${mmuIP}/mmuapi-v0.1/`;
+const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v0.1/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}adminapi-v1.0`;
+const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 
-const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
+const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 
 const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
-//const FHIR_API = `http://localhost:8080/`;http://14.98.169.68:8080/
-//
+
 export const environment = {
   production: false,
   app: `MMU`,
@@ -231,9 +233,10 @@ export const environment = {
   updateANCHistoryDetailsUrl: `${TM_API}ANC/update/historyScreen`,
   updateANCExaminationDetailsUrl: `${TM_API}ANC/update/examinationScreen`,
 
-  /**ANC Fetosense API URLs */
-  savefetosenseTestDetailsUrl: `${TM_API}/fetosense/sendMotherTestDetailsToFetosense`,
-  getPrescribedFetosenseTests: `${TM_API}/fetosense/fetch/fetosenseDetails/`,
+  /**ANC foetalMonitor API URLs */
+  savefetosenseTestDetailsUrl: `${TM_API}/foetalMonitor/sendMotherTestDetailsToFoetalMonitor`,
+  getPrescribedFetosenseTests: `${TM_API}/foetalMonitor/fetch/foetalMonitorDetails/`,
+  getESanjeevaniDetailsUrl: `${COMMON_API}esanjeevani/getESanjeevaniUrl/`,
 
   previousVisitDataUrl: `${TM_API}common/getBenSymptomaticQuestionnaireDetails`,
 
@@ -340,7 +343,7 @@ export const environment = {
   previousImmunizationServiceDataUrl: `${TM_API}common/getBenImmunizationServiceHistory`,
   /* */
   archivedReportsUrl: `${TM_API}labTechnician/get/labResultForVisitcode`,
-  ReportsBase64Url: `${TM_API}fetosense/fetch/reportGraphBase64`,
+  ReportsBase64Url: `${TM_API}foetalMonitor/fetch/reportGraphBase64`,
   previousMMUHistoryUrl: `${MMU_API}common/getBeneficiaryCaseSheetHistory`,
   previousTMHistoryUrl: `${TM_API}common/getBeneficiaryCaseSheetHistory`,
   previousMCTSHistoryUrl: `${COMMON_API}mctsOutboundHistoryController/getMctsCallHistory`,
@@ -384,11 +387,11 @@ export const environment = {
   //file upload
   saveFile: `${COMMON_API}kmfilemanager/addFile`,
   viewFileData: `${TM_API}common/getKMFile`,
-  ioturl: `${IOT_API}`,
-  deviceStatusurl: `${IOT_API}/api/v1/bluetooth/hub/connection_status`,
-  deviceDisconnectUrl: `${IOT_API}/api/v1/bluetooth/hub/disconnect`,
-  deviceBluetoothurl: `${IOT_API}/api/v1/bluetooth/service_discovery`,
-  connectdeviceBluetoothurl: `${IOT_API}/api/v1/bluetooth/hub_connection`,
+  ioturl: `${biologicalScreeningDeviceAPI}`,
+  deviceStatusurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/connection_status`,
+  deviceDisconnectUrl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/disconnect`,
+  deviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/service_discovery`,
+  connectdeviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub_connection`,
 
   startWeighturl: '/api/v1/physical_tests/weight',
   startTempurl: '/api/v1/physical_tests/temperature',
@@ -519,9 +522,9 @@ export const environment = {
   getBirthImmunizationHistoryDataUrl: `${TM_API}/child-adolescent-care/getBenHistoryDetails`,
 
   /* SWAASA Urls*/
-  getResultStatusURL: `${COMMON_API}swaasa/startAssesment`,
-  getAssessmentUrl: `${COMMON_API}swaasa/getAssesment`,
-  getAssessmentIdUrl: `${COMMON_API}swaasa/getAssesmentDetails`,
+  getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
+  getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
+  getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
 
   /* CDSS Urls */
   getCdssQuestionsUrl: `${API104}CDSS/getQuestions`,
@@ -531,7 +534,7 @@ export const environment = {
   getActionMasterUrl: `${TM_API}uptsu/get/action-master`,
   closeVisitSaveComplaintsUrl: `${TM_API}uptsu/submit/closevisit`,
   getnurse104referredworklisturls: `${TM_API}uptsu/getWorklistByVanID`,
-  getAdminCdssStatus: `${ADMIN_API}/uptsu/getCdssData`,
   getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
   getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
+  getAdminCdssStatus: `${ADMIN_API}/uptsu/getCdssData`,
 };

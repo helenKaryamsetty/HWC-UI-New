@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, DoCheck, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   DoctorService,
@@ -34,19 +35,27 @@ import {
   NurseService,
 } from '../../shared/services';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
+import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
   styleUrls: ['./diseaseconfirmation.component.css'],
 })
-export class DiseaseconfirmationComponent implements OnInit {
+export class DiseaseconfirmationComponent
+  implements OnChanges, OnInit, OnDestroy
+{
   @Input()
   mode!: string;
 
   @Input()
   diseaseFormsGroup!: FormGroup;
+
+  @Input()
+  idrsOrCbac!: string;
 
   diseaseFormsArray!: FormArray;
   questions: any = [];
@@ -57,7 +66,13 @@ export class DiseaseconfirmationComponent implements OnInit {
   diseaseArray: any = [];
   attendantType: any;
   isDoctor: any;
-  currentLanguageSet: any;
+  diseasesList: any = [];
+  confirmedDisease: any = [];
+  beneficiaryGender: any;
+  previousConfirmedDiseases: any = [];
+  confirmDiseasesSubscription: any;
+  confirmedDiseasesOnPreviousVisit: any;
+
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
@@ -65,53 +80,388 @@ export class DiseaseconfirmationComponent implements OnInit {
     private doctorService: DoctorService,
     private nurseService: NurseService,
     private route: ActivatedRoute,
+    private ncdScreeningService: NcdScreeningService,
+    private beneficiaryDetailsService: BeneficiaryDetailsService,
   ) {}
 
   ngOnInit() {
-    this.diseaseFormsArray = this.getDiseasesData();
-    console.log('disease Form Array', this.diseaseFormsArray);
-
-    while (this.getDiseasesData().length) {
+    this.getBenificiaryDetails();
+    this.ncdScreeningService.clearDiseaseConfirmationScreenFlag();
+    // API call to fetch the confirmed diseases for CBAC
+    this.fetchPreviousVisitConfirmedDiseases();
+    this.confirmDiseasesSubscription =
+      this.ncdScreeningService.enableDiseaseConfirmForm$.subscribe(
+        (response: any) => {
+          if (response === 'idrs') {
+            this.idrsOrCbac = response;
+            this.diseaseFormsArray = this.getData();
+            while (this.getData().length) {
+              this.diseaseFormsArray.removeAt(0);
+            }
+            this.getPatientRevisitSuspectedDieseaData();
+          } else if (response === 'cbac') {
+            this.idrsOrCbac = response;
+            this.diseaseFormsArray = this.getData();
+            while (this.getData().length) {
+              this.diseaseFormsArray.removeAt(0);
+            }
+            this.getpatientDiseasesata();
+          }
+        },
+      );
+    this.diseaseFormsArray = this.getData();
+    while (this.getData().length) {
       this.diseaseFormsArray.removeAt(0);
     }
-    if (this.mode === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
-      if (visitID !== null && benRegID !== null) {
-        this.getIDRSDetailsFrmNurse(visitID, benRegID);
-      }
-    } else this.getPatientRevisitSuspectedDieseaData();
-    // else {
-    //   this.getDiseasesMasterData();
+
+    // if (this.mode === 'view') {
+    //   let visitID = localStorage.getItem('visitID');
+    //   let benRegID = localStorage.getItem('beneficiaryRegID');
+    //   if (visitID !== null && benRegID !== null) {
+    //     if( this.idrsOrCbac === "idrs")
+    //        this.getIDRSDetailsFrmNurse(visitID, benRegID);
+
+    //     else if( this.idrsOrCbac === "cbac")
+    //         this.getCbacDiseaseDetailsFromNurse(visitID, benRegID);
+
+    //   }
     // }
-    //}
+    // else
+    // {
+    if (this.mode !== 'view') {
+      if (this.idrsOrCbac === 'cbac') this.getpatientDiseasesata();
+      else if (this.idrsOrCbac === 'idrs')
+        this.getPatientRevisitSuspectedDieseaData();
+    }
+    // }
+
     this.attendantType = this.route.snapshot.params['attendant'];
-    if (this.attendantType === 'doctor') {
+    if (
+      this.attendantType === 'doctor' ||
+      this.attendantType === 'tcspecialist'
+    ) {
       this.isDoctor = true;
     }
   }
 
-  getDiseasesData(): any {
+  ngOnChanges() {
+    //this.nurseService.mmuVisitData=false;
+    if (this.mode === 'view') {
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
+      if (visitID !== null && benRegID !== null) {
+        if (this.idrsOrCbac === 'idrs')
+          this.getIDRSDetailsFrmNurse(visitID, benRegID);
+        else if (this.idrsOrCbac === 'cbac')
+          this.getCbacDiseaseDetailsFromNurse(visitID, benRegID);
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.beneficiaryDetailsSubscription)
+      this.beneficiaryDetailsSubscription.unsubscribe();
+
+    if (this.cbacDiseaseDetailsSubscription)
+      this.cbacDiseaseDetailsSubscription.unsubscribe();
+
+    if (this.patientDiseasesDataSub) this.patientDiseasesDataSub.unsubscribe();
+
+    if (this.patientDiseasesata) this.patientDiseasesata.unsubscribe();
+
+    if (this.IDRSDetailsSubscription)
+      this.IDRSDetailsSubscription.unsubscribe();
+
+    if (this.confirmDiseasesSubscription)
+      this.confirmDiseasesSubscription.unsubscribe();
+  }
+  getData() {
     return this.diseaseFormsGroup.get('diseaseFormsArray') as FormArray;
   }
 
-  getDiseaseFormArray(): any {
-    return (this.diseaseFormsGroup.get('diseaseFormsArray') as FormArray)
-      .controls;
-  }
-
   addMoreDiseases(data: any) {
-    this.getDiseasesData().push(
+    this.getData().push(
       new VisitDetailUtils(this.fb).createPatientDiseaseArrayForm(data),
     );
+  }
+  fetchPreviousVisitConfirmedDiseases() {
+    const obj = {
+      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
+    };
+    this.nurseService.getPreviousVisitConfirmedDiseases(obj).subscribe(
+      (value: any) => {
+        if (
+          value !== undefined &&
+          value.statusCode === 200 &&
+          value.data !== null &&
+          value.data !== undefined &&
+          value.data.confirmedDiseases !== undefined &&
+          value.data.confirmedDiseases !== null
+        ) {
+          this.confirmedDiseasesOnPreviousVisit = value.data.confirmedDiseases;
+          this.doctorService.setPreviousVisitConfirmedDiseases(
+            value.data.confirmedDiseases,
+          );
+        }
+      },
+      (err) => {
+        console.log(err.errorMessage());
+      },
+    );
+  }
+
+  getPreviousVisitConfirmedDiseases() {
+    this.previousConfirmedDiseases = [];
+
+    if (
+      this.confirmedDiseasesOnPreviousVisit !== undefined &&
+      this.confirmedDiseasesOnPreviousVisit !== null
+    ) {
+      this.previousConfirmedDiseases = this.confirmedDiseasesOnPreviousVisit;
+      if (this.previousConfirmedDiseases.length > 0) {
+        this.previousConfirmedDiseases.forEach((elementValue: any) => {
+          this.diseaseArray.forEach((confirmedValue: any) => {
+            if (
+              confirmedValue.disease.trim().toLowerCase() ===
+              elementValue.trim().toLowerCase()
+            )
+              confirmedValue.selected = true;
+          });
+        });
+      }
+    }
+
+    while (this.getData().length) {
+      this.diseaseFormsArray.removeAt(0);
+    }
+
+    this.diseaseArray.filter((form: any) => {
+      if (
+        this.beneficiaryGender !== undefined &&
+        this.beneficiaryGender !== null &&
+        this.beneficiaryGender.toLowerCase() === 'male'
+      ) {
+        if (
+          form.disease.toLowerCase() === environment.diabetes.toLowerCase() ||
+          form.disease.toLowerCase() ===
+            environment.hypertension.toLowerCase() ||
+          form.disease.toLowerCase() === environment.oral.toLowerCase()
+        )
+          this.addMoreDiseases(form);
+      } else {
+        if (
+          form.disease.toLowerCase() === environment.diabetes.toLowerCase() ||
+          form.disease.toLowerCase() ===
+            environment.hypertension.toLowerCase() ||
+          form.disease.toLowerCase() === environment.oral.toLowerCase() ||
+          form.disease.toLowerCase() === environment.cervical.toLowerCase() ||
+          form.disease.toLowerCase() === environment.breast.toLowerCase()
+        )
+          this.addMoreDiseases(form);
+      }
+    });
+
+    this.checkedCbacDiseases();
+
+    this.diseaseArray.forEach((res: any, index: any) => {
+      if (res.selected === true) {
+        const diseaseformArraygroup = (<FormGroup>(
+          this.diseaseFormsGroup.controls['diseaseFormsArray']
+        )).controls[index];
+        (<FormGroup>diseaseformArraygroup).controls['selected'].disable();
+      }
+    });
+  }
+
+  cbacDiseaseDetailsSubscription: any;
+  patientDiseasesDataSub: any;
+  getCbacDiseaseDetailsFromNurse(visitID: any, benRegID: any) {
+    this.patientDiseasesDataSub =
+      this.masterdataService.nurseMasterData$.subscribe((data) => {
+        if (data) {
+          if (this.patientDiseasesata) this.patientDiseasesata.unsubscribe();
+          this.confirmedDisease = data.screeningCondition;
+
+          if (this.confirmedDisease && this.confirmedDisease.length > 0) {
+            const obj = {
+              beneficiaryRegId: benRegID,
+              visitCode: localStorage.getItem('visitCode'),
+            };
+
+            this.cbacDiseaseDetailsSubscription = this.nurseService
+              .getCbacDetailsFromNurse(obj)
+              .subscribe((value: any) => {
+                if (
+                  value !== null &&
+                  value.statusCode === 200 &&
+                  value.data !== null &&
+                  value.data !== undefined
+                ) {
+                  this.diseases = [];
+                  this.diseaseArray = [];
+                  for (let i = 0; i < this.confirmedDisease.length; i++) {
+                    if (
+                      this.confirmedDisease[i].name === environment.diabetes
+                    ) {
+                      this.diseases.push({
+                        disease: this.confirmedDisease[i].name,
+                        flag: null,
+                        selected:
+                          value.data.diabetes !== undefined &&
+                          value.data.diabetes !== null
+                            ? value.data.diabetes.confirmed !== null
+                              ? value.data.diabetes.confirmed
+                              : false
+                            : false,
+                      });
+                    }
+                    if (
+                      this.confirmedDisease[i].name === environment.hypertension
+                    ) {
+                      this.diseases.push({
+                        disease: this.confirmedDisease[i].name,
+                        flag: null,
+                        selected:
+                          value.data.hypertension !== undefined &&
+                          value.data.hypertension !== null
+                            ? value.data.hypertension.confirmed !== null
+                              ? value.data.hypertension.confirmed
+                              : false
+                            : false,
+                      });
+                    }
+                    if (this.confirmedDisease[i].name === environment.breast) {
+                      this.diseases.push({
+                        disease: this.confirmedDisease[i].name,
+                        flag: null,
+                        selected:
+                          value.data.breast !== undefined &&
+                          value.data.breast !== null
+                            ? value.data.breast.confirmed !== null
+                              ? value.data.breast.confirmed
+                              : false
+                            : false,
+                      });
+                    }
+                    if (
+                      this.confirmedDisease[i].name === environment.cervical
+                    ) {
+                      this.diseases.push({
+                        disease: this.confirmedDisease[i].name,
+                        flag: null,
+                        selected:
+                          value.data.cervical !== undefined &&
+                          value.data.cervical !== null
+                            ? value.data.cervical.confirmed !== null
+                              ? value.data.cervical.confirmed
+                              : false
+                            : false,
+                      });
+                    }
+                    if (this.confirmedDisease[i].name === environment.oral) {
+                      this.diseases.push({
+                        disease: this.confirmedDisease[i].name,
+                        flag: null,
+                        selected:
+                          value.data.oral !== undefined &&
+                          value.data.oral !== null
+                            ? value.data.oral.confirmed !== null
+                              ? value.data.oral.confirmed
+                              : false
+                            : false,
+                      });
+                    }
+                  }
+                  this.diseaseFormsArray = this.getData();
+                  while (this.getData().length) {
+                    this.diseaseFormsArray.removeAt(0);
+                  }
+
+                  this.diseaseArray = this.diseases;
+                  this.diseaseArray.forEach((form: any, index: any) => {
+                    if (
+                      this.beneficiaryGender !== undefined &&
+                      this.beneficiaryGender !== null &&
+                      this.beneficiaryGender.toLowerCase() === 'male'
+                    ) {
+                      if (
+                        form.disease.toLowerCase() ===
+                          environment.diabetes.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.hypertension.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.oral.toLowerCase()
+                      )
+                        this.addMoreDiseases(form);
+                    } else {
+                      if (
+                        form.disease.toLowerCase() ===
+                          environment.diabetes.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.hypertension.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.oral.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.cervical.toLowerCase() ||
+                        form.disease.toLowerCase() ===
+                          environment.breast.toLowerCase()
+                      )
+                        this.addMoreDiseases(form);
+                    }
+                  });
+
+                  this.checkedCbacDiseases();
+                }
+              });
+          }
+        }
+      });
+  }
+
+  checkedCbacDiseases() {
+    if (this.diseaseFormsGroup.value) {
+      this.diseasearray = [];
+
+      const diseaseFormsArrayControl =
+        this.diseaseFormsGroup.get('diseaseFormsArray');
+      if (diseaseFormsArrayControl) {
+        this.diseasearray = diseaseFormsArrayControl.value;
+      } else {
+        // Handle the case when diseaseFormsArrayControl is null
+      }
+
+      const arrayDiseases: any = [];
+      this.diseasearray.forEach((value: any) => {
+        if (value.selected !== false) arrayDiseases.push(value.diseaseName);
+      });
+
+      this.ncdScreeningService.setConfirmedDiseasesForScreening(arrayDiseases);
+
+      if (
+        arrayDiseases.length > 0 &&
+        this.previousConfirmedDiseases.length <= 0
+      ) {
+        this.nurseService.diseaseFileUpload = true;
+      } else if (arrayDiseases.length > this.previousConfirmedDiseases.length) {
+        this.nurseService.diseaseFileUpload = true;
+      } else {
+        this.nurseService.diseaseFileUpload = false;
+      }
+    }
   }
 
   checked(event: any, item: any) {
     console.log(event.checked);
     console.log(this.diseaseFormsGroup.value);
     if (this.diseaseFormsGroup.value) {
-      this.diseasearray =
-        this.diseaseFormsGroup.get('diseaseFormsArray')?.value;
+      const diseaseFormsArrayControl =
+        this.diseaseFormsGroup.get('diseaseFormsArray');
+      if (diseaseFormsArrayControl) {
+        this.diseasearray = diseaseFormsArrayControl.value;
+      } else {
+        // Handle the case when diseaseFormsArrayControl is null
+      }
+
       const ar: any = [];
       this.diseasearray.forEach((value: any) => {
         if (value.selected !== false) ar.push(value.diseaseName);
@@ -122,7 +472,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.idrsScoreService.clearHypertensionSelected();
         }
         if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.clearConfirmedDiabeticSelected();
+          // this.idrsScoreService.clearConfirmedDiabeticSelected();
         }
         this.idrsScoreService.setUnchecked(item.value.diseaseName);
       } else {
@@ -130,7 +480,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.idrsScoreService.setHypertensionSelected();
         }
         if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.setConfirmedDiabeticSelected();
+          // this.idrsScoreService.setConfirmedDiabeticSelected();
         }
 
         this.idrsScoreService.setDiseasesSelected(ar);
@@ -142,7 +492,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   questionArray = [];
   getIDRSDetailsFrmNurse(visitID: any, benRegID: any) {
     this.nurseMasterDataSubscription =
-      this.masterdataService.nurseMasterData$.subscribe((data: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((data) => {
         if (data) {
           if (this.nurseMasterDataSubscription)
             this.nurseMasterDataSubscription.unsubscribe();
@@ -182,6 +532,8 @@ export class DiseaseconfirmationComponent implements OnInit {
           };
           this.nurseService.getPreviousVisitData(obj).subscribe((res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
+              //console.log("visit", res);
+              //if (res.data.suspectedDisease !== null) {
               this.suspect = [];
               if (
                 res.data.confirmedDisease !== undefined &&
@@ -193,15 +545,15 @@ export class DiseaseconfirmationComponent implements OnInit {
                 this.addToSuspected('Vision Screening');
               if (res.data.isEpilepsy) this.addToSuspected('Epilepsy');
               if (res.data.isHypertension) this.addToSuspected('Hypertension');
+
               this.suspect.forEach((element: any) => {
                 this.diseaseArray.forEach((value: any) => {
                   if (value.disease === element) value.selected = true;
-
                   if (element === 'Hypertension') {
                     this.idrsScoreService.setHypertensionSelected();
                   }
                   if (element === 'Diabetes') {
-                    this.idrsScoreService.setConfirmedDiabeticSelected();
+                    // this.idrsScoreService.setConfirmedDiabeticSelected();
                   }
                 });
               });
@@ -210,16 +562,20 @@ export class DiseaseconfirmationComponent implements OnInit {
                 .subscribe((value: any) => {
                   if (
                     value !== null &&
+                    value !== undefined &&
                     value.statusCode === 200 &&
-                    value.data !== null
+                    value.data !== null &&
+                    value.data !== undefined
                   ) {
-                    if (this.IDRSDetailsSubscription)
-                      this.IDRSDetailsSubscription.unsubscribe();
-
                     this.questionArray = [];
                     let suspect1 = [];
                     // this.suspect = [];
-                    if (value.data.IDRSDetail.confirmedDisease !== null)
+                    if (
+                      value.data.IDRSDetail !== undefined &&
+                      value.data.IDRSDetail !== null &&
+                      value.data.IDRSDetail.confirmedDisease !== null &&
+                      value.data.IDRSDetail.confirmedDisease !== undefined
+                    )
                       suspect1 =
                         value.data.IDRSDetail.confirmedDisease.split(',');
                     if (
@@ -261,10 +617,15 @@ export class DiseaseconfirmationComponent implements OnInit {
                           this.idrsScoreService.setHypertensionSelected();
                         }
                         if (element === 'Diabetes') {
-                          this.idrsScoreService.setConfirmedDiabeticSelected();
+                          // this.idrsScoreService.setConfirmedDiabeticSelected();
                         }
                       });
                     });
+                    this.diseaseFormsArray = this.getData();
+                    while (this.getData().length) {
+                      this.diseaseFormsArray.removeAt(0);
+                    }
+
                     for (const d of this.diseaseArray) {
                       this.addMoreDiseases(d);
                     }
@@ -294,7 +655,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   diseasesMasterData: any;
   getDiseasesMasterData() {
     this.diseasesMasterData = this.masterdataService.nurseMasterData$.subscribe(
-      (data: any) => {
+      (data) => {
         if (data) {
           if (this.diseasesMasterData) this.diseasesMasterData.unsubscribe();
           this.questions = data.IDRSQuestions;
@@ -353,10 +714,47 @@ export class DiseaseconfirmationComponent implements OnInit {
       this.suspect.push(val);
     }
   }
+
+  beneficiaryDetailsSubscription: any;
+  getBenificiaryDetails() {
+    this.beneficiaryDetailsSubscription =
+      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
+        (beneficiaryDetails) => {
+          if (beneficiaryDetails) {
+            this.beneficiaryGender = beneficiaryDetails.genderName;
+          }
+        },
+      );
+  }
+  patientDiseasesata: any;
+  getpatientDiseasesata() {
+    this.patientDiseasesata = this.masterdataService.nurseMasterData$.subscribe(
+      (data) => {
+        if (data) {
+          if (this.patientDiseasesata) this.patientDiseasesata.unsubscribe();
+          this.confirmedDisease = data.screeningCondition;
+          this.diseases = [];
+          this.diseaseArray = [];
+          if (this.confirmedDisease && this.confirmedDisease.length > 0) {
+            for (let i = 0; i < this.confirmedDisease.length; i++) {
+              this.diseases.push({
+                disease: this.confirmedDisease[i].name,
+                flag: null,
+                selected: false,
+              });
+            }
+            this.diseaseArray = this.diseases;
+
+            this.getPreviousVisitConfirmedDiseases();
+          }
+        }
+      },
+    );
+  }
   patientRevisitSuspectedDieseaData: any;
   getPatientRevisitSuspectedDieseaData() {
     this.patientRevisitSuspectedDieseaData =
-      this.masterdataService.nurseMasterData$.subscribe((data: any) => {
+      this.masterdataService.nurseMasterData$.subscribe((data) => {
         if (data) {
           if (this.patientRevisitSuspectedDieseaData)
             this.patientRevisitSuspectedDieseaData.unsubscribe();
@@ -366,6 +764,7 @@ export class DiseaseconfirmationComponent implements OnInit {
           if (this.questions && this.questions.length > 0) {
             for (let i = 0; i < this.questions.length; i++) {
               if (i !== 0) {
+                // console.log(this.questions.DiseaseQuestionType !== this.questions[i - 1].DiseaseQuestionType);
                 if (
                   this.questions[i].DiseaseQuestionType !==
                   this.questions[i - 1].DiseaseQuestionType
@@ -383,6 +782,7 @@ export class DiseaseconfirmationComponent implements OnInit {
                 });
             }
             this.diseaseArray = this.diseases;
+
             const obj = {
               benRegID: localStorage.getItem('beneficiaryRegID'),
             };
@@ -390,6 +790,8 @@ export class DiseaseconfirmationComponent implements OnInit {
               .getPreviousVisitData(obj)
               .subscribe((res: any) => {
                 if (res.statusCode === 200 && res.data !== null) {
+                  //console.log("visit", res);
+                  //if (res.data.suspectedDisease !== null) {
                   this.suspect = [];
                   if (
                     res.data.confirmedDisease !== undefined &&
@@ -402,20 +804,30 @@ export class DiseaseconfirmationComponent implements OnInit {
                   if (res.data.isEpilepsy) this.addToSuspected('Epilepsy');
                   if (res.data.isHypertension)
                     this.addToSuspected('Hypertension');
+
                   this.suspect.forEach((element: any) => {
                     this.diseaseArray.forEach((value: any) => {
                       if (value.disease === element) value.selected = true;
                       if (element === 'Hypertension') {
                         this.idrsScoreService.setHypertensionSelected();
                       }
-                      if (element === 'Diabetes') {
-                        this.idrsScoreService.setConfirmedDiabeticSelected();
-                      }
                     });
                   });
+                  while (this.getData().length) {
+                    this.diseaseFormsArray.removeAt(0);
+                  }
 
                   this.diseaseArray.forEach((form: any, index: any) => {
-                    this.addMoreDiseases(form);
+                    if (
+                      form.disease.toLowerCase() === 'diabetes' ||
+                      form.disease.toLowerCase() === 'epilepsy' ||
+                      form.disease.toLowerCase() === 'asthma' ||
+                      form.disease.toLowerCase() === 'vision screening' ||
+                      form.disease.toLowerCase() === 'tuberculosis screening' ||
+                      form.disease.toLowerCase() === 'malaria screening' ||
+                      form.disease.toLowerCase() === 'hypertension'
+                    )
+                      this.addMoreDiseases(form);
                   });
                   this.diseaseArray.forEach((res: any, index: any) => {
                     if (res.selected === true) {

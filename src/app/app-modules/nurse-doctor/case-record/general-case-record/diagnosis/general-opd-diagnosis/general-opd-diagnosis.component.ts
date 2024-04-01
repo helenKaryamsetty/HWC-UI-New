@@ -19,48 +19,77 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, Input, OnChanges, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  OnChanges,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormControl,
   FormArray,
+  NgForm,
   AbstractControl,
 } from '@angular/forms';
+import {
+  MasterdataService,
+  NurseService,
+  DoctorService,
+} from '../../../../shared/services';
+import { GeneralUtils } from '../../../../shared/utility';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
-import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-general-opd-diagnosis',
   templateUrl: './general-opd-diagnosis.component.html',
   styleUrls: ['./general-opd-diagnosis.component.css'],
 })
-export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
+export class GeneralOpdDiagnosisComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
+  utils = new GeneralUtils(this.fb);
+
   @Input()
   generalDiagnosisForm!: FormGroup;
 
   @Input()
   caseRecordMode!: string;
-  utils = new GeneralUtils(this.fb);
-  diagnosisSubscription: any;
+
+  @Input()
+  visitCat: any;
+
   current_language_set: any;
+  designation: any;
+  specialist = false;
   constructor(
     private fb: FormBuilder,
+    public httpServiceService: HttpServiceService,
+    private nurseService: NurseService,
     private doctorService: DoctorService,
+    private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
-    private httpServiceService: HttpServiceService,
   ) {}
 
-  ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
-      this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
+  ngOnInit() {
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
+    this.designation = localStorage.getItem('designation');
+    if (this.designation === 'TC Specialist') {
+      this.generalDiagnosisForm.controls['instruction'].enable();
+      this.specialist = true;
+    } else {
+      this.generalDiagnosisForm.controls['instruction'].disable();
+      this.specialist = false;
     }
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -70,57 +99,159 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  getDiagnosisDetails(beneficiaryRegID: any, visitID: any, visitCategory: any) {
-    this.diagnosisSubscription = this.doctorService
-      .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.diagnosis) {
-          this.patchDiagnosisDetails(res.data.diagnosis);
+  get specialistDaignosis() {
+    return this.generalDiagnosisForm.get('instruction');
+  }
+
+  ngOnChanges() {
+    if (this.caseRecordMode === 'view') {
+      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const visitCategory = localStorage.getItem('visitCategory');
+
+      const specialistFlagString = localStorage.getItem('specialist_flag');
+
+      if (
+        localStorage.getItem('referredVisitCode') === 'undefined' ||
+        localStorage.getItem('referredVisitCode') === null
+      ) {
+        this.getDiagnosisDetails();
+      } else if (
+        specialistFlagString !== null &&
+        parseInt(specialistFlagString) === 3
+      ) {
+        this.getMMUDiagnosisDetails(
+          beneficiaryRegID,
+          visitID,
+          visitCategory,
+          localStorage.getItem('visitCode'),
+        );
+      } else {
+        this.getMMUDiagnosisDetails(
+          beneficiaryRegID,
+          localStorage.getItem('referredVisitID'),
+          visitCategory,
+          localStorage.getItem('referredVisitCode'),
+        );
+      }
+    }
+  }
+
+  diagnosisSubscription!: Subscription;
+  getDiagnosisDetails() {
+    this.diagnosisSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((res) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+          this.generalDiagnosisForm.patchValue(res.data.diagnosis);
+          if (res.data.diagnosis.provisionalDiagnosisList) {
+            this.patchDiagnosisDetails(
+              res.data.diagnosis.provisionalDiagnosisList,
+            );
+          }
         }
       });
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList',
-    );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
+  MMUdiagnosisSubscription: any;
+  getMMUDiagnosisDetails(
+    beneficiaryRegID: any,
+    visitID: any,
+    visitCategory: any,
+    visitCode: any,
+  ) {
+    this.MMUdiagnosisSubscription = this.doctorService
+      .getMMUCaseRecordAndReferDetails(
+        beneficiaryRegID,
+        visitID,
+        visitCategory,
+        visitCode,
+      )
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+          this.generalDiagnosisForm.patchValue(res.data.diagnosis);
+          if (res.data.diagnosis.provisionalDiagnosisList) {
+            this.patchDiagnosisDetails(
+              res.data.diagnosis.provisionalDiagnosisList,
+            );
+          }
+        }
+      });
   }
 
-  patchDiagnosisDetails(diagnosis: any) {
-    this.generalDiagnosisForm.patchValue(diagnosis);
-    const generalArray = this.generalDiagnosisForm.controls[
+  // MMUdiagnosisSubscription:any;
+  // getMMUDiagnosisDetails(beneficiaryRegID, visitID, visitCategory) {
+  //   this.diagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory,localStorage.getItem("visitCode"))
+  //     .subscribe(res => {
+  //       if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+  //         this.generalDiagnosisForm.patchValue(res.data.diagnosis)
+  //         let diagnosisRes;
+  //         if(res.data.diagnosis.provisionalDiagnosisList)
+  //         {
+  //         diagnosisRes = res.data.diagnosis.provisionalDiagnosisList;
+  //         }
+  //         else{
+  //           diagnosisRes=[];
+  //         }
+  //         this.MMUdiagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, localStorage.getItem("referredVisitID"), visitCategory,localStorage.getItem("referredVisitCode"))
+  //         .subscribe(response => {
+
+  //           if (response && response.statusCode === 200 && response.data && response.data.diagnosis) {
+  //             let diagnosisResponse;
+  //             if(response.data.diagnosis.provisionalDiagnosisList)
+  //             {
+  //           diagnosisResponse = response.data.diagnosis.provisionalDiagnosisList;
+  //             }
+  //             else{
+  //               diagnosisResponse=[];
+  //             }
+
+  //             for(let i=0,j=diagnosisRes.length;i<diagnosisResponse.length;i++,j++)
+  //             {
+  //               diagnosisRes[j]=diagnosisResponse[i];
+  //             }
+
+  //             this.patchDiagnosisDetails(diagnosisRes);
+  //           }
+
+  //         })
+
+  //       }
+  //     })
+  // }
+
+  patchDiagnosisDetails(provisionalDiagnosis: any) {
+    const savedDiagnosisData = provisionalDiagnosis;
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
+    console.log('from diagnosis' + provisionalDiagnosis[0].term);
+    if (
+      provisionalDiagnosis[0].term !== '' &&
+      provisionalDiagnosis[0].conceptID !== ''
+    ) {
+      console.log('from diagnosis second' + provisionalDiagnosis[0].term);
 
-    const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (previousArray !== undefined && previousArray.length > 0) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
+      for (let i = 0; i < savedDiagnosisData.length; i++) {
+        diagnosisArrayList.at(i).patchValue({
+          viewProvisionalDiagnosisProvided: savedDiagnosisData[i].term,
+          term: savedDiagnosisData[i].term,
+          conceptID: savedDiagnosisData[i].conceptID,
         });
-        (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
+        (<FormGroup>diagnosisArrayList.at(i)).controls[
+          'viewProvisionalDiagnosisProvided'
         ].disable();
-        if (generalArray.length < previousArray.length) {
+        if (diagnosisArrayList.length < savedDiagnosisData.length)
           this.addDiagnosis();
-        }
-        j++;
-      });
+      }
     }
   }
 
   addDiagnosis() {
-    const diagnosisListFormArray = <FormArray>(
-      this.generalDiagnosisForm.controls['provisionalDiagnosisList']
-    );
-    if (diagnosisListFormArray.length < 30) {
-      diagnosisListFormArray.push(this.utils.initProvisionalDiagnosisList());
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
+      'provisionalDiagnosisList'
+    ] as FormArray;
+    if (diagnosisArrayList.length <= 29) {
+      diagnosisArrayList.push(this.utils.initProvisionalDiagnosisList());
     } else {
       this.confirmationService.alert(
         this.current_language_set.alerts.info.maxDiagnosis,
@@ -128,7 +259,10 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     }
   }
 
-  deleteDiagnosis(index: any, diagnosisList?: AbstractControl<any, any>) {
+  removeDiagnosisFromList(
+    index: any,
+    diagnosisList?: AbstractControl<any, any>,
+  ) {
     const diagnosisListForm = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
@@ -156,12 +290,17 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     }
   }
 
-  checkProvisionalDiagnosisValidity(diagnosis: any) {
-    const tempDiagnosis = diagnosis.value;
-    if (tempDiagnosis.conceptID && tempDiagnosis.term) {
+  checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
+    const temp = provisionalDiagnosis.value;
+    if (temp.term && temp.conceptID) {
       return false;
     } else {
       return true;
+    }
+  }
+  ngOnDestroy() {
+    if (this.diagnosisSubscription) {
+      this.diagnosisSubscription.unsubscribe();
     }
   }
 }

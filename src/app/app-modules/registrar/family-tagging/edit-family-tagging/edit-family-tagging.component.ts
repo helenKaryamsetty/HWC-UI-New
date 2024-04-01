@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
@@ -33,7 +33,7 @@ import { RegistrarService } from '../../shared/services/registrar.service';
   templateUrl: './edit-family-tagging.component.html',
   styleUrls: ['./edit-family-tagging.component.css'],
 })
-export class EditFamilyTaggingComponent implements OnInit {
+export class EditFamilyTaggingComponent implements OnInit, DoCheck {
   @ViewChild('editFamilyTaggingForm')
   form: any;
 
@@ -128,7 +128,7 @@ export class EditFamilyTaggingComponent implements OnInit {
     this.form.reset();
     this.relationShipList = [];
     this.enableOther = false;
-    if (this.selectedMembersList.length != 1) {
+    if (this.selectedMembersList.length !== 1) {
       this.disableForm = true;
     } else this.disableForm = false;
 
@@ -296,7 +296,7 @@ export class EditFamilyTaggingComponent implements OnInit {
     else if (
       familymembers.includes('Self') &&
       typeOfRelation[0].benRelationshipType.toLowerCase() === 'self' &&
-      this.selectedMembersList.length == 0
+      this.selectedMembersList.length === 0
     ) {
       this.confirmationService.alert(
         this.currentLanguageSet.HeadOfTheFamilyAlreadyPresentRemoveExisting,
@@ -304,6 +304,11 @@ export class EditFamilyTaggingComponent implements OnInit {
       );
     } else {
       if (this.data.isEdit) {
+        const serviceLineDetails: any =
+          localStorage.getItem('serviceLineDetails');
+        const vanID = JSON.parse(serviceLineDetails).vanID;
+        const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
         const requestObjEdit = {
           familyId: this.memberFamilyId,
           // "beneficiaryRegId": this.data.beneficiaryRegID,
@@ -316,16 +321,13 @@ export class EditFamilyTaggingComponent implements OnInit {
           headofFamily_RelationID: this.relationWithHead,
           headofFamily_Relation: typeOfRelation[0].benRelationshipType,
           other: this.other,
-          vanID: JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-            .vanID,
-          parkingPlaceID: JSON.parse(
-            localStorage.getItem('serviceLineDetails') || '{}',
-          ).parkingPlaceID,
+          vanID: vanID,
+          parkingPlaceID: parkingPlaceID,
           modifiedBy: localStorage.getItem('userName'),
         };
         this.familyTaggingService.editFamilyTagging(requestObjEdit).subscribe(
           (res: any) => {
-            if (res.statusCode == 200 && res.data) {
+            if (res.statusCode === 200 && res.data) {
               this.confirmationService.alert(res.data.response, 'success');
               this.matDialogRef.close(true);
             } else {
@@ -337,6 +339,10 @@ export class EditFamilyTaggingComponent implements OnInit {
           },
         );
       } else {
+        const serviceLineDetails: any =
+          localStorage.getItem('serviceLineDetails');
+        const vanID = JSON.parse(serviceLineDetails).vanID;
+        const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
         const requestObj = {
           familyId: this.memberFamilyId,
           beneficiaryRegId: this.data.beneficiaryRegID,
@@ -348,16 +354,13 @@ export class EditFamilyTaggingComponent implements OnInit {
           headofFamily_RelationID: this.relationWithHead,
           headofFamily_Relation: typeOfRelation[0].benRelationshipType,
           other: this.other,
-          vanID: JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-            .vanID,
-          parkingPlaceID: JSON.parse(
-            localStorage.getItem('serviceLineDetails') || '{}',
-          ).parkingPlaceID,
+          vanID: vanID,
+          parkingPlaceID: parkingPlaceID,
           createdBy: localStorage.getItem('userName'),
         };
         this.familyTaggingService.saveFamilyTagging(requestObj).subscribe(
           (res: any) => {
-            if (res.statusCode == 200 && res.data) {
+            if (res.statusCode === 200 && res.data) {
               this.confirmationService.alert(res.data.response, 'success');
               this.matDialogRef.close(true);
             } else {
@@ -374,6 +377,11 @@ export class EditFamilyTaggingComponent implements OnInit {
 
   untagFamilyMember() {
     const memberList: any[] = [];
+
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
     this.selectedMembersList.filter((item) => {
       memberList.push({
         familyId: this.memberFamilyId,
@@ -381,11 +389,8 @@ export class EditFamilyTaggingComponent implements OnInit {
         beneficiaryRegId: item.memberId,
         isHeadOfTheFamily:
           item.relationWithHead.toLowerCase() === 'self' ? true : false,
-        vanID: JSON.parse(localStorage.getItem('serviceLineDetails') || '{}')
-          .vanID,
-        parkingPlaceID: JSON.parse(
-          localStorage.getItem('serviceLineDetails') || '{}',
-        ).parkingPlaceID,
+        vanID: vanID,
+        parkingPlaceID: parkingPlaceID,
         modifiedBy: localStorage.getItem('userName'),
       });
     });
@@ -395,7 +400,7 @@ export class EditFamilyTaggingComponent implements OnInit {
     };
     this.familyTaggingService.untagFamilyMember(requestObj).subscribe(
       (res: any) => {
-        if (res.statusCode == 200 && res.data) {
+        if (res.statusCode === 200 && res.data) {
           this.confirmationService.alert(res.data.response, 'success');
           this.matDialogRef.close(true);
         } else {

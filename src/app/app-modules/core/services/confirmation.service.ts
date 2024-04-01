@@ -13,7 +13,6 @@ export class ConfirmationService {
   constructor(
     private dialog: MatDialog,
     @Inject(DOCUMENT) doc: any,
-    public dialogRef: MatDialogRef<CommonDialogComponent>,
   ) {}
 
   public confirm(
@@ -22,7 +21,6 @@ export class ConfirmationService {
     btnOkText = 'OK',
     btnCancelText = 'Cancel',
   ): Observable<boolean> {
-    const config = new MatDialogConfig();
     const dialogRef = this.dialog.open(CommonDialogComponent, {
       width: '420px',
       disableClose: false,

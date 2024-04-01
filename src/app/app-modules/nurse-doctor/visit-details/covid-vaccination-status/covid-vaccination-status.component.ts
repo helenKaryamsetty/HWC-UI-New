@@ -19,20 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
-  BeneficiaryDetailsService,
-  ConfirmationService,
-} from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  NurseService,
-  MasterdataService,
   DoctorService,
+  MasterdataService,
+  NurseService,
 } from '../../shared/services';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
+import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',
@@ -45,8 +43,12 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   enableVaccineTypeAndDoseTakenFlag = false;
   doseTypeList: any = [];
   vaccineTypeList: any = [];
-  today: Date = new Date();
+  // enableDoseOne: boolean=false;
+  // enableBoosterDose: boolean=false;
+  // enableDoseTwo: boolean=false;
+  today!: Date;
   enableSaveButton = true;
+  // enableSaveButtonForDoseTaken: boolean=true;
 
   constructor(
     private httpService: HttpServiceService,
@@ -136,6 +138,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
         'Not Applicable for Vaccination',
       );
       this.enableVaccinationStatusFields = false;
+      this.enableSaveButton = false;
       this.doctorService.enableCovidVaccinationButton = true;
     } else {
       this.covidVaccineStatusForm.controls['isApplicableForVaccine'].setValue(
@@ -148,6 +151,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   enableVaccineTypeAndDoseTaken() {
     this.covidVaccineStatusForm.controls['vaccineTypes'].setValue(null);
     this.covidVaccineStatusForm.controls['doseTaken'].setValue(null);
+    // this.resetFlags();
     if (this.covidVaccineStatusForm.controls['vaccineStatus'].value === 'YES') {
       this.enableVaccineTypeAndDoseTakenFlag = true;
       this.enableSaveButton = true;
@@ -171,7 +175,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
           }
         }
       },
-      (err: any) => {
+      (err) => {
         console.log('error', err.errorMessage);
       },
     );
@@ -205,7 +209,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
             }
           }
         },
-        (err: any) => {
+        (err) => {
           console.log('error', err.errorMessage);
         },
       );
@@ -231,7 +235,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
             this.confirmationService.alert(res.errorMessage, 'error');
           }
         },
-        (err: any) => {
+        (err) => {
           this.confirmationService.alert(err, 'error');
         },
       );

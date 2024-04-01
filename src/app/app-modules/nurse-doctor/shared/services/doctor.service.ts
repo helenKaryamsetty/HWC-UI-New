@@ -19,39 +19,224 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { FormGroup, FormArray } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
+  screeningType: any;
   enableCovidVaccinationButton = false;
-  prescribedDrugData: any;
   covidVaccineAgeGroup: any;
+  screeningDetailsResponseFromNurse: any = null;
+  isHrpFromNurse = false;
+  reasonHrpFromNurse: any = null;
+  enableHRPReasons = false;
+  valueChanged = false;
+  familyPlanningDetailsResponseFromNurse: any = null;
+  familyPlanningDetailsResponseForRevisit: any = null;
+  birthAndImmunizationDetailsFromNurse: any = null;
+  immunizationHistoryValueChanged = false;
+  enableDispenseFlag = false;
+  immunizationServiceFetchDetails: any = null;
+  immunizationServiceValueChanged = false;
 
   constructor(private http: HttpClient) {}
 
+  screeninDataFromNurse = new BehaviorSubject<any>(null);
+  screeningData$ = this.screeninDataFromNurse.asObservable();
+
+  benFamilyPlanningDetails: any = [];
+  benfamilyPlanningData = new BehaviorSubject<any>(
+    this.benFamilyPlanningDetails,
+  );
+  benFamilyPlanningDetails$ = this.benfamilyPlanningData.asObservable();
+
+  neonatalImmunizationHistoryData: any = [];
+  InfantAndImmunizationHistoryDetails = new BehaviorSubject<any>(
+    this.neonatalImmunizationHistoryData,
+  );
+  infantAndImmunizationData$ =
+    this.InfantAndImmunizationHistoryDetails.asObservable();
+
+  enableHRPStatusAndReasons = new BehaviorSubject<boolean>(
+    this.enableHRPReasons,
+  );
+  enableHRPStatusAndReasons$ = this.enableHRPStatusAndReasons.asObservable();
+
+  valueChangedForFamilyPlanning = new BehaviorSubject<boolean>(
+    this.valueChanged,
+  );
+  valueChangeForFamilyPlanning$ =
+    this.valueChangedForFamilyPlanning.asObservable();
+
+  valueChangedForBirthAndImmunization = new BehaviorSubject<boolean>(
+    this.immunizationHistoryValueChanged,
+  );
+  valueChangedForBirthAndImmunizationCheck$ =
+    this.valueChangedForBirthAndImmunization.asObservable();
+
+  valueChangedForImmunizationServiceChildhood = new BehaviorSubject<boolean>(
+    this.immunizationServiceValueChanged,
+  );
+  valueChangedForImmunizationServiceChildhoodCheck$ =
+    this.valueChangedForImmunizationServiceChildhood.asObservable();
+
+  historyResponse: any = [];
+  populateHistoryResponse = new BehaviorSubject<any>(this.historyResponse);
+  populateHistoryResponse$ = this.populateHistoryResponse.asObservable();
+
+  caserecordResponse = [];
+  populateCaserecordResponse = new BehaviorSubject<any>(
+    this.caserecordResponse,
+  );
+  populateCaserecordResponse$ = this.populateCaserecordResponse.asObservable();
+
+  confirmedDiseases = [];
+  previousVisitConfirmedDiseases = new BehaviorSubject<any>(
+    this.confirmedDiseases,
+  );
+  previousVisitConfirmedDiseases$ =
+    this.previousVisitConfirmedDiseases.asObservable();
+
+  infantData = false;
+  fetchInfantData = new BehaviorSubject<boolean>(this.infantData);
+  fetchInfantDataCheck$ = this.fetchInfantData.asObservable();
+
+  setInfantDataFetch(infantData: any) {
+    this.fetchInfantData.next(infantData);
+  }
+
+  familyData = false;
+  fetchFamilyData = new BehaviorSubject<boolean>(this.familyData);
+  fetchFamilyDataCheck$ = this.fetchFamilyData.asObservable();
+
+  setFamilyDataFetch(familyData: any) {
+    this.fetchFamilyData.next(familyData);
+  }
+
+  setCapturedHistoryByNurse(historyResponse: any) {
+    this.populateHistoryResponse.next(historyResponse);
+  }
+  setCapturedCaserecordDeatilsByDoctor(caserecordResponse: any) {
+    this.populateCaserecordResponse.next(caserecordResponse);
+  }
+  setPreviousVisitConfirmedDiseases(confirmedDiseases: any) {
+    this.previousVisitConfirmedDiseases.next(confirmedDiseases);
+  }
+
   getDoctorWorklist() {
-    console.log(
-      'getDoctorWorklistUrl',
-      localStorage.getItem('providerServiceID'),
-    );
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.doctorWorkList + fetchUrl);
+    // return this.http.get(environment.doctorWorkList + localStorage.getItem('providerServiceID'))
+    //   .map(res => res.json());
   }
 
+  getPreviousInfantAndImmunizationHistoryDetails(
+    neonatalImmunizationHistoryData: any,
+  ) {
+    this.InfantAndImmunizationHistoryDetails.next(
+      neonatalImmunizationHistoryData,
+    );
+  }
+
+  clearPreviousInfantAndImmunizationHistoryDetails() {
+    this.InfantAndImmunizationHistoryDetails.next(null);
+  }
+
+  getBenFamilyDetailsRevisit(benFamilyPlanningDetails: any) {
+    this.benfamilyPlanningData.next(benFamilyPlanningDetails);
+  }
+
+  postNCDscreeningCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
+    const diagnosisFormData = Object.assign(
+      {},
+      diagnosisForm.value,
+      otherDetails,
+    );
+    return diagnosisFormData;
+  }
+  postDoctorNCDScreeningDetails(
+    patientMedicalForm: any,
+    otherDetails: any,
+    tcRequest: any,
+    isSpecialist: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const referForm = patientMedicalForm.controls['patientReferForm'];
+
+    const NCDScreeningDetails = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postNCDscreeningCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      refer: this.postGeneralRefer(referForm, otherDetails),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
+    };
+
+    console.log(
+      'Doctor Covid CARE Visit Details',
+      JSON.stringify(NCDScreeningDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveDoctorNCDScreeningDetails,
+      NCDScreeningDetails,
+    );
+  }
   getServiceOnState() {
     return this.http.post(environment.getServiceOnStateUrl, {});
   }
-
   updateBeneficiaryArrivalStatus(arrivalStatusDetails: any) {
     return this.http.post(
       environment.updateBeneficiaryArrivalStatusUrl,
@@ -74,11 +259,12 @@ export class DoctorService {
   }
 
   getDoctorFutureWorklist() {
-    return this.http.get(
-      environment.doctorFutureWorkList +
-        localStorage.getItem('providerServiceID') +
-        `/${localStorage.getItem('serviceID')}`,
-    );
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const fetchUrl =
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
+    return this.http.get(environment.doctorFutureWorkList + fetchUrl);
   }
 
   getSpecialistFutureWorklist() {
@@ -115,6 +301,11 @@ export class DoctorService {
     });
   }
 
+  // getPreviousVisitDetails(benRegID) {
+  //   return this.http.post(environment.getPreviousVisitDetailsUrl, { benRegID: benRegID })
+  //     .map(res => res.json().data);
+  // }
+
   getMMUHistory() {
     const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previousMMUHistoryUrl, {
@@ -144,336 +335,14 @@ export class DoctorService {
   }
 
   /**
-   ****************************CANCER SCREENING***********************************
-   */
-
-  postDoctorCancerVisitDetails(cancerForm: any, tcRequest: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-
-    const otherDetails = {
-      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      benVisitID: localStorage.getItem('visitID'),
-      benFlowID: localStorage.getItem('benFlowID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      doctorFlag: localStorage.getItem('doctorFlag'),
-      nurseFlag: localStorage.getItem('nurseFlag'),
-      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
-      visitCode: localStorage.getItem('visitCode'),
-      sessionID: localStorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      serviceID: localStorage.getItem('serviceID'),
-      createdBy: localStorage.getItem('userName'),
-    };
-
-    const referDetails = cancerForm.controls.patientCaseRecordForm.value;
-    const diagnosisDetails = cancerForm.controls.patientReferForm.value;
-    const diagnosis = Object.assign(
-      {},
-      diagnosisDetails,
-      referDetails,
-      otherDetails,
-    );
-    const cancerRequest = Object.assign({
-      tcRequest: tcRequest,
-      diagnosis: diagnosis,
-    });
-    console.log(
-      'Doctor Cancer visit Details',
-      JSON.stringify(cancerRequest, null, 4),
-    );
-    return this.http.post(
-      environment.saveDoctorCancerScreeningDetails,
-      cancerRequest,
-    );
-  }
-
-  getVisitDetails(beneficiaryID: string, visitID: string) {
-    return this.http.post(environment.getCancerScreeningVisitDetails, {
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-  }
-
-  getCancerHistoryDetails(beneficiaryID: string, visitID: string) {
-    return this.http.post(environment.getCancerScreeningHistoryDetails, {
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-  }
-
-  getCancerVitalsDetails(beneficiaryID: string, visitID: string) {
-    console.log(beneficiaryID, visitID, 'null something');
-    return this.http.post(environment.getCancerScreeningVitalsDetails, {
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-  }
-
-  getCancerExaminationDetails(beneficiaryID: string, visitID: string) {
-    return this.http.post(environment.getCancerScreeningExaminationDetails, {
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-  }
-
-  updateCancerExaminationDetails(
-    cancerExaminationForm: any,
-    otherDetails: any,
-    imageCoordinates: any,
-  ): Observable<any> {
-    let examinationDetails;
-
-    if (cancerExaminationForm.controls.signsForm.dirty) {
-      const signsForm = cancerExaminationForm.controls.signsForm as FormGroup;
-      // let lymphsArray = (<FormArray>signsForm.controls.lymphNodes).controls.filter(item => {
-      //   return item.dirty;
-      // })
-
-      const lymphsArray = (<FormArray>signsForm.controls['lymphNodes'])
-        .controls;
-      const lymphs = lymphsArray.map((item) =>
-        Object.assign({}, item.value, otherDetails, {
-          createdBy: localStorage.getItem('userName'),
-        }),
-      );
-
-      const cancerSignAndSymptoms = Object.assign(
-        {},
-        signsForm.value,
-        { lymphNodes: undefined },
-        otherDetails,
-      );
-      const signsDetails = Object.assign(
-        {},
-        {
-          cancerSignAndSymptoms: cancerSignAndSymptoms,
-          cancerLymphNodeDetails: lymphs,
-        },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        signsDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.oralExaminationForm.dirty) {
-      const oralExaminationDetails =
-        cancerExaminationForm.controls.oralExaminationForm.value;
-      if (oralExaminationDetails.preMalignantLesionTypeList !== null) {
-        const index =
-          oralExaminationDetails.preMalignantLesionTypeList.indexOf(
-            'Any other lesion',
-          );
-        if (
-          index > -1 &&
-          index === oralExaminationDetails.preMalignantLesionTypeList.length - 1
-        ) {
-          oralExaminationDetails.preMalignantLesionTypeList.pop();
-          oralExaminationDetails.preMalignantLesionTypeList.push(
-            oralExaminationDetails.otherLesionType,
-          );
-        }
-      }
-      const oralDetails = Object.assign(
-        {},
-        oralExaminationDetails,
-        { otherLesionType: undefined },
-        { image: undefined },
-        otherDetails,
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        oralDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.breastExaminationForm.dirty) {
-      const breastExaminationDetails =
-        cancerExaminationForm.controls.breastExaminationForm.value;
-      const breastDetails = Object.assign(
-        {},
-        breastExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        breastDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.abdominalExaminationForm.dirty) {
-      const abdominalExaminationDetails =
-        cancerExaminationForm.controls.abdominalExaminationForm.value;
-      const abdominalDetails = Object.assign(
-        {},
-        abdominalExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        abdominalDetails,
-      });
-    }
-
-    if (cancerExaminationForm.controls.gynecologicalExaminationForm.dirty) {
-      const gynecologicalExaminationDetails =
-        cancerExaminationForm.controls.gynecologicalExaminationForm.value;
-      const gynecologicalDetails = Object.assign(
-        {},
-        gynecologicalExaminationDetails,
-        otherDetails,
-        { image: undefined },
-      );
-      examinationDetails = Object.assign({}, examinationDetails, {
-        gynecologicalDetails,
-      });
-    }
-
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    if (imageCoordinates.length > 0)
-      examinationDetails = Object.assign(
-        {},
-        examinationDetails,
-        { imageCoordinates },
-        {
-          beneficiaryID: localStorage.getItem('beneficiaryID'),
-          sessionID: localStorage.getItem('sessionID'),
-          parkingPlaceID: parkingPlaceID,
-          vanID: vanID,
-          benFlowID: localStorage.getItem('benFlowID'),
-          visitCode: localStorage.getItem('visitCode'),
-        },
-      );
-
-    console.log(
-      'Update Examination details',
-      JSON.stringify(examinationDetails, null, 4),
-    );
-
-    return this.http.post(
-      environment.updateCancerScreeningExamination,
-      examinationDetails,
-    );
-  }
-
-  updateCancerVitalsDetails(
-    cancerVitals: any,
-    disabledFormcontrolValue: any,
-  ): Observable<any> {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const serviceID = localStorage.getItem('serviceID');
-    const createdBy = localStorage.getItem('userName');
-    const updateDetails = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      sessionID: localStorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      benFlowID: localStorage.getItem('benFlowID'),
-      visitCode: localStorage.getItem('visitCode'),
-    };
-
-    const patientVitalsDetails = Object.assign(
-      {},
-      cancerVitals,
-      disabledFormcontrolValue,
-      updateDetails,
-    );
-    return this.http.post(
-      environment.updateCancerScreeningVitals,
-      patientVitalsDetails,
-    );
-  }
-
-  updateCancerHistoryDetails(patientHistoryForm: any, otherDetails: any) {
-    const temp = {
-      familyHistory: this.cancerFamilyHistoryForm(
-        patientHistoryForm.controls.cancerPatientFamilyMedicalHistoryForm,
-        otherDetails,
-      ),
-      personalHistory: this.cancerPersonalHistoryForm(
-        patientHistoryForm.controls.cancerPatientPerosnalHistoryForm,
-        otherDetails,
-      ),
-      pastObstetricHistory: this.cancerObstetricHistoryForm(
-        patientHistoryForm.controls.cancerPatientObstetricHistoryForm,
-        otherDetails,
-      ),
-    };
-    console.log('Updated Cancer History', JSON.stringify(temp, null, 4));
-    return this.http.post(environment.updateCancerScreeningHistory, temp);
-  }
-
-  cancerFamilyHistoryForm(familyHistoryForm: any, otherDetails: any) {
-    let familyHistoryDetails;
-
-    if (familyHistoryForm.dirty && familyHistoryForm.value.diseases !== null) {
-      const diseases = JSON.parse(
-        JSON.stringify(familyHistoryForm.value.diseases),
-      );
-      for (let i = 0; i < diseases.length; i++) {
-        diseases[i].cancerDiseaseType =
-          diseases[i].cancerDiseaseType.cancerDiseaseType;
-
-        if (diseases[i].cancerDiseaseType === 'Any other Cancer')
-          diseases[i].cancerDiseaseType = diseases[i].otherDiseaseType;
-
-        diseases[i] = Object.assign({}, diseases[i], otherDetails);
-      }
-      familyHistoryDetails = diseases;
-    }
-    return familyHistoryDetails;
-  }
-
-  cancerObstetricHistoryForm(obstetricHistoryForm: any, otherDetails: any) {
-    let obstetricHistoryDetails;
-    if (obstetricHistoryForm.dirty) {
-      obstetricHistoryDetails = Object.assign(
-        {},
-        obstetricHistoryForm.value,
-        otherDetails,
-      );
-    }
-    return obstetricHistoryDetails;
-  }
-
-  cancerPersonalHistoryForm(
-    patientPerosnalHistoryForm: any,
-    otherDetails: any,
-  ) {
-    let personalDetails;
-    if (patientPerosnalHistoryForm.dirty) {
-      personalDetails = Object.assign(
-        {},
-        patientPerosnalHistoryForm.value,
-        otherDetails,
-      );
-    }
-    return personalDetails;
-  }
-
-  /**
-   **************************END of CANCER SCREENING**************************
-   */
-
-  /**
    **************************GENERAL OPD QUICK CONSULT**************************
    */
 
-  postQuickConsultDetails(consultationData: any, tcRequest: any) {
+  postQuickConsultDetails(
+    consultationData: any,
+    tcRequest: any,
+    isSpecialist: any,
+  ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -493,6 +362,7 @@ export class DoctorService {
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
     const quickConsultation = Object.assign(
       {},
@@ -545,7 +415,9 @@ export class DoctorService {
     );
     return this.http.post(
       environment.updateGeneralOPDQuickConsultDoctorDetails,
-      { quickConsultation },
+      {
+        quickConsultation,
+      },
     );
   }
 
@@ -565,6 +437,18 @@ export class DoctorService {
     });
   }
 
+  getNcdScreeningForCbac() {
+    return this.http.post(environment.getNcdScreeningDetailsForCbac, {
+      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
+      // benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  reset() {
+    this.screeninDataFromNurse.next(null);
+  }
+
   updateNCDScreeningDetails(
     ncdScreeningFormValue: any,
     patientVisitFormValue: any,
@@ -575,10 +459,16 @@ export class DoctorService {
       providerServiceMapID: localStorage.getItem('providerServiceID'),
       modifiedBy: localStorage.getItem('userName'),
       visitCode: localStorage.getItem('visitCode'),
+      serviceID: localStorage.getItem('serviceID'),
     };
     const postNCDScreeningFormValue = JSON.parse(
       JSON.stringify(ncdScreeningFormValue),
     );
+
+    // if (postNCDScreeningFormValue.screeningCondition) {
+    //   postNCDScreeningFormValue.ncdScreeningConditionID = postNCDScreeningFormValue.screeningCondition.ncdScreeningConditionID;
+    //   postNCDScreeningFormValue.screeningCondition = postNCDScreeningFormValue.screeningCondition.ncdScreeningCondition;
+    // }
 
     if (postNCDScreeningFormValue.reasonForScreening) {
       postNCDScreeningFormValue.ncdScreeningReasonID =
@@ -648,6 +538,7 @@ export class DoctorService {
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any,
+    isSpecialist: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -678,6 +569,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -694,6 +589,7 @@ export class DoctorService {
       serviceID: localStorage.getItem('serviceID'),
       createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
 
     console.log(
@@ -734,8 +630,9 @@ export class DoctorService {
       detailedANC,
       {
         gravida_G: obstetricFormula.gravida_G,
-        termDeliveries_T: obstetricFormula.termDeliveries_T,
-        pretermDeliveries_P: obstetricFormula.pretermDeliveries_P,
+        // termDeliveries_T: obstetricFormula.termDeliveries_T,
+        // pretermDeliveries_P: obstetricFormula.pretermDeliveries_P,
+        para: obstetricFormula.para,
         abortions_A: obstetricFormula.abortions_A,
         stillBirth: obstetricFormula.stillBirth,
         livebirths_L: obstetricFormula.livebirths_L,
@@ -759,6 +656,11 @@ export class DoctorService {
       visitCode: localStorage.getItem('visitCode'),
     });
   }
+  getAncCareDetailsRevisit(beneficiaryID: string) {
+    return this.http.post(environment.getANCDetailsUrl, {
+      benRegID: beneficiaryID,
+    });
+  }
 
   /**
    **************************END OF ANC**************************
@@ -772,10 +674,17 @@ export class DoctorService {
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any,
+    isSpecialist: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    console.log('message', patientMedicalForm);
+    const patientVisitDetailForm = <FormGroup>(
+      patientMedicalForm.controls['patientVisitForm'].controls[
+        'patientVisitDetailsForm'
+      ]
+    );
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
     )).controls['generalFindingsForm'];
@@ -791,6 +700,8 @@ export class DoctorService {
     const referForm = patientMedicalForm.controls['patientReferForm'];
 
     const generalVisitDetails = {
+      subVisitCategory:
+        patientVisitDetailForm.controls['subVisitCategory'].value,
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
       diagnosis: this.postGeneralOPDCaseRecordDiagnosis(
         diagnosisForm,
@@ -804,6 +715,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -820,6 +735,7 @@ export class DoctorService {
       serviceID: localStorage.getItem('serviceID'),
       createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
 
     console.log(
@@ -831,6 +747,7 @@ export class DoctorService {
       environment.saveDoctorGeneralOPDDetails,
       generalVisitDetails,
     );
+    // return Observable.of({errorMessage: 'furrrr'});
   }
 
   /**
@@ -845,6 +762,7 @@ export class DoctorService {
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any,
+    isSpecialist: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -877,6 +795,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -893,6 +815,7 @@ export class DoctorService {
       serviceID: localStorage.getItem('serviceID'),
       createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
 
     console.log(
@@ -905,15 +828,15 @@ export class DoctorService {
       ncdCareVisitDetails,
     );
   }
-
   /**
    **************************END OF NCD CARE**************************
    */
 
-  postDoctorCovidCareDetails(
+  postDoctorCovidDetails(
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any,
+    isSpecialist: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -932,12 +855,9 @@ export class DoctorService {
     )).controls['generalDiagnosisForm'];
     const referForm = patientMedicalForm.controls['patientReferForm'];
 
-    const covidCareVisitDetails = {
+    const covidVisitDetails = {
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
-      diagnosis: this.postCovidCareCaseRecordDiagnosis(
-        diagnosisForm,
-        otherDetails,
-      ),
+      diagnosis: this.postCovidCaseRecordDiagnosis(diagnosisForm, otherDetails),
       investigation: this.postGeneralCaseRecordInvestigation(
         investigationForm,
         otherDetails,
@@ -946,6 +866,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -962,85 +886,64 @@ export class DoctorService {
       serviceID: localStorage.getItem('serviceID'),
       createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
 
     console.log(
-      'Doctor Covid CARE Visit Details',
-      JSON.stringify(covidCareVisitDetails, null, 4),
+      'Doctor Covid-19 Screening Visit Details',
+      JSON.stringify(covidVisitDetails, null, 4),
     );
 
     return this.http.post(
-      environment.saveDoctorCovidCareDetails,
-      covidCareVisitDetails,
-    );
-  }
-  postDoctorNCDScreeningDetails(
-    patientMedicalForm: any,
-    otherDetails: any,
-    tcRequest: any,
-  ) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const findingForm = (<FormGroup>(
-      patientMedicalForm.controls['patientCaseRecordForm']
-    )).controls['generalFindingsForm'];
-    const investigationForm = (<FormGroup>(
-      patientMedicalForm.controls['patientCaseRecordForm']
-    )).controls['generalDoctorInvestigationForm'];
-    const prescriptionForm = (<FormGroup>(
-      patientMedicalForm.controls['patientCaseRecordForm']
-    )).controls['drugPrescriptionForm'];
-    const diagnosisForm = (<FormGroup>(
-      patientMedicalForm.controls['patientCaseRecordForm']
-    )).controls['generalDiagnosisForm'];
-    const referForm = patientMedicalForm.controls['patientReferForm'];
-
-    const NCDScreeningDetails = {
-      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
-      diagnosis: this.postNCDscreeningCaseRecordDiagnosis(
-        diagnosisForm,
-        otherDetails,
-      ),
-      investigation: this.postGeneralCaseRecordInvestigation(
-        investigationForm,
-        otherDetails,
-      ),
-      prescription: this.postGeneralCaseRecordPrescription(
-        prescriptionForm,
-        otherDetails,
-      ),
-      refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: localStorage.getItem('benFlowID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      doctorFlag: localStorage.getItem('doctorFlag'),
-      nurseFlag: localStorage.getItem('nurseFlag'),
-      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
-      sessionID: localStorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      visitCode: localStorage.getItem('visitCode'),
-      benVisitID: localStorage.getItem('visitID'),
-      serviceID: localStorage.getItem('serviceID'),
-      createdBy: localStorage.getItem('userName'),
-      tcRequest: tcRequest,
-    };
-
-    console.log(
-      'Doctor Covid CARE Visit Details',
-      JSON.stringify(NCDScreeningDetails, null, 4),
-    );
-
-    return this.http.post(
-      environment.saveDoctorNCDScreeningDetails,
-      NCDScreeningDetails,
+      environment.saveDoctorCovidDetails,
+      covidVisitDetails,
     );
   }
 
   /**
-   **************************END OF Covid CARE**************************
+   **************************END OF COVID**************************
+   */
+
+  //  postDoctorCovidDetails(patientMedicalForm, otherDetails, tcRequest, isSpecialist) {
+  //   let vanID = JSON.parse(localStorage.getItem('serviceLineDetails')).vanID;
+  //   let parkingPlaceID = JSON.parse(localStorage.getItem('serviceLineDetails')).parkingPlaceID;
+  //   let findingForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalFindingsForm'];
+  //   let investigationForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalDoctorInvestigationForm'];
+  //   let prescriptionForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['drugPrescriptionForm'];
+  //   let diagnosisForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalDiagnosisForm'];
+  //   let referForm = patientMedicalForm.controls['patientReferForm'];
+
+  //   let covidVisitDetails = {
+  //     "findings": this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+  //     "diagnosis": this.postCovidCaseRecordDiagnosis(diagnosisForm, otherDetails),
+  //     "investigation": this.postGeneralCaseRecordInvestigation(investigationForm, otherDetails),
+  //     "prescription": this.postGeneralCaseRecordPrescription(prescriptionForm, otherDetails),
+  //     "refer": this.postGeneralRefer(referForm, otherDetails),
+  //     "benFlowID": localStorage.getItem('benFlowID'),
+  //     "beneficiaryID": localStorage.getItem('beneficiaryID'),
+  //     "doctorFlag": localStorage.getItem('doctorFlag'),
+  //     "nurseFlag": localStorage.getItem('nurseFlag'),
+  //     "pharmacist_flag": localStorage.getItem('pharmacist_flag'),
+  //     sessionID: localStorage.getItem('sessionID'),
+  //     parkingPlaceID: parkingPlaceID, vanID: vanID,
+  //     beneficiaryRegID: "" + localStorage.getItem('beneficiaryRegID'),
+  //     providerServiceMapID: localStorage.getItem('providerServiceID'),
+  //     visitCode: localStorage.getItem('visitCode'),
+  //     benVisitID: localStorage.getItem('visitID'),
+  //     serviceID: localStorage.getItem('serviceID'),
+  //     createdBy: localStorage.getItem('userName'),
+  //     tcRequest: tcRequest,
+  //     isSpecialist: isSpecialist
+  //   }
+
+  //   console.log("Doctor Covid Visit Details", JSON.stringify(covidVisitDetails, null, 4));
+
+  //   return this.http.post(environment.saveDoctorCovidDetails, covidVisitDetails)
+  //     .map(res => res.json());
+  // }
+
+  /**
+   **************************END OF Covid**************************
    */
 
   /**
@@ -1057,12 +960,6 @@ export class DoctorService {
     });
 
     if (!this.getVisitComplaint) {
-      if (visitCategory === 'Cancer Screening') {
-        this.getVisitComplaint = this.http.post(
-          environment.getCancerScreeningVisitDetails,
-          otherDetails,
-        );
-      }
       if (visitCategory === 'General OPD (QC)') {
         this.getVisitComplaint = this.http.post(
           environment.getGeneralOPDQuickConsultVisitDetails,
@@ -1097,40 +994,34 @@ export class DoctorService {
         return this.http.post(environment.getPNCVisitDetailsUrl, otherDetails);
       }
       if (visitCategory === 'COVID-19 Screening') {
-        return this.http.post(
-          environment.getCovidCareVisitDetailsUrl,
+        this.getVisitComplaint = this.http.post(
+          environment.getCovidVisitDetails,
+          otherDetails,
+        );
+      }
+
+      if (visitCategory === 'FP & Contraceptive Services') {
+        this.getVisitComplaint = this.http.post(
+          environment.getFamilyPlanningVisitDetails,
+          otherDetails,
+        );
+      }
+
+      if (visitCategory === 'neonatal and infant health care services') {
+        this.getVisitComplaint = this.http.post(
+          environment.getNeonatalVisitDetails,
+          otherDetails,
+        );
+      }
+
+      if (visitCategory === 'childhood & adolescent healthcare services') {
+        this.getVisitComplaint = this.http.post(
+          environment.getChildAndAdolescentVisitDetails,
           otherDetails,
         );
       }
     }
     return this.getVisitComplaint;
-  }
-
-  getPregVisitComplaint: any;
-  getPregVisitComplaintDetails(
-    beneficiaryID: string,
-    visitID: string,
-    visitCategory: string,
-  ) {
-    // let visitCategory = "NCD screening";
-    const otherDetails = Object.assign({
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-
-    // if (!this.getPregVisitComplaint) {
-
-    // if (visitCategory === 'NCD screening') {
-    this.getPregVisitComplaint = this.http.post(
-      environment.getNCDScreeningVisitDetails,
-      otherDetails,
-    );
-    //
-    // }
-
-    // }
-    return this.getPregVisitComplaint;
   }
 
   generalHistory: any;
@@ -1160,15 +1051,15 @@ export class DoctorService {
           otherDetails,
         );
       }
-      if (visitCategory === 'PNC') {
+      if (visitCategory === 'COVID-19 Screening') {
         this.generalHistory = this.http.post(
-          environment.getPNCHistoryDetailsUrl,
+          environment.getCovidHistoryDetailsUrl,
           otherDetails,
         );
       }
-      if (visitCategory === 'COVID-19 Screening') {
+      if (visitCategory === 'PNC') {
         this.generalHistory = this.http.post(
-          environment.getCovidCareHistoryDetailsUrl,
+          environment.getPNCHistoryDetailsUrl,
           otherDetails,
         );
       }
@@ -1209,14 +1100,95 @@ export class DoctorService {
         otherDetails,
       );
     }
+
+    if (visitCategory === 'COVID-19 Screening') {
+      return this.http.post(environment.getCovidVitalDetailsUrl, otherDetails);
+    }
+
     if (visitCategory === 'PNC') {
       return this.http.post(environment.getPNCVitalsDetailsUrl, otherDetails);
     }
-    if (visitCategory === 'COVID-19 Screening') {
+    if (visitCategory === 'NCD screening') {
       return this.http.post(
-        environment.getCovidCareVitalDetailsUrl,
+        environment.getNCDSceeriningVitalDetails,
         otherDetails,
       );
+    }
+
+    if (visitCategory === 'FP & Contraceptive Services') {
+      return this.http.post(
+        environment.getFamilyPlanningVitalDetailsUrl,
+        otherDetails,
+      );
+    }
+
+    if (visitCategory === 'neonatal and infant health care services') {
+      return this.http.post(
+        environment.getNeonatalVitalsDetailsUrl,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'childhood & adolescent healthcare services') {
+      return this.http.post(
+        environment.getChildAndAdolescentVitalsDetailsUrl,
+        otherDetails,
+      );
+    }
+
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
+  }
+  getRBSPreviousVitals(beneficiary: any): Observable<any> {
+    const visitCategory = localStorage.getItem('visitCategory');
+    if (visitCategory === 'NCD screening') {
+      return this.http.post(
+        environment.getNCDSceeriningVitalDetails,
+        beneficiary,
+      );
+    }
+
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
+  }
+
+  getGenericVitalsForMMULabReport(beneficiary: any): Observable<any> {
+    const otherDetails = Object.assign({}, beneficiary, {
+      visitCode: localStorage.getItem('referredVisitCode'),
+    });
+    const visitCategory = localStorage.getItem('visitCategory');
+    if (visitCategory === 'General OPD (QC)') {
+      return this.http.post(
+        environment.getGeneralOPDQuickConsultVitalDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'ANC') {
+      return this.http.post(environment.getANCVitalsDetailsUrl, otherDetails);
+    }
+    if (visitCategory === 'General OPD') {
+      return this.http.post(
+        environment.getGeneralOPDVitalDetailsUrl,
+        otherDetails,
+      );
+    }
+
+    if (visitCategory === 'NCD care') {
+      return this.http.post(
+        environment.getNCDCareVitalDetailsUrl,
+        otherDetails,
+      );
+    }
+
+    if (visitCategory === 'COVID-19 Screening') {
+      return this.http.post(environment.getCovidVitalDetailsUrl, otherDetails);
+    }
+
+    if (visitCategory === 'PNC') {
+      return this.http.post(environment.getPNCVitalsDetailsUrl, otherDetails);
     }
     if (visitCategory === 'NCD screening') {
       return this.http.post(
@@ -1230,10 +1202,7 @@ export class DoctorService {
     });
   }
 
-  getGeneralExamintionData(
-    beneficiaryID: string,
-    visitID: string,
-  ): Observable<any> {
+  getGeneralExamintionData(beneficiaryID: string, visitID: string) {
     const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: beneficiaryID,
@@ -1253,9 +1222,6 @@ export class DoctorService {
     if (visitCategory === 'PNC') {
       return this.http.post(environment.getPNCExaminationDataUrl, otherDetails);
     }
-    return new Observable((observer) => {
-      observer.complete();
-    });
   }
 
   updateGeneralHistory(
@@ -1263,8 +1229,8 @@ export class DoctorService {
     temp: any,
     beneficiaryAge: any,
   ): Observable<any> {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const visitCategory = localStorage.getItem('visitCategory');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updatedHistoryDetails = {
@@ -1355,6 +1321,13 @@ export class DoctorService {
       );
     }
 
+    if (visitCategory === 'COVID-19 Screening') {
+      return this.http.post(
+        environment.updateCovidHistoryDetailsUrl,
+        updatedHistoryDetails,
+      );
+    }
+
     if (visitCategory === 'PNC') {
       delete updatedHistoryDetails.feedingHistory;
       delete updatedHistoryDetails.developmentHistory;
@@ -1366,13 +1339,7 @@ export class DoctorService {
       );
     }
 
-    if (visitCategory === 'COVID-19 Screening') {
-      return this.http.post(
-        environment.updateCovidCareHistoryDetailsUrl,
-        updatedHistoryDetails,
-      );
-    }
-
+    // Return an observable that emits no value and completes
     return new Observable((observer) => {
       observer.complete();
     });
@@ -1402,9 +1369,7 @@ export class DoctorService {
       feedingHistoryFormValue,
       otherDetails,
       {
-        foodIntoleranceStatus: !feedingHistoryFormValue.foodIntoleranceStatus
-          ? feedingHistoryFormValue.foodIntoleranceStatus
-          : +feedingHistoryFormValue.foodIntoleranceStatus,
+        foodIntoleranceStatus: +feedingHistoryFormValue.foodIntoleranceStatus,
       },
     );
     return feedingHistoryData;
@@ -1423,8 +1388,8 @@ export class DoctorService {
     }
 
     if (temp.complicationAtBirth) {
-      temp.complicationAtBirthID = temp.complicationAtBirth.birthComplicationID;
-      temp.complicationAtBirth = temp.complicationAtBirth.name;
+      temp.complicationAtBirthID = temp.complicationAtBirth.complicationID;
+      temp.complicationAtBirth = temp.complicationAtBirth.complicationValue;
     }
     const perinatalHistoryData = Object.assign({}, temp, otherDetails);
     return perinatalHistoryData;
@@ -1479,9 +1444,18 @@ export class DoctorService {
       if (temp) {
         item.comorbidConditions = undefined;
         item.comorbidCondition = temp.comorbidCondition;
-        if (temp.comorbidConditionID)
+        if (temp.comorbidConditionID) {
           item.comorbidConditionID = '' + temp.comorbidConditionID;
-        // item.isForHistory = !item.isForHistory;
+        }
+        if (
+          item.isForHistory !== undefined &&
+          item.isForHistory !== null &&
+          item.isForHistory === true
+        ) {
+          item.isForHistory = false;
+        } else {
+          item.isForHistory = true;
+        }
       }
     });
     const comorbidityData = Object.assign(
@@ -1542,7 +1516,8 @@ export class DoctorService {
       temp,
       {
         riskySexualPracticesStatus:
-          personalHistoryFormValue.riskySexualPracticesStatus !== undefined
+          personalHistoryFormValue.riskySexualPracticesStatus !== undefined &&
+          personalHistoryFormValue.riskySexualPracticesStatus !== null
             ? +personalHistoryFormValue.riskySexualPracticesStatus
             : null,
         tobaccoList: tobaccoList,
@@ -1550,6 +1525,8 @@ export class DoctorService {
         allergicList: allergyList,
       },
     );
+    console.log('docrisky', personalHistoryFormValue);
+    console.log('docriskyyy', personalHistoryForm);
     return personalHistoryData;
   }
 
@@ -1563,6 +1540,8 @@ export class DoctorService {
       if (item.diseaseType) {
         item.diseaseTypeID = '' + item.diseaseType.diseaseTypeID;
         item.diseaseType = item.diseaseType.diseaseType;
+        // item.snomedCode = item.diseaseType.snomedCode;
+        // item.snomedTerm = item.diseaseType.snomedTerm;
       }
     });
     const familyHistoryData = Object.assign({}, familyHistoryFormValue, temp);
@@ -1588,6 +1567,11 @@ export class DoctorService {
       temp.bloodFlowDuration = temp.bloodFlowDuration.menstrualCycleRange;
     }
 
+    // if (temp.problemName) {
+    //   temp.menstrualProblemID = "" + temp.problemName.menstrualProblemID;
+    //   temp.problemName = temp.problemName.name;
+    // }
+
     if (
       temp.lMPDate === null ||
       temp.lMPDate === undefined ||
@@ -1608,6 +1592,12 @@ export class DoctorService {
       pastObstetricHistoryFormValue.pastObstericHistoryList;
 
     pastObstetricList.map((item: any) => {
+      // if (item.pregComplicationList) {
+      //   item.pregComplicationList.map(complication => {
+      //     complication.pregComplicationID = complication.complicationID;
+      //     complication.pregComplicationType = complication.complicationType;
+      //   })
+      // }
       if (item.durationType) {
         item.pregDurationID = item.durationType.pregDurationID;
         item.durationType = item.durationType.durationType;
@@ -1620,10 +1610,22 @@ export class DoctorService {
         item.deliveryPlaceID = item.deliveryPlace.deliveryPlaceID;
         item.deliveryPlace = item.deliveryPlace.deliveryPlace;
       }
+      // if (item.deliveryComplicationType) {
+      //   item.deliveryComplicationID = item.deliveryComplicationType.complicationID;
+      //   item.deliveryComplicationType = item.deliveryComplicationType.complicationValue;
+      // }
+      // if (item.postpartumComplicationType) {
+      //   item.postpartumComplicationID = item.postpartumComplicationType.complicationID;
+      //   item.postpartumComplicationType = item.postpartumComplicationType.complicationValue;
+      // }
       if (item.pregOutcome) {
         item.pregOutcomeID = item.pregOutcome.pregOutcomeID;
         item.pregOutcome = item.pregOutcome.pregOutcome;
       }
+      // if (item.postNatalComplication) {
+      //   item.postNatalComplicationID = item.postNatalComplication.complicationID;
+      //   item.postNatalComplication = item.postNatalComplication.complicationValue;
+      // }
       if (item.newBornComplication) {
         item.newBornComplicationID = item.newBornComplication.complicationID;
         item.newBornComplication = item.newBornComplication.complicationValue;
@@ -1647,6 +1649,11 @@ export class DoctorService {
       JSON.stringify(immunizationHistoryForm.value),
     );
     const formData = immunizationHistoryFormValue.immunizationList;
+    // formData.forEach((item)=>{
+    //   item.vaccines.forEach((vaccine)=>{
+    //     vaccine.status = ""+vaccine.status
+    //   })
+    // })
     const immunizationHistoryData = Object.assign(
       {},
       { immunizationList: formData },
@@ -1678,7 +1685,7 @@ export class DoctorService {
   updateGeneralVitals(
     patientVitalsForm: any,
     visitCategory: any,
-  ): Observable<object> {
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -1697,6 +1704,7 @@ export class DoctorService {
         benVisitID: localStorage.getItem('visitID'),
       },
     );
+    console.log('Vitals Form', patientVitalData);
     if (visitCategory === 'ANC') {
       return this.http.post(
         environment.updateANCVitalsDetailsUrl,
@@ -1716,15 +1724,16 @@ export class DoctorService {
       );
     }
 
-    if (visitCategory === 'PNC') {
+    if (visitCategory === 'COVID-19 Screening') {
       return this.http.post(
-        environment.updatePNCVitalsDetailsUrl,
+        environment.updateCovidVitalsDetailsUrl,
         patientVitalData,
       );
     }
-    if (visitCategory === 'COVID-19 Screening') {
+
+    if (visitCategory === 'PNC') {
       return this.http.post(
-        environment.updateCovidCareVitalsDetailsUrl,
+        environment.updatePNCVitalsDetailsUrl,
         patientVitalData,
       );
     }
@@ -1735,47 +1744,71 @@ export class DoctorService {
       );
     }
 
+    if (visitCategory === 'FP & Contraceptive Services') {
+      return this.http.post(
+        environment.updateFamilyPlanningVitalsDetailsUrl,
+        patientVitalData,
+      );
+    }
+
+    // Return an observable that emits no value and completes
     return new Observable((observer) => {
       observer.complete();
     });
   }
 
-  updateIDRSDetails(
-    idrsScreeningForm: any,
+  updateNeonatalVitals(
+    neonatalVitalsForm: any,
     visitCategory: any,
-  ): Observable<object> {
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const patientIDRSData = Object.assign({}, idrsScreeningForm.value, {
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      sessionID: localStorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      createdBy: localStorage.getItem('userName'),
-      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
-      visitCode: localStorage.getItem('visitCode'),
-      benVisitID: localStorage.getItem('visitID'),
-      deleted: false,
-    });
-
-    const idrsDetails = { idrsDetails: patientIDRSData };
-    if (visitCategory === 'NCD screening') {
+    const patientVitalData = Object.assign(
+      {},
+      neonatalVitalsForm.value,
+      neonatalVitalsForm.getRawValue(),
+      {
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        modifiedBy: localStorage.getItem('userName'),
+        sessionID: localStorage.getItem('sessionID'),
+        parkingPlaceID: parkingPlaceID,
+        vanID: vanID,
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
+      },
+    );
+    console.log('Vitals Form', patientVitalData);
+    if (
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    ) {
       return this.http.post(
-        environment.updateNCDScreeningIDRSDetailsUrl,
-        idrsDetails,
+        environment.updateNeonatalVitalsDetailsUrl,
+        patientVitalData,
       );
     }
+    if (
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      return this.http.post(
+        environment.updateChildAndAdolescentVitalsDetailsUrl,
+        patientVitalData,
+      );
+    }
+
+    // Return an observable that emits no value and completes
     return new Observable((observer) => {
       observer.complete();
     });
   }
+
   updatePatientExamination(
     patientExaminationForm: any,
     visitCategory: any,
     updateDetails: any,
-  ): Observable<object> {
+  ) {
     let updatedExaminationDetails;
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1908,6 +1941,10 @@ export class DoctorService {
           patientExaminationForm.headToToeExaminationForm,
           updateDetails,
         ),
+        // oralDetails: this.updateOralExaminationForm(
+        //   patientExaminationForm.oralExaminationForm,
+        //   updateDetails
+        // ),
         gastroIntestinalExamination: this.updateGastroIntestinalSystemForm(
           patientExaminationForm.systemicExaminationForm
             .gastroIntestinalSystemForm,
@@ -1956,10 +1993,6 @@ export class DoctorService {
         updatedExaminationDetails,
       );
     }
-
-    return new Observable((observer) => {
-      observer.complete();
-    });
   }
 
   updateGeneralExaminationForm(
@@ -1984,6 +2017,35 @@ export class DoctorService {
       updateDetails,
     );
     return headToToeExaminationFormData;
+  }
+
+  updateOralExaminationForm(oralExaminationForm: any, updateDetails: any) {
+    if (oralExaminationForm.dirty) {
+      if (oralExaminationForm.preMalignantLesionTypeList !== null) {
+        const index =
+          oralExaminationForm.preMalignantLesionTypeList.indexOf(
+            'Any other lesion',
+          );
+        if (
+          index > -1 &&
+          index === oralExaminationForm.preMalignantLesionTypeList.length - 1
+        ) {
+          oralExaminationForm.preMalignantLesionTypeList.pop();
+          oralExaminationForm.preMalignantLesionTypeList.push(
+            oralExaminationForm.otherLesionType,
+          );
+        }
+      }
+      oralExaminationForm = Object.assign({}, oralExaminationForm, {
+        otherLesionType: undefined,
+      });
+    }
+    const oralExaminationFormData = Object.assign(
+      {},
+      oralExaminationForm,
+      updateDetails,
+    );
+    return oralExaminationFormData;
   }
 
   updateGastroIntestinalSystemForm(
@@ -2110,8 +2172,74 @@ export class DoctorService {
     return diagnosisFormData;
   }
 
+  postFamilyPlanningCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
+    const diagnosisFormData = Object.assign(
+      {},
+      diagnosisForm.value,
+      otherDetails,
+    );
+    return diagnosisFormData;
+  }
+
+  postNeonatalCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
+    const diagnosisFormData = Object.assign(
+      {},
+      diagnosisForm.value,
+      otherDetails,
+    );
+    return diagnosisFormData;
+  }
+
+  postChildAndAdolescentCaseRecordDiagnosis(
+    diagnosisForm: any,
+    otherDetails: any,
+  ) {
+    const diagnosisFormData = Object.assign(
+      {},
+      diagnosisForm.value,
+      otherDetails,
+    );
+    return diagnosisFormData;
+  }
+
+  postCovidCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
+    const diagnosisFormData = Object.assign(
+      {},
+      diagnosisForm.value,
+      otherDetails,
+    );
+    return diagnosisFormData;
+  }
+
+  // postNCDCareCaseRecordDiagnosis(diagnosisForm, otherDetails) {
+  //   let diagnosisFormData = JSON.parse(JSON.stringify(diagnosisForm.value));
+
+  //   if (diagnosisFormData.ncdScreeningCondition) {
+  //     diagnosisFormData.ncdScreeningConditionID =
+  //       diagnosisFormData.ncdScreeningCondition.ncdScreeningConditionID;
+  //     diagnosisFormData.ncdScreeningCondition =
+  //       diagnosisFormData.ncdScreeningCondition.screeningCondition;
+  //   }
+
+  //   if (diagnosisFormData.ncdCareType) {
+  //     diagnosisFormData.ncdCareTypeID =
+  //       diagnosisFormData.ncdCareType.ncdCareTypeID;
+  //     diagnosisFormData.ncdCareType = diagnosisFormData.ncdCareType.ncdCareType;
+  //   }
+
+  //   let diagnosisData = Object.assign({}, diagnosisFormData, otherDetails);
+  //   return diagnosisData;
+  // }
+
   postNCDCareCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
     const diagnosisFormData = JSON.parse(JSON.stringify(diagnosisForm.value));
+
+    if (diagnosisFormData.ncdScreeningCondition) {
+      diagnosisFormData.ncdScreeningConditionID =
+        diagnosisFormData.ncdScreeningCondition.ncdScreeningConditionID;
+      diagnosisFormData.ncdScreeningCondition =
+        diagnosisFormData.ncdScreeningCondition.screeningCondition;
+    }
 
     if (diagnosisFormData.ncdCareType) {
       diagnosisFormData.ncdCareTypeID =
@@ -2121,24 +2249,14 @@ export class DoctorService {
 
     const diagnosisData = Object.assign({}, diagnosisFormData, otherDetails);
     return diagnosisData;
+    // let diagnosisFormData = Object.assign(
+    //   {},
+    //   diagnosisForm.value,
+    //   otherDetails
+    // );
+    // return diagnosisFormData;
   }
 
-  postCovidCareCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
-    const diagnosisFormData = Object.assign(
-      {},
-      diagnosisForm.value,
-      otherDetails,
-    );
-    return diagnosisFormData;
-  }
-  postNCDscreeningCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
-    const diagnosisFormData = Object.assign(
-      {},
-      diagnosisForm.value,
-      otherDetails,
-    );
-    return diagnosisFormData;
-  }
   postGeneralCaseRecordInvestigation(
     investigationForm: any,
     otherDetails: any,
@@ -2150,10 +2268,15 @@ export class DoctorService {
     if (
       !!investigationFormValue.labTest &&
       !!investigationFormValue.radiologyTest
-    )
-      labTest = investigationFormValue.labTest.concat(
-        investigationFormValue.radiologyTest,
-      );
+    ) {
+      if (investigationFormValue.radiologyTest === null) {
+        labTest = investigationFormValue.labTest;
+      } else {
+        labTest = investigationFormValue.labTest.concat(
+          investigationFormValue.radiologyTest,
+        );
+      }
+    }
 
     const temp = labTest.filter((test: any) => {
       return !test.disabled;
@@ -2179,11 +2302,28 @@ export class DoctorService {
     return prescribedDrugs;
   }
 
+  postFamilyCaseRecordTreatmentOnSideEffects(sideEffectsForm: any) {
+    const treatmentSideEffectsFormValue = JSON.parse(
+      JSON.stringify(sideEffectsForm.value),
+    );
+    const listOfSideEffects =
+      treatmentSideEffectsFormValue.treatmentsOnSideEffects;
+
+    return listOfSideEffects;
+  }
+
   deleteMedicine(id: any) {
     return this.http.post(environment.drugDeleteUrl, { id });
+    // return Observable.of({
+    //   statusCode: 200,
+    //   data: {
+    //     msg: 'success'
+    //   }
+    // });
   }
 
   postGeneralRefer(referForm: any, otherDetails: any) {
+    console.log('testt1279' + referForm);
     const referFormData = JSON.parse(JSON.stringify(referForm.value));
     if (referFormData.referredToInstituteName) {
       referFormData.referredToInstituteID =
@@ -2200,11 +2340,42 @@ export class DoctorService {
       );
       referFormData.refrredToAdditionalServiceList = temp.slice();
     }
+    if (referFormData.referralReason) {
+      referFormData.referralReason = referForm.controls['referralReason'].value;
+    }
     if (referFormData.revisitDate) {
       referFormData.revisitDate = referForm.controls['revisitDate'].value;
     }
-    if (referFormData.referralReason) {
-      referFormData.referralReason = referForm.controls['referralReason'].value;
+
+    const referData = Object.assign({}, referFormData, otherDetails);
+    return referData;
+  }
+
+  postFamilyPlanningRefer(referForm: any, otherDetails: any) {
+    const referFormData = JSON.parse(JSON.stringify(referForm.value));
+    if (referFormData.referredToInstituteName) {
+      referFormData.referredToInstituteID =
+        referFormData.referredToInstituteName.institutionID;
+      referFormData.referredToInstituteName =
+        referFormData.referredToInstituteName.institutionName;
+    }
+
+    if (referFormData.otherReferredToInstituteName) {
+      referFormData.otherReferredToInstituteName =
+        referForm.controls['otherReferredToInstituteName'].value;
+    }
+
+    if (referFormData.referralReasonList) {
+      referFormData.referralReasonList =
+        referForm.controls['referralReasonList'].value;
+    }
+
+    if (referFormData.otherReferralReason) {
+      referFormData.otherReferralReason =
+        referForm.controls['otherReferralReason'].value;
+    }
+    if (referFormData.revisitDate) {
+      referFormData.revisitDate = referForm.controls['revisitDate'].value;
     }
 
     const referData = Object.assign({}, referFormData, otherDetails);
@@ -2229,16 +2400,23 @@ export class DoctorService {
     });
   }
 
+  getHistoricalTrends() {
+    // return this.http.post(this.getHistoricalTrendsUrl,{})
+    // .map(res => res.json())
+  }
+
   clearCache() {
     this.generalHistory = null;
     this.getVisitComplaint = null;
     this.caseRecordAndReferDetails = null;
+    this.caseRecordAndReferDetails1 = null;
   }
 
   postDoctorPNCDetails(
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any,
+    isSpecialist: any,
   ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -2268,6 +2446,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -2284,6 +2466,7 @@ export class DoctorService {
       serviceID: localStorage.getItem('serviceID'),
       createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
     };
 
     console.log(
@@ -2302,6 +2485,20 @@ export class DoctorService {
     });
   }
 
+  getPreviousPNCDetails(beneficiaryID: string) {
+    return this.http.post(environment.getPNCDetailsUrl, {
+      benRegID: beneficiaryID,
+    });
+  }
+
+  getCovidDetails(beneficiaryID: string, visitID: string) {
+    return this.http.post(environment.getPNCDetailsUrl, {
+      benRegID: beneficiaryID,
+      benVisitID: visitID,
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
   updatePNCDetails(patientPNCForm: any, otherDetails: any) {
     const temp = JSON.parse(JSON.stringify(patientPNCForm.value));
     if (temp.deliveryPlace) {
@@ -2312,6 +2509,12 @@ export class DoctorService {
     if (temp.deliveryType) {
       temp.deliveryTypeID = temp.deliveryType.deliveryTypeID;
       temp.deliveryType = temp.deliveryType.deliveryType;
+    }
+
+    if (temp.deliveryConductedBy) {
+      temp.deliveryConductedByID =
+        temp.deliveryConductedBy.deliveryConductedByID;
+      temp.deliveryConductedBy = temp.deliveryConductedBy.deliveryConductedBy;
     }
 
     if (temp.deliveryComplication) {
@@ -2340,6 +2543,9 @@ export class DoctorService {
         temp.newBornHealthStatus.newBornHealthStatusID;
       temp.newBornHealthStatus = temp.newBornHealthStatus.newBornHealthStatus;
     }
+    // if (!temp.dateOfDelivery || temp.dateOfDelivery === null) {
+    //   temp.dateOfDelivery = undefined;
+    // }
     const updatedPNCDetails = Object.assign({}, temp, otherDetails);
 
     console.log(
@@ -2369,19 +2575,23 @@ export class DoctorService {
     visitID: any,
     visitCategory: any,
   ) {
+    // if(localStorage.getItem("referredVisitCode") === "undefined" || localStorage.getItem("referredVisitCode") === null || parseInt(localStorage.getItem('specialist_flag'))==3)
+    // {
     const otherDetails = Object.assign({
       benRegID: beneficiaryRegID,
       benVisitID: visitID,
       visitCode: localStorage.getItem('visitCode'),
     });
+    // } else {
+
+    //   otherDetails = Object.assign({
+    //     benRegID: beneficiaryRegID,
+    //     benVisitID: localStorage.getItem("referredVisitID"),
+    //     visitCode: localStorage.getItem("referredVisitCode")
+    //   });
+    // }
 
     if (!this.caseRecordAndReferDetails) {
-      if (visitCategory === 'Cancer Screening') {
-        this.caseRecordAndReferDetails = this.http.post(
-          environment.getCancerScreeningDoctorDetails,
-          otherDetails,
-        );
-      }
       if (visitCategory === 'General OPD (QC)') {
         this.caseRecordAndReferDetails = this.http.post(
           environment.getGeneralOPDQuickConsultDoctorDetails,
@@ -2412,20 +2622,101 @@ export class DoctorService {
           otherDetails,
         );
       }
-      if (visitCategory === 'PNC') {
-        this.caseRecordAndReferDetails = this.http.post(
-          environment.getPNCDoctorDetails,
-          otherDetails,
-        );
-      }
       if (visitCategory === 'COVID-19 Screening') {
         this.caseRecordAndReferDetails = this.http.post(
           environment.getCovidDoctorDetails,
           otherDetails,
         );
       }
+      if (visitCategory === 'PNC') {
+        this.caseRecordAndReferDetails = this.http.post(
+          environment.getPNCDoctorDetails,
+          otherDetails,
+        );
+      }
+      if (visitCategory === 'FP & Contraceptive Services') {
+        this.caseRecordAndReferDetails = this.http.post(
+          environment.getFamilyPlanningDoctorDetails,
+          otherDetails,
+        );
+      }
+      if (
+        visitCategory.toLowerCase() ===
+        'neonatal and infant health care services'
+      ) {
+        this.caseRecordAndReferDetails = this.http.post(
+          environment.getNeonatalAndInfantDetails,
+          otherDetails,
+        );
+      }
+      if (
+        visitCategory.toLowerCase() ===
+        'childhood & adolescent healthcare services'
+      ) {
+        this.caseRecordAndReferDetails = this.http.post(
+          environment.getChildAndAdolescentDetails,
+          otherDetails,
+        );
+      }
     }
     return this.caseRecordAndReferDetails;
+  }
+  caseRecordAndReferDetails1: any;
+  getMMUCaseRecordAndReferDetails(
+    beneficiaryRegID: any,
+    visitID: any,
+    visitCategory: any,
+    visitcode: any,
+  ) {
+    const otherDetails = Object.assign({
+      benRegID: beneficiaryRegID,
+      benVisitID: visitID,
+      visitCode: visitcode,
+    });
+
+    if (visitCategory === 'General OPD (QC)') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getGeneralOPDQuickConsultDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'ANC') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getANCDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'General OPD') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getGeneralOPDDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'NCD screening') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getNCDScreeningDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'NCD care') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getNCDCareDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'COVID-19 Screening') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getCovidDoctorDetails,
+        otherDetails,
+      );
+    }
+    if (visitCategory === 'PNC') {
+      this.caseRecordAndReferDetails1 = this.http.post(
+        environment.getPNCDoctorDetails,
+        otherDetails,
+      );
+    }
+    return this.caseRecordAndReferDetails1;
   }
 
   updateDoctorDiagnosisDetails(
@@ -2433,10 +2724,16 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
-  ): Observable<object> {
+  ) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    console.log('message', patientMedicalForm);
+    const patientVisitDetailForm = <FormGroup>(
+      patientMedicalForm.controls['patientVisitForm'].controls[
+        'patientVisitDetailsForm'
+      ]
+    );
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
     )).controls['generalFindingsForm'];
@@ -2450,8 +2747,10 @@ export class DoctorService {
       patientMedicalForm.controls['patientCaseRecordForm']
     )).controls['generalDiagnosisForm'];
     const referForm = patientMedicalForm.controls['patientReferForm'];
-
+    console.log('Revisit Value' + referForm.controls['revisitDate'].value);
     const updatedDoctorDiagnosis = {
+      subVisitCategory:
+        patientVisitDetailForm.controls['subVisitCategory'].value,
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
       diagnosis: this.postGeneralCaseRecordDiagnosis(
         diagnosisForm,
@@ -2466,6 +2765,10 @@ export class DoctorService {
         prescriptionForm,
         otherDetails,
       ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
       benFlowID: localStorage.getItem('benFlowID'),
       beneficiaryID: localStorage.getItem('beneficiaryID'),
@@ -2526,11 +2829,80 @@ export class DoctorService {
         updatedDoctorDiagnosis,
       );
     }
+  }
 
-    // Return an observable that emits no value and completes
-    return new Observable((observer) => {
-      observer.complete();
-    });
+  updateFamilyPlanningDoctorDiagnosisDetails(
+    patientMedicalForm: any,
+    visitCategory: any,
+    otherDetails: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const referForm = patientMedicalForm.controls['patientReferForm'];
+    const treatmentsOnSideEffectsFormDet = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['treatmentsOnSideEffectsForm'];
+    console.log('Revisit Value' + referForm.controls['revisitDate'].value);
+    const updatedDoctorDiagnosis = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralCaseRecordDiagnosis(
+        diagnosisForm,
+        visitCategory,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      treatmentsOnSideEffects: this.postFamilyCaseRecordTreatmentOnSideEffects(
+        treatmentsOnSideEffectsFormDet,
+      ),
+      refer: this.postFamilyPlanningRefer(referForm, otherDetails),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: otherDetails.isSpecialist,
+    };
+
+    console.log(
+      'updated doctor details',
+      JSON.stringify(updatedDoctorDiagnosis, null, 4),
+    );
+
+    return this.http.post(
+      environment.updateFamilyPlanningDoctorDetails,
+      updatedDoctorDiagnosis,
+    );
   }
 
   postGeneralCaseRecordDiagnosis(
@@ -2558,20 +2930,44 @@ export class DoctorService {
         otherDetails,
       );
     }
+    if (visitCategory === 'COVID-19 Screening') {
+      diagnosisDetails = this.postCovidCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      );
+    }
     if (visitCategory === 'PNC') {
       diagnosisDetails = this.postANCCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory === 'COVID-19 Screening') {
-      diagnosisDetails = this.postCovidCareCaseRecordDiagnosis(
+    if (visitCategory === 'NCD screening') {
+      diagnosisDetails = this.postNCDscreeningCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
     }
-    if (visitCategory === 'NCD screening') {
-      diagnosisDetails = this.postNCDscreeningCaseRecordDiagnosis(
+
+    if (visitCategory === 'FP & Contraceptive Services') {
+      diagnosisDetails = this.postFamilyPlanningCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      );
+    }
+    if (
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    ) {
+      diagnosisDetails = this.postNeonatalCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      );
+    }
+    if (
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      diagnosisDetails = this.postChildAndAdolescentCaseRecordDiagnosis(
         diagnosisForm,
         otherDetails,
       );
@@ -2594,6 +2990,9 @@ export class DoctorService {
 
   getArchivedReports(ArchivedReports: any) {
     return this.http.post(environment.archivedReportsUrl, ArchivedReports);
+  }
+  getReportsBase64(obj: any) {
+    return this.http.post(environment.ReportsBase64Url, obj);
   }
 
   getPatientMCTSCallHistory(callDetailID: any) {
@@ -2657,6 +3056,86 @@ export class DoctorService {
       diagnosis,
     });
   }
+
+  updateTCStartTime(tCStartTimeObj: any) {
+    return this.http.post(environment.updateTCStartTimeUrl, tCStartTimeObj);
+  }
+
+  invokeSwymedCall(specialistID: any) {
+    const userID = localStorage.getItem('userID');
+    return this.http.get(
+      environment.invokeSwymedCallUrl + userID + '/' + specialistID,
+    );
+  }
+
+  invokeSwymedCallSpecialist() {
+    const userID = localStorage.getItem('userID');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    return this.http.get(
+      environment.invokeSwymedCallSpecialistUrl + userID + '/' + vanID,
+    );
+  }
+  /* Doctor Signature download */
+  downloadSign(userID: any) {
+    //let option = new RequestOptions({ responseType: ResponseContentType.Blob });
+    //return this.http
+    //  .get(environment.downloadSignUrl + userID, option)
+  }
+  getIDRSDetails(beneficiaryID: string, visitID: string): Observable<any> {
+    const visitCategory = localStorage.getItem('visitCategory');
+    const otherDetails = Object.assign({
+      benRegID: beneficiaryID,
+      benVisitID: visitID,
+      visitCode: localStorage.getItem('visitCode'),
+    });
+
+    if (visitCategory === 'NCD screening') {
+      return this.http.post(
+        environment.getNCDScreeningIDRSDetails,
+        otherDetails,
+      );
+    }
+
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
+  }
+  updateIDRSDetails(
+    idrsScreeningForm: any,
+    visitCategory: any,
+  ): Observable<object> {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const patientIDRSData = Object.assign({}, idrsScreeningForm.value, {
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('userName'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      createdBy: localStorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      deleted: false,
+    });
+
+    const idrsDetails = { idrsDetails: patientIDRSData };
+    if (visitCategory === 'NCD screening') {
+      return this.http.post(
+        environment.updateNCDScreeningIDRSDetailsUrl,
+        idrsDetails,
+      );
+    }
+
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
+  }
+
   updateNCDScreeningHistory(
     NCDScreeningHistoryForm: any,
     temp: any,
@@ -2699,6 +3178,8 @@ export class DoctorService {
         updatedHistoryDetails,
       );
     }
+
+    // Return an observable that emits no value and completes
     return new Observable((observer) => {
       observer.complete();
     });
@@ -2712,109 +3193,13 @@ export class DoctorService {
       physicalActivityHistory.value,
       otherDetails,
     );
+    // console.log('General examination', JSON.stringify(generalExaminationForm, null, 4));
     return physicalActivityHistoryForm;
   }
-
-  getIDRSDetails(beneficiaryID: string, visitID: string): Observable<any> {
-    const visitCategory = localStorage.getItem('visitCategory');
-    const otherDetails = Object.assign({
-      benRegID: beneficiaryID,
-      benVisitID: visitID,
-      visitCode: localStorage.getItem('visitCode'),
-    });
-    if (visitCategory === 'NCD screening') {
-      return this.http.post(
-        environment.getNCDScreeningIDRSDetails,
-        otherDetails,
-      );
-    }
-
-    return new Observable((observer) => {
-      observer.complete();
-    });
+  getMMUData(loadMMUData: any) {
+    return this.http.post(environment.loadMMUDataUrl, loadMMUData);
   }
 
-  postTMReferedNurseDetails(
-    patientMedicalForm: any,
-    otherDetails: any,
-    tcRequest: any,
-  ) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const referForm = (<FormGroup>(
-      patientMedicalForm.controls['patientVisitForm']
-    )).controls['tmcConfirmationForm'];
-    const isTMCDone = referForm.value.tmcConfirmed;
-    const benData: any = localStorage.getItem('beneficiaryData');
-    const beneficiaryData = JSON.parse(benData);
-    const generalVisitDetails = {
-      prescription: this.prescribedDrugData ? this.prescribedDrugData : null,
-      refer: this.postTMVisitDatilsRefer(
-        referForm,
-        otherDetails,
-        beneficiaryData,
-      ),
-      benFlowID: localStorage.getItem('benFlowID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      doctorFlag: String(beneficiaryData.doctorFlag),
-      nurseFlag: String(beneficiaryData.nurseFlag),
-      pharmacist_flag:
-        beneficiaryData.pharmacist_flag === 'Not Available' ? 0 : 1,
-      isSpecialist: false,
-      sessionID: localStorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      visitCode: localStorage.getItem('visitCode'),
-      benVisitID: String(beneficiaryData.benVisitID),
-      serviceID: localStorage.getItem('serviceID'),
-      createdBy: localStorage.getItem('userName'),
-      isTMCDone: isTMCDone,
-    };
-    console.log(
-      'TM Nurse Details',
-      JSON.stringify(generalVisitDetails, null, 4),
-    );
-
-    return this.http.post(
-      environment.postNCDScreeningDetails,
-      generalVisitDetails,
-    );
-    // return Observable.of({errorMessage: 'furrrr'});
-  }
-
-  postTMVisitDatilsRefer(
-    referForm: any,
-    otherDetails: any,
-    beneficiaryData: any,
-  ) {
-    const referFormData = JSON.parse(JSON.stringify(referForm.value));
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    let temp = {};
-    if (referFormData.refrredToAdditionalServiceList) {
-      temp = {
-        referredToInstituteID:
-          referFormData.refrredToAdditionalServiceList.institutionID,
-        referredToInstituteName:
-          referFormData.refrredToAdditionalServiceList.institutionName,
-        refrredToAdditionalServiceList: null,
-        revisitDate: null,
-        referralReason: null,
-        vanID: beneficiaryData.vanID,
-        parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
-        sessionID: localStorage.getItem('sessionID'),
-        beneficiaryID: String(beneficiaryData.beneficiaryID),
-        serviceID: localStorage.getItem('serviceID'),
-        benFlowID: String(beneficiaryData.benFlowID),
-        isSpecialist: false,
-      };
-    }
-    otherDetails.benVisitID = String(beneficiaryData.benVisitID);
-    const referData = Object.assign({}, temp, otherDetails);
-    return referData;
-  }
   HRPDetails: any;
   getHRPDetails(beneficiaryRegID: any, visitCode: any) {
     const reqObj = Object.assign({
@@ -2823,36 +3208,801 @@ export class DoctorService {
     });
 
     this.HRPDetails = this.http.post(environment.loadHRPUrl, reqObj);
+
     return this.HRPDetails;
   }
-
-  /* Doctor Signature download */
-  downloadSign(userID: any) {
-    return this.http
-      .get(environment.downloadSignUrl + userID, { responseType: 'blob' })
-      .pipe(map((res: any) => <Blob>res.blob()));
-  }
-
-  enableButton: any = false;
+  enableButton: any = null;
   enableVitalsUpdateButton = new BehaviorSubject(this.enableButton);
   enableVitalsUpdateButton$ = this.enableVitalsUpdateButton.asObservable();
   setValueToEnableVitalsUpdateButton(value: any) {
     this.enableVitalsUpdateButton.next(value);
   }
 
+  setCommonDataForFP() {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
+    const data = {
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
+    };
+  }
+
+  updateFamilyPlanning(medicalForm: any, visitCategory: any) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+
+    const commonData = {
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
+      createdBy: localStorage.getItem('userName'),
+    };
+    const familyPlanningReproductiveDetailsForm = Object.assign(
+      {},
+      medicalForm.controls.familyPlanningForm.controls
+        .familyPlanningAndReproductiveForm.value,
+      commonData,
+    );
+    const iecAndCounsellingDetails = Object.assign(
+      {},
+      medicalForm.controls.familyPlanningForm.controls.IecCounsellingForm.value,
+      commonData,
+    );
+    const dispensationDetails = Object.assign(
+      {},
+      medicalForm.controls.familyPlanningForm.controls.dispensationDetailsForm
+        .value,
+      commonData,
+    );
+
+    const patientFamilyPlanningData = Object.assign(
+      {},
+      {
+        familyPlanningReproductiveDetails:
+          familyPlanningReproductiveDetailsForm,
+      },
+      { iecAndCounsellingDetails: iecAndCounsellingDetails },
+      { dispensationDetails: dispensationDetails },
+      {
+        sessionID: localStorage.getItem('sessionID'),
+        parkingPlaceID: parkingPlaceID,
+        vanID: vanID,
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
+        createdBy: localStorage.getItem('userName'),
+      },
+    );
+
+    if (visitCategory === 'FP & Contraceptive Services') {
+      return this.http.post(
+        environment.updateFamilyPlanningScreenDetailsUrl,
+        patientFamilyPlanningData,
+      );
+    }
+  }
+
+  updateBirthAndImmunizationHistory(medicalForm: any, visitCategory: any) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const commonData = {
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+    const infantBirthDetailsForm = Object.assign(
+      {},
+      medicalForm.controls.infantBirthDetailsForm.value,
+      commonData,
+    );
+    const ImmunizationHistoryDetails = Object.assign(
+      {},
+      medicalForm.controls.immunizationHistory.value,
+      commonData,
+    );
+    const birthAndImmunizationHistoryDetails = Object.assign(
+      {},
+      { infantBirthDetails: infantBirthDetailsForm },
+      { immunizationHistory: ImmunizationHistoryDetails },
+      {
+        sessionID: localStorage.getItem('sessionID'),
+        parkingPlaceID: parkingPlaceID,
+        vanID: vanID,
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
+      },
+    );
+
+    if (
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    ) {
+      return this.http.post(
+        environment.updateBirthImmunizationHistoryDetailsUrl,
+        birthAndImmunizationHistoryDetails,
+      );
+    }
+
+    if (
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      return this.http.post(
+        environment.updateBirthAndImmunizationHistoryDataUrl,
+        birthAndImmunizationHistoryDetails,
+      );
+    }
+  }
+
+  updateNCDSreeningDetails(medicalForm: any, visitCategory: any) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const patientNCDScreeningData = Object.assign(
+      {},
+      { diabetes: medicalForm.controls.diabetes.value },
+      { hypertension: medicalForm.controls.hypertension.value },
+      { oral: medicalForm.controls.oral.value },
+      { breast: medicalForm.controls.breast.value },
+      { cervical: medicalForm.controls.cervical.value },
+      {
+        benFlowID: localStorage.getItem('benFlowID'),
+        beneficiaryID: localStorage.getItem('beneficiaryID'),
+        sessionID: localStorage.getItem('sessionID'),
+        parkingPlaceID: parkingPlaceID,
+        modifiedBy: localStorage.getItem('userName'),
+        vanID: vanID,
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: localStorage.getItem('visitID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+      },
+    );
+
+    if (visitCategory === 'NCD screening') {
+      return this.http.post(
+        environment.updateNCDScreeningDetailsUrl,
+        patientNCDScreeningData,
+      );
+    }
+  }
+
+  enableHrpReasonsStatus(enablingHrp: any) {
+    this.enableHRPStatusAndReasons.next(enablingHrp);
+  }
+
+  clearHrpReasonsStatus() {
+    this.enableHRPReasons = false;
+    this.enableHRPStatusAndReasons.next(false);
+  }
+
+  familyPlanningValueChanged(valueChanged: any) {
+    this.valueChangedForFamilyPlanning.next(valueChanged);
+  }
+
+  getFamilyPlanningFetchDetails() {
+    return this.http.post(environment.getFamilyPlanningDetailsUrl, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  getFamilyPlanningFetchDetailsOnRevisit() {
+    return this.http.post(environment.getFamilyPlanningDetailsUrl, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+    });
+  }
+
+  BirthAndImmunizationValueChanged(valueChanged: any) {
+    this.valueChangedForBirthAndImmunization.next(valueChanged);
+  }
+
+  getBirthImmunizationHistoryNurseDetails() {
+    return this.http.post(environment.getBirthImmunizationHistoryDetailsUrl, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  getBirthImmunizationHistoryNurseDetailsForChildAndAdolescent() {
+    return this.http.post(environment.getBirthImmunizationHistoryDataUrl, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  getPreviousBirthImmunizationHistoryDetails(visitCategory: any) {
+    // let visitCategory = localStorage.getItem("visitCategory");
+    if (
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    ) {
+      return this.http.post(
+        environment.getPreviousBirthImmunizationDetailsUrl,
+        {
+          benRegID: localStorage.getItem('beneficiaryRegID'),
+        },
+      );
+    }
+    if (
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      return this.http.post(
+        environment.getPreviousBirthImmunizationDataForChildAndAdolascentUrl,
+        {
+          benRegID: localStorage.getItem('beneficiaryRegID'),
+        },
+      );
+    }
+  }
+
+  postDoctorFamilyPlanningetails(
+    patientMedicalForm: any,
+    otherDetails: any,
+    tcRequest: any,
+    isSpecialist: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const referForm = patientMedicalForm.controls['patientReferForm'];
+    const treatmentsOnSideEffectsFormDet = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['treatmentsOnSideEffectsForm'];
+
+    const generalVisitDetails = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralOPDCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      treatmentsOnSideEffects: this.postFamilyCaseRecordTreatmentOnSideEffects(
+        treatmentsOnSideEffectsFormDet,
+      ),
+      refer: this.postFamilyPlanningRefer(referForm, otherDetails),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
+    };
+
+    console.log(
+      'Doctor Visit Details',
+      JSON.stringify(generalVisitDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveDoctorFamilyPlanningDetails,
+      generalVisitDetails,
+    );
+    // return Observable.of({errorMessage: 'furrrr'});
+  }
+
+  /* Neonatal and infant health care services */
+  postFollowUpForImmunization(
+    followUpImmunizationForm: any,
+    otherDetails: any,
+  ) {
+    const followUpForImmunization = JSON.parse(
+      JSON.stringify(followUpImmunizationForm.value),
+    );
+    // if (followUpForImmunization.nextDueVaccines) {
+    //   followUpForImmunization.nextDueVaccinesID =
+    //   followUpForImmunization.nextDueVaccines.id;
+    //   followUpForImmunization.nextDueVaccines =
+    //   followUpForImmunization.nextDueVaccines.name;
+    // }
+
+    // if (followUpForImmunization.locationOfNextImmunization) {
+    //   followUpForImmunization.locationOfNextImmunizationID =
+    //   followUpForImmunization.locationOfNextImmunization.id;
+    //   followUpForImmunization.locationOfNextImmunization =
+    //   followUpForImmunization.locationOfNextImmunization.name;
+    // }
+
+    if (followUpForImmunization.dueDateForNextImmunization) {
+      followUpForImmunization.dueDateForNextImmunization =
+        followUpImmunizationForm.controls['dueDateForNextImmunization'].value;
+    }
+
+    const followUpImmunizationData = Object.assign(
+      {},
+      followUpForImmunization,
+      otherDetails,
+    );
+    return followUpImmunizationData;
+  }
+
+  postDoctorNeonatalAndInfantService(
+    patientMedicalForm: any,
+    otherDetails: any,
+    tcRequest: any,
+    isSpecialist: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const followUpImmunizationForm =
+      patientMedicalForm.controls['patientFollowUpImmunizationForm'];
+    console.log(
+      'Due Date For Next Immunization' +
+        followUpImmunizationForm.controls['dueDateForNextImmunization'].value,
+    );
+
+    const generalVisitDetails = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralOPDCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      followUpForImmunization: this.postFollowUpForImmunization(
+        followUpImmunizationForm,
+        otherDetails,
+      ),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
+    };
+
+    console.log(
+      'Doctor Visit Details',
+      JSON.stringify(generalVisitDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveDoctorNeonatalAndInfantService,
+      generalVisitDetails,
+    );
+  }
+
+  postDoctorChildAndAdolescentService(
+    patientMedicalForm: any,
+    otherDetails: any,
+    tcRequest: any,
+    isSpecialist: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const followUpImmunizationForm =
+      patientMedicalForm.controls['patientFollowUpImmunizationForm'];
+    console.log(
+      'Due Date For Next Immunization' +
+        followUpImmunizationForm.controls['dueDateForNextImmunization'].value,
+    );
+
+    const generalVisitDetails = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralOPDCaseRecordDiagnosis(
+        diagnosisForm,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      followUpForImmunization: this.postFollowUpForImmunization(
+        followUpImmunizationForm,
+        otherDetails,
+      ),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: isSpecialist,
+    };
+
+    console.log(
+      'Doctor Visit Details',
+      JSON.stringify(generalVisitDetails, null, 4),
+    );
+
+    return this.http.post(
+      environment.saveDoctorChildAndAdolescentService,
+      generalVisitDetails,
+    );
+  }
+
+  /* Neonatal and infant health care services doctor update */
+  updateNeonatalAndInfantDoctorDiagnosisDetails(
+    patientMedicalForm: any,
+    visitCategory: any,
+    otherDetails: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const followUpImmunizationForm =
+      patientMedicalForm.controls['patientFollowUpImmunizationForm'];
+    console.log(
+      'Due Date For Next Immunization' +
+        followUpImmunizationForm.controls['dueDateForNextImmunization'].value,
+    );
+    const updatedDoctorDiagnosis = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralCaseRecordDiagnosis(
+        diagnosisForm,
+        visitCategory,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      followUpForImmunization: this.postFollowUpForImmunization(
+        followUpImmunizationForm,
+        otherDetails,
+      ),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: otherDetails.isSpecialist,
+    };
+
+    console.log(
+      'updated doctor details',
+      JSON.stringify(updatedDoctorDiagnosis, null, 4),
+    );
+
+    return this.http.post(
+      environment.updateNeonatalAndInfantService,
+      updatedDoctorDiagnosis,
+    );
+  }
+
+  updateChildAndAdolescentDoctorDiagnosisDetails(
+    patientMedicalForm: any,
+    visitCategory: any,
+    otherDetails: any,
+    tcRequest: any,
+  ) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const findingForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalFindingsForm'];
+    const investigationForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDoctorInvestigationForm'];
+    const prescriptionForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['drugPrescriptionForm'];
+    const diagnosisForm = (<FormGroup>(
+      patientMedicalForm.controls['patientCaseRecordForm']
+    )).controls['generalDiagnosisForm'];
+    const followUpImmunizationForm =
+      patientMedicalForm.controls['patientFollowUpImmunizationForm'];
+    console.log(
+      'Due Date For Next Immunization' +
+        followUpImmunizationForm.controls['dueDateForNextImmunization'].value,
+    );
+    const updatedDoctorDiagnosis = {
+      findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
+      diagnosis: this.postGeneralCaseRecordDiagnosis(
+        diagnosisForm,
+        visitCategory,
+        otherDetails,
+      ),
+      investigation: this.postGeneralCaseRecordInvestigation(
+        investigationForm,
+        otherDetails,
+      ),
+      prescription: this.postGeneralCaseRecordPrescription(
+        prescriptionForm,
+        otherDetails,
+      ),
+      counsellingProvidedList:
+        patientMedicalForm.controls['provideCounselling'].controls[
+          'counsellingProvidedList'
+        ].value,
+      followUpForImmunization: this.postFollowUpForImmunization(
+        followUpImmunizationForm,
+        otherDetails,
+      ),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      tcRequest: tcRequest,
+      isSpecialist: otherDetails.isSpecialist,
+    };
+
+    console.log(
+      'updated doctor details',
+      JSON.stringify(updatedDoctorDiagnosis, null, 4),
+    );
+
+    return this.http.post(
+      environment.updateChildAndAdolescentServiceDoctor,
+      updatedDoctorDiagnosis,
+    );
+  }
+  /*Neonatal Immunization Service */
+  fetchImmunizationServiceDeatilsFromNurse() {
+    return this.http.post(environment.fetchNeonatalImmunizationService, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  /*Oral Vitamin A Immunization Service */
+  fetchOralVitaminADeatilsFromNurse() {
+    return this.http.post(environment.fetchChildAndAdolescentService, {
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
+    });
+  }
+
+  updateImmunizationServices(immunizationServiceForm: any) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const commonData = {
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+    const updateImmunizationService = Object.assign(
+      {},
+      immunizationServiceForm.value,
+      commonData,
+    );
+    const immunizationService = {
+      immunizationServices: updateImmunizationService,
+    };
+    return this.http.post(
+      environment.updateNeonatalImmunizationService,
+      immunizationService,
+    );
+  }
+
+  immunizationServiceChildhoodValueChanged(valueChanged: any) {
+    this.valueChangedForBirthAndImmunization.next(valueChanged);
+  }
+
+  updateChildhoodImmunizationServices(medicalForm: any, visitCategory: any) {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const commonData = {
+      vanID: vanID,
+      parkingPlaceID: parkingPlaceID,
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+    };
+    const immunizationServicesForm = Object.assign(
+      {},
+      medicalForm.controls.immunizationServicesForm.value,
+      commonData,
+    );
+    const oralVitaminAFormDeatils = Object.assign(
+      {},
+      medicalForm.controls.oralVitaminAForm.value,
+      commonData,
+    );
+    const immunizationServiceChildhoodDetails = Object.assign(
+      {},
+      { immunizationServices: immunizationServicesForm },
+      { oralVitaminAProphylaxis: oralVitaminAFormDeatils },
+      {
+        sessionID: localStorage.getItem('sessionID'),
+        parkingPlaceID: parkingPlaceID,
+        vanID: vanID,
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
+      },
+    );
+
+    if (
+      visitCategory.trim().toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
+      return this.http.post(
+        environment.updateChildAndAdolescentService,
+        immunizationServiceChildhoodDetails,
+      );
+    }
+  }
+
   getAssessment(benRegID: any) {
+    // let url = "{%3FpatientId%3D}";
+    //   // let swaasaurl = unescape(url + +encodeURIComponent($scope.entityId));
+    //   // const encodedSyntax = encodeURIComponent('/{patientId}?patientId=');
+    //   // return this.http.get(`${environment.getAssessmentIdUrl}/${'patientId'}?patientId=${benRegID}`);
     return this.http.get(environment.getAssessmentIdUrl + '/' + benRegID);
   }
 
   getAssessmentDet(assessmentId: any) {
     return this.http.get(environment.getAssessmentUrl + '/' + assessmentId);
-  }
-
-  historyResponse: any = [];
-  populateHistoryResponse = new BehaviorSubject<any>(this.historyResponse);
-  populateHistoryResponse$ = this.populateHistoryResponse.asObservable();
-
-  setCapturedHistoryByNurse(historyResponse: any) {
-    this.populateHistoryResponse.next(historyResponse);
   }
 }

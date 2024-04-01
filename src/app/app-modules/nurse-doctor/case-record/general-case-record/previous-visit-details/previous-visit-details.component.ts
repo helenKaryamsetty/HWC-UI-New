@@ -19,22 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  OnDestroy,
+  DoCheck,
+} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DoctorService } from '../../../shared/services';
+import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { CameraService } from '../../../../core/services/camera.service';
+import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { Router } from '@angular/router';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
   styleUrls: ['./previous-visit-details.component.css'],
 })
-export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
-  @Input()
-  currentVitals: any;
-
+export class PreviousVisitDetailsComponent
+  implements OnInit, DoCheck, OnDestroy
+{
   lineChartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
@@ -124,17 +132,24 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
 
   //Ends Bg Chart
 
+  @Input()
+  vitals: any;
+
   previousVisitDetails: any;
   current_language_set: any;
-
+  previousVisitDetailsSubscription!: Subscription;
   constructor(
     private doctorService: DoctorService,
+    private confirmationService: ConfirmationService,
     private cameraService: CameraService,
     private router: Router,
-    private httpServiceService: HttpServiceService,
+    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
+    // this.getPreviousVisitDetails();
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.loadGraphData();
   }
 
@@ -146,16 +161,11 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
-  loadGraphData() {
-    const benRegID = localStorage.getItem('beneficiaryRegID');
-    const visitID = localStorage.getItem('visitID');
-    const visitCategory = localStorage.getItem('visitCategory');
 
-    this.doctorService
-      .getCaseRecordAndReferDetails(benRegID, visitID, visitCategory)
-      .subscribe((data: any) => {
-        console.log(data, 'data here', data.GraphData, 'graphdata');
-        if (data?.data?.GraphData) {
+  loadGraphData() {
+    this.previousVisitDetailsSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((data) => {
+        if (data && data.data && data.data.GraphData) {
           this.plotGraphs(data.data.GraphData);
         }
       });
@@ -172,7 +182,7 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     const diastolic: any = [];
 
     console.log(bpList, 'bpList');
-    if (bpList?.length) {
+    if (bpList && bpList.length) {
       bpList = bpList.reverse();
       const k = Object.assign([], bpList);
       k.sort(function (a: any, b: any) {
@@ -205,7 +215,8 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
       return +new Date(b.date) - +new Date(a.date);
     });
     console.log(k, 'dated');
-    if (k?.length) {
+    if (k && k.length) {
+      // weightList = weightList.reverse();
       k.forEach((element: any) => {
         if (element.date && element.weight) {
           data.push(element.weight);
@@ -228,7 +239,8 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
       return +new Date(b.date) - +new Date(a.date);
     });
     console.log(k, 'dated');
-    if (k?.length) {
+    if (k && k.length) {
+      // k = k.reverse();
       k.forEach((element: any) => {
         if (
           element.date &&
@@ -251,29 +263,38 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     }
   }
 
+  // getPreviousVisitDetails() {
+  //   const benRegID = localStorage.getItem('beneficiaryRegID');
+  //   this.doctorService.getPreviousVisitDetails(benRegID)
+  //     .subscribe((data) => {
+  //       if (data && data.benVisitDetails && data.benVisitDetails.length > 0)
+  //         this.previousVisitDetails = data.benVisitDetails.slice(0, 5);
+  //       console.log("previous visit Details", this.previousVisitDetails);
+  //     });
+  // }
+
   calculateBMI() {
-    if (this.currentVitals)
+    if (this.vitals)
       return +(
-        (this.currentVitals.weight_Kg /
-          (this.currentVitals.height_cm * this.currentVitals.height_cm)) *
+        (this.vitals.weight_Kg /
+          (this.vitals.height_cm * this.vitals.height_cm)) *
         10000
       ).toFixed(1);
-    else return 0;
   }
 
   visitDateTime: any;
   getCaseSheetPrintData(visitDetail: any) {
-    const visitDateAndTime: Date = visitDetail.createdDate;
+    const visitDateAndTime = visitDetail.createdDate;
     this.visitDateTime = new Date(visitDateAndTime).toISOString();
 
-    localStorage.setItem('caseSheetBenFlowID', '');
+    localStorage.setItem('caseSheetBenFlowID', 'null');
     localStorage.setItem('caseSheetVisitCategory', visitDetail.visitCategory);
     localStorage.setItem(
       'caseSheetBeneficiaryRegID',
       visitDetail.beneficiaryRegID,
     );
     localStorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
-    this.router.navigate(['/nurse-doctor/print']);
+    this.router.navigate(['/common/print']);
     // }
   }
 
@@ -335,6 +356,11 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
   callBloodGlucoseGraph(graphData: any) {
     if (Object.keys(graphData).length === 7) {
       this.cameraService.ViewGraph(graphData);
+    }
+  }
+  ngOnDestroy() {
+    if (this.previousVisitDetailsSubscription) {
+      this.previousVisitDetailsSubscription.unsubscribe();
     }
   }
 }

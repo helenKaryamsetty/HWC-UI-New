@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import { Component, OnInit, Input } from '@angular/core';
+
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -39,7 +39,6 @@ export class ReferComponent implements OnInit {
   visitCategory!: string;
 
   showGeneralOPD = false;
-  showCancer = false;
 
   constructor() {}
 
@@ -51,11 +50,10 @@ export class ReferComponent implements OnInit {
         this.visitCategory === 'NCD care' ||
         this.visitCategory === 'PNC' ||
         this.visitCategory === 'COVID-19 Screening' ||
-        this.visitCategory === 'NCD screening'
+        this.visitCategory === 'NCD screening' ||
+        this.visitCategory === 'FP & Contraceptive Services'
           ? true
           : false;
-      this.showCancer =
-        this.visitCategory === 'Cancer Screening' ? true : false;
     }
   }
 }

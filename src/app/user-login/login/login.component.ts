@@ -226,100 +226,249 @@ export class LoginComponent implements OnInit {
     return salt + iv + ciphertext;
   }
 
+  // login() {
+  //   const encriptPassword = this.encrypt(
+  //     this.Key_IV,
+  //     this.loginForm.controls.password.value,
+  //   );
+  //   this.authService
+  //     .login(this.loginForm.controls.userName.value, encriptPassword, false)
+  //     .subscribe(
+  //       (res: any) => {
+  //         if (res.statusCode === 200) {
+  //           if (res.data.previlegeObj && res.data.previlegeObj[0]) {
+  //             localStorage.setItem(
+  //               'loginDataResponse',
+  //               JSON.stringify(res.data),
+  //             );
+
+  //             this.getServicesAuthdetails(res.data);
+  //           } else {
+  //             this.confirmationService.alert(
+  //               'Seems you are logged in from somewhere else, Logout from there & try back in.',
+  //               'error',
+  //             );
+  //           }
+  //         } else if (res.statusCode === 5002) {
+  //           if (
+  //             res.errorMessage ===
+  //             'You are already logged in,please confirm to logout from other device and login again'
+  //           ) {
+  //             this.confirmationService
+  //               .confirm('info', res.errorMessage)
+  //               .subscribe((confirmResponse: any) => {
+  //                 if (confirmResponse) {
+  //                   this.authService
+  //                     .userLogoutPreviousSession(
+  //                       this.loginForm.controls.userName.value,
+  //                     )
+  //                     .subscribe((logOutFromPreviousSession: any) => {
+  //                       if (logOutFromPreviousSession.statusCode === 200) {
+  //                         this.authService
+  //                           .login(
+  //                             this.loginForm.controls.userName.value,
+  //                             encriptPassword,
+  //                             true,
+  //                           )
+  //                           .subscribe((userLoggedIn: any) => {
+  //                             if (userLoggedIn.statusCode === 200) {
+  //                               if (
+  //                                 userLoggedIn.data.previlegeObj &&
+  //                                 userLoggedIn.data.previlegeObj[0] &&
+  //                                 userLoggedIn.data.previlegeObj !== null &&
+  //                                 userLoggedIn.data.previlegeObj !== undefined
+  //                               ) {
+  //                                 localStorage.setItem(
+  //                                   'loginDataResponse',
+  //                                   JSON.stringify(userLoggedIn.data),
+  //                                 );
+  //                                 this.getServicesAuthdetails(
+  //                                   userLoggedIn.data,
+  //                                 );
+  //                               } else {
+  //                                 this.confirmationService.alert(
+  //                                   'Seems you are logged in from somewhere else, Logout from there & try back in.',
+  //                                   'error',
+  //                                 );
+  //                               }
+  //                             } else {
+  //                               this.confirmationService.alert(
+  //                                 userLoggedIn.errorMessage,
+  //                                 'error',
+  //                               );
+  //                             }
+  //                           });
+  //                       } else {
+  //                         this.confirmationService.alert(
+  //                           logOutFromPreviousSession.errorMessage,
+  //                           'error',
+  //                         );
+  //                       }
+  //                     });
+  //                 }
+  //               });
+  //           } else {
+  //             sessionStorage.clear();
+  //             this.router.navigate(['/login']);
+  //             this.confirmationService.alert(res.errorMessage, 'error');
+  //           }
+  //         } else {
+  //           this.confirmationService.alert(res.errorMessage, 'error');
+  //         }
+  //       },
+  //       (err: any) => {
+  //         this.confirmationService.alert(err, 'error');
+  //       },
+  //     );
+  // }
+
+  // getServicesAuthdetails(loginDataResponse: any) {
+  //   const userName: any = this.loginForm.controls.userName.value;
+  //   sessionStorage.setItem('key', loginDataResponse.key);
+  //   sessionStorage.setItem(
+  //     'isAuthenticated',
+  //     loginDataResponse.isAuthenticated,
+  //   );
+  //   localStorage.setItem('userID', loginDataResponse.userID);
+  //   localStorage.setItem('userName', loginDataResponse.userName);
+  //   const userName = this.loginForm.controls.userName;
+  //   const userNameValue: string | null = userName.value;
+
+  //   // Check if the value is not null before storing it
+  //   if (userNameValue !== null) {
+  //     localStorage.setItem('username', userNameValue);
+  //   }
+  //   localStorage.setItem('fullName', loginDataResponse.fullName);
+
+  //   const services: any = [];
+  //   loginDataResponse.previlegeObj.map((item: any) => {
+  //     if (
+  //       item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+  //         .serviceID === 9
+  //     ) {
+  //       const service = {
+  //         providerServiceID: item.serviceID,
+  //         serviceName: item.serviceName,
+  //         apimanClientKey: item.apimanClientKey,
+  //         serviceID:
+  //           item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+  //             .serviceID,
+  //       };
+  //       services.push(service);
+  //     }
+  //   });
+  //   if (services.length > 0) {
+  //     localStorage.setItem('services', JSON.stringify(services));
+  //     if (loginDataResponse.Status.toLowerCase() === 'new') {
+  //       this.router.navigate(['/set-security-questions']);
+  //     } else {
+  //       this.router.navigate(['/service']);
+  //     }
+  //   } else {
+  //     this.confirmationService.alert(
+  //       "User doesn't have previlege to access the application",
+  //     );
+  //   }
+  // }
+
   login() {
-    const encriptPassword = this.encrypt(
+    const encryptPassword = this.encrypt(
       this.Key_IV,
       this.loginForm.controls.password.value,
     );
-    this.authService
-      .login(this.loginForm.controls.userName.value, encriptPassword, false)
-      .subscribe(
-        (res: any) => {
-          if (res.statusCode === 200) {
-            if (res.data.previlegeObj && res.data.previlegeObj[0]) {
-              localStorage.setItem(
-                'loginDataResponse',
-                JSON.stringify(res.data),
-              );
 
-              this.getServicesAuthdetails(res.data);
-            } else {
-              this.confirmationService.alert(
-                'Seems you are logged in from somewhere else, Logout from there & try back in.',
-                'error',
-              );
-            }
-          } else if (res.statusCode === 5002) {
-            if (
-              res.errorMessage ===
-              'You are already logged in,please confirm to logout from other device and login again'
-            ) {
-              this.confirmationService
-                .confirm('info', res.errorMessage)
-                .subscribe((confirmResponse: any) => {
-                  if (confirmResponse) {
-                    this.authService
-                      .userLogoutPreviousSession(
-                        this.loginForm.controls.userName.value,
-                      )
-                      .subscribe((logOutFromPreviousSession: any) => {
-                        if (logOutFromPreviousSession.statusCode === 200) {
-                          this.authService
-                            .login(
-                              this.loginForm.controls.userName.value,
-                              encriptPassword,
-                              true,
-                            )
-                            .subscribe((userLoggedIn: any) => {
-                              if (userLoggedIn.statusCode === 200) {
-                                if (
-                                  userLoggedIn.data.previlegeObj &&
-                                  userLoggedIn.data.previlegeObj[0] &&
-                                  userLoggedIn.data.previlegeObj !== null &&
-                                  userLoggedIn.data.previlegeObj !== undefined
-                                ) {
-                                  localStorage.setItem(
-                                    'loginDataResponse',
-                                    JSON.stringify(userLoggedIn.data),
-                                  );
-                                  this.getServicesAuthdetails(
-                                    userLoggedIn.data,
-                                  );
+    if (
+      this.loginForm.controls.userName.value &&
+      this.loginForm.controls.password.value
+    ) {
+      this.authService
+        .login(
+          this.loginForm.controls.userName.value.trim(),
+          encryptPassword,
+          false,
+        )
+        .subscribe(
+          (res: any) => {
+            console.log('res in login', res);
+            if (res.statusCode === 200) {
+              if (res?.data?.previlegeObj[0]) {
+                localStorage.setItem(
+                  'loginDataResponse',
+                  JSON.stringify(res.data),
+                );
+                this.getServicesAuthdetails(res.data);
+              } else {
+                this.confirmationService.alert(
+                  'Seems you are logged in from somewhere else, Logout from there & try back in.',
+                  'error',
+                );
+              }
+            } else if (res.statusCode === 5002) {
+              if (
+                res.errorMessage ===
+                'You are already logged in,please confirm to logout from other device and login again'
+              ) {
+                this.confirmationService
+                  .confirm('info', res.errorMessage)
+                  .subscribe((confirmResponse) => {
+                    if (confirmResponse) {
+                      this.authService
+                        .userLogoutPreviousSession(
+                          this.loginForm.controls.userName.value,
+                        )
+                        .subscribe((userlogoutPreviousSession: any) => {
+                          if (userlogoutPreviousSession.statusCode === 200) {
+                            this.authService
+                              .login(
+                                this.loginForm.controls.userName.value,
+                                encryptPassword,
+                                true,
+                              )
+                              .subscribe((userLoggedIn: any) => {
+                                if (userLoggedIn.statusCode === 200) {
+                                  if (userLoggedIn?.data?.previlegeObj[0]) {
+                                    localStorage.setItem(
+                                      'loginDataResponse',
+                                      JSON.stringify(userLoggedIn.data),
+                                    );
+                                    this.getServicesAuthdetails(
+                                      userLoggedIn.data,
+                                    );
+                                  } else {
+                                    this.confirmationService.alert(
+                                      'Seems you are logged in from somewhere else, Logout from there & try back in.',
+                                      'error',
+                                    );
+                                  }
                                 } else {
                                   this.confirmationService.alert(
-                                    'Seems you are logged in from somewhere else, Logout from there & try back in.',
+                                    userLoggedIn.errorMessage,
                                     'error',
                                   );
                                 }
-                              } else {
-                                this.confirmationService.alert(
-                                  userLoggedIn.errorMessage,
-                                  'error',
-                                );
-                              }
-                            });
-                        } else {
-                          this.confirmationService.alert(
-                            logOutFromPreviousSession.errorMessage,
-                            'error',
-                          );
-                        }
-                      });
-                  }
-                });
-            } else {
-              sessionStorage.clear();
-              this.router.navigate(['/login']);
-              this.confirmationService.alert(res.errorMessage, 'error');
+                              });
+                          } else {
+                            this.confirmationService.alert(
+                              userlogoutPreviousSession.errorMessage,
+                              'error',
+                            );
+                          }
+                        });
+                    } else {
+                      sessionStorage.clear();
+                      this.router.navigate(['/login']);
+                    }
+                  });
+              } else {
+                this.confirmationService.alert(res.errorMessage, 'error');
+              }
             }
-          } else {
-            this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        (err: any) => {
-          this.confirmationService.alert(err, 'error');
-        },
-      );
+          },
+          (err) => {
+            this.confirmationService.alert(err, 'error');
+          },
+        );
+    }
   }
 
   getServicesAuthdetails(loginDataResponse: any) {
@@ -331,20 +480,13 @@ export class LoginComponent implements OnInit {
     );
     localStorage.setItem('userID', loginDataResponse.userID);
     localStorage.setItem('userName', loginDataResponse.userName);
-    const userName = this.loginForm.controls.userName;
-    const userNameValue: string | null = userName.value;
-
-    // Check if the value is not null before storing it
-    if (userNameValue !== null) {
-      localStorage.setItem('username', userNameValue);
-    }
+    localStorage.setItem('username', userName);
     localStorage.setItem('fullName', loginDataResponse.fullName);
-
     const services: any = [];
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
         item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
-          .serviceID === 9
+          .serviceID === '9'
       ) {
         const service = {
           providerServiceID: item.serviceID,

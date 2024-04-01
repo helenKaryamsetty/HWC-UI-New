@@ -19,31 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
-  ConfirmationService,
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
+import { MatDialog } from '@angular/material/dialog';
+import {
   BeneficiaryDetailsService,
+  ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
   DoctorService,
   MasterdataService,
   NurseService,
 } from '../../../shared/services';
-import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
-import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+
 @Component({
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',
   styleUrls: ['./physical-activity-history.component.css'],
 })
-export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
+export class PhysicalActivityHistoryComponent
+  implements OnChanges, OnInit, DoCheck
+{
   @Input()
-  physicalActivityHistoryForm!: FormGroup;
+  physicalActivityHistory!: FormGroup;
 
   @Input()
   mode!: string;
@@ -61,12 +70,12 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   constructor(
     private idrsScoreService: IdrsscoreService,
     private dialog: MatDialog,
-    private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
+    private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    public httpServiceService: HttpServiceService,
+    private httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
@@ -75,20 +84,29 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
     this.getBeneficiaryDetails();
   }
 
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
+  // getMasterData(){
+  //   this.masterData = this.dummy;
+  //   this.physicalActivityQuestions = this.masterData.physicalActivitQuestions
+  //   console.log("questions", this.physicalActivityQuestions);
 
+  // }
+  ngOnChanges() {
+    if (this.mode === 'view') {
+      // let visitID = localStorage.getItem('visitID');
+      // let benRegID = localStorage.getItem('beneficiaryRegID')
+      // this.getGeneralHistory(benRegID, visitID);
+    }
+  }
   nurseMasterDataSubscription: any;
   getMasterData() {
+    // this.masterData = this.dummy;
+    // this.diseaseMasterData = this.masterData.data.DiseaseTypes;
+    // this.familyMemeberMasterData = this.masterData.data.familyMemberTypes;
+    // this.addFamilyDisease();
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
+          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.physicalActivityQuestions = this.masterData.physicalActivity;
           console.log('masterData', this.masterData);
@@ -102,17 +120,24 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
               benRegID !== null &&
               visitCategory === 'NCD screening'
             ) {
-              this.getGeneralHistory(benRegID, visitID);
+              this.getGeneralHistory();
             }
+          }
+          const specialistFlagString = localStorage.getItem('specialistFlag');
+
+          if (
+            specialistFlagString !== null &&
+            parseInt(specialistFlagString) === 100
+          ) {
+            this.getGeneralHistory();
           }
         }
       });
   }
   generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
+  getGeneralHistory() {
+    this.generalHistorySubscription =
+      this.doctorService.populateHistoryResponse$.subscribe((history) => {
         if (
           history !== null &&
           history.statusCode === 200 &&
@@ -120,16 +145,15 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
           history.data.FamilyHistory
         ) {
           this.physicalActivityHistoryData =
-            history.data.physicalActivityHistoryForm;
+            history.data.PhysicalActivityHistory;
           if (this.physicalActivityHistoryData !== undefined)
             this.handlePysicalActivityHistoryData();
         }
       });
   }
   handlePysicalActivityHistoryData() {
-    this.physicalActivityHistoryForm.patchValue(
-      this.physicalActivityHistoryData,
-    );
+    this.physicalActivityHistory.patchValue(this.physicalActivityHistoryData);
+
     const selectedQuestion = this.physicalActivityQuestions.filter(
       (item: any) => {
         return (
@@ -141,6 +165,7 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
       this.idrsScoreService.setIRDSscorePhysicalActivity(
         selectedQuestion[0].score,
       );
+      // this.idrsScoreService.setIDRSScoreFlag();
     }
   }
   calculateIDRSScore(event: any, formGrpup: any) {
@@ -156,10 +181,12 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
     console.log('questionId', selectedQuestion);
     const questionID = selectedQuestion[0].pAID;
     const IDRSScoreForPhysicalActivity = selectedQuestion[0].score;
-    this.physicalActivityHistoryForm.patchValue({ pAID: questionID });
-    this.physicalActivityHistoryForm.patchValue({
+    this.physicalActivityHistory.patchValue({ pAID: questionID });
+    this.physicalActivityHistory.patchValue({
       score: IDRSScoreForPhysicalActivity,
     });
+
+    // this.physicalActivityHistory.patchValue(selectedQuestion);
 
     this.idrsScoreService.setIRDSscorePhysicalActivity(
       IDRSScoreForPhysicalActivity,
@@ -220,5 +247,13 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
           }
         },
       );
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }

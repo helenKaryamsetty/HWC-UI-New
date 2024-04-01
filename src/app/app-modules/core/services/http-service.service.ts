@@ -34,7 +34,7 @@ export class HttpServiceService {
   //   return this._http.get(url).subscribe();
   // }
   getLanguage(url: string) {
-    // if (this.languageAvailable(url) == true) {
+    // if (this.languageAvailable(url) === true) {
     //   return this._http.get(url);
     // } else {
     //   console.log("error here");

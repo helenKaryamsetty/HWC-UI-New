@@ -17,3 +17,7 @@
 .radio-btn {
     margin-left: 15px;
 }
+
+button#previousFeedingHistory .mat-icon.material-icons {
+    color: #52575C !important;
+}

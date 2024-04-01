@@ -35,7 +35,8 @@ export class ServiceComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.assignSelectedLanguage();
     localStorage.removeItem('providerServiceID');
-    this.servicesList = JSON.parse(localStorage.getItem('services') || '{}');
+    const services: any = localStorage.getItem('services');
+    this.servicesList = JSON.parse(services);
     this.fullName = localStorage.getItem('fullName');
   }
 
@@ -135,9 +136,8 @@ export class ServiceComponent implements OnInit, DoCheck {
     localStorage.setItem('serviceName', service.serviceName);
     localStorage.setItem('serviceID', service.serviceID);
     sessionStorage.setItem('apimanClientKey', service.apimanClientKey);
-    this.loginDataResponse = JSON.parse(
-      localStorage.getItem('loginDataResponse') || '{}',
-    );
+    const loginDataResponse: any = localStorage.getItem('loginDataResponse');
+    this.loginDataResponse = JSON.parse(loginDataResponse);
     this.serviceDetails = service;
     this.getServicePoint();
     this.getCdssAdminStatus();

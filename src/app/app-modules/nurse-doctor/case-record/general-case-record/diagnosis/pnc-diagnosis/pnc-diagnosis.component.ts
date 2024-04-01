@@ -19,34 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
   Component,
   OnInit,
   Input,
-  DoCheck,
   OnDestroy,
+  DoCheck,
   OnChanges,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
-import { ConfirmationService } from './../../../../../core/services/confirmation.service';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { DoctorService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
+import { ConfirmationService } from './../../../../../core/services/confirmation.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-pnc-diagnosis',
   templateUrl: './pnc-diagnosis.component.html',
   styleUrls: ['./pnc-diagnosis.component.css'],
 })
 export class PncDiagnosisComponent
-  implements OnInit, DoCheck, OnDestroy, OnChanges
+  implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   utils = new GeneralUtils(this.fb);
   @Input()
@@ -55,31 +51,15 @@ export class PncDiagnosisComponent
   @Input()
   caseRecordMode!: string;
   current_language_set: any;
-
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList',
-    );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
-  }
-
-  getConfirmatoryDiagnosisList(): AbstractControl[] | null {
-    const confirmatoryDiagnosisListControl = this.generalDiagnosisForm.get(
-      'confirmatoryDiagnosisList',
-    );
-    return confirmatoryDiagnosisListControl instanceof FormArray
-      ? confirmatoryDiagnosisListControl.controls
-      : null;
-  }
+  designation: any;
+  specialist = false;
 
   constructor(
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    private httpServiceService: HttpServiceService,
+    public httpServiceService: HttpServiceService,
   ) {}
 
   beneficiaryAge: any;
@@ -94,7 +74,18 @@ export class PncDiagnosisComponent
     this.minimumDeathDate = new Date(
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
+    this.assignSelectedLanguage();
+    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
+    this.designation = localStorage.getItem('designation');
+    if (this.designation === 'TC Specialist') {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
+      this.specialist = true;
+    } else {
+      this.generalDiagnosisForm.controls['specialistDiagnosis'].disable();
+      this.specialist = false;
+    }
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -107,6 +98,9 @@ export class PncDiagnosisComponent
   ngOnDestroy() {
     if (this.beneficiaryDetailsSubscription)
       this.beneficiaryDetailsSubscription.unsubscribe();
+    if (this.diagnosisSubscription) {
+      this.diagnosisSubscription.unsubscribe();
+    }
   }
 
   ngOnChanges() {
@@ -114,7 +108,31 @@ export class PncDiagnosisComponent
       const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
       const visitID = localStorage.getItem('visitID');
       const visitCategory = localStorage.getItem('visitCategory');
-      this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
+      const specialistFlagString = localStorage.getItem('specialist_flag');
+
+      if (
+        localStorage.getItem('referredVisitCode') === 'undefined' ||
+        localStorage.getItem('referredVisitCode') === null
+      ) {
+        this.getDiagnosisDetails();
+      } else if (
+        specialistFlagString !== null &&
+        parseInt(specialistFlagString) === 3
+      ) {
+        this.getMMUDiagnosisDetails(
+          beneficiaryRegID,
+          visitID,
+          visitCategory,
+          localStorage.getItem('visitCode'),
+        );
+      } else {
+        this.getMMUDiagnosisDetails(
+          beneficiaryRegID,
+          localStorage.getItem('referredVisitID'),
+          visitCategory,
+          localStorage.getItem('referredVisitCode'),
+        );
+      }
     }
   }
 
@@ -131,24 +149,6 @@ export class PncDiagnosisComponent
           }
         },
       );
-  }
-
-  diagnosisSubscription: any;
-  getDiagnosisDetails(beneficiaryRegID: any, visitID: any, visitCategory: any) {
-    this.diagnosisSubscription = this.doctorService
-      .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-      .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.diagnosis) {
-          this.patchDiagnosisDetails(res.data.diagnosis);
-        }
-      });
-  }
-
-  patchDiagnosisDetails(diagnosis: any) {
-    if (diagnosis.dateOfDeath)
-      diagnosis.dateOfDeath = new Date(diagnosis.dateOfDeath);
-    this.generalDiagnosisForm.patchValue(diagnosis);
-    this.handleDiagnosisData(diagnosis);
   }
 
   addProvisionalDiagnosis() {
@@ -180,20 +180,108 @@ export class PncDiagnosisComponent
             } else {
               provisionalDiagnosisForm.reset();
               provisionalDiagnosisForm.controls[
-                'provisionalDiagnosis'
+                'viewProvisionalDiagnosisProvided'
               ].enable();
             }
             this.generalDiagnosisForm.markAsDirty();
           }
         });
-    } else if (provisionalDiagnosisArrayList.length > 1) {
-      provisionalDiagnosisArrayList.removeAt(index);
     } else {
-      provisionalDiagnosisForm.reset();
-      provisionalDiagnosisForm.controls['provisionalDiagnosis'].enable();
+      if (provisionalDiagnosisArrayList.length > 1) {
+        provisionalDiagnosisArrayList.removeAt(index);
+      } else {
+        provisionalDiagnosisForm.reset();
+        provisionalDiagnosisForm.controls[
+          'viewProvisionalDiagnosisProvided'
+        ].enable();
+      }
     }
   }
 
+  diagnosisSubscription!: Subscription;
+  getDiagnosisDetails() {
+    this.diagnosisSubscription =
+      this.doctorService.populateCaserecordResponse$.subscribe((res) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+          this.patchDiagnosisDetails(res.data.diagnosis);
+        }
+      });
+  }
+
+  MMUdiagnosisSubscription: any;
+  getMMUDiagnosisDetails(
+    beneficiaryRegID: any,
+    visitID: any,
+    visitCategory: any,
+    visitCode: any,
+  ) {
+    this.MMUdiagnosisSubscription = this.doctorService
+      .getMMUCaseRecordAndReferDetails(
+        beneficiaryRegID,
+        visitID,
+        visitCategory,
+        visitCode,
+      )
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+          this.generalDiagnosisForm.patchValue(res.data.diagnosis);
+          if (res.data.diagnosis.provisionalDiagnosisList) {
+            this.patchDiagnosisDetails(
+              res.data.diagnosis.provisionalDiagnosisList,
+            );
+          }
+        }
+      });
+  }
+
+  // MMUdiagnosisSubscription:any;
+  // getMMUDiagnosisDetails(beneficiaryRegID, visitID, visitCategory) {
+  //   this.diagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory,localStorage.getItem("visitCode"))
+  //     .subscribe(res => {
+  //       if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
+  //         this.generalDiagnosisForm.patchValue(res.data.diagnosis)
+  //         let diagnosisRes;
+  //         if(res.data.diagnosis.provisionalDiagnosisList)
+  //         {
+  //         diagnosisRes = res.data.diagnosis.provisionalDiagnosisList;
+  //         }
+  //         else{
+  //           diagnosisRes=[];
+  //         }
+
+  //         this.MMUdiagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, localStorage.getItem("referredVisitID"), visitCategory,localStorage.getItem("referredVisitCode"))
+  //         .subscribe(response => {
+
+  //           if (response && response.statusCode === 200 && response.data && response.data.diagnosis) {
+  //             let diagnosisResponse;
+  //             if(response.data.diagnosis.provisionalDiagnosisList)
+  //             {
+  //           diagnosisResponse = response.data.diagnosis.provisionalDiagnosisList;
+  //             }
+  //             else{
+  //               diagnosisResponse=[];
+  //             }
+
+  //             for(let i=0,j=diagnosisRes.length;i<diagnosisResponse.length;i++,j++)
+  //             {
+  //               diagnosisRes[j]=diagnosisResponse[i];
+  //             }
+
+  //             this.patchDiagnosisDetails(diagnosisRes);
+  //           }
+
+  //         })
+
+  //       }
+  //     })
+  // }
+
+  patchDiagnosisDetails(diagnosis: any) {
+    if (diagnosis.dateOfDeath)
+      diagnosis.dateOfDeath = new Date(diagnosis.dateOfDeath);
+    this.generalDiagnosisForm.patchValue(diagnosis);
+    this.handleDiagnosisData(diagnosis);
+  }
   handleDiagnosisData(diagnosis: any) {
     if (
       diagnosis.provisionalDiagnosisList &&
@@ -215,12 +303,12 @@ export class PncDiagnosisComponent
     ] as FormArray;
     for (let i = 0; i < provisionalDiagnosisDataList.length; i++) {
       provisionalDiagnosisList.at(i).patchValue({
-        provisionalDiagnosis: provisionalDiagnosisDataList[i].term,
+        viewProvisionalDiagnosisProvided: provisionalDiagnosisDataList[i].term,
         term: provisionalDiagnosisDataList[i].term,
         conceptID: provisionalDiagnosisDataList[i].conceptID,
       });
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
-        'provisionalDiagnosis'
+        'viewProvisionalDiagnosisProvided'
       ].disable();
       if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
         this.addProvisionalDiagnosis();
@@ -233,12 +321,13 @@ export class PncDiagnosisComponent
     ] as FormArray;
     for (let i = 0; i < confirmatoryDiagnosisDataList.length; i++) {
       confirmatoryDiagnosisList.at(i).patchValue({
-        confirmatoryDiagnosis: confirmatoryDiagnosisDataList[i].term,
+        viewConfirmatoryDiagnosisProvided:
+          confirmatoryDiagnosisDataList[i].term,
         term: confirmatoryDiagnosisDataList[i].term,
         conceptID: confirmatoryDiagnosisDataList[i].conceptID,
       });
       (<FormGroup>confirmatoryDiagnosisList.at(i)).controls[
-        'confirmatoryDiagnosis'
+        'viewConfirmatoryDiagnosisProvided'
       ].disable();
       if (
         confirmatoryDiagnosisList.length < confirmatoryDiagnosisDataList.length
@@ -285,19 +374,24 @@ export class PncDiagnosisComponent
             } else {
               confirmatoryDiagnosisForm.reset();
               confirmatoryDiagnosisForm.controls[
-                'confirmatoryDiagnosis'
+                'viewConfirmatoryDiagnosisProvided'
               ].enable();
             }
             this.generalDiagnosisForm.markAsDirty();
           }
         });
-    } else if (confirmatoryDiagnosisFormArrayList.length > 1) {
-      confirmatoryDiagnosisFormArrayList.removeAt(index);
     } else {
-      confirmatoryDiagnosisForm.reset();
-      confirmatoryDiagnosisForm.controls['confirmatoryDiagnosis'].enable();
+      if (confirmatoryDiagnosisFormArrayList.length > 1) {
+        confirmatoryDiagnosisFormArrayList.removeAt(index);
+      } else {
+        confirmatoryDiagnosisForm.reset();
+        confirmatoryDiagnosisForm.controls[
+          'viewConfirmatoryDiagnosisProvided'
+        ].enable();
+      }
     }
   }
+
   checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
     const temp = provisionalDiagnosis.value;
     if (temp.term && temp.conceptID) {

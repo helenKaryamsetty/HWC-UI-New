@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -34,17 +41,18 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { DoctorService } from 'src/app/app-modules/core/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MasterdataService } from 'src/app/app-modules/core/services/masterdata.service';
 import { NurseService } from '../../shared/services/nurse.service';
+import { DoctorService, MasterdataService } from '../../shared/services';
 
 @Component({
   selector: 'app-form-immunization-history',
   templateUrl: './form-immunization-history.component.html',
   styleUrls: ['./form-immunization-history.component.css'],
 })
-export class FormImmunizationHistoryComponent implements OnInit {
+export class FormImmunizationHistoryComponent
+  implements OnChanges, OnInit, DoCheck, OnDestroy
+{
   @Input()
   mode: any;
 
@@ -88,7 +96,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     this.getMasterData();
 
     this.doctorService.fetchInfantDataCheck$.subscribe((responsevalue) => {
-      if (responsevalue == true) {
+      if (responsevalue === true) {
         this.getNurseFetchDetails();
       }
     });
@@ -171,8 +179,8 @@ export class FormImmunizationHistoryComponent implements OnInit {
     immunizationAge.forEach((item) => {
       const vaccines: any[] = [];
       list.forEach((element: any) => {
-        if (element.vaccinationTime == item) {
-          if (element.sctCode != null) {
+        if (element.vaccinationTime === item) {
+          if (element.sctCode !== null) {
             vaccines.push({
               vaccine: element.vaccineName,
               sctCode: element.sctCode,
@@ -203,7 +211,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     this.initImmunizationForm();
 
     //for fetching previous visit immunization history
-    if (this.attendant == 'nurse') {
+    if (this.attendant === 'nurse') {
       this.getPreviousImmunizationHistoryDetails();
     }
   }
@@ -239,15 +247,15 @@ export class FormImmunizationHistoryComponent implements OnInit {
     const arr = age !== undefined && age !== null ? age.trim().split(' ') : age;
     if (arr[1]) {
       const ageUnit = arr[1];
-      if (ageUnit.toLowerCase() == 'years') {
+      if (ageUnit.toLowerCase() === 'years') {
         if (arr[0] === '5-6') {
           return 5 * 12 * 30;
         } else return parseInt(arr[0]) * 12 * 30;
-      } else if (ageUnit.toLowerCase() == 'months') {
+      } else if (ageUnit.toLowerCase() === 'months') {
         if (arr[0] === '9-12') return 9 * 30;
         else if (arr[0] === '16-24') return 16 * 30;
         else return parseInt(arr[0]) * 30;
-      } else if (ageUnit.toLowerCase() == 'weeks') return parseInt(arr[0]) * 7;
+      } else if (ageUnit.toLowerCase() === 'weeks') return parseInt(arr[0]) * 7;
       else if (ageUnit.toLowerCase() === 'days') return parseInt(arr[0]);
     }
     return 0;
@@ -261,10 +269,14 @@ export class FormImmunizationHistoryComponent implements OnInit {
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     )).patchValue(this.temp);
 
-    if (this.mode == 'view') {
+    if (this.mode === 'view') {
       this.getNurseFetchDetails();
     }
-    if (parseInt(localStorage.getItem('specialistFlag') || '{}') == 100) {
+    const specialistFlagString = localStorage.getItem('specialistFlag');
+    if (
+      specialistFlagString !== null &&
+      parseInt(specialistFlagString) === 100
+    ) {
       this.getNurseFetchDetails();
     }
   }
@@ -446,7 +458,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     // ].value;
 
     this.vaccineReceivedList.filter((item: any) => {
-      if (item.id == receivedAtId) {
+      if (item.id === receivedAtId) {
         // (<FormArray>immunizationList.controls[index]).controls[
         //   'vaccinationReceivedAt'
         // ].patchValue(item.name);
@@ -460,7 +472,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     });
 
     // for enabling update button in doctor
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -470,13 +482,18 @@ export class FormImmunizationHistoryComponent implements OnInit {
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     );
 
-    const vaccineArray = (<FormArray>immunizationList.controls[index]).controls[
-      'vaccines'
-    ].value;
+    //const vaccineArray = (<FormArray>immunizationList.controls[index]).controls[
+    //   'vaccines'
+    // ].value;
+
+    const vaccineControl = (immunizationList.controls[index] as FormGroup)
+      .controls['vaccine'];
+
+    const vaccineArray = vaccineControl.value;
 
     let flag = false;
     vaccineArray.filter((item: any) => {
-      if (item.status == true) {
+      if (item.status === true) {
         flag = true;
       }
     });
@@ -522,7 +539,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     }
 
     // for enabling update button in doctor
-    this.mode == 'view' || this.mode == 'update'
+    this.mode === 'view' || this.mode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -531,7 +548,7 @@ export class FormImmunizationHistoryComponent implements OnInit {
     const benRegID = localStorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousImmunizationServicesData(benRegID).subscribe(
       (res: any) => {
-        if (res != null && res.data != null) {
+        if (res !== null && res.data !== null) {
           if (res.data.length > 0) {
             this.viewPreviousDetails(res.data);
           } else {

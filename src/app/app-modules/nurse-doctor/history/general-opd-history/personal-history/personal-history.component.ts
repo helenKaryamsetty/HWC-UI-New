@@ -19,15 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import {
   FormBuilder,
   FormArray,
   FormGroup,
+  FormControl,
+  Form,
   AbstractControl,
 } from '@angular/forms';
-
 import {
   MasterdataService,
   NurseService,
@@ -38,10 +45,11 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
+import { NcdScreeningService } from '../../../shared/services/ncd-screening.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { AllergenSearchComponent } from 'src/app/app-modules/core/component/allergen-search/allergen-search.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
 @Component({
   selector: 'app-general-personal-history',
@@ -58,9 +66,9 @@ export class GeneralPersonalHistoryComponent
   mode!: string;
 
   @Input()
-  visitCategory: any;
+  visitType: any;
 
-  masterData: any;
+  masterData: any = null;
   personalHistoryData: any;
 
   tobaccoMasterData: any;
@@ -89,21 +97,22 @@ export class GeneralPersonalHistoryComponent
   ];
   previousSelectedAlleryList: any = [];
   allerySelectList: any = [];
+  currentLanguageSet: any;
   snomedTerm: any;
   snomedCode: any;
   selectedSnomedTerm: any;
-  countForSearch = -1;
-  currentLanguageSet: any;
+  countForSearch = 0;
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private nurseService: NurseService,
     private doctorService: DoctorService,
+    public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService,
+    private ncdScreeningService: NcdScreeningService,
   ) {}
 
   ngOnInit() {
@@ -125,23 +134,30 @@ export class GeneralPersonalHistoryComponent
           this.getMasterData();
         }
       });
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (this.mode !== 'view' && this.mode !== 'update') {
+      this.ncdScreeningService.enablingIdrs$.subscribe((response) => {
+        if (response === true) {
+          this.generalPersonalHistoryForm.reset();
+        } else {
+          this.generalPersonalHistoryForm.reset();
+        }
+      });
+    }
   }
 
   ngOnDestroy() {
+    //   let allergies = <FormArray>(
+    //     this.generalPersonalHistoryForm.controls["allergicList"]
+    //   );
+    //   while (allergies.length) {
+    //     allergies.removeAt(0);
+    //  }
+    this.generalPersonalHistoryForm.reset();
+
     if (this.nurseMasterDataSubscription)
       this.nurseMasterDataSubscription.unsubscribe();
     if (this.beneficiaryDetailSubscription)
       this.beneficiaryDetailSubscription.unsubscribe();
-    this.generalPersonalHistoryForm.reset();
   }
 
   beneficiaryDetailSubscription: any;
@@ -167,49 +183,8 @@ export class GeneralPersonalHistoryComponent
           this.tobaccoMasterData = masterData.typeOfTobaccoProducts;
           this.alcoholMasterData = masterData.typeOfAlcoholProducts;
           this.addMasters();
-
-          if (this.mode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            this.getGeneralHistory(benRegID, visitID);
-          }
         }
       });
-  }
-
-  generalHistorySubscription: any;
-  getGeneralHistory(benRegID: any, visitID: any) {
-    this.generalHistorySubscription = this.doctorService
-      .getGeneralHistoryDetails(benRegID, visitID)
-      .subscribe((history: any) => {
-        if (
-          history !== null &&
-          history.statusCode === 200 &&
-          history.data !== null &&
-          history.data.PersonalHistory
-        ) {
-          this.personalHistoryData = history.data.PersonalHistory;
-          this.generalPersonalHistoryForm.patchValue(this.personalHistoryData);
-          this.handlePersonalTobaccoHistoryData();
-          this.handlePersonalAlcoholHistoryData();
-          this.handlePersonalAllergyHistoryData();
-        }
-      });
-  }
-
-  getTobaccoList(): AbstractControl[] | null {
-    const tobaccoControl = this.generalPersonalHistoryForm.get('tobaccoList');
-    return tobaccoControl instanceof FormArray ? tobaccoControl.controls : null;
-  }
-
-  getAlcoholList(): AbstractControl[] | null {
-    const alcoholControl = this.generalPersonalHistoryForm.get('alcoholList');
-    return alcoholControl instanceof FormArray ? alcoholControl.controls : null;
-  }
-
-  getAllergyList(): AbstractControl[] | null {
-    const allergyControl = this.generalPersonalHistoryForm.get('allergicList');
-    return allergyControl instanceof FormArray ? allergyControl.controls : null;
   }
 
   addMasters() {
@@ -233,7 +208,6 @@ export class GeneralPersonalHistoryComponent
               return (
                 valueAllergy.allergyType.allergyType === itemAllergy.allergyType
               );
-            else return false;
           });
           const flagAllergy = arrAllergy.length === 0 ? true : false;
           return flagAllergy;
@@ -263,7 +237,6 @@ export class GeneralPersonalHistoryComponent
         const arr = temp.filter((value: any) => {
           if (value.tobaccoUseType !== null)
             return value.tobaccoUseType.habitValue === item.habitValue;
-          else return false;
         });
         const flag = arr.length === 0 ? true : false;
         return flag;
@@ -292,7 +265,6 @@ export class GeneralPersonalHistoryComponent
               return (
                 valueAlcohol.typeOfAlcohol.habitValue === itemAlcohol.habitValue
               );
-            else return false;
           });
           const flagAlcohol = arrAlcohol.length === 0 ? true : false;
           return flagAlcohol;
@@ -308,6 +280,21 @@ export class GeneralPersonalHistoryComponent
     ) {
       this.handlePersonalAlcoholHistoryData();
     }
+  }
+
+  generalHistorySubscription: any;
+  getGeneralHistory() {
+    // this.generalHistorySubscription = this.doctorService.
+    // populateHistoryResponse$
+    //   .subscribe(history => {
+    if (this.personalHistoryData !== null) {
+      // this.personalHistoryData = history.data.PersonalHistory;
+      this.generalPersonalHistoryForm.patchValue(this.personalHistoryData);
+      this.handlePersonalTobaccoHistoryData();
+      this.handlePersonalAlcoholHistoryData();
+      this.handlePersonalAllergyHistoryData();
+    }
+    // });
   }
 
   handlePersonalTobaccoHistoryData() {
@@ -390,20 +377,26 @@ export class GeneralPersonalHistoryComponent
       const temp = this.personalHistoryData.allergicList.slice();
 
       for (let i = 0; i < temp.length; i++) {
-        const allergyType = this.allergyMasterData.filter((item) => {
+        let allergyType = null;
+        allergyType = this.allergyMasterData.filter((item) => {
           return item.allergyType === temp[i].allergyType;
         });
 
+        // if (this.snomedTerm.length > 0) temp[i].this.snomedTerm = this.snomedTerm[0];
+        // if (this.snomedCode.length > 0) temp[i].this.snomedCode = this.snomedCode[0];
+
         if (allergyType.length > 0) temp[i].allergyType = allergyType[0];
 
-        temp[i].typeOfAllergicReactions =
-          this.masterData.AllergicReactionTypes.filter((item: any) => {
-            let flag = false;
-            temp[i].typeOfAllergicReactions.forEach((element: any) => {
-              if (element.name === item.name) flag = true;
+        if (this.masterData.AllergicReactionTypes !== undefined) {
+          temp[i].typeOfAllergicReactions =
+            this.masterData.AllergicReactionTypes.filter((item: any) => {
+              let flag = false;
+              temp[i].typeOfAllergicReactions.forEach((element: any) => {
+                if (element.name === item.name) flag = true;
+              });
+              return flag;
             });
-            return flag;
-          });
+        }
 
         if (temp[i].otherAllergicReaction) temp[i].enableOtherAllergy = true;
 
@@ -412,6 +405,7 @@ export class GeneralPersonalHistoryComponent
           k.patchValue(temp[i]);
           k.markAsTouched();
           this.filterAlleryList(temp[i].allergyType, i);
+          // k.patchValue("allergyType" , temp[i].allergyType);
         }
 
         if (i + 1 < temp.length) this.addAllergy();
@@ -430,7 +424,6 @@ export class GeneralPersonalHistoryComponent
         const arr = temp.filter((value: any) => {
           if (value.tobaccoUseType !== null)
             return value.tobaccoUseType.habitValue === item.habitValue;
-          else return false;
         });
         const flag = arr.length === 0 ? true : false;
         return flag;
@@ -438,14 +431,14 @@ export class GeneralPersonalHistoryComponent
       this.tobaccoSelectList.push(result.slice());
     }
     tobaccoList.push(this.initTobaccoList());
+    console.log('tobacco Lists', this.tobaccoSelectList);
   }
 
   filterTobaccoList(tobacco: any, i: any, tobaccoForm?: FormGroup) {
-    const previousValue: any = this.previousSelectedTobaccoList[i];
+    const previousValue = this.previousSelectedTobaccoList[i];
 
     if (tobaccoForm && tobacco.tobaccoUseType !== 'Other')
-      tobacco.patchValue({ otherTobaccoUseType: null });
-
+      tobaccoForm.patchValue({ otherTobaccoUseType: null });
     if (previousValue) {
       this.tobaccoSelectList.map((item: any, t: any) => {
         if (t !== i && previousValue.tobaccoUseType !== 'Other') {
@@ -457,14 +450,15 @@ export class GeneralPersonalHistoryComponent
 
     this.tobaccoSelectList.map((item: any, t: any) => {
       const index = item.indexOf(tobacco);
-      if (index !== -1 && t !== i && tobacco.tobaccoUseType !== 'Other')
+      if (index !== -1 && t !== i && tobacco.tobaccoUseType !== 'Other') {
         item = item.splice(index, 1);
+      }
     });
 
     this.previousSelectedTobaccoList[i] = tobacco;
   }
 
-  removeTobacco(i: any, tobaccoForm?: AbstractControl<any, any>) {
+  removeTobacco(i: any, tobaccoForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -504,7 +498,6 @@ export class GeneralPersonalHistoryComponent
         const arr = temp.filter((value: any) => {
           if (value.typeOfAlcohol !== null)
             return value.typeOfAlcohol.habitValue === item.habitValue;
-          else return false;
         });
         const flag = arr.length === 0 ? true : false;
         return flag;
@@ -514,9 +507,8 @@ export class GeneralPersonalHistoryComponent
     alcoholList.push(this.initAlcoholList());
   }
 
-  filterAlcoholList(event: any, i: any, alcoholForm?: FormGroup) {
-    const alcohol: any = event.value;
-    const previousValue: any = this.previousSelectedAlcoholList[i];
+  filterAlcoholList(alcohol: any, i: any, alcoholForm?: FormGroup) {
+    const previousValue = this.previousSelectedAlcoholList[i];
 
     if (alcoholForm && alcohol.typeOfAlcohol !== 'Other')
       alcoholForm.patchValue({ otherAlcoholType: null });
@@ -532,13 +524,15 @@ export class GeneralPersonalHistoryComponent
 
     this.alcoholSelectList.map((item: any, t: any) => {
       const index = item.indexOf(alcohol);
-      if (index !== -1 && t !== i) item = item.splice(index, 1);
+      if (index !== -1 && t !== i && alcohol.typeOfAlcohol !== 'Other') {
+        item = item.splice(index, 1);
+      }
     });
 
     this.previousSelectedAlcoholList[i] = alcohol;
   }
 
-  removeAlcohol(i: any, alcoholForm?: AbstractControl<any, any>) {
+  removeAlcohol(i: any, alcoholForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -568,7 +562,6 @@ export class GeneralPersonalHistoryComponent
   }
 
   addAllergy() {
-    this.selectedSnomedTerm = null;
     const allergicList = <FormArray>(
       this.generalPersonalHistoryForm.controls['allergicList']
     );
@@ -579,19 +572,24 @@ export class GeneralPersonalHistoryComponent
           const arr = temp.filter((value: any) => {
             if (value.allergyType !== null)
               return value.allergyType.allergyType === item.allergyType;
-            else return false;
           });
           const flag = arr.length === 0 ? true : false;
           return flag;
         });
+        console.log('resultForterm', result);
+
         this.allerySelectList.push(result.slice());
       }
+      // allergicList[0].patchValue({allergyName : allergicList.value.snomedTerm})
+
+      console.log('allergicList', allergicList);
       allergicList.push(this.initAllergyList());
+      console.log('allergicList', allergicList);
+      console.log('allergy Lists', this.allerySelectList);
     }
   }
 
-  filterAlleryList(event: any, i: any) {
-    const allergy: any = event.value;
+  filterAlleryList(allergy: any, i: any) {
     const previousValue = this.previousSelectedAlleryList[i];
     if (previousValue) {
       this.allerySelectList.map((item: any, t: any) => {
@@ -608,7 +606,7 @@ export class GeneralPersonalHistoryComponent
     this.previousSelectedAlleryList[i] = allergy;
   }
 
-  removeAllergy(i: any, allergyForm?: AbstractControl<any, any>) {
+  removeAllergy(i: any, allergyForm?: FormGroup) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -678,7 +676,7 @@ export class GeneralPersonalHistoryComponent
   getPreviousTobaccoHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousTobaccoHistory(benRegID, this.visitCategory)
+      .getPreviousTobaccoHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -706,17 +704,44 @@ export class GeneralPersonalHistoryComponent
         },
       );
   }
+  get tobaccoList() {
+    return this.generalPersonalHistoryForm.get('tobaccoList') as FormArray;
+  }
+
+  perDayChange() {
+    console.log('perChange', this.generalPersonalHistoryForm);
+    const validateTobaccoConsumption = this.generalPersonalHistoryForm.controls[
+      'tobaccoList'
+    ] as FormArray;
+    console.log('validateTobaccoConsumption', validateTobaccoConsumption);
+    validateTobaccoConsumption.value.forEach((patchNumber: any, i: any) => {
+      if (patchNumber.perDay !== null && patchNumber.perDay === true) {
+        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
+          'numberperWeek'
+        ].setValue(null);
+        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
+          'numberperDay'
+        ].setValue(patchNumber.number);
+      } else if (patchNumber.perDay !== null && patchNumber.perDay === false) {
+        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
+          'numberperDay'
+        ].setValue(null);
+        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
+          'numberperWeek'
+        ].setValue(patchNumber.number);
+      }
+    });
+    console.log('perChange', this.generalPersonalHistoryForm);
+  }
 
   getPreviousAlcoholHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousAlcoholHistory(benRegID, this.visitCategory)
+      .getPreviousAlcoholHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            const title =
-              this.currentLanguageSet.historyData.Alcoholhistory
-                .previousalcoholhistorydetails;
+            const title = this.currentLanguageSet.previousAlcoholhistoryDet;
             if (res.data.data.length > 0) {
               this.viewPreviousData(res.data, title);
             } else {
@@ -744,7 +769,7 @@ export class GeneralPersonalHistoryComponent
   getPreviousAllergyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousAllergyHistory(benRegID, this.visitCategory)
+      .getPreviousAllergyHistory(benRegID, this.visitType)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -803,37 +828,7 @@ export class GeneralPersonalHistoryComponent
     return this.generalPersonalHistoryForm.controls['allergyStatus'].value;
   }
 
-  get tobaccoList() {
-    return this.generalPersonalHistoryForm.get('tobaccoList') as FormArray;
-  }
-
-  perDayChange() {
-    console.log('perChange', this.generalPersonalHistoryForm);
-    const validateTobaccoConsumption = this.generalPersonalHistoryForm.controls[
-      'tobaccoList'
-    ] as FormArray;
-    console.log('validateTobaccoConsumption', validateTobaccoConsumption);
-    validateTobaccoConsumption.value.forEach((patchNumber: any, i: any) => {
-      if (patchNumber.perDay !== null && patchNumber.perDay === true) {
-        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
-          'numberperWeek'
-        ].setValue(null);
-        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
-          'numberperDay'
-        ].setValue(patchNumber.number);
-      } else if (patchNumber.perDay !== null && patchNumber.perDay === false) {
-        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
-          'numberperDay'
-        ].setValue(null);
-        (<FormGroup>validateTobaccoConsumption.at(i)).controls[
-          'numberperWeek'
-        ].setValue(patchNumber.number);
-      }
-    });
-    console.log('perChange', this.generalPersonalHistoryForm);
-  }
-
-  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
+  validateDuration(formGroup: FormGroup, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -918,6 +913,7 @@ export class GeneralPersonalHistoryComponent
     if (
       temp.tobaccoUseType &&
       temp.number &&
+      // temp.durationStatus &&
       temp.duration &&
       temp.durationUnit
     ) {
@@ -946,28 +942,26 @@ export class GeneralPersonalHistoryComponent
     const temp = allergyForm.value;
     if (
       temp.allergyType &&
-      temp.typeOfAllergicReactions &&
       temp.snomedTerm &&
-      temp.snomedCode
+      temp.snomedCode &&
+      temp.typeOfAllergicReactions
     ) {
       return false;
     } else {
       return true;
     }
   }
+
   searchComponents(
-    term: any,
+    term: string,
     i: any,
     allergyForm: AbstractControl<any, any>,
   ): void {
-    const formValues = this.generalPersonalHistoryForm.value;
-    const searchTerm = formValues?.allergicList[i]?.snomedTerm;
+    const searchTerm = term;
+    // let searchTerm = <FormArray>this.generalPersonalHistoryForm.controls['snomedTerm'];allergicList
+    // let searchTerm = this.generalPersonalHistoryForm.controls['snomedTerm'];
     console.log('searchTerm', this.generalPersonalHistoryForm);
-    if (
-      searchTerm !== null &&
-      searchTerm !== undefined &&
-      searchTerm.length > 2
-    ) {
+    if (searchTerm.length > 2) {
       const dialogRef = this.dialog.open(AllergenSearchComponent, {
         data: { searchTerm: searchTerm },
       });
@@ -979,23 +973,29 @@ export class GeneralPersonalHistoryComponent
             this.generalPersonalHistoryForm.value.allergicList !== undefined &&
             this.generalPersonalHistoryForm.value.allergicList.length > 0
           ) {
-            this.selectedSnomedTerm = result.component;
-            const allergyForm = this.generalPersonalHistoryForm.controls[
-              'allergicList'
-            ] as FormArray;
+            // console.log("check",this.generalPersonalHistoryForm.value.allergicList.at(i).snomedTerm);
+            // this.generalPersonalHistoryForm.value.allergicList[0].snomedTerm.patchValue(result.component);
 
-            allergyForm.at(i).patchValue({ snomedTerm: result.component });
-            allergyForm.at(i).patchValue({ snomedCode: result.componentNo });
-            allergyForm.at(i).patchValue({ allergyName: result.component });
+            // this.generalPersonalHistoryForm.value.allergicList[0].patchValue({
+            //   snomedTerm: result.component})
+            // this.generalPersonalHistoryForm.controls['snomedTerm'].setValue(result.component);
+            // this.generalPersonalHistoryForm.controls['snomedCode'].setValue(result.componentNo);
+            this.selectedSnomedTerm = result.component;
+            allergyForm.patchValue({ snomedTerm: result.component });
+            allergyForm.patchValue({ snomedCode: result.componentNo });
+            allergyForm.patchValue({ allergyName: result.component });
             this.countForSearch = i;
           }
+          // this.familyHistoryForm.controls['testLoincCode'].setValue(result.d);
           this.componentFlag = true;
+          //  this.generalPersonalHistoryForm.controls['snomedTerm'].disable();
+          //  this.generalPersonalHistoryForm.controls['snomedCode'].disable();
 
           this.enableAlert = false;
         } else {
           this.enableAlert = true;
-          this.snomedTerm = null;
-          this.snomedCode = null;
+          this.snomedTerm === null;
+          this.snomedCode === null;
         }
       });
     }
@@ -1044,5 +1044,19 @@ export class GeneralPersonalHistoryComponent
         this.countForSearch = index;
       }
     }
+    // if(this.countForSearch === 0){
+    //   this.confirmationService.alert("Please select a valid snomed code");
+    //   allergyForm.patchValue({ snomedTerm: null });
+    //   this.countForSearch = 0;
+
+    // }
+  }
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 }
