@@ -35,6 +35,13 @@ import { ChildAndAdolescentOralVitaminACaseSheetComponent } from './case-sheet/g
 import { NurseService } from './shared/services/nurse.service';
 import { DoctorService, MasterdataService } from './shared/services';
 import { ExaminationCaseSheetComponent } from './case-sheet/general-case-sheet/examination-case-sheet/examination-case-sheet.component';
+// import { Nurse104RefferedWorklistComponent } from './nurse-worklist-wrapper/nurse-104-reffered-worklist/nurse-104-reffered-worklist.component';
+// import { NurseMmuTmReferredWorklistComponent } from './nurse-worklist-wrapper/nurse-mmu-tm-referred-worklist/nurse-mmu-tm-referred-worklist.component';
+// import { NurseTmFutureWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-future-worklist/nurse-tm-future-worklist.component';
+// import { NurseTmWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-worklist/nurse-tm-worklist.component';
+//import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
+import { MaterialModule } from '../core/material.module';
+// import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -43,6 +50,7 @@ import { ExaminationCaseSheetComponent } from './case-sheet/general-case-sheet/e
     CoreModule,
     ReactiveFormsModule,
     FormsModule,
+    MaterialModule,
   ],
   declarations: [
     // NurseWorklistComponent,
@@ -129,14 +137,14 @@ import { ExaminationCaseSheetComponent } from './case-sheet/general-case-sheet/e
     // TcSpecialistWorklistWrapperComponent,
     // TcSpecialistFutureWorklistComponent,
     // NurseWorklistWrapperComponent,
-    // NurseTmWorklistComponent,
-    // NurseTmFutureWorklistComponent,
+    //NurseTmWorklistComponent,
+    //NurseTmFutureWorklistComponent,
     // CovidDiagnosisComponent,
     // IdrsComponent,
     // PhysicalActivityHistoryComponent,
     // FamilyHistoryNcdscreeningComponent,
     // NcdScreeningDiagnosisComponent,
-    // NurseMmuTmReferredWorklistComponent,
+    //NurseMmuTmReferredWorklistComponent,
     // DiseaseconfirmationComponent,
     // CovidVaccinationStatusComponent,
     // DiabetesScreeningComponent,
@@ -165,7 +173,7 @@ import { ExaminationCaseSheetComponent } from './case-sheet/general-case-sheet/e
     ChildAndAdolescentOralVitaminACaseSheetComponent,
     // ChildhoodOralVitaminComponent,
     // ImmunizationServiceComponent,
-    // Nurse104RefferedWorklistComponent,
+    //Nurse104RefferedWorklistComponent,
     // Referred104CdssDetailsComponent,
     // Referred104DetailsPopupComponent,
     // Referred104WorkareaComponent,
