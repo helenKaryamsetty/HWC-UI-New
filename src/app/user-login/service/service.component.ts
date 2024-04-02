@@ -275,6 +275,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   routeToDesignationWorklist(designation: any) {
+    designation = 'Registrar';
     switch (designation) {
       case 'Registrar':
         this.router.navigate(['/registrar/registration']);

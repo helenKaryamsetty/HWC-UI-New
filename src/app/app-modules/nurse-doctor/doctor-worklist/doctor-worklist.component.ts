@@ -52,7 +52,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryList: any;
   filteredBeneficiaryList: any[] = [];
   blankTable = [1, 2, 3, 4, 5];
-  filterTerm: string | null | undefined;
+  filterTerm: any;
   currentLanguageSet: any;
   cbacData: any = [];
   beneficiaryMetaData: any;
@@ -161,18 +161,15 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
             item.statusMessage = temp.statusMessage;
             item.statusCode = temp.statusCode;
           });
-          // this.beneficiaryList = data.data;
-          // this.filteredBeneficiaryList = data.data;
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.filterTerm = null;
-          this.dataSource.data = [];
           this.dataSource.data = benlist;
           this.dataSource.paginator = this.paginator;
           this.dataSource.data.forEach((sectionCount: any, index: number) => {
             sectionCount.sno = index + 1;
           });
+          this.filterTerm = null;
         } else this.confirmationService.alert(data.errorMessage, 'error');
       },
       (err) => {
@@ -182,38 +179,23 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   loadDataToBenList(data: any) {
-    data.forEach(
-      (element: {
-        genderName: string;
-        age: string;
-        statusMessage: string;
-        VisitCategory: string;
-        benVisitNo: string;
-        districtName: string;
-        villageName: string;
-        arrival: boolean;
-        preferredPhoneNum: string;
-        visitDate: moment.MomentInput;
-        benVisitDate: moment.MomentInput;
-      }) => {
-        element.genderName = element.genderName || 'Not Available';
-        element.age = element.age || 'Not Available';
-        element.statusMessage = element.statusMessage || 'Not Available';
-        element.VisitCategory = element.VisitCategory || 'Not Available';
-        element.benVisitNo = element.benVisitNo || 'Not Available';
-        element.districtName = element.districtName || 'Not Available';
-        element.villageName = element.villageName || 'Not Available';
-        element.arrival = false;
-        element.preferredPhoneNum =
-          element.preferredPhoneNum || 'Not Available';
-        element.visitDate =
-          moment(element.visitDate).format('DD-MM-YYYY HH:mm A') ||
-          'Not Available';
-        element.benVisitDate =
-          moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-          'Not Available';
-      },
-    );
+    data.forEach((element: any) => {
+      element.genderName = element.genderName || 'Not Available';
+      element.age = element.age || 'Not Available';
+      element.statusMessage = element.statusMessage || 'Not Available';
+      element.VisitCategory = element.VisitCategory || 'Not Available';
+      element.benVisitNo = element.benVisitNo || 'Not Available';
+      element.districtName = element.districtName || 'Not Available';
+      element.villageName = element.villageName || 'Not Available';
+      element.arrival = false;
+      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
+      element.visitDate =
+        moment(element.visitDate).format('DD-MM-YYYY HH:mm A') ||
+        'Not Available';
+      element.benVisitDate =
+        moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
+        'Not Available';
+    });
     return data;
   }
 
@@ -239,8 +221,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
               key === 'preferredPhoneNum' ||
               key === 'villageName' ||
               key === 'beneficiaryRegID' ||
-              key ||
-              'visitDate')
+              key === 'visitDate')
           ) {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
@@ -464,7 +445,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  toggleArrivalStatus(evt: any, benFlowID: any, index: any) {
+  toggleArrivalStatus(evt: any, benFlowID: any) {
     let message: string;
     if (evt.checked) {
       message = this.currentLanguageSet.alerts.info.beneficiaryArrive;
@@ -487,6 +468,8 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
           if (filteredBenIndex >= 0) {
             this.beneficiaryList[filteredBenIndex].benArrivedFlag = evt.checked;
             this.filteredBeneficiaryList = this.beneficiaryList;
+            this.dataSource.data = this.beneficiaryList;
+            this.dataSource.paginator = this.paginator;
             if (
               this.filterTerm !== null &&
               this.filterTerm !== undefined &&
@@ -507,7 +490,6 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
               .subscribe(
                 (res: any) => {
                   if (res && res.statusCode && res.data) {
-                    // this.confirmationService.alert(res.data.response, "success");
                     this.confirmationService.alert(
                       this.currentLanguageSet.alerts.info.confirmArrival,
                       'success',
@@ -526,7 +508,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
               );
           }
         } else {
-          this.pagedList[index].benArrivedFlag = !evt.checked;
+          // this.pagedList[index].benArrivedFlag = !evt.checked;
         }
       });
 

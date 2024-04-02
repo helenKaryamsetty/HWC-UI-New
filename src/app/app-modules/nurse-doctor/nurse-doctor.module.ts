@@ -19,15 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-// import { Nurse104RefferedWorklistComponent } from './nurse-worklist-wrapper/nurse-104-reffered-worklist/nurse-104-reffered-worklist.component';
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 import { NurseDoctorRoutingModule } from './nurse-doctor-routing.module';
-// import { ChartsModule } from 'ng2-charts';
-
-// import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
 import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.component';
 import { BirthImmunizationHistoryComponent } from './birth-immunization-history/birth-immunization-history.component';
 import { FormImmunizationHistoryComponent } from './birth-immunization-history/form-immunization-history/form-immunization-history.component';

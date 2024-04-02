@@ -19,49 +19,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 
-// import { DashboardComponent } from './dashboard/dashboard.component';
+import { RouterModule, Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { SearchComponent } from './search/search.component';
-import { ConsentFormComponent } from './consent-form/consent-form.component';
 import { CanDeactivateGuardService } from '../../app-modules/core/services/can-deactivate-guard.service';
 import { FamilyTaggingDetailsComponent } from './family-tagging/family-tagging-details/family-tagging-details.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgModule } from '@angular/core';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   component: DashboardComponent,
-  //   children: [
-  //     {
-  //       path: '',
-  //       redirectTo: 'search',
-  //       pathMatch: 'full'
-  //     },
   {
-    path: 'search',
-    component: SearchComponent,
+    path: '',
+    component: DashboardComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'search',
+        pathMatch: 'full',
+      },
+      {
+        path: 'search',
+        component: SearchComponent,
+      },
+      {
+        path: 'registration',
+        component: RegistrationComponent,
+        canDeactivate: [CanDeactivateGuardService],
+      },
+      {
+        path: 'search/:beneficiaryID',
+        component: RegistrationComponent,
+      },
+      {
+        path: 'familyTagging',
+        component: FamilyTaggingDetailsComponent,
+      },
+      {
+        path: 'familyTagging/:benDetails',
+        component: FamilyTaggingDetailsComponent,
+      },
+    ],
   },
-  {
-    path: 'registration',
-    component: RegistrationComponent,
-    canDeactivate: [CanDeactivateGuardService],
-  },
-  {
-    path: 'search/:beneficiaryID',
-    component: RegistrationComponent,
-  },
-  {
-    path: 'familyTagging',
-    component: FamilyTaggingDetailsComponent,
-  },
-  {
-    path: 'familyTagging/:benDetails',
-    component: FamilyTaggingDetailsComponent,
-  },
-  //   ]
-  // }
 ];
 
 @NgModule({

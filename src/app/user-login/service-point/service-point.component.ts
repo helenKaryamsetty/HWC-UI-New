@@ -229,6 +229,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   routeToDesignation(designation: any) {
+    console.log('designation', designation);
     switch (designation) {
       case 'Registrar':
         this.router.navigate(['/registrar/registration']);
@@ -256,7 +257,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
-    this.servicePointService.getMMUDemographics().subscribe((res) => {
+    this.servicePointService.getMMUDemographics().subscribe((res: any) => {
       if (res && res.statusCode === 200) {
         this.saveDemographicsToStorage(res.data);
       } else {
@@ -376,15 +377,17 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   getCdssAdminStatus() {
     const psmid = this.serviceProviderId;
-    this.servicePointService.getCdssAdminDetails(psmid).subscribe((res) => {
-      if (
-        res.data !== null &&
-        res.data !== undefined &&
-        res.data.isCdss !== undefined &&
-        res.data.isCdss !== null
-      ) {
-        localStorage.setItem('isCdss', res.data.isCdss);
-      }
-    });
+    this.servicePointService
+      .getCdssAdminDetails(psmid)
+      .subscribe((res: any) => {
+        if (
+          res.data !== null &&
+          res.data !== undefined &&
+          res.data.isCdss !== undefined &&
+          res.data.isCdss !== null
+        ) {
+          localStorage.setItem('isCdss', res.data.isCdss);
+        }
+      });
   }
 }

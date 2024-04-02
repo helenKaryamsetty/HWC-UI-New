@@ -23,16 +23,11 @@ import {
   Component,
   OnInit,
   Input,
-  Output,
-  Optional,
-  EventEmitter,
-  Inject,
   ViewChild,
   AfterContentChecked,
 } from '@angular/core';
-import { Router, ActivatedRoute, RouterLinkActive } from '@angular/router';
+import { Router, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { ConfirmationService } from '../../services/confirmation.service';
 import { TelemedicineService } from '../../services/telemedicine.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ShowCommitAndVersionDetailsComponent } from './../show-commit-and-version-details/show-commit-and-version-details.component';
@@ -40,7 +35,6 @@ import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component'
 import { IotService } from '../../services/iot.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
-// import {LanguageServiceService} from '../../services/language-service.service';
 
 @Component({
   selector: 'app-header',
@@ -58,52 +52,9 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
   status: any;
   navigation: any;
   isConnected = true;
-  /*navigation = [
-    {
-      role: "Registrar",
-      work: [
-        { link: "/registrar/registration", label: "Registration" },
-        { link: "/registrar/search", label: "Search" }
-      ]
-    },
-    { role: "Nurse", link: "/common/nurse-worklist", label: "Nurse" },
-    { role: "Doctor", link: "/common/doctor-worklist", label: "Doctor" },
-    { role: "Lab Technician", link: "/lab/worklist", label: "Lab Technician" },
-    {
-      role: "Pharmacist",
-      link: "/pharmacist/pharmacist-worklist",
-      label: "Pharmacist"
-    },
-    {
-      role: "Radiologist",
-      link: "/common/radiologist-worklist",
-      label: "Radiologist"
-    },
-    {
-      role: "Oncologist",
-      link: "/common/oncologist-worklist",
-      label: "Oncologist"
-    },
-    {
-      role: "TC Specialist",
-      work: [
-        { link: "/common/tcspecialist-worklist", label: "Worklist" },
-        {
-          // link: this.telemedicineService.routeToTeleMedecine(),
-          label: "Timesheet"
-        }
-      ]
-    },
-    { role: "DataSync", link: "/datasync", label: "Data Sync" }
-  ];*/
-  // @Input('isDarkTheme')
-  // isDarkTheme: Boolean;
 
   @Input()
   showRoles = false;
-
-  // @Output()
-  // dark: EventEmitter <Boolean> = new EventEmitter<Boolean>();
 
   servicePoint: any;
   userName: any;
@@ -119,7 +70,6 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     private auth: AuthService,
     private telemedicineService: TelemedicineService,
     private http_service: HttpServiceService,
-    private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     public service: IotService,
   ) {}
@@ -155,9 +105,13 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
   }
 
   fetchLanguageSet() {
-    this.http_service.fetchLanguageSet().subscribe((languageRes) => {
-      if (languageRes !== undefined && languageRes !== null) {
-        this.languageArray = languageRes;
+    this.http_service.fetchLanguageSet().subscribe((languageRes: any) => {
+      if (
+        languageRes &&
+        languageRes.data !== undefined &&
+        languageRes !== null
+      ) {
+        this.languageArray = languageRes.data;
         this.getLanguage();
       }
     });
@@ -235,17 +189,16 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
             link: '/registrar/search',
             label: this.currentLanguageSet.common.search,
           },
-          // { link: "/registrar/familyTagging", label: this.currentLanguageSet.familyTagging}
         ],
       },
       {
         role: 'Nurse',
-        link: '/common/nurse-worklist',
+        link: '/nurse-doctor/nurse-worklist',
         label: this.currentLanguageSet.role_selection.Nurse,
       },
       {
         role: 'Doctor',
-        link: '/common/doctor-worklist',
+        link: '/nurse-doctor/doctor-worklist',
         label: this.currentLanguageSet.role_selection.Doctor,
       },
       {
@@ -260,12 +213,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
       {
         role: 'Radiologist',
-        link: '/common/radiologist-worklist',
+        link: '/nurse-doctor/radiologist-worklist',
         label: this.currentLanguageSet.role_selection.Radiologist,
       },
       {
         role: 'Oncologist',
-        link: '/common/oncologist-worklist',
+        link: '/nurse-doctor/oncologist-worklist',
         label: this.currentLanguageSet.role_selection.Oncologist,
       },
       {
@@ -273,13 +226,12 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
         label: this.currentLanguageSet.common.TCSpecialist,
         work: [
           {
-            link: '/common/tcspecialist-worklist',
+            link: '/nurse-doctor/tcspecialist-worklist',
             label: 'Worklist',
             labelName: this.currentLanguageSet.common.Worklist,
           },
           {
             label: 'Timesheet',
-            // link: this.telemedicineService.routeToTeleMedecine(),
             labelName: this.currentLanguageSet.common.timeSheet,
           },
         ],
@@ -293,9 +245,11 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     if (this.showRoles) {
       const role: any = localStorage.getItem('role');
       this.roles = JSON.parse(role);
-      this.filteredNavigation = this.navigation.filter((item: any) => {
-        return this.roles.includes(item.role);
-      });
+      if (this.roles !== undefined && this.roles !== null) {
+        this.filteredNavigation = this.navigation.filter((item: any) => {
+          return this.roles.includes(item.role);
+        });
+      }
     }
   }
   DataSync() {
@@ -313,7 +267,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     });
   }
   getSwymedLogout() {
-    this.auth.getSwymedLogout().subscribe((res) => {
+    this.auth.getSwymedLogout().subscribe((res: any) => {
       window.location.href = res.data.response;
       this.logout();
     });
@@ -363,13 +317,13 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     }
   }
   showData(versionData: any) {
-    const dialogRef = this.dialog.open(ShowCommitAndVersionDetailsComponent, {
+    this.dialog.open(ShowCommitAndVersionDetailsComponent, {
       data: versionData,
     });
   }
 
   openIOT() {
-    const dialogRef = this.dialog.open(IotBluetoothComponent, {
+    this.dialog.open(IotBluetoothComponent, {
       width: '600px',
     });
   }

@@ -77,10 +77,10 @@ export class AudioRecordingService {
   }
 
   private record() {
-    this.recorder = new RecordRTC.StereoAudioRecorder(this.stream, {
-      type: 'audio',
-      mimeType: 'audio/webm',
-    });
+    // this.recorder = new RecordRTC.StereoAudioRecorder(this.stream, {
+    //   type: 'audio',
+    //   mimeType: 'audio/webm',
+    // });
 
     this.recorder.record();
     this.startTime = moment();

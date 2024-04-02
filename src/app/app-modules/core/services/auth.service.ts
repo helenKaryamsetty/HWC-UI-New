@@ -14,117 +14,70 @@ export class AuthService {
   ) {}
 
   login(userName: any, password: any, doLogout: any) {
-    return this.http
-      .post(environment.loginUrl, {
-        userName: userName,
-        password: password,
-        doLogout: doLogout,
-      })
-      .pipe(
-        map((res) => {
-          console.log('res ************', res);
-          return res;
-        }),
-      );
+    return this.http.post(environment.loginUrl, {
+      userName: userName,
+      password: password,
+      doLogout: doLogout,
+    });
   }
 
   userLogoutPreviousSession(userName: any) {
-    return this.http
-      .post(environment.userLogoutPreviousSessionUrl, { userName: userName })
-      .pipe(
-        map((res) => {
-          return res;
-        }),
-      );
+    return this.http.post(environment.userLogoutPreviousSessionUrl, {
+      userName: userName,
+    });
   }
 
   getUserSecurityQuestionsAnswer(uname: any): Observable<any> {
-    return this.http
-      .post(environment.getUserSecurityQuestionsAnswerUrl, {
-        userName: uname.toLowerCase(),
-      })
-      .pipe(
-        map((res) => {
-          return res;
-        }),
-      );
+    return this.http.post(environment.getUserSecurityQuestionsAnswerUrl, {
+      userName: uname.toLowerCase(),
+    });
   }
 
   getSecurityQuestions() {
-    return this.http.get(environment.getSecurityQuestionUrl).pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+    return this.http.get(environment.getSecurityQuestionUrl);
   }
 
   saveUserSecurityQuestionsAnswer(userQuestionAnswer: any) {
-    return this.http
-      .post(environment.saveUserSecurityQuestionsAnswerUrl, userQuestionAnswer)
-      .pipe(
-        map((res) => {
-          return res;
-        }),
-      );
+    return this.http.post(
+      environment.saveUserSecurityQuestionsAnswerUrl,
+      userQuestionAnswer,
+    );
   }
 
   setNewPassword(userName: string, password: string, transactionId: any) {
-    return this.http
-      .post(environment.setNewPasswordUrl, {
-        userName: userName,
-        password: password,
-        transactionId: transactionId,
-      })
-      .pipe(
-        map((res) => {
-          return res;
-        }),
-      );
+    return this.http.post(environment.setNewPasswordUrl, {
+      userName: userName,
+      password: password,
+      transactionId: transactionId,
+    });
   }
 
   validateSessionKey() {
-    return this.http.post(environment.getSessionExistsURL, {}).pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+    return this.http.post(environment.getSessionExistsURL, {});
   }
 
   logout() {
-    return this.http.post(environment.logoutUrl, '').pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+    return this.http.post(environment.logoutUrl, '');
   }
   getSwymedLogout() {
-    return this.http.get(environment.getSwymedLogoutUrl).pipe(
-      map((res: any) => res.json()),
-      catchError((err) => {
-        return throwError(err);
-      }),
-    );
+    return this.http.get(environment.getSwymedLogoutUrl);
   }
 
   getUIVersionAndCommitDetails(url: any) {
     return this.http.get(url);
-    //.map((res) => res.json());
   }
   getAPIVersionAndCommitDetails() {
     return this.http.get(environment.apiVersionUrl);
-    //.map((res) => res.json());
   }
   validateSecurityQuestionAndAnswer(ans: any, uname: any): Observable<any> {
     return this.http.post(environment.validateSecurityQuestions, {
       SecurityQuesAns: ans,
       userName: uname,
     });
-    //.map((res) => res.json());
   }
   getTransactionIdForChangePassword(uname: any): Observable<any> {
     return this.http.post(environment.getTransacIDForPasswordChange, {
       userName: uname,
     });
-    //.map((res) => res.json());
   }
 }

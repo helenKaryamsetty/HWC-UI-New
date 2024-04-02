@@ -1,0 +1,11 @@
+{
+  "version": "1.0.2",
+  "hash": "9c30a3101d79260182e1de749dfcc67e26a90fed",
+  "shortHash": "9c30a31",
+  "commit": "9c30a3101d79260182e1de749dfcc67e26a90fed",
+  "shortCommit": "9c30a31",
+  "author": "Sweta Prakash",
+  "email": "125380378+swetatech24@users.noreply.github.com",
+  "date": "Wed Sep 20 13:21:27 2023 +0530",
+  "message": "Use of externally-controlled format string, Potentially unsafe external link, Client-side cross-site scripting, Overly permissive regular expression range (#49)\n    \n    * POJO Fetosense changes\n    \n    * Client-side cross-site scripting,Overly permissive regular expression range,Use of externally-controlled format string,Potentially unsafe external link\n    \n    * removed commented code"
+}

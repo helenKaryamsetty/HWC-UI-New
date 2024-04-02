@@ -1,9 +1,5 @@
-import { Injectable, ViewContainerRef, Inject } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { Injectable, Inject } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs';
 import { CameraDialogComponent } from '../component/camera-dialog/camera-dialog.component';
@@ -13,7 +9,6 @@ export class CameraService {
   constructor(
     private dialog: MatDialog,
     @Inject(DOCUMENT) doc: any,
-    public dialogRef: MatDialogRef<CameraDialogComponent>,
   ) {}
 
   public capture(titleAlign = 'center'): Observable<any> {
@@ -34,21 +29,21 @@ export class CameraService {
   public annotate(
     image: string,
     points: any,
+    currentLanguage: any,
     titleAlign = 'center',
   ): Observable<any> {
-    const config = new MatDialogConfig();
     const dialogRef = this.dialog.open(CameraDialogComponent, {
       width: '80%',
     });
     dialogRef.componentInstance.capture = false;
     dialogRef.componentInstance.imageCode = false;
     dialogRef.componentInstance.annotate = image;
+    dialogRef.componentInstance.currentLanguageSet = currentLanguage;
     dialogRef.componentInstance.availablePoints = points;
     return dialogRef.afterClosed();
   }
 
   public ViewGraph(graph: any): void {
-    const config = new MatDialogConfig();
     const dialogRef = this.dialog.open(CameraDialogComponent, {
       width: '80%',
     });
@@ -58,5 +53,4 @@ export class CameraService {
     dialogRef.componentInstance.availablePoints = false;
     dialogRef.componentInstance.graph = graph;
   }
-  public close(): void {}
 }

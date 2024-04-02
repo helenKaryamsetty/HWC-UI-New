@@ -22,30 +22,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-// import { Md2Module } from 'md2';
-// import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
 import { RegistrarRoutingModule } from './registrar-routing.module';
 import { CoreModule } from '../core/core.module';
-
-// import { DashboardComponent } from './dashboard/dashboard.component';
 import { SearchComponent } from './search/search.component';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
-
 import { RegisterDemographicDetailsComponent } from './registration/register-demographic-details/register-demographic-details.component';
-// import { HealthIdValidateComponent, RegisterOtherDetailsComponent } from './registration/register-other-details/register-other-details.component';
-
-// import { RegistrarService } from './shared/services/registrar.service';
-
 import { ViewHealthIdCardComponent } from './registration/register-other-details/view-health-id-card/view-health-id-card.component';
-import {
-  HealthIdOtpGenerationComponent,
-  HealthIdOtpSuccessComponent,
-} from './health-id-otp-generation/health-id-otp-generation.component';
+import { HealthIdOtpGenerationComponent } from './health-id-otp-generation/health-id-otp-generation.component';
 import { QuickSearchComponent } from './quick-search/quick-search.component';
 import { EditFamilyTaggingComponent } from './family-tagging/edit-family-tagging/edit-family-tagging.component';
-// import { FamilyTaggingService } from './shared/services/familytagging.service';
 import { ConsentFormComponent } from './consent-form/consent-form.component';
 import { SearchFamilyComponent } from './search-family/search-family.component';
 import { CreateFamilyTaggingComponent } from './family-tagging/create-family-tagging/create-family-tagging.component';
@@ -59,11 +44,15 @@ import { RegisterPersonalDetailsComponent } from './registration/register-person
 import { RegistrationComponent } from './registration/registration.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MaterialModule } from '../core/material.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FamilyTaggingService } from './shared/services/familytagging.service';
+import { RegistrarService } from './shared/services/registrar.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    // Md2Module,
+    MaterialModule,
     FormsModule,
     CoreModule,
     RegistrarRoutingModule,
@@ -72,15 +61,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     BsDatepickerModule.forRoot(),
   ],
 
-  // entryComponents: [SearchDialogComponent,HealthIdOtpGenerationComponent,ConsentFormComponent,SearchFamilyComponent,HealthIdOtpSuccessComponent,HealthIdValidateComponent,QuickSearchComponent,GenerateMobileOtpGenerationComponent,
-  //   SetPasswordForAbhaComponent,ViewHealthIdCardComponent,EditFamilyTaggingComponent,CreateFamilyTaggingComponent,GenerateAbhaComponentComponent, BiometricAuthenticationComponent],
-
-  providers: [
-    // RegistrarService ,
-    // FamilyTaggingService
-  ],
+  providers: [RegistrarService, FamilyTaggingService],
   declarations: [
-    // DashboardComponent,
+    DashboardComponent,
     RegistrationComponent,
     SearchComponent,
     SearchDialogComponent,

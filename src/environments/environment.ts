@@ -24,14 +24,14 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'https://amritwprdev.piramalswasthya.org/';
-const identityIP = 'https://amritwprdev.piramalswasthya.org/';
-const tmIP = 'https://amritwprdev.piramalswasthya.org/';
-const IP104 = 'https://amritwprdev.piramalswasthya.org/';
-const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
-const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
-const adminIP = 'https://amritwprdev.piramalswasthya.org/';
-const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
+const commonIP = 'https://amritwprdev.piramalswasthya.org';
+const identityIP = 'https://amritwprdev.piramalswasthya.org';
+const tmIP = 'https://amritwprdev.piramalswasthya.org';
+const IP104 = 'https://amritwprdev.piramalswasthya.org';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const FHIRIP = 'http://183.82.107.186:8080';
 const SERVER_IP = '10.208.122.39';
 const SWYMED_IP = '14.143.13.109';
 
@@ -48,7 +48,7 @@ const COMMON_API = `${commonIP}/commonapi-v0.1/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 // const COMMON_API_OPEN = `http://localhost:8080/`;
 // const COMMON_API = `http://localhost:8080/`;
-const TM_API = `${tmIP}/hwc-facility-service-v1.1/`;
+const TM_API = `${tmIP}/hwc-facility-service-v0.1/`;
 // const TM_API = `${tmIP}/hwc-facility-service/`;
 
 const API104 = `${IP104}/104api-v1.0/`;
@@ -57,7 +57,7 @@ const MMU_API = `${mmuIP}/mmuapi-v0.1/`;
 const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v0.1/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v1.0`;
+const ADMIN_API = `${adminIP}/adminapi-v0.1`;
 
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 

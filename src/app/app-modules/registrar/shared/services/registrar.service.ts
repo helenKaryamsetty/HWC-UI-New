@@ -21,11 +21,8 @@
  */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { environment } from 'src/environments/environment';
-
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class RegistrarService {
@@ -106,13 +103,7 @@ export class RegistrarService {
 
   getRegistrationMaster(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http
-      .post(environment.registrarMasterDataUrl, tmpSPID)
-      .subscribe((res: any) => {
-        console.log(JSON.stringify(res.json().data), 'json data');
-        if (res.json().data)
-          this.registrationMasterDetails.next(res.json().data);
-      });
+    return this.http.post(environment.registrarMasterDataUrl, tmpSPID);
   }
 
   getResgistartionMasterData(servicePointID: any) {
@@ -129,16 +120,9 @@ export class RegistrarService {
   }
 
   getPatientDataAsObservable(benRegID: any) {
-    return this.http
-      .post(environment.getCompleteBeneficiaryDetail, {
-        beneficiaryRegID: benRegID,
-      })
-      .subscribe((res: any) => {
-        if (res.json().data) {
-          console.log(res.json().data, 'res json data');
-          this.beneficiaryDetails.next(res.json().data);
-        }
-      });
+    return this.http.post(environment.getCompleteBeneficiaryDetail, {
+      beneficiaryRegID: benRegID,
+    });
   }
 
   getPatientData(benRegID: any) {
@@ -159,11 +143,6 @@ export class RegistrarService {
   identityQuickSearch(searchTerm: any) {
     return this.http.post(environment.identityQuickSearchUrl, searchTerm);
   }
-
-  // quickSearchByPhoneNO(searchTerm: any) {
-  //   return this.http.get(environment.quickSearchUrl, searchTerm)
-  //     .map((res) => res.json().data);
-  // }
 
   clearBeneficiaryEditDetails() {
     this.beneficiaryEditDetails.next(null);

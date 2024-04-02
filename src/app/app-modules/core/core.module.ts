@@ -1,47 +1,38 @@
-import { NgModule, ErrorHandler, ModuleWithProviders } from '@angular/core';
+/*
+ * AMRIT – Accessible Medical Records via Integrated Technology
+ * Integrated EHR (Electronic Health Records) Solution
+ *
+ * Copyright (C) "Piramal Swasthya Management and Research Institute"
+ *
+ * This file is part of AMRIT.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see https://www.gnu.org/licenses/.
+ */
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { Http, XHRBackend, RequestOptions } from '@angular/http';
 import { MaterialModule } from './material.module';
-// import { Md2Module } from 'md2';
-// import { ChartsModule } from 'ng2-charts';
-// import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { WebCamModule } from 'ack-angular-webcam';
-
-// import { HttpInterceptor } from './services/http-interceptor.service';
-import { SpinnerService } from './services/spinner.service';
-import { CameraService } from './services/camera.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
-import { BeneficiaryDetailsService } from './services/beneficiary-details.service';
-import { CommonService } from './services/common-services.service';
-import { GlobalErrorHandler } from './services/global-error-handler.service';
 import { TelemedicineService } from './services/telemedicine.service';
-
-// import { myEmail } from './directives/email/myEmail.directive';
-// import { myMobileNumber } from './directives/MobileNumber/myMobileNumber.directive';
-// import { myName } from './directives/name/myName.directive';
-// import { myPassword } from './directives/password/myPassword.directive';
-// import { StringValidator } from './directives/stringValidator.directive';
-// import { NumberValidator } from './directives/numberValidator.directive';
-// import { DisableFormControlDirective } from './directives/disableFormControl.directive';
-// import { NullDefaultValueDirective } from './directives/null-default-value.directive';
-import { InventoryService } from './services/inventory.service';
-
-// import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.directive';
-// import { ConfirmatoryDiagnosisDirective } from './directives/confirmatory-diagnosis.directive';
-//import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
-import { CanDeactivateGuardService } from './services/can-deactivate-guard.service';
-
-// import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonDialogComponent } from './component/common-dialog/common-dialog.component';
 import { HttpServiceService } from './services/http-service.service';
 import { AllergenSearchComponent } from './component/allergen-search/allergen-search.component';
 import { SpecialistLoginComponent } from './component/specialist-login/specialist-login.component';
-// import { AppFooterComponent } from './component/app-footer/app-footer.component';
 import { AppHeaderComponent } from './component/app-header/app-header.component';
 import { BeneficiaryDetailsComponent } from './component/beneficiary-details/beneficiary-details.component';
 import { CalibrationComponent } from './component/calibration/calibration.component';
@@ -63,12 +54,15 @@ import { IotService } from './services/iot.service';
 import { AppFooterComponent } from './component/app-footer/app-footer.component';
 import { HealthIdDisplayModalComponent } from './component/health-id-display-modal/health-id-display-modal.component';
 import { ConfirmationService } from './services/confirmation.service';
-// import { HealthIdDisplayModalComponent } from './components/health-id-display-modal/health-id-display-modal.component';
-// import { myHealthId } from './directives/myHealthId/myHealthId.directive';
-
-// import { SetLanguageComponent } from './components/set-language.component';
-// import { ClinicalObservationsDirective } from './directives/clinical-observations.directive';
-// import { SignificantFindingsDirective } from './directives/significant-findings.directive';
+import {
+  CameraService,
+  SpinnerService,
+  BeneficiaryDetailsService,
+} from './services';
+import { CanDeactivateGuardService } from './services/can-deactivate-guard.service';
+import { CommonService } from './services/common-services.service';
+import { InventoryService } from './services/inventory.service';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 @NgModule({
   imports: [
@@ -139,60 +133,29 @@ import { ConfirmationService } from './services/confirmation.service';
     //  ClinicalObservationsDirective, SignificantFindingsDirective,
     OpenPreviousVisitDetailsComponent,
   ],
-  //   entryComponents: [
-  //     CommonDialogComponent,
-  //     CameraDialogComponent,
-  //    TextareaDialogComponent,
-  //     SpinnerComponent,
-  //     PreviousDetailsComponent,
-  //     PreviousImmunizationServiceDetailsComponent,
-  //     MmuRbsDetailsComponent,
-  //     SpecialistLoginComponent,
-  //     DiagnosisSearchComponent,
-  //     ShowCommitAndVersionDetailsComponent,
-  //     ViewRadiologyUploadedFilesComponent,
-  //     IotcomponentComponent,
-  //     IotBluetoothComponent,
-  //     AllergenSearchComponent,
-  //     CalibrationComponent,
-  //     HealthIdDisplayModalComponent,
-  //     OpenPreviousVisitDetailsComponent
-  //   ]
 })
 export class CoreModule {
-  // static forRoot: any;
-
   static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [
-        //         HttpInterceptor,
-        //         HttpServiceService,
-
+        HttpInterceptorService,
+        HttpServiceService,
         ConfirmationService,
-        //         CameraService,
+        CameraService,
         TextareaDialog,
         AuthGuard,
         AppHeaderComponent,
         AuthService,
-        //         SpinnerService,
-        //         BeneficiaryDetailsService,
-        //         CommonService,
-        //         InventoryService,
-        //         CanDeactivateGuardService,
+        SpinnerService,
+        BeneficiaryDetailsService,
+        CommonService,
+        InventoryService,
+        CanDeactivateGuardService,
         TelemedicineService,
         IotService,
         HttpServiceService,
-        //         {
-        //           provide: Http,
-        //           useFactory: HttpInterceptorFactory,
-        //           deps: [XHRBackend, RequestOptions, Router, SpinnerService, ConfirmationService]
-        //         }
       ],
     };
   }
 }
-
-// export function HttpInterceptorFactory(backend: XHRBackend, options: RequestOptions, router: Router, spinner: SpinnerService, confirmation: ConfirmationService) {
-//   return new HttpInterceptor(backend, options, router, spinner, confirmation);
-//}

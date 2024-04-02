@@ -1114,21 +1114,6 @@ export class SearchComponent implements OnInit, DoCheck {
     this.searchBeneficiaryInMongo(this.pageNo);
   }
 
-  // openConsent(){
-  //   let mdDialogRef: MdDialogRef<ConsentFormComponent> = this.dialog.open(
-  //    ConsentFormComponent,
-  //    {
-  //      width:"40%",
-  //      height: "53%",
-  //      disableClose: false,
-  //    }
-  //  );
-  // mdDialogRef.afterClosed().subscribe((consentProvided) => {
-  //   this.consentGranted = consentProvided;
-  //    this.registrarService.sendConsentStatus(consentProvided);
-  //  })
-
-  // }
   navigateTORegistrar() {
     const link = '/registrar/registration';
     const currentRoute = this.router.routerState.snapshot.url;

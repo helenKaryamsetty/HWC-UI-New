@@ -136,8 +136,6 @@ export class DoctorService {
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.doctorWorkList + fetchUrl);
-    // return this.http.get(environment.doctorWorkList + localStorage.getItem('providerServiceID'))
-    //   .map(res => res.json());
   }
 
   getPreviousInfantAndImmunizationHistoryDetails(

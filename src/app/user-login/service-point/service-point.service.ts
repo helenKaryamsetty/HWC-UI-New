@@ -36,31 +36,11 @@ export class ServicePointService {
     private router: Router,
   ) {}
 
-  // getServicePoints(userId: string, serviceProviderId: string) {
-  //   return this.http.post(environment.servicePointUrl, { userID: userId, providerServiceMapID: serviceProviderId })
-  //     .pipe(map((res: any) => console.log(res)),
-  //     catchError((err: string) => {
-  //       return throwError(err);
-  //     }))
-  //     ;
-  // }
-
   getServicePoints(userId: string, serviceProviderId: string) {
-    return this.http
-      .post(environment.servicePointUrl, {
-        userID: userId,
-        providerServiceMapID: serviceProviderId,
-      })
-      .pipe(
-        map((res: any) => {
-          console.log(res);
-          return res;
-        }),
-        catchError((err: any) => {
-          console.error('Error:', err);
-          return throwError(err);
-        }),
-      );
+    return this.http.post(environment.servicePointUrl, {
+      userID: userId,
+      providerServiceMapID: serviceProviderId,
+    });
   }
 
   getMMUDemographics() {
@@ -68,33 +48,20 @@ export class ServicePointService {
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const spPSMID = localStorage.getItem('providerServiceID');
 
-    return this.http
-      .post(environment.demographicsCurrentMasterUrl, {
-        vanID: vanID,
-        spPSMID: spPSMID,
-      })
-      .pipe(
-        map((res: any) => {
-          console.log(res);
-          return res;
-        }),
-
-        catchError((err: string) => {
-          return throwError(err);
-        }),
-      );
+    return this.http.post(environment.demographicsCurrentMasterUrl, {
+      vanID: vanID,
+      spPSMID: spPSMID,
+    });
   }
 
   getSwymedMailLogin() {
     const userID = localStorage.getItem('userID');
     return this.http.get(environment.getSwymedMailLoginUrl + userID);
   }
-  getCdssAdminDetails(providerServiceMapID: string | null) {
-    return (
-      this.http
-        .get(environment.getAdminCdssStatus + '/' + providerServiceMapID)
-        // .get(environment.getSwymedMailLoginUrl + providerServiceMapID) // this is just for demo. ** need to change this with above
-        .pipe(map((res: any) => res))
+
+  getCdssAdminDetails(providerServiceMapID: any) {
+    return this.http.get(
+      environment.getAdminCdssStatus + '/' + providerServiceMapID,
     );
   }
 }

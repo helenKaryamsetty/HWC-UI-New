@@ -19,27 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-// import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
+
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-// import { DashboardComponent } from './dashboard/dashboard.component';
-// import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
-// import { DoctorTmWorklistWrapperComponent } from './doctor-tm-worklist-wrapper/doctor-tm-worklist-wrapper.component';
-// import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
-// import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
-// import { WorkareaComponent } from './workarea/workarea.component';
 import { CaseSheetComponent } from './case-sheet/case-sheet.component';
-// import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
-// import { GeneralCaseRecordComponent } from './case-record/general-case-record/general-case-record.component';
 import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard.service';
 import { DashboardComponent } from '../data-sync/dashboard/dashboard.component';
 import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.component';
 import { WorkareaComponent } from '../data-sync/workarea/workarea.component';
-
-// import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
-// import { OralCancerScreeningComponent } from './screening/oral-cancer-screening/oral-cancer-screening.component';
-// import { Nurse104RefferedWorklistComponent } from './nurse-worklist-wrapper/nurse-104-reffered-worklist/nurse-104-reffered-worklist.component';
 
 const routes: Routes = [
   {
@@ -82,7 +69,6 @@ const routes: Routes = [
       {
         path: 'attendant/:attendant/patient/:beneficiaryRegID',
         component: WorkareaComponent,
-        // canActivate: [WorkareaCanActivate],
         canDeactivate: [CanDeactivateGuardService],
       },
       // {

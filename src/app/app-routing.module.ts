@@ -1,22 +1,36 @@
+/*
+ * AMRIT – Accessible Medical Records via Integrated Technology
+ * Integrated EHR (Electronic Health Records) Solution
+ *
+ * Copyright (C) "Piramal Swasthya Management and Research Institute"
+ *
+ * This file is part of AMRIT.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see https://www.gnu.org/licenses/.
+ */
+
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './app-modules/core/services/auth-guard.service';
 import { ServiceComponent } from './user-login/service/service.component';
 import { LoginComponent } from './user-login/login/login.component';
-
 import { ServicePointComponent } from './user-login/service-point/service-point.component';
-// import { ServiceComponent } from './service/service.component';
-
 import { SetPasswordComponent } from './user-login/set-password/set-password.component';
 import { SetSecurityQuestionsComponent } from './user-login/set-security-questions/set-security-questions.component';
 import { ResetPasswordComponent } from './user-login/reset-password/reset-password.component';
-// import { AuthGuard } from './app-modules/core/services/auth-guard.service';
-// import { ServicePointResolve } from './service-point/service-point-resolve.service';
-
-// import { PreviousDetailsComponent } from './app-modules/core/components/previous-details/previous-details.component';
 import { TmLogoutComponent } from './user-login/tm-logout/tm-logout.component';
 import { ServicePointResolve } from './user-login/service-point/service-point-resolve.service';
-import { TestRoutingComponent } from './app-modules/test-routing/test-routing.component';
 
 const routes: Routes = [
   {
@@ -43,7 +57,6 @@ const routes: Routes = [
   {
     path: 'set-password',
     component: SetPasswordComponent,
-    // canActivate: [AuthGuard],
   },
   {
     path: 'service',
@@ -58,10 +71,6 @@ const routes: Routes = [
       servicePoints: ServicePointResolve,
     },
   },
-  // {
-  //   path: 'common/doctor-worklist',
-  //   component: TestRoutingComponent
-  // },
   {
     path: 'registrar',
     canActivate: [AuthGuard],
@@ -77,8 +86,6 @@ const routes: Routes = [
       import('./app-modules/nurse-doctor/nurse-doctor.module').then(
         (m) => m.NurseDoctorModule,
       ),
-
-    // './app-modules/nurse-doctor/nurse-doctor.module#NurseDoctorModule'
   },
   // {
   //   path: 'lab',
@@ -95,11 +102,6 @@ const routes: Routes = [
   //   canActivate: [AuthGuard],
   //   loadChildren: './app-modules/data-sync/dataSync.module#DataSYNCModule'
   //},
-  {
-    path: '**',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
 ];
 
 @NgModule({

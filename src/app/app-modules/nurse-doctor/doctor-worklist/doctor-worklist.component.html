@@ -1,4 +1,4 @@
-<!-- <div class="container-fluid">
+<div class="container-fluid">
   <div class="row m-t-10">
     <div class="col-xs-8 col-sm-6 col-md-4">
       <div class="sw">
@@ -41,8 +41,6 @@
   <div class="row m-t-10 m-b-40">
     <div class="col-sm-12">
       <mat-card>
-
-
         <section class="table-responsive" style="padding-bottom: 30px">
           <div class="mat-elevation-z8 responsiveTable">
             <table
@@ -217,20 +215,18 @@
                   <mat-checkbox
                     class="control-label"
                     [disabled]="
-                      beneficiary.statusCode === 1 ||
-                      beneficiary.statusCode === 2 ||
-                      beneficiary.statusCode === 3 ||
-                      beneficiary.statusCode === 9 ||
-                      beneficiary.statusCode === 4 ||
-                      beneficiary.statusCode === 10 ||
-                      beneficiary.statusCode === 11
+                      element.statusCode === 1 ||
+                      element.statusCode === 2 ||
+                      element.statusCode === 3 ||
+                      element.statusCode === 9 ||
+                      element.statusCode === 4 ||
+                      element.statusCode === 10 ||
+                      element.statusCode === 11
                     "
-                    (change)="
-                      toggleArrivalStatus($event, beneficiary.benFlowID, m)
-                    "
-                    [(ngModel)]="beneficiary.benArrivedFlag"
+                    (change)="toggleArrivalStatus($event, element.benFlowID)"
+                    [(ngModel)]="element.benArrivedFlag"
                     placeholder="Confirm Whether Beneficiary has arrived"
-                    [value]="true"
+                    [value]="'true'"
                   >
                   </mat-checkbox>
                 </td>
@@ -268,32 +264,31 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                   <button
-                    (click)="cancelTCRequest(beneficiary)"
+                    (click)="cancelTCRequest(element)"
                     matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
                     class="full-width-login button-reset box button-overall-disabled"
-                    [disabled]="beneficiary.specialist_flag !== 1"
+                    [disabled]="element.specialist_flag !== 1"
                   >
                     {{ currentLanguageSet?.common?.cancel }}
                   </button>
                 </td>
                 <td mat-cell *matCellDef="let element">
                   <button
-                    (click)="openScheduler(beneficiary)"
+                    (click)="openScheduler(element)"
                     matTooltip="{{ currentLanguageSet?.tc?.reschedule }}"
                     class="full-width-login-schedule box"
-                    [disabled]="beneficiary.specialist_flag !== 4"
+                    [disabled]="element.specialist_flag !== 4"
                   >
                     {{ currentLanguageSet?.tc?.schedule }}
                   </button>
                 </td>
                 <td mat-cell *matCellDef="let element">
                   <button
-                    (click)="initiateTC(beneficiary)"
+                    (click)="initiateTC(element)"
                     matTooltip="{{ currentLanguageSet?.tc?.startTc }}"
                     class="full-width-login-voice-chat box accent"
                     [disabled]="
-                      beneficiary.specialist_flag !== 1 &&
-                      !beneficiary.benArrivedFlag
+                      element.specialist_flag !== 1 && !element.benArrivedFlag
                     "
                   >
                     <span class="material-icons">voice_chat</span>
@@ -367,8 +362,7 @@
             <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
           </div>
           <div class="col-12 row">
-            <div class="col-6">
-            </div>
+            <div class="col-6"></div>
             <div class="col-6">
               <mat-paginator
                 style="display: unset !important"
@@ -385,4 +379,4 @@
       </mat-card>
     </div>
   </div>
-</div> -->
+</div>
