@@ -27,6 +27,7 @@ import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard
 import { DashboardComponent } from '../data-sync/dashboard/dashboard.component';
 import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.component';
 import { WorkareaComponent } from '../data-sync/workarea/workarea.component';
+import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 //import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 
 const routes: Routes = [
@@ -39,10 +40,10 @@ const routes: Routes = [
         redirectTo: 'nurse-worklist',
         pathMatch: 'full',
       },
-      // {
-      //   path: 'nurse-worklist',
-      //   component: NurseWorklistWrapperComponent,
-      // },
+      {
+        path: 'nurse-worklist',
+        component: NurseWorklistWrapperComponent,
+      },
       {
         path: 'doctor-worklist',
         component: DoctorWorklistComponent,

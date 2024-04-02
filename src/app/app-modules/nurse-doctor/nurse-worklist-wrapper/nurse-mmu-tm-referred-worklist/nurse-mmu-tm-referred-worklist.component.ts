@@ -19,7 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { NurseService } from '../../shared/services';
@@ -27,6 +33,8 @@ import { CameraService } from '../../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-nurse-mmu-tm-referred-worklist',
@@ -47,6 +55,21 @@ export class NurseMmuTmReferredWorklistComponent
   filterTerm: any;
   currentLanguageSet: any;
   currentPage!: number;
+  displayedColumns: any = [
+    'sno',
+    'beneficiaryID',
+    'beneficiaryName',
+    'gender',
+    'age',
+    'status',
+    'fatherName',
+    'district',
+    'phoneNo',
+    'image',
+  ];
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  dataSource = new MatTableDataSource<any>();
+
   constructor(
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
@@ -103,13 +126,16 @@ export class NurseMmuTmReferredWorklistComponent
             const benlist = this.loadDataToBenList(res.data);
             this.beneficiaryList = benlist;
             this.filteredBeneficiaryList = benlist;
-            this.pageChanged({
-              page: this.activePage,
-              itemsPerPage: this.rowsPerPage,
+            this.dataSource.data = [];
+            this.dataSource.data = benlist;
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.data.forEach((sectionCount: any, index: number) => {
+              sectionCount.sno = index + 1;
             });
             this.filterTerm = null;
-            this.currentPage = 1;
           } else this.confirmationService.alert(res.errorMessage, 'error');
+          this.dataSource.data = [];
+          this.dataSource.paginator = this.paginator;
         },
         (err) => {
           this.confirmationService.alert(err, 'error');
@@ -225,6 +251,8 @@ export class NurseMmuTmReferredWorklistComponent
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
     else {
       this.filteredBeneficiaryList = [];
+      this.dataSource.data = [];
+      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
@@ -240,6 +268,13 @@ export class NurseMmuTmReferredWorklistComponent
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
               this.filteredBeneficiaryList.push(item);
+              this.dataSource.data.push(item);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.data.forEach(
+                (sectionCount: any, index: number) => {
+                  sectionCount.sno = index + 1;
+                },
+              );
               break;
             }
           } else {
@@ -249,12 +284,26 @@ export class NurseMmuTmReferredWorklistComponent
                 const val = 'First visit';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               } else {
                 const val = 'Revist';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               }

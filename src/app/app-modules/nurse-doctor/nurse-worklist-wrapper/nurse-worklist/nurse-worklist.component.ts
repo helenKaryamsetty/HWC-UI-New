@@ -112,13 +112,16 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           const benlist = this.loadDataToBenList(res.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.pageChanged({
-            page: this.activePage,
-            itemsPerPage: this.rowsPerPage,
+          this.dataSource.data = [];
+          this.dataSource.data = benlist;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.data.forEach((sectionCount: any, index: number) => {
+            sectionCount.sno = index + 1;
           });
           this.filterTerm = null;
-          this.currentPage = 1;
         } else this.confirmationService.alert(res.errorMessage, 'error');
+        this.dataSource.data = [];
+        this.dataSource.paginator = this.paginator;
       },
       (err) => {
         this.confirmationService.alert(err, 'error');
@@ -416,6 +419,8 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
     else {
       this.filteredBeneficiaryList = [];
+      this.dataSource.data = [];
+      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
@@ -431,6 +436,13 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
               this.filteredBeneficiaryList.push(item);
+              this.dataSource.data.push(item);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.data.forEach(
+                (sectionCount: any, index: number) => {
+                  sectionCount.sno = index + 1;
+                },
+              );
               break;
             }
           } else {
@@ -440,12 +452,26 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
                 const val = 'First visit';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               } else {
                 const val = 'Revist';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               }

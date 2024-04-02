@@ -37,6 +37,8 @@ import * as moment from 'moment';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-nurse-tm-worklist',
@@ -54,6 +56,20 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
   filterTerm: any;
   currentLanguageSet: any;
   currentPage!: number;
+  displayedColumns: any = [
+    'sno',
+    'beneficiaryID',
+    'beneficiaryName',
+    'gender',
+    'age',
+    'visitCategory',
+    'tcDate',
+    'beneficiaryArrived',
+    'image',
+    'action',
+  ];
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private nurseService: NurseService,
@@ -106,13 +122,16 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
           const benlist = this.loadDataToBenList(res.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.pageChanged({
-            page: this.activePage,
-            itemsPerPage: this.rowsPerPage,
+          this.dataSource.data = [];
+          this.dataSource.data = benlist;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.data.forEach((sectionCount: any, index: number) => {
+            sectionCount.sno = index + 1;
           });
           this.filterTerm = null;
-          this.currentPage = 1;
         } else this.confirmationService.alert(res.errorMessage, 'error');
+        this.dataSource.data = [];
+        this.dataSource.paginator = this.paginator;
       },
       (err) => {
         this.confirmationService.alert(err, 'error');
@@ -135,16 +154,7 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
     } else if (beneficiaryVisitDetials.specialist_flag === 4) {
       status.statusCode = 4;
       status.statusMessage = 'Tele-Consultation Cancelled';
-    }
-    //  else if (beneficiaryVisitDetials.doctorFlag === 3) {
-    //   status.statusCode = 3;
-    //   status.statusMessage = "Labtest Done";
-    // }
-    // else if (beneficiaryVisitDetials.doctorFlag === 1) {
-    //   status.statusCode = 1;
-    //   status.statusMessage = "Pending For consultation";
-    // }
-    else if (beneficiaryVisitDetials.specialist_flag === 9) {
+    } else if (beneficiaryVisitDetials.specialist_flag === 9) {
       status.statusCode = 9;
       status.statusMessage = 'Tele-Consultation Done';
     }
@@ -231,6 +241,8 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
     else {
       this.filteredBeneficiaryList = [];
+      this.dataSource.data = [];
+      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
@@ -246,6 +258,13 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
               this.filteredBeneficiaryList.push(item);
+              this.dataSource.data.push(item);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.data.forEach(
+                (sectionCount: any, index: number) => {
+                  sectionCount.sno = index + 1;
+                },
+              );
               break;
             }
           } else {
@@ -255,12 +274,26 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
                 const val = 'First visit';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               } else {
                 const val = 'Revist';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
+                  this.dataSource.data.push(item);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.data.forEach(
+                    (sectionCount: any, index: number) => {
+                      sectionCount.sno = index + 1;
+                    },
+                  );
                   break;
                 }
               }
@@ -277,7 +310,7 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.currentPage = 1;
   }
 
-  toggleArrivalStatus(evt: any, benFlowID: any, index: any) {
+  toggleArrivalStatus(evt: any, benFlowID: any) {
     let message: string;
     if (evt.checked) {
       message = this.currentLanguageSet.alerts.info.beneficiaryArrive;
@@ -332,7 +365,7 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
               );
           }
         } else {
-          this.pagedList[index].benArrivedFlag = !evt.checked;
+          // this.pagedList[index].benArrivedFlag = !evt.checked;
         }
       });
 

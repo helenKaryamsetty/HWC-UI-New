@@ -41,144 +41,231 @@
     <div class="col-sm-12">
       <mat-card>
         <section class="table-responsive">
-          <table
-            class="table table-striped"
-            aria-describedby="mmurefferedWorklist"
-          >
-            <thead>
-              <tr>
-                <th id="sno">{{ currentLanguageSet?.coreComponents?.sno }}</th>
-                <th id="beneficiaryID">
-                  {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+          <div class="mat-elevation-z8 responsiveTable">
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              aria-describedby="nurseWorklist"
+            >
+              <ng-container matColumnDef="sno">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.coreComponents?.sno }}
                 </th>
-                <th id="beneficiaryName">
-                  {{ currentLanguageSet?.bendetails?.beneficiaryName }}
-                </th>
-                <th id="gender">
-                  {{ currentLanguageSet?.bendetails?.gender }}
-                </th>
-                <th id="age">{{ currentLanguageSet?.bendetails?.age }}</th>
-
-                <th id="district">
-                  {{ currentLanguageSet?.bendetails?.district }}
-                </th>
-                <th id="phoneNo">
-                  {{ currentLanguageSet?.bendetails?.phoneNo }}
-                </th>
-                <th id="image">{{ currentLanguageSet?.bendetails?.image }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-template
-                [ngIf]="
-                  filteredBeneficiaryList &&
-                  filteredBeneficiaryList.length === 0
-                "
-              >
-                <tr *ngFor="let row of blankTable">
-                  <td colspan="10" *ngIf="row === 3">
-                    <h4 class="norecord text-field-color">
-                      {{ currentLanguageSet?.common?.noRecordFound }}
-                    </h4>
-                  </td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                </tr>
-              </ng-template>
-              <tr *ngFor="let beneficiary of pagedList" class="table-hover">
                 <td
+                  mat-cell
+                  *matCellDef="let element"
                   [ngClass]="{
                     visitStatus: true,
-                    'first-visit': beneficiary.referredFlag === false,
-                    'closed-visit': beneficiary.referredFlag === true
+                    'first-visit': element?.benVisitNo === 1,
+                    revisit: element?.benVisitNo !== 1
                   }"
                 >
-                  {{ filteredBeneficiaryList.indexOf(beneficiary) + 1 }}
+                  {{ element.sno }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary?.beneficiaryID }}
-                </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary?.benName | titlecase }}
-                </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.genderName | titlecase }}
-                </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.benAge }}
-                </td>
-
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.districtName | titlecase }} /
-                  {{ beneficiary.villageName | titlecase }}
-                </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.preferredPhoneNum }}
-                </td>
-                <td
-                  (click)="patientImageView(beneficiary.beneficiaryRegID)"
-                  tooltip="{{ currentLanguageSet?.tc?.image }}"
+              </ng-container>
+              <ng-container matColumnDef="beneficiaryID">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
                 >
-                  <img alt="" src="assets/images/Avatar-Profile_30X30.png " />
+                  {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element?.beneficiaryID }}
                 </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="2">
-                  <div
-                    class="totalCount"
-                    *ngIf="filteredBeneficiaryList.length > 0"
-                  >
-                    {{ currentLanguageSet?.common?.totalCount }} :
-                    {{ filteredBeneficiaryList.length }}
-                  </div>
+              </ng-container>
+              <ng-container matColumnDef="beneficiaryName">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element?.benName | titlecase }}
                 </td>
-                <td colspan="3">
-                  <ul
-                    class="description"
-                    *ngIf="filteredBeneficiaryList.length > 0"
-                  >
-                    <li>
-                      <div class="Tele-Consultation"></div>
-                      <p>{{ currentLanguageSet?.common?.TCDone }}</p>
-                    </li>
-
-                    <li>
-                      <div class="Tele-Consultation-marker"></div>
-                      <p>{{ currentLanguageSet?.common?.TCPending }}</p>
-                    </li>
-                  </ul>
+              </ng-container>
+              <ng-container matColumnDef="gender">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.gender }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.genderName | titlecase }}
                 </td>
-                <td colspan="5">
-                  <pagination
-                    class="pull-right"
-                    [boundaryLinks]="true"
-                    (pageChanged)="pageChanged($event)"
-                    *ngIf="filteredBeneficiaryList.length"
-                    [totalItems]="filteredBeneficiaryList.length"
-                    [itemsPerPage]="rowsPerPage"
-                    [maxSize]="rowsPerPage"
-                    [rotate]="rotate"
-                    [(ngModel)]="currentPage"
-                    previousText="&lsaquo;"
-                    nextText="&rsaquo;"
-                    firstText="&laquo;"
-                    lastText="&raquo;"
-                  ></pagination>
+              </ng-container>
+              <ng-container matColumnDef="age">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.age }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.age }}
                 </td>
-              </tr>
-            </tfoot>
-          </table>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.status }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.benVisitNo === 1 ? "First visit" : "Revisit" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fatherName">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.fatherName }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.fatherName | titlecase }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="district">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.district }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.districtName | titlecase }} /
+                  {{ element.villageName | titlecase }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="phoneNo">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.phoneNo }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.preferredPhoneNum }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="image">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.image }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="patientImageView(element.beneficiaryRegID)"
+                  matTooltip="{{ currentLanguageSet?.tc?.image }}"
+                >
+                  <img
+                    src="assets/images/Avatar-Profile_30X30.png "
+                    alt="image"
+                  />
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+          <div
+            class="pull-center"
+            style="margin-top: 35px; text-align: center"
+            [hidden]="dataSource.data.length > 0"
+          >
+            <strong>{{ currentLanguageSet?.common?.noRecordsFound }}</strong>
+          </div>
+          <div class="col-12 row">
+            <div class="col-6" style="margin-top: 15px">
+              <ul
+                class="description"
+                style="display: unset"
+                *ngIf="dataSource.data.length > 0"
+              >
+                <li>
+                  <div class="first-visit-marker"></div>
+                  <p>{{ currentLanguageSet?.common?.firstVisit }}</p>
+                </li>
+                <li>
+                  <div class="revisit-marker"></div>
+                  <p>{{ currentLanguageSet?.common?.reVisit }}</p>
+                </li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <mat-paginator
+                style="display: unset"
+                [hidden]="dataSource.data.length === 0"
+                [pageSizeOptions]="[5, 10, 20]"
+                [pageSize]="5"
+                showFirstLastButtons
+                aria-label="Select patient in nurseWorklist"
+              >
+              </mat-paginator>
+            </div>
+          </div>
         </section>
       </mat-card>
     </div>

@@ -35,13 +35,15 @@ import { ChildAndAdolescentOralVitaminACaseSheetComponent } from './case-sheet/g
 import { NurseService } from './shared/services/nurse.service';
 import { DoctorService, MasterdataService } from './shared/services';
 import { ExaminationCaseSheetComponent } from './case-sheet/general-case-sheet/examination-case-sheet/examination-case-sheet.component';
-// import { Nurse104RefferedWorklistComponent } from './nurse-worklist-wrapper/nurse-104-reffered-worklist/nurse-104-reffered-worklist.component';
-// import { NurseMmuTmReferredWorklistComponent } from './nurse-worklist-wrapper/nurse-mmu-tm-referred-worklist/nurse-mmu-tm-referred-worklist.component';
-// import { NurseTmFutureWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-future-worklist/nurse-tm-future-worklist.component';
-// import { NurseTmWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-worklist/nurse-tm-worklist.component';
-//import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
 import { MaterialModule } from '../core/material.module';
-// import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
+import { Nurse104RefferedWorklistComponent } from './nurse-worklist-wrapper/nurse-104-reffered-worklist/nurse-104-reffered-worklist.component';
+import { NurseMmuTmReferredWorklistComponent } from './nurse-worklist-wrapper/nurse-mmu-tm-referred-worklist/nurse-mmu-tm-referred-worklist.component';
+import { NurseTmFutureWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-future-worklist/nurse-tm-future-worklist.component';
+import { NurseTmWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-worklist/nurse-tm-worklist.component';
+import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
+import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
+import { NcdScreeningService } from './shared/services/ncd-screening.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -53,7 +55,7 @@ import { MaterialModule } from '../core/material.module';
     MaterialModule,
   ],
   declarations: [
-    // NurseWorklistComponent,
+    NurseWorklistComponent,
     // PrintPageSelectComponent,
     // QuickConsultComponent,
     // ObstetricExaminationComponent,
@@ -136,15 +138,15 @@ import { MaterialModule } from '../core/material.module';
     // SchedulerComponent,
     // TcSpecialistWorklistWrapperComponent,
     // TcSpecialistFutureWorklistComponent,
-    // NurseWorklistWrapperComponent,
-    //NurseTmWorklistComponent,
-    //NurseTmFutureWorklistComponent,
+    NurseWorklistWrapperComponent,
+    NurseTmWorklistComponent,
+    NurseTmFutureWorklistComponent,
     // CovidDiagnosisComponent,
     // IdrsComponent,
     // PhysicalActivityHistoryComponent,
     // FamilyHistoryNcdscreeningComponent,
     // NcdScreeningDiagnosisComponent,
-    //NurseMmuTmReferredWorklistComponent,
+    NurseMmuTmReferredWorklistComponent,
     // DiseaseconfirmationComponent,
     // CovidVaccinationStatusComponent,
     // DiabetesScreeningComponent,
@@ -173,7 +175,7 @@ import { MaterialModule } from '../core/material.module';
     ChildAndAdolescentOralVitaminACaseSheetComponent,
     // ChildhoodOralVitaminComponent,
     // ImmunizationServiceComponent,
-    //Nurse104RefferedWorklistComponent,
+    Nurse104RefferedWorklistComponent,
     // Referred104CdssDetailsComponent,
     // Referred104DetailsPopupComponent,
     // Referred104WorkareaComponent,
@@ -190,6 +192,7 @@ import { MaterialModule } from '../core/material.module';
     NurseService,
     DoctorService,
     MasterdataService,
+    NcdScreeningService,
     // WorkareaCanActivate, LabService,IdrsscoreService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
   ],
   // entryComponents: [PrintPageSelectComponent, ViewTestReportComponent, BeneficiaryMctsCallHistoryComponent, SchedulerComponent, CdssFormResultPopupComponent,ViewDiseaseSummaryDetailsComponent

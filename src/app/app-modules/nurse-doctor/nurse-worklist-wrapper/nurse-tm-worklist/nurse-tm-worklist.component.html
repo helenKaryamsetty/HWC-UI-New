@@ -42,219 +42,278 @@
     <div class="col-sm-12">
       <mat-card>
         <section class="table-responsive">
-          <table
-            class="table table-striped"
-            aria-describedby="BeneficiaryListTbl"
-          >
-            <thead>
-              <tr>
-                <th id="sno">{{ currentLanguageSet?.coreComponents?.sno }}</th>
-                <th id="beneficiaryID">
-                  {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+          <div class="mat-elevation-z8 responsiveTable">
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              aria-describedby="nurseWorklist"
+            >
+              <ng-container matColumnDef="sno">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.coreComponents?.sno }}
                 </th>
-                <th id="beneficiaryName">
-                  {{ currentLanguageSet?.bendetails?.beneficiaryName }}
-                </th>
-                <th id="gender">
-                  {{ currentLanguageSet?.bendetails?.gender }}
-                </th>
-                <th id="age">{{ currentLanguageSet?.bendetails?.age }}</th>
-                <th id="visitCategory">
-                  {{ currentLanguageSet?.bendetails?.visitCategory }}
-                </th>
-                <th id="tcDate">
-                  {{ currentLanguageSet?.bendetails?.tcDate }}
-                </th>
-                <th id="beneficiaryArrived">
-                  {{ currentLanguageSet?.bendetails?.beneficiaryArrived }}
-                </th>
-                <th id="image">{{ currentLanguageSet?.bendetails?.image }}</th>
-                <th colspan="3" style="text-align: center" id="action">
-                  {{ currentLanguageSet?.bendetails?.action }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-template
-                [ngIf]="
-                  filteredBeneficiaryList &&
-                  filteredBeneficiaryList.length === 0
-                "
-              >
-                <tr *ngFor="let row of blankTable">
-                  <td colspan="11" *ngIf="row === 3">
-                    <h4 class="norecord text-field-color">
-                      {{ currentLanguageSet?.common?.noRecordFound }}
-                    </h4>
-                  </td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td *ngIf="row !== 3">&nbsp;</td>
-                  <td colspan="3" *ngIf="row !== 3">&nbsp;</td>
-                </tr>
-              </ng-template>
-              <tr
-                *ngFor="let beneficiary of pagedList; let m = index"
-                class="table-hover"
-              >
                 <td
+                  mat-cell
+                  *matCellDef="let element"
                   [ngClass]="{
                     visitStatus: true,
-                    'p-f-c': beneficiary.statusCode === 1,
-                    'p-f-t': beneficiary.statusCode === 2,
-                    't-d': beneficiary.statusCode === 3,
-                    'c-d': beneficiary.statusCode === 9,
-                    'p-f-t-c': beneficiary.statusCode === 5,
-                    't-c-c': beneficiary.statusCode === 4
+                    'p-f-c': element.statusCode === 1,
+                    'p-f-t': element.statusCode === 2,
+                    't-d': element.statusCode === 3,
+                    'c-d': element.statusCode === 9,
+                    'p-f-t-c': element.statusCode === 5,
+                    't-c-c': element.statusCode === 4
                   }"
                 >
-                  {{ filteredBeneficiaryList.indexOf(beneficiary) + 1 }}
+                  {{ element.sno }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary?.beneficiaryID }}
+              </ng-container>
+              <ng-container matColumnDef="beneficiaryID">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element?.beneficiaryID }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary?.benName | titlecase }}
+              </ng-container>
+              <ng-container matColumnDef="beneficiaryName">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element?.benName | titlecase }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.genderName | titlecase }}
+              </ng-container>
+              <ng-container matColumnDef="gender">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.gender }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.genderName | titlecase }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.age }}
+              </ng-container>
+              <ng-container matColumnDef="age">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.age }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.age }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  <span style="color: #a6a6a6"
-                    >{{ beneficiary.VisitCategory }}
-                  </span>
-                  /
-                  <span style="color: #a6a6a6">{{
-                    beneficiary.benVisitNo
-                  }}</span>
+              </ng-container>
+
+              <ng-container matColumnDef="visitCategory">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.visitCategory }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.VisitCategory }}
                 </td>
-                <td (click)="loadNursePatientDetails(beneficiary)">
-                  {{ beneficiary.tCRequestDate }}
+              </ng-container>
+
+              <ng-container matColumnDef="tcDate">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.tcDate }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="loadNursePatientDetails(element)"
+                >
+                  {{ element.tCRequestDate }}
                 </td>
-                <td class="centered">
+              </ng-container>
+
+              <ng-container matColumnDef="beneficiaryArrived">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.beneficiaryArrived }}
+                </th>
+                <td class="centered" mat-cell *matCellDef="let element">
                   <mat-checkbox
                     class="control-label"
                     [disabled]="
-                      beneficiary.statusCode === 1 ||
-                      beneficiary.statusCode === 2 ||
-                      beneficiary.statusCode === 3 ||
-                      beneficiary.statusCode === 9 ||
-                      beneficiary.statusCode === 4
+                      element.statusCode === 1 ||
+                      element.statusCode === 2 ||
+                      element.statusCode === 3 ||
+                      element.statusCode === 9 ||
+                      element.statusCode === 4
                     "
-                    (change)="
-                      toggleArrivalStatus($event, beneficiary.benFlowID, m)
-                    "
-                    [(ngModel)]="beneficiary.benArrivedFlag"
+                    (change)="toggleArrivalStatus($event, element.benFlowID)"
+                    [(ngModel)]="element.benArrivedFlag"
                     placeholder="Confirm Whether Beneficiary has arrived"
-                    [value]="true"
+                    [value]="'true'"
                   ></mat-checkbox>
                 </td>
-                <td
-                  (click)="patientImageView(beneficiary.beneficiaryRegID)"
-                  tooltip="{{ currentLanguageSet?.tc?.image }}"
+              </ng-container>
+
+              <ng-container matColumnDef="image">
+                <th
+                  mat-header-cell
+                  style="border-bottom: none"
+                  *matHeaderCellDef
+                  mat-sort-header
                 >
-                  <img alt="" src="assets/images/Avatar-Profile_30X30.png" />
+                  {{ currentLanguageSet?.bendetails?.image }}
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  (click)="patientImageView(element.beneficiaryRegID)"
+                  matTooltip="{{ currentLanguageSet?.tc?.image }}"
+                >
+                  <img
+                    src="assets/images/Avatar-Profile_30X30.png "
+                    alt="image"
+                  />
                 </td>
-                <td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th
+                  mat-header-cell
+                  colspan="3"
+                  style="text-align: center"
+                  id="action"
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  {{ currentLanguageSet?.bendetails?.action }}
+                </th>
+                <td mat-cell *matCellDef="let element">
                   <button
-                    (click)="cancelTCRequest(beneficiary)"
-                    tooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
-                    class="full-width-login button-reset box button-overall-disabled"
-                    [disabled]="beneficiary.specialist_flag !== 1"
+                    mat-raised-button
+                    (click)="cancelTCRequest(element)"
+                    matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
+                    color="warn"
+                    [disabled]="element.specialist_flag !== 1"
                   >
                     {{ currentLanguageSet?.common?.cancel }}
                   </button>
-                </td>
-                <td>
                   <button
-                    (click)="openScheduler(beneficiary)"
-                    tooltip="{{ currentLanguageSet?.tc?.reschedule }}"
-                    class="full-width-login-schedule box"
-                    [disabled]="beneficiary.specialist_flag !== 4"
+                    mat-raised-button
+                    (click)="openScheduler(element)"
+                    matTooltip="{{ currentLanguageSet?.tc?.reschedule }}"
+                    color="primary"
+                    [disabled]="element.specialist_flag !== 4"
                   >
                     {{ currentLanguageSet?.tc?.schedule }}
                   </button>
-                </td>
-                <td>
                   <button
-                    (click)="initiateTC(beneficiary)"
-                    tooltip="{{ currentLanguageSet?.tc?.startTc }}"
-                    class="full-width-login-voice-chat box accent"
-                    [disabled]="beneficiary.specialist_flag !== 1"
+                    mat-raised-button
+                    (click)="initiateTC(element)"
+                    matTooltip="{{ currentLanguageSet?.tc?.startTc }}"
+                    color="accent"
+                    [disabled]="element.specialist_flag !== 1"
                   >
                     <span class="material-icons">voice_chat</span>
                   </button>
                 </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="12">
-                  <ul
-                    class="description"
-                    *ngIf="filteredBeneficiaryList.length > 0"
-                  >
-                    <li>
-                      <div class="marker-p-f-t-c"></div>
-                      <p>
-                        {{
-                          currentLanguageSet?.alerts?.info
-                            ?.pendingForConsultation
-                        }}
-                      </p>
-                    </li>
-                    <li>
-                      <div class="marker-t-c-c"></div>
-                      <p>{{ currentLanguageSet?.alerts?.info?.teleCancel }}</p>
-                    </li>
-                    <li>
-                      <div class="marker-c-d"></div>
-                      <p>
-                        {{ currentLanguageSet?.alerts?.info?.consultationDone }}
-                      </p>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="6">
-                  <div
-                    class="totalCount"
-                    *ngIf="filteredBeneficiaryList.length > 0"
-                  >
-                    {{ currentLanguageSet?.common?.totalCount }} :
-                    {{ filteredBeneficiaryList.length }}
-                  </div>
-                </td>
-                <td colspan="6">
-                  <pagination
-                    class="pull-right"
-                    [(ngModel)]="currentPage"
-                    [boundaryLinks]="true"
-                    (pageChanged)="pageChanged($event)"
-                    *ngIf="filteredBeneficiaryList.length"
-                    [totalItems]="filteredBeneficiaryList.length"
-                    [itemsPerPage]="rowsPerPage"
-                    [maxSize]="rowsPerPage"
-                    [rotate]="rotate"
-                    previousText="&lsaquo;"
-                    nextText="&rsaquo;"
-                    firstText="&laquo;"
-                    lastText="&raquo;"
-                  ></pagination>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+          <div
+            class="pull-center"
+            style="margin-top: 35px; text-align: center"
+            [hidden]="dataSource.data.length > 0"
+          >
+            <strong>{{ currentLanguageSet?.common?.noRecordsFound }}</strong>
+          </div>
+          <div class="col-12 row">
+            <div class="col-6" style="margin-top: 15px">
+              <ul class="description" *ngIf="dataSource.data.length > 0">
+                <li>
+                  <div class="marker-p-f-t-c"></div>
+                  <p>
+                    {{
+                      currentLanguageSet?.alerts?.info?.pendingForConsultation
+                    }}
+                  </p>
+                </li>
+                <li>
+                  <div class="marker-t-c-c"></div>
+                  <p>{{ currentLanguageSet?.alerts?.info?.teleCancel }}</p>
+                </li>
+                <li>
+                  <div class="marker-c-d"></div>
+                  <p>
+                    {{ currentLanguageSet?.alerts?.info?.consultationDone }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <mat-paginator
+                style="display: unset"
+                [hidden]="dataSource.data.length === 0"
+                [pageSizeOptions]="[5, 10, 20]"
+                [pageSize]="5"
+                showFirstLastButtons
+                aria-label="Select patient in nurseTMWorklist"
+              >
+              </mat-paginator>
+            </div>
+          </div>
         </section>
       </mat-card>
     </div>
