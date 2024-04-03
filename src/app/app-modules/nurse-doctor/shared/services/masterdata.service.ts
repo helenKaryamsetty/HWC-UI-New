@@ -75,7 +75,11 @@ export class MasterdataService {
    * Visit details master data api call
    */
   getVisitDetailMasterData() {
-    return this.http.get(this.visitDetailMasterDataUrl);
+    return this.http
+      .get(this.visitDetailMasterDataUrl)
+      .subscribe((res: any) => {
+        this.visitDetailMasterDataSource.next(res.data);
+      });
   }
 
   /**

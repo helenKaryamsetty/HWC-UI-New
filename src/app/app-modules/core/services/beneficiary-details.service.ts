@@ -17,10 +17,21 @@ export class BeneficiaryDetailsService {
   constructor(private http: HttpClient) {}
 
   getBeneficiaryDetails(beneficiaryRegID: string, benFlowID: string) {
-    this.http.post(environment.getBeneficiaryDetail, {
-      beneficiaryRegID: beneficiaryRegID,
-      benFlowID: benFlowID,
-    });
+    this.http
+      .post(environment.getBeneficiaryDetail, {
+        beneficiaryRegID: beneficiaryRegID,
+        benFlowID: benFlowID,
+      })
+      .subscribe(
+        (res: any) => {
+          if (res.data) {
+            this.beneficiaryDetails.next(res.data);
+          }
+        },
+        (err: any) => {
+          this.beneficiaryDetails.next(null);
+        },
+      );
   }
 
   getBeneficiaryImage(beneficiaryRegID: string) {

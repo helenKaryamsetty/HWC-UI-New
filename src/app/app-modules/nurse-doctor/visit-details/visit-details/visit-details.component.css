@@ -101,4 +101,6 @@ h5{
     width: 350px;
 }
 
-  
+.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
+    width: 95%;
+}
