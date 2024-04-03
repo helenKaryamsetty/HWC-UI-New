@@ -112,7 +112,6 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           const benlist = this.loadDataToBenList(res.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
           this.dataSource.data = benlist;
           this.dataSource.paginator = this.paginator;
           this.dataSource.data.forEach((sectionCount: any, index: number) => {
@@ -120,8 +119,6 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           });
           this.filterTerm = null;
         } else this.confirmationService.alert(res.errorMessage, 'error');
-        this.dataSource.data = [];
-        this.dataSource.paginator = this.paginator;
       },
       (err) => {
         this.confirmationService.alert(err, 'error');
@@ -250,7 +247,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
                         beneficiary.benVisitNo,
                       );
                       this.router.navigate([
-                        '/common/attendant/nurse/patient/',
+                        '/nurse-doctor/attendant/nurse/patient/',
                         beneficiary.beneficiaryRegID,
                       ]);
                     }
@@ -281,7 +278,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
                         beneficiary.benVisitNo,
                       );
                       this.router.navigate([
-                        '/common/attendant/nurse/patient/',
+                        '/nurse-doctor/attendant/nurse/patient/',
                         beneficiary.beneficiaryRegID,
                       ]);
                     }
@@ -330,7 +327,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
               localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
               localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
-                '/common/attendant/nurse/patient/',
+                '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
               ]);
             }
@@ -353,7 +350,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
               localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
               localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
-                '/common/attendant/nurse/patient/',
+                '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
               ]);
             }
@@ -384,7 +381,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
               localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
               localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
-                '/common/attendant/nurse/patient/',
+                '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
               ]);
             }
@@ -406,7 +403,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
               localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
               localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
-                '/common/attendant/nurse/patient/',
+                '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
               ]);
             }

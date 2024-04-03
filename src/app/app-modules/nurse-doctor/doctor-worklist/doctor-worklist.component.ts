@@ -293,7 +293,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
       beneficiary.beneficiaryRegID,
     );
     localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-    this.router.navigate(['/common/print/' + 'TM' + '/' + 'current']);
+    this.router.navigate(['/nurse-doctor/print/' + 'TM' + '/' + 'current']);
   }
 
   routeToWorkArea(beneficiary: any) {
@@ -412,7 +412,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
     const dataSeted = this.setDataForWorkArea(beneficiary);
     if (dataSeted) {
       this.router.navigate([
-        '/common/attendant/doctor/patient/',
+        '/nurse-doctor/attendant/doctor/patient/',
         beneficiary.beneficiaryRegID,
       ]);
     }

@@ -155,7 +155,7 @@ export class Nurse104RefferedWorklistComponent
             localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
             localStorage.setItem('benFlowID', beneficiary.benFlowID);
             this.router.navigate([
-              '/common/attendant/nurse/104referredpatient/',
+              '/nurse-doctor/attendant/nurse/104referredpatient/',
               beneficiary.beneficiaryRegID,
             ]);
           }
@@ -170,41 +170,40 @@ export class Nurse104RefferedWorklistComponent
   nurse104ReferredWorklistResponce() {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanId = JSON.parse(serviceLineDetails).vanID;
-    this.nurseService.loadNursePatientDetails(vanId).subscribe(
-      (res: any) => {
-        if (res !== null) {
-          const benlist = this.loadDataToNurse104ReferredWorklist(res);
-          this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
+    // this.nurseService.loadNursePatientDetails(vanId).subscribe(
+    //   (res: any) => {
+    //     if (res !== null) {
+    //       const benlist = this.loadDataToNurse104ReferredWorklist(res);
+    //       this.beneficiaryList = benlist;
+    //       this.filteredBeneficiaryList = benlist;
+    //       this.dataSource.data = benlist;
+    //       this.dataSource.paginator = this.paginator;
+    //       this.dataSource.data.forEach((sectionCount: any, index: number) => {
+    //         sectionCount.sno = index + 1;
+    //       });
 
-          this.filterTerm = null;
-        } else this.confirmationService.alert(res.errorMessage, 'error');
-        this.dataSource.data = [];
-        this.dataSource.paginator = this.paginator;
-      },
-      (err) => {
-        this.confirmationService.alert(err, 'error');
-      },
-    );
+    //       this.filterTerm = null;
+    //     } else this.confirmationService.alert(res.errorMessage, 'error');
+    //     this.dataSource.data = [];
+    //     this.dataSource.paginator = this.paginator;
+    //   },
+    //   (err) => {
+    //     this.confirmationService.alert(err, 'error');
+    //   },
+    // );
   }
 
   loadDataToNurse104ReferredWorklist(data: any) {
-    data.forEach((element: any) => {
-      element.genderName = element.genderName || 'Not Available';
-      element.age = element.age || 'Not Available';
-      element.benVisitNo = element.benVisitNo || 'Not Available';
-      element.districtName = element.districtName || 'Not Available';
-      element.villageName = element.villageName || 'Not Available';
-      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      element.referredFlag = element.referredFlag || 'Not Available';
-    });
-    return data;
+    // data.forEach((element: any) => {
+    //   element.genderName = element.genderName || 'Not Available';
+    //   element.age = element.age || 'Not Available';
+    //   element.benVisitNo = element.benVisitNo || 'Not Available';
+    //   element.districtName = element.districtName || 'Not Available';
+    //   element.villageName = element.villageName || 'Not Available';
+    //   element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
+    //   element.referredFlag = element.referredFlag || 'Not Available';
+    // });
+    // return data;
   }
 
   /* 

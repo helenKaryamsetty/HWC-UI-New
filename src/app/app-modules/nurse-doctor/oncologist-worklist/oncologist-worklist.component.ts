@@ -203,7 +203,7 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
             localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
             localStorage.setItem('visitCategory', beneficiary.VisitCategory);
             this.router.navigate([
-              '/common/patient',
+              '/nurse-doctor/patient',
               beneficiary.beneficiaryRegID,
             ]);
           }
@@ -223,7 +223,9 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
               beneficiary.beneficiaryRegID,
             );
             localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-            this.router.navigate(['/common/print/' + 'TM' + '/' + 'current']);
+            this.router.navigate([
+              '/nurse-doctor/print/' + 'TM' + '/' + 'current',
+            ]);
           }
         });
     }

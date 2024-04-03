@@ -1248,7 +1248,7 @@ export class WorkareaComponent
   navigateToNurseWorklist() {
     this.patientMedicalForm.reset();
     this.removeBeneficiaryDataForNurseVisit();
-    this.router.navigate(['/common/nurse-worklist']);
+    this.router.navigate(['/nurse-doctor/nurse-worklist']);
   }
 
   checkForPrescribedTests(temp: any) {
@@ -3859,13 +3859,13 @@ export class WorkareaComponent
     this.patientMedicalForm.reset();
     this.testsPrescribed = null;
     this.removeBeneficiaryDataForDoctorVisit();
-    this.router.navigate(['/common/doctor-worklist']);
+    this.router.navigate(['/nurse-doctor/doctor-worklist']);
   }
   navigateToSpecialistWorklist() {
     this.patientMedicalForm.reset();
     this.testsPrescribed = null;
     this.removeBeneficiaryDataForDoctorVisit();
-    this.router.navigate(['/common/tcspecialist-worklist']);
+    this.router.navigate(['/nurse-doctor/tcspecialist-worklist']);
   }
   basedOnRoleNavigateToWorklist() {
     if (this.isSpecialist) {
@@ -3960,7 +3960,7 @@ export class WorkareaComponent
           );
           this.patientMedicalForm.reset();
           this.removeBeneficiaryDataForNurseVisit();
-          this.router.navigate(['/common/nurse-worklist']);
+          this.router.navigate(['/nurse-doctor/nurse-worklist']);
         }
       },
       (err) => {
@@ -3970,7 +3970,7 @@ export class WorkareaComponent
         );
         this.patientMedicalForm.reset();
         this.removeBeneficiaryDataForNurseVisit();
-        this.router.navigate(['/common/nurse-worklist']);
+        this.router.navigate(['/nurse-doctor/nurse-worklist']);
       },
     );
   }

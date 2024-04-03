@@ -199,7 +199,7 @@ export class NurseMmuTmReferredWorklistComponent
             localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
             localStorage.setItem('specialistFlag', beneficiary.specialist_flag);
             this.router.navigate([
-              '/common/attendant/nurse/patient/',
+              '/nurse-doctor/attendant/nurse/patient/',
               beneficiary.beneficiaryRegID,
             ]);
           }
@@ -239,7 +239,7 @@ export class NurseMmuTmReferredWorklistComponent
             // localStorage.setItem('beneficiaryRegID', "543931");
 
             this.router.navigate([
-              '/common/attendant/nurse/patient/',
+              '/nurse-doctor/attendant/nurse/patient/',
               beneficiary.beneficiaryRegID,
             ]);
           }

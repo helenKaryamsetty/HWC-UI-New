@@ -234,7 +234,7 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
       beneficiary.beneficiaryRegID,
     );
     localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-    this.router.navigate(['/common/print/' + 'TM' + '/' + 'current']);
+    this.router.navigate(['/nurse-doctor/print/' + 'TM' + '/' + 'current']);
   }
 
   filterBeneficiaryList(searchTerm: string) {
