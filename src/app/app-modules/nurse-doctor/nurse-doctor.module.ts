@@ -52,6 +52,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { VisitDetailsComponent } from './visit-details/visit-details.component';
+import { PatientVisitDetailsComponent } from './visit-details/visit-details/visit-details.component';
+import { CbacComponent } from './visit-details/cbac/cbac.component';
+import { AdherenceComponent } from './visit-details/adherence/adherence.component';
+import { ChiefComplaintsComponent } from './visit-details/chief-complaints/chief-complaints.component';
+import { ContactHistoryComponent } from './visit-details/contact-history/contact-history.component';
+import { CovidVaccinationStatusComponent } from './visit-details/covid-vaccination-status/covid-vaccination-status.component';
+import { DiseaseconfirmationComponent } from './visit-details/diseaseconfirmation/diseaseconfirmation.component';
+import { InvestigationsComponent } from './visit-details/investigations/investigations.component';
+import { SymptomsComponent } from './visit-details/symptoms/symptoms.component';
+import { TravelHistoryComponent } from './visit-details/travel-history/travel-history.component';
+import { UploadFilesComponent } from './visit-details/upload-files/upload-files.component';
+import { IdrsscoreService } from './shared/services/idrsscore.service';
 
 @NgModule({
   imports: [
@@ -72,6 +85,7 @@ import { MatTableModule } from '@angular/material/table';
   ],
   declarations: [
     NurseWorklistComponent,
+    PatientVisitDetailsComponent,
     // PrintPageSelectComponent,
     // QuickConsultComponent,
     // ObstetricExaminationComponent,
@@ -104,15 +118,15 @@ import { MatTableModule } from '@angular/material/table';
     // AncDetailsComponent,
     // AncImmunizationComponent,
     // ObstetricFormulaComponent,
-    // VisitDetailsComponent,
+    VisitDetailsComponent,
     // VisitCategoryComponent,
-    // ChiefComplaintsComponent,
-    // AdherenceComponent,
-    // TravelHistoryComponent,
-    // SymptomsComponent,
-    // ContactHistoryComponent,
-    // InvestigationsComponent,
-    // UploadFilesComponent,
+    ChiefComplaintsComponent,
+    AdherenceComponent,
+    TravelHistoryComponent,
+    SymptomsComponent,
+    ContactHistoryComponent,
+    InvestigationsComponent,
+    UploadFilesComponent,
     // HistoryComponent,
     // ExaminationComponent,
     // VitalsComponent,
@@ -163,12 +177,12 @@ import { MatTableModule } from '@angular/material/table';
     // FamilyHistoryNcdscreeningComponent,
     // NcdScreeningDiagnosisComponent,
     NurseMmuTmReferredWorklistComponent,
-    // DiseaseconfirmationComponent,
-    // CovidVaccinationStatusComponent,
+    DiseaseconfirmationComponent,
+    CovidVaccinationStatusComponent,
     // DiabetesScreeningComponent,
     // OralCancerScreeningComponent,
     // ScreeningComponent,
-    // CbacComponent,
+    CbacComponent,
     // HypertensionScreeningComponent,
     // BreastCancerScreeningComponent,
     // CervicalCancerScreeningComponent,
@@ -209,7 +223,8 @@ import { MatTableModule } from '@angular/material/table';
     DoctorService,
     MasterdataService,
     NcdScreeningService,
-    // WorkareaCanActivate, LabService,IdrsscoreService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
+    IdrsscoreService,
+    // WorkareaCanActivate, LabService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
   ],
 })
 export class NurseDoctorModule {}

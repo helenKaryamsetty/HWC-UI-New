@@ -72,6 +72,17 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   isCdssStatus = false;
   isCdss: any;
 
+  patientVisitDetailsForm!: FormGroup;
+  covidVaccineStatusForm!: FormGroup;
+  patientChiefComplaintsForm!: FormGroup;
+  patientAdherenceForm!: FormGroup;
+  patientInvestigationsForm!: FormGroup;
+  patientCovidForm!: FormGroup;
+  patientFileUploadDetailsForm!: FormGroup;
+  patientDiseaseForm!: FormGroup;
+  cbacScreeningForm!: FormGroup;
+  presentChiefComplaintDb!: FormGroup;
+  diseaseSummaryDb!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
@@ -81,6 +92,41 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.patientVisitDetailsForm = this.patientVisitForm.get(
+      'patientVisitDetailsForm',
+    ) as FormGroup;
+    this.cbacScreeningForm = this.patientVisitForm.get(
+      'cbacScreeningForm',
+    ) as FormGroup;
+
+    this.covidVaccineStatusForm = this.patientVisitForm.get(
+      'covidVaccineStatusForm',
+    ) as FormGroup;
+    this.patientChiefComplaintsForm = this.patientVisitForm.get(
+      'patientChiefComplaintsForm',
+    ) as FormGroup;
+    this.patientAdherenceForm = this.patientVisitForm.get(
+      'patientAdherenceForm',
+    ) as FormGroup;
+    this.patientInvestigationsForm = this.patientVisitForm.get(
+      'patientInvestigationsForm',
+    ) as FormGroup;
+    this.patientCovidForm = this.patientVisitForm.get(
+      'patientCovidForm',
+    ) as FormGroup;
+    this.patientFileUploadDetailsForm = this.patientVisitForm.get(
+      'patientFileUploadDetailsForm',
+    ) as FormGroup;
+    this.patientDiseaseForm = this.patientVisitForm.get(
+      'patientDiseaseForm',
+    ) as FormGroup;
+    this.presentChiefComplaintDb = this.patientVisitForm.get(
+      'presentChiefComplaintDb',
+    ) as FormGroup;
+    this.diseaseSummaryDb = this.patientVisitForm.get(
+      'diseaseSummaryDb',
+    ) as FormGroup;
+
     this.ncdScreeningService.clearDiseaseConfirmationScreenFlag();
     this.isCdss = localStorage.getItem('isCdss');
     if (

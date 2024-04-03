@@ -33,7 +33,6 @@ import { DoctorService } from '../shared/services';
 import { DoctorServiceStub } from '../shared/mocks/doctor-service-stub';
 
 import { VisitDetailsComponent } from './visit-details.component';
-import { CdssFormComponent } from '../cdss/cdss-form/cdss-form.component';
 
 describe('VisitDetailsComponent', () => {
   let component: VisitDetailsComponent;
@@ -47,7 +46,7 @@ describe('VisitDetailsComponent', () => {
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MaterialModule,
-        CdssFormComponent,
+        //CdssFormComponent,
       ],
       declarations: [VisitDetailsComponent],
       schemas: [NO_ERRORS_SCHEMA],

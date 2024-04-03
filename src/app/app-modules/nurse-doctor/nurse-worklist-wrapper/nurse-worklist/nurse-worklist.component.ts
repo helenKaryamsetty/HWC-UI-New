@@ -158,6 +158,8 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   loadNursePatientDetails(beneficiary: any) {
+    console.log('beneficiary', beneficiary);
+
     this.cbacData = [];
     this.beneficiaryDetailsService.cbacData = this.cbacData;
     this.beneficiaryDetailsService

@@ -110,6 +110,15 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
+  getCheifComplaints(): AbstractControl[] | null {
+    const chiefComplaintsControl =
+      this.patientChiefComplaintsForm.get('complaints');
+    return chiefComplaintsControl instanceof FormArray
+      ? chiefComplaintsControl.controls
+      : null;
+  }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
@@ -480,7 +489,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
       });
   }
 
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -509,7 +518,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     return complaint && complaint.chiefComplaint;
   }
 
-  suggestChiefComplaintList(complaintForm: FormGroup, i: any) {
+  suggestChiefComplaintList(complaintForm: AbstractControl, i: any) {
     const complaint = complaintForm.value.chiefComplaint;
     if (
       complaint !== undefined &&

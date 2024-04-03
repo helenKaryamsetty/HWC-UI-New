@@ -17,28 +17,16 @@ export class BeneficiaryDetailsService {
   constructor(private http: HttpClient) {}
 
   getBeneficiaryDetails(beneficiaryRegID: string, benFlowID: string) {
-    this.http
-      .post(environment.getBeneficiaryDetail, {
-        beneficiaryRegID: beneficiaryRegID,
-        benFlowID: benFlowID,
-      })
-      .subscribe(
-        (res: any) => {
-          if (res.json().data) {
-            this.beneficiaryDetails.next(res.json().data);
-          }
-        },
-        (err) => {
-          this.beneficiaryDetails.next(null);
-        },
-      );
+    this.http.post(environment.getBeneficiaryDetail, {
+      beneficiaryRegID: beneficiaryRegID,
+      benFlowID: benFlowID,
+    });
   }
 
   getBeneficiaryImage(beneficiaryRegID: string) {
     return this.http.post(environment.getBeneficiaryImage, {
       beneficiaryRegID: beneficiaryRegID,
     });
-    //.map(res => res.json().data);
   }
 
   reset() {
@@ -57,12 +45,10 @@ export class BeneficiaryDetailsService {
 
   // getCheck() {
   //   return this.http.get('http://localhost:3000/profile')
-  //   .map(res => res.json());
   // }
   getCBACDetails(beneficiaryRegID: string) {
     return this.http.post(environment.getBenCBACDetails, {
       benRegID: beneficiaryRegID,
     });
-    //.map(res => res.json());
   }
 }

@@ -6,10 +6,7 @@
       formArrayName="diseaseFormsArray"
     >
       <ng-container
-        *ngFor="
-          let item of diseaseFormsGroup.get('diseaseFormsArray')['controls'];
-          let i = index
-        "
+        *ngFor="let item of getDiseaseFormArray(); let i = index"
         [formGroupName]="i"
       >
         <mat-checkbox
@@ -19,10 +16,7 @@
           (change)="checked($event, item)"
           [disabled]="isDoctor"
         >
-          {{
-            diseaseFormsGroup.controls.diseaseFormsArray.controls[i].controls
-              .diseaseName.value
-          }}
+          {{ item.value.diseaseName }}
         </mat-checkbox>
       </ng-container>
     </div>
@@ -32,10 +26,7 @@
       formArrayName="diseaseFormsArray"
     >
       <ng-container
-        *ngFor="
-          let item of diseaseFormsGroup.get('diseaseFormsArray')['controls'];
-          let i = index
-        "
+        *ngFor="let item of getDiseaseFormArray(); let i = index"
         [formGroupName]="i"
       >
         <mat-checkbox
@@ -45,10 +36,7 @@
           (change)="checkedCbacDiseases()"
           [disabled]="isDoctor"
         >
-          {{
-            diseaseFormsGroup.controls.diseaseFormsArray.controls[i].controls
-              .diseaseName.value
-          }}
+          {{ item.value.diseaseName }}
         </mat-checkbox>
       </ng-container>
     </div>

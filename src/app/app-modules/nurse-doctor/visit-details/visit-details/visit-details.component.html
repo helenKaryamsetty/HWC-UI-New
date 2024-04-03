@@ -40,24 +40,26 @@
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="input-full-width"
-      placeholder="{{
-        currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
-      }}"
-      name="visitReason"
-      formControlName="visitReason"
-      (change)="reasonSelected(visitReason)"
-      [disabled]="disableVisit"
-      required
-    >
-      <mat-option
-        *ngFor="let visitReasons of templateVisitReasons"
-        [value]="visitReasons.visitReason"
+    <mat-form-field class="input-full-width">
+      <mat-select
+        class="input-full-width"
+        placeholder="{{
+          currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
+        }}"
+        name="visitReason"
+        formControlName="visitReason"
+        (selectionChange)="reasonSelected(visitReason)"
+        [disabled]="disableVisit"
+        required
       >
-        {{ visitReasons.visitReason }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let visitReasons of templateVisitReasons"
+          [value]="visitReasons.visitReason"
+        >
+          {{ visitReasons.visitReason }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" *ngIf="visitReason">
@@ -68,7 +70,7 @@
       }}"
       name="visitCategory"
       formControlName="visitCategory"
-      (change)="checkCategoryDependent(visitCategory)"
+      (selectionChange)="checkCategoryDependent(visitCategory)"
       [disabled]="disableVisit"
       required
     >
@@ -110,7 +112,7 @@
       showPregnancyStatus &&
       visitCategory !== null &&
       visitCategory !== undefined &&
-      visitCategory !== 'PNC' ===================&=&
+      visitCategory !== 'PNC' &&
       visitCategory !== 'Neonatal and Infant Health Care Services'
     "
   >
@@ -140,9 +142,9 @@
       visitCategory !== null &&
       visitCategory !== undefined &&
       pregnancyStatus &&
-      pregnancyStatus === 'Yes' ===================&&
-      visitCategory !== 'PNC' =&&
-      visitCategory !== 'Neona=tal and Infant Health Care Services'
+      pregnancyStatus === 'Yes' &&
+      visitCategory !== 'PNC' &&
+      visitCategory !== 'Neonatal and Infant Health Care Services'
     "
   >
     <mat-form-field class="input-full-width">
@@ -168,7 +170,7 @@
     *ngIf="
       visitCategory === 'FP & Contraceptive Services' &&
       visitReason === 'Follow Up' &&
-      attendant === 'nurse==================='
+      attendant === 'nurse'
     "
   >
     <mat-select
@@ -178,7 +180,7 @@
       placeholder="{{ currentLanguageSet?.followUpFpMethod }}"
       (change)="
         checkForOtherFpMethodOption(
-          patientVisitDetailsForm.controls.followUpForFpMethod.value
+          patientVisitDetailsForm.controls['followUpForFpMethod'].value
         )
       "
       multiple
@@ -191,8 +193,8 @@
           [disabled]="
             disableAllFpOptions !== null &&
             ((!disableAllFpOptions && methods.name === 'None') ||
- ===================             (disableAllFpOptions && methods.name !== 'None'))
-=  =        "
+              (disableAllFpOptions && methods.name !== 'None'))
+          "
         >
           {{ methods.name }}
         </mat-option>
@@ -223,7 +225,7 @@
     *ngIf="
       visitCategory === 'FP & Contraceptive Services' &&
       visitReason === 'Follow Up' &&
-      attendant === 'nurse==================='
+      attendant === 'nurse'
     "
   >
     <mat-select
@@ -234,7 +236,7 @@
       multiple
       (change)="
         checkForOtherSideEffectsOption(
-          patientVisitDetailsForm.controls.sideEffects.value
+          patientVisitDetailsForm.controls['sideEffects'].value
         )
       "
     >
@@ -269,7 +271,7 @@
     *ngIf="
       visitCategory !== null &&
       visitCategory !== undefined &&
-      visitCategory === 'NCD s===================c=reening'
+      visitCategory === 'NCD screening'
     "
   >
     <mat-radio-group
@@ -292,7 +294,7 @@
   *ngIf="
     visitCategory === 'FP & Contraceptive Services' &&
     visitReason === 'Follow Up' &&
-    attendant !== 'nur===================se'
+    attendant !== 'nurse'
   "
 >
   <div class="col-xs-12">
@@ -305,14 +307,14 @@
           {{ currentLanguageSet?.followUpFpMethod }}:
         </th>
         <td class="alignTable">
-          {{ patientVisitDetailsForm.controls.followUpForFpMethod.value }}
+          {{ patientVisitDetailsForm.controls["followUpForFpMethod"].value }}
         </td>
 
         <th class="alignTableSide" id="sideEffects">
           {{ currentLanguageSet?.sideEffect }}:
         </th>
         <td class="alignTableSide">
-          {{ patientVisitDetailsForm.controls.sideEffects.value }}
+          {{ patientVisitDetailsForm.controls["sideEffects"].value }}
         </td>
       </tr>
 
@@ -328,7 +330,9 @@
           class="alignTable"
           *ngIf="enableOtherFpTextField && attendant !== 'nurse'"
         >
-          {{ patientVisitDetailsForm.controls.otherFollowUpForFpMethod.value }}
+          {{
+            patientVisitDetailsForm.controls["otherFollowUpForFpMethod"].value
+          }}
         </td>
 
         <th
@@ -342,7 +346,7 @@
           class="alignTable"
           *ngIf="enableOtherSideEffectTextField && attendant !== 'nurse'"
         >
-          {{ patientVisitDetailsForm.controls.otherSideEffects.value }}
+          {{ patientVisitDetailsForm.controls["otherSideEffects"].value }}
         </td>
       </tr>
     </table>

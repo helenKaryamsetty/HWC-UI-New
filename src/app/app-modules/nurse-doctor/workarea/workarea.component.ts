@@ -184,6 +184,9 @@ export class WorkareaComponent
   isCbac = false;
   enableExaminationUpdateForHrp = false;
   enableupdateButtonSubcriptionForScreening: Subscription = new Subscription();
+
+  patientVisitForm!: FormGroup;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -292,6 +295,10 @@ export class WorkareaComponent
         disableFlag,
       ),
     });
+    this.patientVisitForm = this.patientMedicalForm.get(
+      'patientVisitForm',
+    ) as FormGroup;
+
     this.setVitalsUpdateButtonValue();
     this.getBeneficiaryDetails();
     this.getBeneficiaryHealthIDDetails();

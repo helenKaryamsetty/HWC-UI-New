@@ -130,7 +130,7 @@ export class TravelHistoryComponent
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (this.mode.toLowerCase() === 'view') {
       this.readTravel = true;
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -692,12 +692,13 @@ export class TravelHistoryComponent
   // get international() {
   //   return this.patientCovidForm.controls["international"].value;
   // }
-  onChange(travel: string, isChecked: boolean) {
+  onChange(travel: string, isChecked: any) {
     const travelFormArray = <FormArray>(
       this.patientCovidForm.controls['travelList']
     );
+    const isCheckedEvent = isChecked?.target?.checked;
 
-    if (isChecked) {
+    if (isCheckedEvent) {
       travelFormArray.push(new FormControl(travel));
       if (travel === 'Domestic') {
         this.istravelModeDomestic = true;

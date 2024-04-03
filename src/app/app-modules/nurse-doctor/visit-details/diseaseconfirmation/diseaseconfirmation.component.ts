@@ -144,6 +144,11 @@ export class DiseaseconfirmationComponent
     }
   }
 
+  getDiseaseFormArray(): any {
+    return (this.diseaseFormsGroup.get('diseaseFormsArray') as FormArray)
+      .controls;
+  }
+
   ngOnChanges() {
     //this.nurseService.mmuVisitData=false;
     if (this.mode === 'view') {

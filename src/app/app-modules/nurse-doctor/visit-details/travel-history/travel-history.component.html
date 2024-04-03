@@ -33,7 +33,7 @@
               <input
                 type="checkbox"
                 style="width: 20px; height: 20px"
-                (change)="onChange(travel, $event.target.checked)"
+                (change)="onChange(travel, $event)"
                 id="travelType"
               />
               <span>{{ travel }}</span>
@@ -45,7 +45,7 @@
               style="width: 20px; height: 20px"
               id="travelType"
               class="button-overall-disabled"
-              (change)="onChange('Domestic', $event.target.checked)"
+              (change)="onChange('Domestic', $event)"
               [checked]="domtravel"
               [disabled]="readTravel && readTravel1 === false"
             />
@@ -55,7 +55,7 @@
               type="checkbox"
               style="width: 20px; height: 20px"
               id="travelType"
-              (change)="onChange('International', $event.target.checked)"
+              (change)="onChange('International', $event)"
               [checked]="intertravel"
               class="button-overall-disabled"
               [disabled]="readTravel && readTravel1 === false"
@@ -370,7 +370,7 @@
       <h4>{{ currentLanguageSet?.travel?.outcome }}</h4>
 
       <div>
-        <mat-input-container>
+        <mat-form-field>
           <h5>{{ currentLanguageSet?.travel?.suspectedCOVID }}</h5>
           <input
             matInput
@@ -380,10 +380,10 @@
             formControlName="suspectedStatusUI"
             value="{{ suspectedCovid }}"
             readonly
-          /> </mat-input-container
+          /> </mat-form-field
         ><br /><br />
 
-        <mat-input-container [style.width]="'50%'">
+        <mat-form-field [style.width]="'50%'">
           <h4>{{ currentLanguageSet?.travel?.recommendation }} :</h4>
           <br />
 
@@ -394,7 +394,7 @@
             id="recommendation"
             readonly
           ></textarea>
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <!--Grid column-->
     </div>

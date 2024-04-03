@@ -35,8 +35,6 @@ import { ConfirmationService } from '../../services';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from '../set-language.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 
 @Component({
@@ -62,30 +60,6 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   firstName: any;
   lastName: any;
   regDate: any;
-
-  displayedColumns1: string[] = [
-    'beneficiaryName',
-    'genderAge',
-    'beneficiaryID',
-    'aBHA',
-    'registrationDate',
-    'visitDate',
-    'district',
-  ];
-  dataSource1 = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator1: MatPaginator | null = null;
-
-  displayedColumns2: string[] = [
-    'beneficiaryName',
-    'familyId',
-    'genderAge',
-    'beneficiaryID',
-    'aBHA',
-    'registrationDate',
-    'district',
-  ];
-  dataSource2 = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator2: MatPaginator | null = null;
 
   constructor(
     private router: Router,

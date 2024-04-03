@@ -45,7 +45,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
 })
-export class VisitDetailsComponent
+export class PatientVisitDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
@@ -233,9 +233,12 @@ export class VisitDetailsComponent
 
   visitCategorySubscription: any;
   getVisitReasonAndCategory() {
+    console.log('masterData ');
+
     this.visitCategorySubscription =
       this.masterdataService.visitDetailMasterData$.subscribe((masterData) => {
         if (masterData) {
+          console.log('masterData ', masterData);
           this.templateNurseMasterData = masterData;
           console.log(
             'Visit reason and category',

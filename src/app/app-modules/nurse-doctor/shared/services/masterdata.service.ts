@@ -75,11 +75,7 @@ export class MasterdataService {
    * Visit details master data api call
    */
   getVisitDetailMasterData() {
-    return this.http
-      .get(this.visitDetailMasterDataUrl)
-      .subscribe((res: any) => {
-        this.visitDetailMasterDataSource.next(res.json().data);
-      });
+    return this.http.get(this.visitDetailMasterDataUrl);
   }
 
   /**
@@ -87,20 +83,13 @@ export class MasterdataService {
    */
   getNurseMasterData(visitID: string, providerServiceID: any) {
     const gender = localStorage.getItem('beneficiaryGender');
-    return (
-      this.http
-        .get(
-          this.nurseMasterDataUrl +
-            visitID +
-            '/' +
-            providerServiceID +
-            '/' +
-            gender,
-        )
-        // return this.http.get(this.nurseMasterDataUrl+visitID)
-        .subscribe((res: any) => {
-          this.nurseMasterDataSource.next(res.json().data);
-        })
+    return this.http.get(
+      this.nurseMasterDataUrl +
+        visitID +
+        '/' +
+        providerServiceID +
+        '/' +
+        gender,
     );
   }
 
@@ -126,26 +115,17 @@ export class MasterdataService {
     const gender = localStorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
-    return (
-      this.http
-        .get(
-          this.doctorMasterDataUrl +
-            visitID +
-            '/' +
-            providerServiceID +
-            '/' +
-            gender +
-            '/' +
-            facilityID +
-            '/' +
-            vanID,
-        )
-        //return this.http.get(this.doctorMasterDataUrl+visitID+"/"+providerServiceID)
-        .subscribe((res: any) => {
-          console.log('res.json().data', res.json().data);
-
-          this.doctorMasterDataSource.next(res.json().data);
-        })
+    return this.http.get(
+      this.doctorMasterDataUrl +
+        visitID +
+        '/' +
+        providerServiceID +
+        '/' +
+        gender +
+        '/' +
+        facilityID +
+        '/' +
+        vanID,
     );
   }
 

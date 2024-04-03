@@ -8,9 +8,7 @@
     <div
       class="row multi-row-select"
       *ngFor="
-        let complaint of patientChiefComplaintsForm.controls.complaints[
-          'controls'
-        ];
+        let complaint of getCheifComplaints();
         let i = index;
         let isLast = last;
         let isOdd = odd
@@ -64,7 +62,7 @@
               placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID
               }}"
-              [disableFormControl]="!complaint.value.chiefComplaint"
+              [disabled]="!complaint.value.chiefComplaint"
             />
           </mat-form-field>
         </div>
@@ -81,7 +79,7 @@
               placeholder="{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
               }}"
-              [disableFormControl]="!complaint.value.chiefComplaint"
+              [disabled]="!complaint.value.chiefComplaint"
               (change)="validateDuration(complaint)"
             />
           </mat-form-field>
@@ -96,7 +94,7 @@
               currentLanguageSet?.nurseData?.chiefComplaintsDetails
                 ?.unitOfDuration
             }}"
-            [disableFormControl]="!complaint.value.duration"
+            [disabled]="!complaint.value.duration"
             (change)="validateDuration(complaint)"
           >
             <mat-option value="Hours">Hour(s)</mat-option>
@@ -123,7 +121,7 @@
                   ?.description
               }}"
               maxlength="300"
-              [disableFormControl]="!complaint.value.chiefComplaint"
+              [disabled]="!complaint.value.chiefComplaint"
             ></textarea>
           </mat-form-field>
         </div>
