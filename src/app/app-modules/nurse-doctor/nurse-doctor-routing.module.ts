@@ -26,8 +26,9 @@ import { CaseSheetComponent } from './case-sheet/case-sheet.component';
 import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard.service';
 import { DashboardComponent } from '../data-sync/dashboard/dashboard.component';
 import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.component';
-import { WorkareaComponent } from '../data-sync/workarea/workarea.component';
 import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
+import { WorkareaComponent } from './workarea/workarea.component';
+import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
 //import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 
 const routes: Routes = [
@@ -73,12 +74,11 @@ const routes: Routes = [
         component: WorkareaComponent,
         canDeactivate: [CanDeactivateGuardService],
       },
-      // {
-      //   path: 'attendant/:attendant/104referredpatient/:beneficiaryRegID',
-      //   component: Referred104WorkareaComponent,
-      //   canActivate: [WorkareaCanActivate],
-      //   canDeactivate: [CanDeactivateGuardService],
-      // },
+      {
+        path: 'attendant/:attendant/104referredpatient/:beneficiaryRegID',
+        component: Referred104WorkareaComponent,
+        canDeactivate: [CanDeactivateGuardService],
+      },
     ],
   },
   {

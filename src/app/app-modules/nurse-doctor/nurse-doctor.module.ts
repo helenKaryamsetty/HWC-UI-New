@@ -43,6 +43,15 @@ import { NurseTmWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-work
 import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
 import { NcdScreeningService } from './shared/services/ncd-screening.service';
+import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
+import { WorkareaComponent } from './workarea/workarea.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   imports: [
@@ -53,6 +62,13 @@ import { NcdScreeningService } from './shared/services/ncd-screening.service';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
+    MatTableModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatIconModule,
   ],
   declarations: [
     NurseWorklistComponent,
@@ -104,7 +120,7 @@ import { NcdScreeningService } from './shared/services/ncd-screening.service';
     // AncComponent,
     // PncComponent,
     // DashboardComponent,
-    // WorkareaComponent,
+    WorkareaComponent,
     // GeneralCaseRecordComponent,
     // GeneralReferComponent,
     // GeneralCaseSheetComponent,
@@ -178,7 +194,7 @@ import { NcdScreeningService } from './shared/services/ncd-screening.service';
     Nurse104RefferedWorklistComponent,
     // Referred104CdssDetailsComponent,
     // Referred104DetailsPopupComponent,
-    // Referred104WorkareaComponent,
+    Referred104WorkareaComponent,
     // Referred104CdssDetailsComponent,
     // CdssFormComponent,
     // DiseaseFormComponent,
@@ -195,7 +211,5 @@ import { NcdScreeningService } from './shared/services/ncd-screening.service';
     NcdScreeningService,
     // WorkareaCanActivate, LabService,IdrsscoreService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
   ],
-  // entryComponents: [PrintPageSelectComponent, ViewTestReportComponent, BeneficiaryMctsCallHistoryComponent, SchedulerComponent, CdssFormResultPopupComponent,ViewDiseaseSummaryDetailsComponent
-  // ]
 })
 export class NurseDoctorModule {}

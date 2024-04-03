@@ -10,6 +10,7 @@ import { CommonDialogComponent } from '../component/common-dialog/common-dialog.
 
 @Injectable()
 export class ConfirmationService {
+  eSanjeevaniFlagArry: any;
   constructor(
     private dialog: MatDialog,
     @Inject(DOCUMENT) doc: any,

@@ -2722,7 +2722,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
-  ) {
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -2827,6 +2827,10 @@ export class DoctorService {
         updatedDoctorDiagnosis,
       );
     }
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   updateFamilyPlanningDoctorDiagnosisDetails(
