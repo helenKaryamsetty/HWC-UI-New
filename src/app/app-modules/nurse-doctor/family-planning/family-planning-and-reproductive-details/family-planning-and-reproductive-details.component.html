@@ -1,0 +1,460 @@
+<div class="row m-t-20" [formGroup]="familyPlanningAndReproductiveForm">
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
+    <div class="form-group">
+      <label class="control-label" for="familyPlanningAndReproductive">{{
+        current_language_set?.fertilityStatus
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        id="fertilityStatus"
+        name="fertilityStatus"
+        formControlName="fertilityStatus"
+        (change)="checkWithFertilityStatus()"
+      >
+        <mat-radio-button
+          class="radio-button"
+          color="primary"
+          [value]="fertility.name"
+          *ngFor="let fertility of fertilityStatusOption"
+        >
+          {{ fertility.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && bengender !== 'male'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.parity }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            defaultNull
+            matTextareaAutosize
+            id="parity"
+            name="parity"
+            formControlName="parity"
+            allowMax="15"
+            (change)="checkParity()"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.totalNoOfChildrenBornFemale }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            allowMax="15"
+            defaultNull
+            matTextareaAutosize
+            id="totalNoOfChildrenBornFemale"
+            name="totalNoOfChildrenBornFemale"
+            formControlName="totalNoOfChildrenBornFemale"
+            (change)="validateNoOfChildrenBorn(totalNoOfChildrenBornFemale)"
+            (blur)="
+              checktotalFemaleChildrenBorn(
+                totalNoOfChildrenBornFemale,
+                numberOfLiveChildrenFemale
+              )
+            "
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.totalNoOfChildrenBornMale }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            allowMax="15"
+            defaultNull
+            matTextareaAutosize
+            id="totalNoOfChildrenBornMale"
+            name="totalNoOfChildrenBornMale"
+            formControlName="totalNoOfChildrenBornMale"
+            (change)="validateNoOfChildrenBorn(totalNoOfChildrenBornMale)"
+            (blur)="
+              checktotalMaleChildrenBorn(
+                totalNoOfChildrenBornMale,
+                numberOfLiveChildrenMale
+              )
+            "
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.totalNoOfChildrenBorn }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            defaultNull
+            matTextareaAutosize
+            allowMax="30"
+            id="totalNoOfChildrenBorn"
+            name="totalNoOfChildrenBorn"
+            formControlName="totalNoOfChildrenBorn"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.numberOfLiveChildrenFemale }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            allowMax="15"
+            defaultNull
+            matTextareaAutosize
+            id="numberOfLiveChildrenFemale"
+            name="numberOfLiveChildrenFemale"
+            formControlName="numberOfLiveChildrenFemale"
+            (change)="validateNoOfChildrenBorn(numberOfLiveChildrenFemale)"
+            (blur)="
+              checkLiveNoOfChildrenBornFemale(
+                totalNoOfChildrenBornFemale,
+                numberOfLiveChildrenFemale
+              )
+            "
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.numberOfLiveChildrenMale }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            allowMax="15"
+            defaultNull
+            matTextareaAutosize
+            id="numberOfLiveChildrenMale"
+            name="numberOfLiveChildrenMale"
+            formControlName="numberOfLiveChildrenMale"
+            (change)="validateNoOfChildrenBorn(numberOfLiveChildrenMale)"
+            (blur)="
+              checkLiveNoOfChildrenBornMale(
+                totalNoOfChildrenBornMale,
+                numberOfLiveChildrenMale
+              )
+            "
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.numberOfLiveChildren }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            allowMax="30"
+            defaultNull
+            matTextareaAutosize
+            id="numberOfLiveChildren"
+            name="numberOfLiveChildren"
+            formControlName="numberOfLiveChildren"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.ageOfYoungestChild }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            defaultNull
+            matTextareaAutosize
+            id="ageOfYoungestChild"
+            name="ageOfYoungestChild"
+            formControlName="ageOfYoungestChild"
+            (change)="checkAgeOfYoungestChildValidation(ageOfYoungestChild)"
+            maxlength="2"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.unitOfAge }}
+      </mat-label>
+      <mat-select
+        [style.width]="'100%'"
+        formControlName="unitOfAge"
+        (selectionChange)="
+          checkAgeOfYoungestChildValidation(
+            familyPlanningAndReproductiveForm.controls['ageOfYoungestChild']
+              .value
+          )
+        "
+      >
+        <mat-option
+          *ngFor="let ageUnit of ageUnitMasterData"
+          [value]="ageUnit.name"
+        >
+          {{ ageUnit.name }}
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.youngestChildGender }}
+      </mat-label>
+      <mat-select
+        [style.width]="'100%'"
+        formControlName="youngestChildGender"
+        (selectionChange)="onValueChange()"
+      >
+        <mat-option
+          *ngFor="let youngestChildGender of genderMasterData"
+          [value]="youngestChildGender.genderName"
+          >{{ youngestChildGender.genderName }}
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      style="margin-bottom: 15px !important"
+      *ngIf="fertilityStatus === 'Fertile'"
+    >
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.currentlyUsingFPMethod }}
+      </mat-label>
+      <mat-select
+        multiple
+        class="select-full-width"
+        name="currentFPMethod"
+        formControlName="currentlyUsingFpMethod"
+        (selectionChange)="
+          populateSterilizationForTubectomyOrVasectomy();
+          populateDosesFieldForAntara();
+          currentlyUsingFPOther();
+          resetcurrentlyUsingFPOptions(
+            familyPlanningAndReproductiveForm.controls['currentlyUsingFpMethod']
+              .value
+          )
+        "
+      >
+        <ng-container *ngFor="let currentFPMethod of currentlyFPMethod">
+          <mat-option
+            class="dropdownHeight"
+            [value]="currentFPMethod.name"
+            [disabled]="
+              currentFPMethod.name === 'None'
+                ? disableCurrentlyUsingFPNone
+                : disableAllOptions
+            "
+          >
+            {{ currentFPMethod.name }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && enableSterilizationFields"
+    >
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.dateOfSterilization }}
+        </mat-label>
+        <input
+          matInput
+          [max]="maxEndDate"
+          [matDatepicker]="sterilizationPicker"
+          name="dateOfSterilization"
+          formControlName="dateOfSterilization"
+          readonly
+          (change)="onValueChange()"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="sterilizationPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #sterilizationPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && enableSterilizationFields"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.placeOfSterilization }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="alphaspace"
+            defaultNull
+            matTextareaAutosize
+            id="placeOfSterilization"
+            name="placeOfSterilization"
+            formControlName="placeOfSterilization"
+            (change)="onValueChange()"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && enableDoseFields"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.dosesTaken }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="number"
+            defaultNull
+            matTextareaAutosize
+            id="dosesTaken"
+            name="dosesTaken"
+            formControlName="dosesTaken"
+            [min]="1"
+            allowMax="180"
+            (change)="onValueChange()"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && enableDoseFields"
+    >
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.dateOfLastDoseTaken }}
+        </mat-label>
+        <input
+          matInput
+          [max]="maxEndDate"
+          [matDatepicker]="lastDosePicker"
+          name="dateOfLastDoseTaken"
+          formControlName="dateOfLastDoseTaken"
+          readonly
+          (change)="onValueChange()"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="lastDosePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #lastDosePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      *ngIf="fertilityStatus === 'Fertile' && enablecurrentlyUsingFPOther"
+    >
+      <div class="form-group">
+        <mat-form-field class="input-full-width">
+          <mat-label class="mat-label-text">
+            {{ current_language_set?.other }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="alphaspace"
+            defaultNull
+            matTextareaAutosize
+            id="otherCurrentlyUsingFpMethod"
+            name="otherCurrentlyUsingFpMethod"
+            formControlName="otherCurrentlyUsingFpMethod"
+            maxlength="100"
+            (change)="onValueChange()"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3239,7 +3239,7 @@ export class DoctorService {
     };
   }
 
-  updateFamilyPlanning(medicalForm: any, visitCategory: any) {
+  updateFamilyPlanning(medicalForm: any, visitCategory: any): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -3259,19 +3259,22 @@ export class DoctorService {
     };
     const familyPlanningReproductiveDetailsForm = Object.assign(
       {},
-      medicalForm.controls.familyPlanningForm.controls
-        .familyPlanningAndReproductiveForm.value,
+      medicalForm.controls.familyPlanningForm.controls[
+        'familyPlanningAndReproductiveForm'
+      ].value,
       commonData,
     );
     const iecAndCounsellingDetails = Object.assign(
       {},
-      medicalForm.controls.familyPlanningForm.controls.IecCounsellingForm.value,
+      medicalForm.controls.familyPlanningForm.controls['IecCounsellingForm']
+        .value,
       commonData,
     );
     const dispensationDetails = Object.assign(
       {},
-      medicalForm.controls.familyPlanningForm.controls.dispensationDetailsForm
-        .value,
+      medicalForm.controls.familyPlanningForm.controls[
+        'dispensationDetailsForm'
+      ].value,
       commonData,
     );
 
@@ -3301,6 +3304,10 @@ export class DoctorService {
         patientFamilyPlanningData,
       );
     }
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   updateBirthAndImmunizationHistory(medicalForm: any, visitCategory: any) {

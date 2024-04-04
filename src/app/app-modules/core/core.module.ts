@@ -63,6 +63,17 @@ import { CanDeactivateGuardService } from './services/can-deactivate-guard.servi
 import { CommonService } from './services/common-services.service';
 import { InventoryService } from './services/inventory.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
+import { MyEmailDirective } from './directives/email/myEmail.directive';
+import { MyMobileNumberDirective } from './directives/MobileNumber/myMobileNumber.directive';
+import { ConfirmatoryDiagnosisDirective } from './directives/confirmatory-diagnosis.directive';
+import { MyNameDirective } from './directives/name/myName.directive';
+import { NullDefaultValueDirective } from './directives/null-default-value.directive';
+import { NumberValidatorDirective } from './directives/numberValidator.directive';
+import { MyPasswordDirective } from './directives/password/myPassword.directive';
+import { StringValidatorDirective } from './directives/stringValidator.directive';
+import { MyHealthIdDirective } from './directives/myHealthId/myHealthId.directive';
+import { DisableFormControlDirective } from './directives/disableFormControl.directive';
+import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.directive';
 
 @NgModule({
   imports: [
@@ -91,11 +102,18 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
     MmuRbsDetailsComponent,
     SpecialistLoginComponent,
     DiagnosisSearchComponent,
-    // myEmail, myMobileNumber, myName, myPassword, StringValidator, NullDefaultValueDirective, NumberValidator, DisableFormControlDirective,
-    //  DiagnosisSearchDirective, ConfirmatoryDiagnosisDirective,
+    MyEmailDirective,
+    MyMobileNumberDirective,
+    MyHealthIdDirective,
+    MyNameDirective,
+    MyPasswordDirective,
+    ConfirmatoryDiagnosisDirective,
+    DisableFormControlDirective,
+    NullDefaultValueDirective,
+    NumberValidatorDirective,
+    DiagnosisSearchDirective,
+    StringValidatorDirective,
     ShowCommitAndVersionDetailsComponent,
-    //ViewRadiologyUploadedFilesComponent,
-    // , ConfirmatoryDiagnosisDirective
     IotcomponentComponent,
     IotBluetoothComponent,
     AllergenSearchComponent,
@@ -120,10 +138,18 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
     PreviousDetailsComponent,
     PreviousImmunizationServiceDetailsComponent,
     MmuRbsDetailsComponent,
-    // PaginationModule,
     ShowCommitAndVersionDetailsComponent,
-    // myEmail, myMobileNumber, myName, myPassword, DisableFormControlDirective, StringValidator, NumberValidator, NullDefaultValueDirective,
-    //  DiagnosisSearchDirective, ConfirmatoryDiagnosisDirective,
+    MyEmailDirective,
+    MyMobileNumberDirective,
+    MyHealthIdDirective,
+    MyNameDirective,
+    MyPasswordDirective,
+    ConfirmatoryDiagnosisDirective,
+    DisableFormControlDirective,
+    NullDefaultValueDirective,
+    NumberValidatorDirective,
+    DiagnosisSearchDirective,
+    StringValidatorDirective,
     IotcomponentComponent,
     IotBluetoothComponent,
     AllergenSearchComponent,

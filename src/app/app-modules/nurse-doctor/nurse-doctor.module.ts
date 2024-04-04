@@ -65,6 +65,10 @@ import { SymptomsComponent } from './visit-details/symptoms/symptoms.component';
 import { TravelHistoryComponent } from './visit-details/travel-history/travel-history.component';
 import { UploadFilesComponent } from './visit-details/upload-files/upload-files.component';
 import { IdrsscoreService } from './shared/services/idrsscore.service';
+import { DispensationDetailsComponent } from './family-planning/dispensation-details/dispensation-details.component';
+import { FamilyPlanningAndReproductiveComponent } from './family-planning/family-planning-and-reproductive-details/family-planning-and-reproductive-details.component';
+import { FamilyPlanningComponent } from './family-planning/family-planning.component';
+import { IecAndCounsellingComponent } from './family-planning/iec-and-counselling-details/iec-and-counselling-details.component';
 
 @NgModule({
   imports: [
@@ -188,10 +192,10 @@ import { IdrsscoreService } from './shared/services/idrsscore.service';
     // CervicalCancerScreeningComponent,
     // ScreeningCaseSheetComponent,
     // GeneralOralExaminationComponent,
-    // FamilyPlanningComponent,
-    // DispensationDetailsComponent,
-    // FamilyPlanningAndReproductiveComponent,
-    // IecAndCounsellingComponent,
+    FamilyPlanningComponent,
+    DispensationDetailsComponent,
+    FamilyPlanningAndReproductiveComponent,
+    IecAndCounsellingComponent,
     // TreatmentsOnSideEffectsComponent,
     // FamilyPlanningCaseSheetComponent,
     // VisitDeatilsCaseSheetComponent,
