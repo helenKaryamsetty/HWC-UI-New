@@ -476,3 +476,77 @@ body md-icon.search-btn.cursorPointer.mat-icon.material-icons.ng-star-inserted {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: red !important;
+  color: fieldtext !important;
+}
+/* radio Button */
+/* .mat-mdc-radio-button .mdc-form-field {
+  color: #0277bd !important;
+} */
+.mat-accent {
+  --mat-option-selected-state-label-text-color:#0277bd !important;
+}
+
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-disabled-selected-icon-color: #000;
+  --mdc-radio-disabled-unselected-icon-color: #000;
+  --mdc-radio-unselected-hover-icon-color: #212121;
+  --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-radio-selected-focus-icon-color:#0277bd !important;
+  --mdc-radio-selected-hover-icon-color:#0277bd !important;
+  --mdc-radio-selected-icon-color:#0277bd !important;
+  --mdc-radio-selected-pressed-icon-color:#0277bd !important;
+  --mat-radio-ripple-color: #000;
+  --mat-radio-checked-ripple-color:#0277bd !important;
+  --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
+}
+::ng-deep.bs-datepicker.bs-datepicker-head {
+  background-color: #337ab7 !important;
+  min-width: 270px !important;
+  height: 50px !important;
+  padding: 10px !important;
+  border-radius: 3px 3px 0 0 !important;
+  text-align: justify !important;
+}
+
+::ng-deep.bs-datepicker.selected {
+  background-color: #337ab7 !important;
+}
+
+::ng-deep.bs-datepicker.bs-datepicker-body{
+    padding: 10px !important;
+    border-radius: 0 0 3px 3px !important;
+    min-height: 232px !important;
+    min-width: 278px !important;
+    border: 1px solid #e9edf0 !important;
+}
+
+::ng-deep.bs-datepicker {
+  display: flex !important;
+  -webkit-box-align: stretch !important;
+  align-items: stretch !important;
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  flex-flow: row wrap !important;
+  background: #fff !important;
+  box-shadow: 0 0 10px 0 #aaa !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+::ng-deep.bs-datepicker.bs-datepicker-container {
+  padding: 0 !important;
+}
+
+.mat-label-text {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mdc-form-field>label {
+  color: #000;
+}

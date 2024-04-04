@@ -115,6 +115,10 @@ export class RegisterPersonalDetailsComponent
         if (res !== null && res !== undefined)
           this.setPersonalDetailsFromHealthId(res);
       });
+    console.log(
+      'personalDataOnHealthIDSubscription',
+      this.personalDataOnHealthIDSubscription,
+    );
   }
   setPersonalDetailsFromHealthId(res: any) {
     this.personalDetailsForm.patchValue({
@@ -442,6 +446,7 @@ export class RegisterPersonalDetailsComponent
   maritalStatusMaster: any[] = [];
   onGenderSelected() {
     const genderMaster = this.masterData.genderMaster;
+    console.log('genderMaster', genderMaster);
     genderMaster.forEach((element: any, i: any) => {
       if (element.genderID === this.personalDetailsForm.value.gender) {
         this.personalDetailsForm.patchValue({

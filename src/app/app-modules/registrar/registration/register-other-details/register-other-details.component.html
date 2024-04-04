@@ -78,7 +78,7 @@
               [style.width]="'100%'"
               formControlName="community"
               [required]="isCommunityRequired"
-              (change)="onCommunityChanged()"
+              (selectionChange)="onCommunityChanged()"
             >
               <mat-option
                 *ngFor="let community of masterData?.communityMaster"
@@ -159,7 +159,7 @@
               class="p-t-12"
               [style.width]="'100%'"
               formControlName="religion"
-              (change)="getReligionName()"
+              (selectionChange)="getReligionName()"
             >
               <mat-option
                 *ngFor="let religion of masterData?.religionMaster"
@@ -250,8 +250,6 @@
                   currentLanguageSet?.ro?.otherInfo?.govtIDType
                 }}</mat-label>
                 <mat-select
-                  class="p-t-12"
-                  [style.width]="'40%'"
                   (selectionChange)="filtergovIDs(id.value.type, i)"
                   formControlName="type"
                   [required]="isGidRequired"
@@ -269,7 +267,7 @@
               </mat-form-field>
               <mat-form-field
                 id="govtID"
-                [style.width]="'35%'"
+                [style.width]="'40%'"
                 style="line-height: unset; margin-left: 15px"
                 class="mleft15"
               >
@@ -285,6 +283,7 @@
                   [pattern]="
                     otherDetailsForm.controls['govID'].value[i].pattern
                   "
+                  allow="otherDetailsForm.controls['govID'].value[i].allow"
                   formControlName="idValue"
                   [minlength]="
                     otherDetailsForm.controls['govID'].value[i].minLength
@@ -384,28 +383,35 @@
             class="row"
           >
             <ng-container [formGroupName]="i">
-              <mat-select
-                class="p-t-12"
-                [style.width]="'45%'"
-                formControlName="type"
-                (selectionChange)="filterOtherGovIDs(id.value.type, i)"
-                style="line-height: unset"
-                placeholder="{{
-                  currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType
-                }}"
-              >
-                <mat-option
-                  *ngFor="
-                    let govIDType of otherGovIDMaster[i]?.otherGovIdEntityMaster
-                  "
-                  [value]="govIDType.govtIdentityTypeID"
-                  >{{ govIDType.identityType }}
-                </mat-option>
-              </mat-select>
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType }}
+                </mat-label>
+                <mat-select
+                  class="p-t-12"
+                  [style.width]="'100%'"
+                  formControlName="type"
+                  (selectionChange)="filterOtherGovIDs(id.value.type, i)"
+                  style="line-height: unset"
+                  placeholder="{{
+                    currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType
+                  }}"
+                >
+                  <mat-option
+                    *ngFor="
+                      let govIDType of otherGovIDMaster[i]
+                        ?.otherGovIdEntityMaster
+                    "
+                    [value]="govIDType.govtIdentityTypeID"
+                    >{{ govIDType.identityType }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
               <mat-form-field
                 id="govtID"
-                [style.width]="'35%'"
-                style="line-height: unset; margin-left: 15px"
+                [style.width]="'45%'"
+                style="line-height: unset"
                 class="mleft15"
               >
                 <mat-label class="mat-label-text">
@@ -429,6 +435,7 @@
                 />
               </mat-form-field>
               <button
+                style="text-align: center"
                 mat-mini-fab
                 color="warn"
                 *ngIf="
@@ -447,7 +454,9 @@
               <span *ngIf="i < otherGovLength - 1">
                 <button
                   mat-mini-fab
+                  style="margin-left: 3px; text-align: center"
                   color="primary"
+                  class="mat_blue_circle"
                   *ngIf="isLast"
                   [disabled]="
                     !otherDetailsForm.controls['otherGovID'].value[i].idValue

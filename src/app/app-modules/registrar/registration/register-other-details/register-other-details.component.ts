@@ -203,6 +203,7 @@ export class RegisterOtherDetailsComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    console.log('this.currentLanguageSet ********', this.currentLanguageSet);
   }
 
   ngOnDestroy() {
@@ -222,14 +223,14 @@ export class RegisterOtherDetailsComponent
 
   setErrorMessageForID() {
     this.patterns = [
-      {
-        govtIdentityTypeID: 1,
-        allow: 'number',
-        error: this.currentLanguageSet.common.enterDigitAadharNumber,
-        maxLength: 12,
-        pattern: /^\d{4}\d{4}\d{4}$/,
-        identityType: 'Aadhar',
-      },
+      // {
+      //   govtIdentityTypeID: 1,
+      //   allow: 'number',
+      //   error: this.currentLanguageSet.common.enterDigitAadharNumber,
+      //   maxLength: 12,
+      //   pattern: /^\d{4}\d{4}\d{4}$/,
+      //   identityType: 'Aadhar',
+      // },
       {
         govtIdentityTypeID: 2,
         allow: 'alphanumeric',

@@ -6,7 +6,7 @@
       color="primary"
       class="pull-right"
       [checked]="demographicsEditEnabled"
-      (selectionChange)="confirmEditDemographics($event)"
+      (change)="confirmEditDemographics($event)"
       labelPosition="before"
       ><span
         style="
@@ -45,7 +45,7 @@
         <div class="select-container">
           <mat-form-field>
             <mat-label class="mat-label-text">{{
-              currentLanguageSet?.ro?.locInfo?.districtTownCity
+              currentLanguageSet?.ro?.locInfo?.district_Town_City
             }}</mat-label>
             <mat-select
               [style.width]="'100%'"

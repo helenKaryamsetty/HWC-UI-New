@@ -2,7 +2,7 @@
 <!-- {{personalDetailsForm.value | json }} -->
 <div class="m-t-10" [formGroup]="personalDetailsForm">
   <div class="row">
-    <div id="image_row" class="col-md-2 col-md-push-10 text-center">
+    <div id="image_row" class="col-md-2 order-md-last text-center">
       <div class="row">
         <div class="col-xs-12">
           <div *ngIf="personalDetailsForm.value.image === null">
@@ -37,399 +37,476 @@
       </div>
     </div>
 
-    <div id="data_row" class="col-md-10 col-md-pull-2">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'100%'">
-          <input
-            defaultNull
-            autocomplete="off"
-            required
-            matInput
-            allowText="alphabet"
-            placeholder="{{
-              current_language_set?.ro?.personalInfo?.firstName
-            }}"
-            formControlName="firstName"
-            minlength="2"
-            maxlength="50"
-            (change)="setFullName()"
-          />
-          <mat-error
-            *ngIf="
-              personalDetailsForm.controls['firstName'].errors?.['required']
-            "
-          >
-            {{
-              current_language_set?.benDetailsAlert?.firstNameMandatory
-            }}</mat-error
-          >
-          <mat-error
-            *ngIf="
-              personalDetailsForm.controls['firstName'].errors?.['minlength']
-            "
-          >
-            {{
-              current_language_set?.benDetailsAlert?.minCharRequired
-            }}</mat-error
-          >
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'100%'">
-          <input
-            defaultNull
-            autocomplete="off"
-            matInput
-            allowText="alphaspace"
-            placeholder="{{ current_language_set?.ro?.personalInfo?.lastName }}"
-            formControlName="lastName"
-            (change)="setFullName()"
-            maxlength="50"
-          />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <div class="row">
-          <div class="col-xs-2 col-sm-2 m-t-15" style="padding-top: 7px">
-            <mat-checkbox
-              checked="checked"
-              formControlName="checked"
-              (change)="checkMobileNoIsRequired($event)"
-            >
-            </mat-checkbox>
-          </div>
-          <div class="col-xs-10 col-sm-10 m-l-10-">
-            <mat-form-field [style.width]="'100%'">
-              <input
-                defaultNull
-                autocomplete="off"
-                matInput
-                allowText="number"
-                name="phoneNo"
-                [required]="isMobileNoRequired"
-                (blur)="getParentDetails()"
-                placeholder="{{
-                  current_language_set?.ro?.personalInfo?.contactNo
-                }}."
-                minlength="10"
-                formControlName="phoneNo"
-                maxlength="10"
-                name="contactNo"
-                [min]="10"
-              />
-              <mat-error
-                *ngIf="
-                  personalDetailsForm.controls['phoneNo'].errors?.['required']
-                "
-              >
-                {{
-                  current_language_set?.benDetailsAlert?.mobNoMandatory
-                }}</mat-error
-              >
-              <mat-error
-                *ngIf="
-                  personalDetailsForm.controls['phoneNo'].errors?.['minlength']
-                "
-              >
-                {{
-                  current_language_set?.benDetailsAlert?.minDigitsRequired
-                }}</mat-error
-              >
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field class="col-xs-12 m-l-10-">
-          <input
-            matInput
-            autocomplete="off"
-            allowText="number"
-            name="alternateContactNumber"
-            placeholder="{{
-              current_language_set?.ro?.personalInfo?.alternateNumber
-            }}"
-            minlength="10"
-            formControlName="alternateContactNumber"
-            maxlength="10"
-          />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          [style.width]="'100%'"
-          required
-          (change)="onGenderSelected()"
-          placeholder="{{ current_language_set?.ro?.personalInfo?.gender }}"
-          formControlName="gender"
-        >
-          <mat-option
-            *ngFor="let gender of masterData?.genderMaster"
-            value="gender.genderID"
-            >{{ gender.genderName }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'96%'">
-          <mat-icon matSuffix>event</mat-icon>
-          <mat-label class="mat-label-text">{{
-            current_language_set?.ro?.personalInfo?.dob
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            readonly="true"
-            matInput
-            id="dob-input"
-            [(ngModel)]="dateForCalendar"
-            type="text"
-            #dobval
-            (onHidden)="dobChangeByCalender(dobval.value)"
-            (change)="dobChangeByCalender(dobval.value)"
-            [bsConfig]="bsConfig"
-            [minDate]="minDate"
-            [maxDate]="today"
-            #dp="bsDatepicker"
-            maxlength="10"
-            bsDatepicker
-            formControlName="dob"
-          />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'100%'">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="number"
-            required
-            placeholder="{{ current_language_set?.ro?.personalInfo?.age }}"
-            (change)="onAgeEntered()"
-            formControlName="age"
-            maxlength="3"
-          />
-          <mat-error
-            *ngIf="personalDetailsForm.controls['age'].errors?.['required']"
-          >
-            {{ current_language_set?.benDetailsAlert?.ageMandatory }}</mat-error
-          >
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          [style.width]="'100%'"
-          required
-          (change)="onAgeUnitEntered()"
-          placeholder="{{ current_language_set?.ro?.personalInfo?.ageUnit }}"
-          formControlName="ageUnit"
-        >
-          <mat-option
-            *ngFor="let ageUnit of masterData?.ageUnit"
-            [value]="ageUnit.name"
-          >
-            {{ ageUnit.name | titlecase }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <ng-container *ngIf="enableMaritalStatus">
-        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-select
-            [style.width]="'100%'"
-            placeholder="{{
-              current_language_set?.ro?.personalInfo?.maritalStatus
-            }}"
-            (change)="onMaritalStatusChanged()"
-            [required]="enableMaritalStatus"
-            formControlName="maritalStatus"
-          >
-            <mat-option
-              *ngFor="let maritalStatus of maritalStatusMaster"
-              [value]="maritalStatus.maritalStatusID"
-            >
-              {{ maritalStatus.status | titlecase }}
-            </mat-option>
-          </mat-select>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="enableMaritalStatus && enableMarriageDetails">
+    <div id="data_row" class="col-md-10 order-md-first">
+      <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
           <mat-form-field [style.width]="'100%'">
+            <mat-label class="mat-label-text">{{
+              current_language_set?.ro?.personalInfo?.firstName
+            }}</mat-label>
             <input
+              defaultNull
               autocomplete="off"
+              required
               matInput
-              allowText="alphaspace"
-              [required]="enableSpouseMandatory"
+              allowText="alphabet"
               placeholder="{{
-                current_language_set?.ro?.personalInfo?.spouseName
+                current_language_set?.ro?.personalInfo?.firstName
               }}"
-              formControlName="spouseName"
+              formControlName="firstName"
               minlength="2"
               maxlength="50"
+              (change)="setFullName()"
             />
             <mat-error
               *ngIf="
-                personalDetailsForm.controls['spouseName'].errors?.['minlength']
+                personalDetailsForm.controls['firstName'].errors?.['required']
               "
-              >{{
-                current_language_set?.common?.pleaseprovideatleast3character
+            >
+              {{
+                current_language_set?.benDetailsAlert?.firstNameMandatory
+              }}</mat-error
+            >
+            <mat-error
+              *ngIf="
+                personalDetailsForm.controls['firstName'].errors?.['minlength']
+              "
+            >
+              {{
+                current_language_set?.benDetailsAlert?.minCharRequired
               }}</mat-error
             >
           </mat-form-field>
         </div>
-      </ng-container>
 
-      <div
-        *ngIf="enableMaritalStatus && enableMarriageDetails"
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-      >
-        <mat-form-field [style.width]="'100%'">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="number"
-            (change)="checkAgeAtMarriage()"
-            [required]="enableMarriageDetails"
-            formControlName="ageAtMarriage"
-            minlength="2"
-            maxlength="3"
-            placeholder="{{
-              current_language_set?.ro?.personalInfo?.ageAtMarriage
-            }}"
-          />
-          <mat-error
-            *ngIf="
-              personalDetailsForm.controls['ageAtMarriage'].errors?.[
-                'minlength'
-              ]
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label class="mat-label-text">{{
+              current_language_set?.ro?.personalInfo?.lastName
+            }}</mat-label>
+            <input
+              defaultNull
+              autocomplete="off"
+              matInput
+              allowText="alphaspace"
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.lastName
+              }}"
+              formControlName="lastName"
+              (change)="setFullName()"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
+
+        <div
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+          style="margin-bottom: 50px"
+        >
+          <div class="row">
+            <div class="col-xs-2 col-sm-2 m-t-15" style="padding-top: 7px">
+              <mat-checkbox
+                checked="checked"
+                formControlName="checked"
+                (change)="checkMobileNoIsRequired($event)"
+              >
+              </mat-checkbox>
+            </div>
+            <div class="col-xs-10 col-sm-10">
+              <mat-form-field [style.width]="'100%'">
+                <mat-label class="mat-label-text">
+                  {{ current_language_set?.ro?.personalInfo?.contactNo }}
+                </mat-label>
+                <input
+                  appDefaultNull
+                  autocomplete="off"
+                  matInput
+                  allowText="number"
+                  name="phoneNo"
+                  [required]="isMobileNoRequired"
+                  (blur)="getParentDetails()"
+                  minlength="10"
+                  formControlName="phoneNo"
+                  maxlength="10"
+                  name="contactNo"
+                  [min]="10"
+                />
+                <mat-error
+                  *ngIf="
+                    personalDetailsForm.controls['phoneNo'].errors?.['required']
+                  "
+                >
+                  {{
+                    current_language_set?.benDetailsAlert?.mobNoMandatory
+                  }}</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    personalDetailsForm.controls['phoneNo'].errors?.[
+                      'minlength'
+                    ]
+                  "
+                >
+                  {{
+                    current_language_set?.benDetailsAlert?.minDigitsRequired
+                  }}</mat-error
+                >
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field class="col-xs-12 m-l-10-" [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.alternateNumber }}
+            </mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              allowText="number"
+              name="alternateContactNumber"
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.alternateNumber
+              }}"
+              minlength="10"
+              formControlName="alternateContactNumber"
+              maxlength="10"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.gender }}
+            </mat-label>
+            <mat-select
+              required
+              (selectionChange)="onGenderSelected()"
+              formControlName="gender"
+            >
+              <mat-option
+                *ngFor="let gender of masterData?.genderMaster"
+                value="gender.genderID"
+                >{{ gender.genderName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-icon matSuffix>event</mat-icon>
+            <mat-label class="mat-label-text">{{
+              current_language_set?.ro?.personalInfo?.dob
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              readonly="true"
+              matInput
+              id="dob-input"
+              [(ngModel)]="dateForCalendar"
+              type="text"
+              #dobval
+              (onHidden)="dobChangeByCalender(dobval.value)"
+              (change)="dobChangeByCalender(dobval.value)"
+              [bsConfig]="bsConfig"
+              [minDate]="minDate"
+              [maxDate]="today"
+              #dp="bsDatepicker"
+              maxlength="10"
+              bsDatepicker
+              formControlName="dob"
+            />
+            <!-- [matDatepicker]="picker" -->
+            <!-- <mat-datepicker-toggle
+              matPrefix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker [style.width]="'100%'" #picker></mat-datepicker> -->
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.age }}
+            </mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="number"
+              required
+              placeholder="{{ current_language_set?.ro?.personalInfo?.age }}"
+              (change)="onAgeEntered()"
+              formControlName="age"
+              maxlength="3"
+            />
+            <mat-error
+              *ngIf="personalDetailsForm.controls['age'].errors?.['required']"
+            >
+              {{
+                current_language_set?.benDetailsAlert?.ageMandatory
+              }}</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.ageUnit }}
+            </mat-label>
+            <mat-select
+              required
+              (selectionChange)="onAgeUnitEntered()"
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.ageUnit
+              }}"
+              formControlName="ageUnit"
+            >
+              <mat-option
+                *ngFor="let ageUnit of masterData?.ageUnit"
+                [value]="ageUnit.name"
+              >
+                {{ ageUnit.name | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <ng-container>
+          <div
+            class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+            *ngIf="enableMaritalStatus"
+          >
+            <mat-form-field [style.width]="'100%'">
+              <mat-label class="mat-label-text">
+                {{ current_language_set?.ro?.personalInfo?.maritalStatus }}
+              </mat-label>
+              <mat-select
+                (selectionChange)="onMaritalStatusChanged()"
+                [required]="enableMaritalStatus"
+                formControlName="maritalStatus"
+              >
+                <mat-option
+                  *ngFor="let maritalStatus of maritalStatusMaster"
+                  [value]="maritalStatus.maritalStatusID"
+                >
+                  {{ maritalStatus.status | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="enableMaritalStatus && enableMarriageDetails">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ current_language_set?.ro?.personalInfo?.spouseName }}"
+              </mat-label>
+              <input
+                autocomplete="off"
+                matInput
+                allowText="alphaspace"
+                [required]="enableSpouseMandatory"
+                placeholder="{{
+                  current_language_set?.ro?.personalInfo?.spouseName
+                }}"
+                formControlName="spouseName"
+                minlength="2"
+                maxlength="50"
+              />
+              <mat-error
+                *ngIf="
+                  personalDetailsForm.controls['spouseName'].errors?.[
+                    'minlength'
+                  ]
+                "
+                >{{
+                  current_language_set?.common?.pleaseprovideatleast3character
+                }}</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <div
+          *ngIf="enableMaritalStatus && enableMarriageDetails"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+        >
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.ageAtMarriage }}
+            </mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="number"
+              (change)="checkAgeAtMarriage()"
+              [required]="enableMarriageDetails"
+              formControlName="ageAtMarriage"
+              minlength="2"
+              maxlength="3"
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.ageAtMarriage
+              }}"
+            />
+            <mat-error
+              *ngIf="
+                personalDetailsForm.controls['ageAtMarriage'].errors?.[
+                  'minlength'
+                ]
+              "
+              >{{ current_language_set?.common?.invalidMarriageAge }}</mat-error
+            >
+            <mat-error
+              *ngIf="
+                personalDetailsForm.controls['ageAtMarriage'].errors?.[
+                  'maxlength'
+                ]
+              "
+              >{{ current_language_set?.common?.invalidMarriageAge }}</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.incomeStatus }}
+            </mat-label>
+            <mat-select
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.incomeStatus
+              }}"
+              (selectionChange)="onIncomeChanged()"
+              formControlName="income"
+            >
+              <mat-option
+                *ngFor="let incomeStatus of masterData?.incomeMaster"
+                [value]="incomeStatus.incomeStatusID"
+              >
+                {{ incomeStatus.incomeStatus }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.literacyStatus }}
+            </mat-label>
+            <mat-select
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.literacyStatus
+              }}"
+              formControlName="literacyStatus"
+              (selectionChange)="changeLiteracyStatus()"
+            >
+              <mat-option
+                *ngFor="let literacyStatusValue of masterData?.literacyStatus"
+                [value]="literacyStatusValue.literacystatus"
+              >
+                {{ literacyStatusValue.literacystatus | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div
+          *ngIf="personalDetailsForm.value.literacyStatus === 'Literate'"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+        >
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{
+                current_language_set?.ro?.personalInfo?.educationalQualification
+              }}
+            </mat-label>
+            <mat-select
+              [style.width]="'100%'"
+              [required]="
+                personalDetailsForm.value.literacyStatus === 'Literate'
+              "
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.educationalQualification
+              }}"
+              formControlName="educationQualification"
+              (selectionChange)="onEducationQualificationChanged()"
+            >
+              <mat-option
+                *ngFor="let qualification of masterData?.qualificationMaster"
+                [value]="qualification.educationID"
+              >
+                {{ qualification.educationType | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.occupation }}
+            </mat-label>
+            <mat-select
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.occupation
+              }}"
+              formControlName="occupation"
+              (selectionChange)="getOccupationName()"
+            >
+              <mat-option
+                *ngFor="let occupation of masterData?.occupationMaster"
+                [value]="occupation.occupationID"
+              >
+                {{ occupation.occupationType | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div
+          *ngIf="personalDetailsForm.value.occupation === '7'"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+        >
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ current_language_set?.ro?.personalInfo?.otherOccupation }}
+            </mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="alphaspace"
+              placeholder="{{
+                current_language_set?.ro?.personalInfo?.otherOccupation
+              }}
             "
-            >{{ current_language_set?.common?.invalidMarriageAge }}</mat-error
-          >
-          <mat-error
-            *ngIf="
-              personalDetailsForm.controls['ageAtMarriage'].errors?.[
-                'maxlength'
-              ]
-            "
-            >{{ current_language_set?.common?.invalidMarriageAge }}</mat-error
-          >
-        </mat-form-field>
-      </div>
+              formControlName="occupationOther"
+              minlength="3"
+              maxlength="50"
+              [required]="true"
+            />
+          </mat-form-field>
+        </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          [style.width]="'100%'"
-          placeholder="{{
-            current_language_set?.ro?.personalInfo?.incomeStatus
-          }}"
-          (change)="onIncomeChanged()"
-          formControlName="income"
-        >
-          <mat-option
-            *ngFor="let incomeStatus of masterData?.incomeMaster"
-            [value]="incomeStatus.incomeStatusID"
-          >
-            {{ incomeStatus.incomeStatus }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          [style.width]="'100%'"
-          placeholder="{{
-            current_language_set?.ro?.personalInfo?.literacyStatus
-          }}"
-          formControlName="literacyStatus"
-          (change)="changeLiteracyStatus()"
-        >
-          <mat-option
-            *ngFor="let literacyStatusValue of masterData?.literacyStatus"
-            [value]="literacyStatusValue.literacystatus"
-          >
-            {{ literacyStatusValue.literacystatus | titlecase }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <div
-        *ngIf="personalDetailsForm.value.literacyStatus === 'Literate'"
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-      >
-        <mat-select
-          [style.width]="'100%'"
-          [required]="personalDetailsForm.value.literacyStatus === 'Literate'"
-          placeholder="{{
-            current_language_set?.ro?.personalInfo?.educationalQualification
-          }}"
-          formControlName="educationQualification"
-          (change)="onEducationQualificationChanged()"
-        >
-          <mat-option
-            *ngFor="let qualification of masterData?.qualificationMaster"
-            [value]="qualification.educationID"
-          >
-            {{ qualification.educationType | titlecase }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          [style.width]="'100%'"
-          placeholder="{{ current_language_set?.ro?.personalInfo?.occupation }}"
-          formControlName="occupation"
-          (change)="getOccupationName()"
-        >
-          <mat-option
-            *ngFor="let occupation of masterData?.occupationMaster"
-            [value]="occupation.occupationID"
-          >
-            {{ occupation.occupationType | titlecase }}
-          </mat-option>
-        </mat-select>
-      </div>
-
-      <div
-        *ngIf="personalDetailsForm.value.occupation === '7'"
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-      >
-        <mat-form-field [style.width]="'100%'">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="alphaspace"
-            placeholder="{{
-              current_language_set?.ro?.personalInfo?.otherOccupation
-            }}
-            "
-            formControlName="occupationOther"
-            minlength="3"
-            maxlength="50"
-            [required]="true"
-          />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field>
-          <input
-            matInput
-            autocomplete="on"
-            [disabled]="true"
-            name="registrationDate"
-            placeholder="Registration Date"
-            formControlName="registrationDate"
-          />
-        </mat-form-field>
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+          <mat-form-field [style.width]="'100%'">
+            <mat-label> Registration Date </mat-label>
+            <input
+              matInput
+              autocomplete="on"
+              [disabled]="true"
+              name="registrationDate"
+              placeholder="Registration Date"
+              formControlName="registrationDate"
+            />
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>
