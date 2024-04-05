@@ -459,7 +459,8 @@ export class RegisterDemographicDetailsComponent
    * Check and save location Data from Storage
    */
   loadLocationFromStorage() {
-    const location: any = localStorage.getItem('location');
+    const locationData: any = localStorage.getItem('location');
+    const location = JSON.parse(locationData);
     this.demographicsMaster = Object.assign({}, location, {
       servicePointID: localStorage.getItem('servicePointID'),
       servicePointName: localStorage.getItem('servicePointName'),
