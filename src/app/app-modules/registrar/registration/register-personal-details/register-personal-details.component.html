@@ -25,9 +25,8 @@
           </div>
           <button
             id="captureButton"
-            class="m-t-10"
+            class="m-t-10 mat_captureButton"
             (click)="captureImage()"
-            mat-button
             mat-raised-button
             type="button"
           >
@@ -40,12 +39,12 @@
     <div id="data_row" class="col-md-10 order-md-first">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
+          <mat-form-field style="width: 100%">
             <mat-label class="mat-label-text">{{
               current_language_set?.ro?.personalInfo?.firstName
             }}</mat-label>
             <input
-              defaultNull
+              appDefaultNull
               autocomplete="off"
               required
               matInput
@@ -77,12 +76,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
+          <mat-form-field style="width: 100%">
             <mat-label class="mat-label-text">{{
               current_language_set?.ro?.personalInfo?.lastName
             }}</mat-label>
             <input
-              defaultNull
+              appDefaultNull
               autocomplete="off"
               matInput
               allowText="alphaspace"
@@ -107,12 +106,12 @@
               </mat-checkbox>
             </div>
             <div class="col-xs-10 col-sm-10">
-              <mat-form-field [style.width]="'100%'">
+              <mat-form-field style="width: 100%">
                 <mat-label class="mat-label-text">
                   {{ current_language_set?.ro?.personalInfo?.contactNo }}
                 </mat-label>
                 <input
-                  appDefaultNull
+                  appappDefaultNull
                   autocomplete="off"
                   matInput
                   allowText="number"
@@ -151,8 +150,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field class="col-xs-12 m-l-10-" [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field class="col-xs-12 m-l-10-" style="width: 100%">
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.alternateNumber }}
             </mat-label>
             <input
@@ -168,11 +167,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.gender }}
             </mat-label>
             <mat-select
+              style="width: 100%"
               required
               (selectionChange)="onGenderSelected()"
               formControlName="gender"
@@ -187,7 +187,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
+          <mat-form-field style="width: 96%">
             <mat-icon matSuffix>event</mat-icon>
             <mat-label class="mat-label-text">{{
               current_language_set?.ro?.personalInfo?.dob
@@ -210,18 +210,12 @@
               bsDatepicker
               formControlName="dob"
             />
-            <!-- [matDatepicker]="picker" -->
-            <!-- <mat-datepicker-toggle
-              matPrefix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker [style.width]="'100%'" #picker></mat-datepicker> -->
           </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field style="width: 100%">
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.age }}
             </mat-label>
             <input
@@ -244,11 +238,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.ageUnit }}
             </mat-label>
             <mat-select
+              [style.width]="'100%'"
               required
               (selectionChange)="onAgeUnitEntered()"
               formControlName="ageUnit"
@@ -263,73 +258,71 @@
           </mat-form-field>
         </div>
 
-        <ng-container>
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-            *ngIf="enableMaritalStatus"
-          >
-            <mat-form-field [style.width]="'100%'">
-              <mat-label class="mat-label-text">
-                {{ current_language_set?.ro?.personalInfo?.maritalStatus }}
-              </mat-label>
-              <mat-select
-                (selectionChange)="onMaritalStatusChanged()"
-                [required]="enableMaritalStatus"
-                formControlName="maritalStatus"
+        <div
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+          *ngIf="enableMaritalStatus"
+        >
+          <mat-form-field>
+            <mat-label class="mat-label-text">
+              {{ current_language_set?.ro?.personalInfo?.maritalStatus }}
+            </mat-label>
+            <mat-select
+              style="width: 100%"
+              (selectionChange)="onMaritalStatusChanged()"
+              [required]="enableMaritalStatus"
+              formControlName="maritalStatus"
+            >
+              <mat-option
+                *ngFor="let maritalStatus of maritalStatusMaster"
+                [value]="maritalStatus.maritalStatusID"
               >
-                <mat-option
-                  *ngFor="let maritalStatus of maritalStatusMaster"
-                  [value]="maritalStatus.maritalStatusID"
-                >
-                  {{ maritalStatus.status | titlecase }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </ng-container>
+                {{ maritalStatus.status | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <ng-container *ngIf="enableMaritalStatus && enableMarriageDetails">
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>
-                {{ current_language_set?.ro?.personalInfo?.spouseName }}"
-              </mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                allowText="alphaspace"
-                [required]="enableSpouseMandatory"
-                formControlName="spouseName"
-                minlength="2"
-                maxlength="50"
-              />
-              <mat-error
-                *ngIf="
-                  personalDetailsForm.controls['spouseName'].errors?.[
-                    'minlength'
-                  ]
-                "
-                >{{
-                  current_language_set?.common?.pleaseprovideatleast3character
-                }}</mat-error
-              >
-            </mat-form-field>
-          </div>
-        </ng-container>
+        <div
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
+          *ngIf="enableMaritalStatus && enableMarriageDetails"
+        >
+          <mat-form-field style="width: 100%">
+            <mat-label class="mat-label-text">
+              {{ current_language_set?.ro?.personalInfo?.spouseName }}"
+            </mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="alphaspace"
+              [required]="enableSpouseMandatory"
+              formControlName="spouseName"
+              minlength="2"
+              maxlength="50"
+            />
+            <mat-error
+              *ngIf="
+                personalDetailsForm.controls['spouseName'].errors?.['minlength']
+              "
+              >{{
+                current_language_set?.common?.pleaseprovideatleast3character
+              }}</mat-error
+            >
+          </mat-form-field>
+        </div>
 
         <div
           *ngIf="enableMaritalStatus && enableMarriageDetails"
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
         >
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field style="width: 100%">
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.ageAtMarriage }}
             </mat-label>
             <input
               autocomplete="off"
               matInput
               allowText="number"
-              (change)="checkAgeAtMarriage()"
+              (selectionChange)="checkAgeAtMarriage()"
               [required]="enableMarriageDetails"
               formControlName="ageAtMarriage"
               minlength="2"
@@ -355,11 +348,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.incomeStatus }}
             </mat-label>
             <mat-select
+              style="width: 100%"
               (selectionChange)="onIncomeChanged()"
               formControlName="income"
             >
@@ -374,11 +368,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.literacyStatus }}
             </mat-label>
             <mat-select
+              style="width: 100%"
               formControlName="literacyStatus"
               (selectionChange)="changeLiteracyStatus()"
             >
@@ -396,14 +391,14 @@
           *ngIf="personalDetailsForm.value.literacyStatus === 'Literate'"
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
         >
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{
                 current_language_set?.ro?.personalInfo?.educationalQualification
               }}
             </mat-label>
             <mat-select
-              [style.width]="'100%'"
+              style="width: 100%"
               [required]="
                 personalDetailsForm.value.literacyStatus === 'Literate'
               "
@@ -421,11 +416,12 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field>
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.occupation }}
             </mat-label>
             <mat-select
+              style="width: 100%"
               formControlName="occupation"
               (selectionChange)="getOccupationName()"
             >
@@ -440,11 +436,11 @@
         </div>
 
         <div
-          *ngIf="personalDetailsForm.value.occupation === '7'"
+          *ngIf="personalDetailsForm.value.occupation === 7"
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
         >
-          <mat-form-field [style.width]="'100%'">
-            <mat-label>
+          <mat-form-field style="width: 100%">
+            <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.otherOccupation }}
             </mat-label>
             <input
@@ -460,8 +456,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label> Registration Date </mat-label>
+          <mat-form-field style="width: 100%">
+            <mat-label class="mat-label-text"> Registration Date </mat-label>
             <input
               matInput
               autocomplete="on"
