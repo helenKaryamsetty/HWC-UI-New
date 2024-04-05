@@ -258,7 +258,30 @@ export class DispensationDetailsComponent
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
-
+  disableQuantityPrescribed() {
+    const noQtyPresItems: any = [
+      'Vasectomy (Male sterilization)',
+      'Tubectomy (Female Sterilization)',
+      'IUCD 375',
+      'IUCD 380A',
+    ];
+    const contraceptiveType =
+      this.dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
+        .value;
+    if (contraceptiveType.length > 0) {
+      const qtyPresIncluded = contraceptiveType.every((element: any) =>
+        noQtyPresItems.includes(element),
+      );
+      if (qtyPresIncluded) {
+        this.dispensationDetailsForm.controls['qtyPrescribed'].reset();
+        this.dispensationDetailsForm.controls['qtyPrescribed'].disable();
+      } else {
+        this.dispensationDetailsForm.controls['qtyPrescribed'].enable();
+      }
+    } else {
+      this.dispensationDetailsForm.controls['qtyPrescribed'].enable();
+    }
+  }
   resettypeOfContraceptivePrescribed(selectedOption: any) {
     if (
       selectedOption !== undefined &&

@@ -12,6 +12,7 @@
       (selectionChange)="
         populateDoseFieldForAntara();
         otherContrasepiveType();
+        disableQuantityPrescribed();
         resettypeOfContraceptivePrescribed(
           dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
             .value
@@ -69,16 +70,6 @@
         allowText="number"
         name="qtyPrescribed"
         formControlName="qtyPrescribed"
-        [disabled]="
-          dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
-            .value === 'Vasectomy (Male sterilization)' ||
-          dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
-            .value === 'Tubectomy (Female Sterilization)' ||
-          dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
-            .value === 'IUCD 375' ||
-          dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
-            .value === 'IUCD 380A'
-        "
         (change)="onValueChange()"
       />
     </mat-form-field>

@@ -159,7 +159,6 @@ export class IecAndCounsellingComponent
   }
 
   counselledOnOther() {
-    console.log(this.counselledOn);
     if (
       this.counselledOn !== undefined &&
       this.counselledOn !== null &&

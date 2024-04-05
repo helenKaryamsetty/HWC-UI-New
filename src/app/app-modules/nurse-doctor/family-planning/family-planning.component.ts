@@ -71,7 +71,6 @@ export class FamilyPlanningComponent
   ) {}
 
   ngOnInit() {
-    console.log('patient medical form - fp ', this.patientMedicalForm);
     const familyPlaningForm = this.patientMedicalForm.get(
       'familyPlanningForm',
     ) as FormGroup;
