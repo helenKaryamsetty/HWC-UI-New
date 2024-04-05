@@ -1,7 +1,7 @@
-<!-- <div class="row m-t-20" [formGroup]="infantBirthDetailsForm">
+<div class="row m-t-20" [formGroup]="infantBirthDetailsForm">
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+    *ngIf="visitCategory === 'Childhood & Adolescent Healthcare Services'"
   >
     <mat-form-field
       class="input-full-width mat_form_field_background_color mat_form_field_background_width"
@@ -11,7 +11,6 @@
       </mat-label>
       <input
         matInput
-        [openOnFocus]="true"
         style="width: 100%"
         [matDatepicker]="picker"
         name="dateOfBirth"
@@ -28,7 +27,7 @@
 
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+    *ngIf="visitCategory === 'Childhood & Adolescent Healthcare Services'"
   >
     <mat-form-field
       class="input-full-width mat_form_field_background_color mat_form_field_background_width"
@@ -60,7 +59,7 @@
         id="deliveryPlaceID"
         name="deliveryPlaceID"
         formControlName="deliveryPlaceID"
-        (change)="otherPlaceOfDelivery(true)"
+        (selectionChange)="otherPlaceOfDelivery(true)"
       >
         <mat-option
           *ngFor="let place of deliveryPlaceList"
@@ -103,7 +102,7 @@
         id="deliveryTypeID"
         name="deliveryTypeID"
         formControlName="deliveryTypeID"
-        (change)="getDeliveryType()"
+        (selectionChange)="getDeliveryType()"
       >
         <mat-option
           *ngFor="let type of deliveryTypeList"
@@ -117,7 +116,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
-      visitType.toLowerCase() === 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     "
   >
     <mat-form-field class="input-full-width">
@@ -129,7 +128,7 @@
         id="birthComplicationID"
         name="birthComplicationID"
         formControlName="birthComplicationID"
-        (change)="otherBirthComplication()"
+        (selectionChange)="otherBirthComplication()"
       >
         <mat-option
           *ngFor="let complication of birthComplicationList"
@@ -174,7 +173,7 @@
         id="gestationID"
         name="gestationID"
         formControlName="gestationID"
-        (change)="getGestation()"
+        (selectionChange)="getGestation()"
       >
         <mat-option
           *ngFor="let item of gestationList"
@@ -197,7 +196,7 @@
         id="deliveryConductedByID"
         name="deliveryConductedByID"
         formControlName="deliveryConductedByID"
-        (change)="getDeliveryConductedBy()"
+        (selectionChange)="getDeliveryConductedBy()"
       >
         <mat-option
           *ngFor="let item of deliveryConductedByList"
@@ -234,7 +233,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
-      visitType.toLowerCase() === 'neonatal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     "
   >
     <mat-form-field class="input-full-width">
@@ -247,7 +246,7 @@
         id="congenitalAnomaliesList"
         name="congenitalAnomaliesList"
         formControlName="congenitalAnomaliesList"
-        (change)="onValueChange()"
+        (selectionChange)="onValueChange()"
       >
         <mat-option
           *ngFor="let item of congenitalAnomaliesList"
@@ -261,7 +260,7 @@
 
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="visitType === 'Childhood & Adolescent Healthcare Services'"
+    *ngIf="visitCategory === 'Childhood & Adolescent Healthcare Services'"
   >
     <mat-form-field
       class="input-full-width mat_form_field_background_color mat_form_field_background_width"
@@ -271,7 +270,6 @@
       </mat-label>
       <input
         matInput
-        [openOnFocus]="true"
         style="width: 100%"
         [matDatepicker]="picker1"
         name="dateOfUpdatingBirthDetails"
@@ -285,4 +283,4 @@
       <mat-datepicker [style.width]="'100%'" #picker1></mat-datepicker>
     </mat-form-field>
   </div>
-</div> -->
+</div>

@@ -1,4 +1,4 @@
-<!-- <mat-accordion [formGroup]="patientBirthImmunizationHistoryForm">
+<mat-accordion [formGroup]="patientBirthImmunizationHistoryForm">
   <mat-expansion-panel expanded="true" *ngIf="beneficiaryAge <= 2">
     <mat-expansion-panel-header
       *ngIf="
@@ -14,7 +14,7 @@
       <h5>{{ currentLanguageSet?.birthHistory }}</h5>
     </mat-expansion-panel-header>
     <app-infant-birth-details
-      [mode]="mode"
+      [immunizationHistoryMode]="immunizationHistoryMode"
       [visitCategory]="visitCategory"
       [infantBirthDetailsForm]="infantBirthDetailsForm"
     ></app-infant-birth-details>
@@ -25,8 +25,8 @@
       <h5>{{ currentLanguageSet?.formImmunizationHistory }}</h5>
     </mat-expansion-panel-header>
     <app-form-immunization-history
-      [mode]="mode"
+      [immunizationHistoryMode]="immunizationHistoryMode"
       [neonatalImmunizationHistoryForm]="immunizationHistory"
     ></app-form-immunization-history>
   </mat-expansion-panel>
-</mat-accordion> -->
+</mat-accordion>

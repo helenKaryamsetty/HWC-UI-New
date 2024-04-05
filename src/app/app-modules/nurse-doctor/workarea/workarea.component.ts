@@ -129,6 +129,7 @@ export class WorkareaComponent
 
   specialistFlag: any;
   patientMedicalForm!: FormGroup;
+  patientBirthImmunizationHistoryForm!: FormGroup;
 
   showESanjeevaniBtn = false;
   tm = false;
@@ -1013,6 +1014,11 @@ export class WorkareaComponent
           'patientBirthImmunizationHistoryForm',
           new GeneralUtils(this.fb).createBirthImmunizationHistoryForm(),
         );
+
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientBirthImmunizationHistoryForm',
+        ) as FormGroup;
+
         this.patientMedicalForm.addControl(
           'patientVitalsForm',
           new GeneralUtils(this.fb).createNeonatalVitalDetailsForm(),
@@ -1078,6 +1084,11 @@ export class WorkareaComponent
           'patientBirthImmunizationHistoryForm',
           new GeneralUtils(this.fb).createBirthImmunizationHistoryForm(),
         );
+
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientBirthImmunizationHistoryForm',
+        ) as FormGroup;
+
         this.patientMedicalForm.addControl(
           'patientVitalsForm',
           new GeneralUtils(this.fb).createNeonatalVitalDetailsForm(),

@@ -236,7 +236,7 @@
             </div>
           </mat-step> -->
 
-          <!-- <mat-step
+          <mat-step
             *ngIf="showImmunizationHistory"
             label="Birth & Immunization History"
           >
@@ -247,7 +247,7 @@
               [immunizationHistoryMode]="immunizationHistoryMode"
               [visitCategory]="visitCategory"
               [patientBirthImmunizationHistoryForm]="
-                patientMedicalForm.controls.patientBirthImmunizationHistoryForm
+                patientBirthImmunizationHistoryForm
               "
             ></app-birth-immunization-history>
             <div class="row m-t-20">
@@ -281,7 +281,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <!-- <mat-step *ngIf="showVitals" label="Vitals">
             <ng-template matStepLabel>{{
