@@ -474,8 +474,9 @@ export class SearchComponent implements OnInit, DoCheck {
    * ReStruct the response object of Identity Search to be as per search table requirements
    */
   searchRestruct(benList: any, benObject: any) {
+    console.log('benList', benList);
     const requiredBenData: any[] = [];
-    benList.forEach((element: any, i: any) => {
+    benList.data.forEach((element: any, i: any) => {
       requiredBenData.push({
         beneficiaryID: element.beneficiaryID,
         beneficiaryRegID: element.beneficiaryRegID,

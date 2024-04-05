@@ -50,9 +50,6 @@
               required
               matInput
               allowText="alphabet"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.firstName
-              }}"
               formControlName="firstName"
               minlength="2"
               maxlength="50"
@@ -89,9 +86,6 @@
               autocomplete="off"
               matInput
               allowText="alphaspace"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.lastName
-              }}"
               formControlName="lastName"
               (change)="setFullName()"
               maxlength="50"
@@ -166,9 +160,6 @@
               autocomplete="off"
               allowText="number"
               name="alternateContactNumber"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.alternateNumber
-              }}"
               minlength="10"
               formControlName="alternateContactNumber"
               maxlength="10"
@@ -238,7 +229,6 @@
               matInput
               allowText="number"
               required
-              placeholder="{{ current_language_set?.ro?.personalInfo?.age }}"
               (change)="onAgeEntered()"
               formControlName="age"
               maxlength="3"
@@ -261,9 +251,6 @@
             <mat-select
               required
               (selectionChange)="onAgeUnitEntered()"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.ageUnit
-              }}"
               formControlName="ageUnit"
             >
               <mat-option
@@ -312,9 +299,6 @@
                 matInput
                 allowText="alphaspace"
                 [required]="enableSpouseMandatory"
-                placeholder="{{
-                  current_language_set?.ro?.personalInfo?.spouseName
-                }}"
                 formControlName="spouseName"
                 minlength="2"
                 maxlength="50"
@@ -350,9 +334,6 @@
               formControlName="ageAtMarriage"
               minlength="2"
               maxlength="3"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.ageAtMarriage
-              }}"
             />
             <mat-error
               *ngIf="
@@ -379,9 +360,6 @@
               {{ current_language_set?.ro?.personalInfo?.incomeStatus }}
             </mat-label>
             <mat-select
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.incomeStatus
-              }}"
               (selectionChange)="onIncomeChanged()"
               formControlName="income"
             >
@@ -401,9 +379,6 @@
               {{ current_language_set?.ro?.personalInfo?.literacyStatus }}
             </mat-label>
             <mat-select
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.literacyStatus
-              }}"
               formControlName="literacyStatus"
               (selectionChange)="changeLiteracyStatus()"
             >
@@ -432,9 +407,6 @@
               [required]="
                 personalDetailsForm.value.literacyStatus === 'Literate'
               "
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.educationalQualification
-              }}"
               formControlName="educationQualification"
               (selectionChange)="onEducationQualificationChanged()"
             >
@@ -454,9 +426,6 @@
               {{ current_language_set?.ro?.personalInfo?.occupation }}
             </mat-label>
             <mat-select
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.occupation
-              }}"
               formControlName="occupation"
               (selectionChange)="getOccupationName()"
             >
@@ -482,10 +451,6 @@
               autocomplete="off"
               matInput
               allowText="alphaspace"
-              placeholder="{{
-                current_language_set?.ro?.personalInfo?.otherOccupation
-              }}
-            "
               formControlName="occupationOther"
               minlength="3"
               maxlength="50"
@@ -502,7 +467,6 @@
               autocomplete="on"
               [disabled]="true"
               name="registrationDate"
-              placeholder="Registration Date"
               formControlName="registrationDate"
             />
           </mat-form-field>

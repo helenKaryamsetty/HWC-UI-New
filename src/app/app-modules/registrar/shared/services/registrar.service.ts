@@ -103,12 +103,22 @@ export class RegistrarService {
 
   getRegistrationMaster(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http.post(environment.registrarMasterDataUrl, tmpSPID);
+    return this.http
+      .post(environment.registrarMasterDataUrl, tmpSPID)
+      .subscribe((res: any) => {
+        console.log(JSON.stringify(res.data), 'json data');
+        if (res.data) this.registrationMasterDetails.next(res.data);
+      });
   }
 
   getResgistartionMasterData(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http.post(environment.registrarMasterDataUrl, tmpSPID);
+    return this.http
+      .post(environment.registrarMasterDataUrl, tmpSPID)
+      .subscribe((res: any) => {
+        console.log(JSON.stringify(res.data), 'json data');
+        if (res.data) this.registrationMasterDetails.next(res.data);
+      });
   }
 
   subject = new BehaviorSubject(this.consentGranted);

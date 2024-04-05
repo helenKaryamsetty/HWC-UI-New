@@ -29,6 +29,7 @@
               [style.width]="'100%'"
               formControlName="stateID"
               [required]="true"
+              (selectionChange)="onStateChange()"
               [disabled]="disableState"
             >
               <mat-option
@@ -52,6 +53,7 @@
               [required]="true"
               formControlName="districtID"
               [disabled]="disableDistrict"
+              (selectionChange)="onDistrictChange()"
             >
               <mat-option
                 *ngFor="let district of districtList"
@@ -74,7 +76,7 @@
               [required]="true"
               formControlName="blockID"
               [disabled]="disableSubDistrict"
-              (change)="onSubDistrictChange()"
+              (selectionChange)="onSubDistrictChange()"
             >
               <mat-option
                 *ngFor="let subDistrict of subDistrictList"
@@ -97,7 +99,7 @@
               [required]="true"
               formControlName="villageID"
               [disabled]="patientRevisit && disableSubDistrict"
-              (change)="onVillageChange()"
+              (selectionChange)="onVillageChange()"
             >
               <mat-option
                 *ngFor="let village of villageList"

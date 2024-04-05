@@ -1,21 +1,23 @@
 <section class="row" style="margin-top: 0.5%">
   <section class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-      <mat-select
-        input
-        id="searchCategory"
-        name="searchCategory"
-        (change)="clearSearchTerm()"
-        [(ngModel)]="searchCategory"
-        style="width: 100%; margin-bottom: 10px"
-      >
-        <mat-option
-          *ngFor="let catergory of searchCategories"
-          class="field-color"
-          value="catergory"
-          >{{ catergory }}</mat-option
+      <mat-form-field>
+        <mat-select
+          input
+          id="searchCategory"
+          name="searchCategory"
+          (selectionChange)="clearSearchTerm()"
+          [(value)]="searchCategory"
+          style="width: 100%; margin-bottom: 10px"
         >
-      </mat-select>
+          <mat-option
+            *ngFor="let catergory of searchCategories"
+            class="field-color"
+            [value]="catergory"
+            >{{ catergory }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="container searchBox col-lg-8 col-md-8 col-sm-12 col-xs-12">
       <div class="row">
@@ -47,7 +49,7 @@
       </div>
     </div>
   </section>
-  <section class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
+  <!-- <section class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
     <section class="row search-button-container">
       <button
         mat-raised-button
@@ -107,7 +109,7 @@
         </div>
       </div>
     </section>
-  </section>
+  </section> -->
 </section>
 
 <div class="row spacer"></div>
@@ -117,10 +119,12 @@
     <mat-card>
       <div *ngIf="beneficiaryList?.length > 0" class="pull-right">
         <mat-form-field id="filterbox" class="m-t-20">
+          <mat-label>
+            {{ currentLanguageSet?.common?.inTableSearch }}
+          </mat-label>
           <input
             autocomplete="off"
             matInput
-            placeholder="{{ currentLanguageSet?.common?.inTableSearch }}"
             #filterTerm
             (keyup)="filterBeneficiaryList(filterTerm.value)"
           />

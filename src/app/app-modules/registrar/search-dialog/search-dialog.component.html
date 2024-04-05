@@ -15,13 +15,13 @@
       <section class="row m-t-10">
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ currentLanguageSet?.ro?.personalInfo?.firstName }}
+            </mat-label>
             <input
               autocomplete="off"
               matInput
               allowText="alphabet"
-              placeholder="{{
-                currentLanguageSet?.ro?.personalInfo?.firstName
-              }}"
               required="true"
               name="firstName"
               [(ngModel)]="beneficiary.firstName"
@@ -39,11 +39,13 @@
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field myName [style.width]="'100%'">
+            <mat-label>
+              {{ currentLanguageSet?.ro?.personalInfo?.lastName }}
+            </mat-label>
             <input
               autocomplete="off"
               matInput
               allowText="alphaspace"
-              placeholder="{{ currentLanguageSet?.ro?.personalInfo?.lastName }}"
               name="lastName"
               [(ngModel)]="beneficiary.lastName"
               #lastNameV="ngModel"
@@ -54,11 +56,13 @@
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field [style.width]="'100%'">
+            <mat-label>
+              {{ currentLanguageSet?.ro?.otherInfo?.fatherName }}
+            </mat-label>
             <input
               autocomplete="off"
               matInput
               allowText="alphabet"
-              placeholder="{{ currentLanguageSet?.ro?.otherInfo?.fatherName }} "
               name="fatherName"
               [(ngModel)]="beneficiary.fatherName"
               #fatherNameV="ngModel"
@@ -72,21 +76,24 @@
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
-            <mat-select
-              class="p-t-12"
-              (change)="selectGender()"
-              required
-              [style.width]="'100%'"
-              placeholder="{{ currentLanguageSet?.ro?.personalInfo?.gender }}"
-              name="gender"
-              [(ngModel)]="beneficiary.gender"
-            >
-              <mat-option
-                *ngFor="let gender of masterData?.genderMaster"
-                [value]="gender.genderID"
-                >{{ gender.genderName }}
-              </mat-option>
-            </mat-select>
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.ro?.personalInfo?.gender }}
+              </mat-label>
+              <mat-select
+                class="p-t-12"
+                (change)="selectGender()"
+                required
+                name="gender"
+                [(ngModel)]="beneficiary.gender"
+              >
+                <mat-option
+                  *ngFor="let gender of masterData?.genderMaster"
+                  [value]="gender.genderID"
+                  >{{ gender.genderName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 box">
@@ -103,7 +110,6 @@
               name="dob"
               id="dob"
               [(ngModel)]="beneficiary.dob"
-              placeholder="{{ currentLanguageSet?.dateOfBirth }}"
               formControlName="startDate"
               ng-readonly="true"
               max="today"
@@ -119,74 +125,86 @@
       <section class="row grayborder">
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
-            <mat-select
-              class="p-t-12"
-              (change)="onStateChange()"
-              [style.width]="'100%'"
-              placeholder="
-                        {{ currentLanguageSet?.ro?.locInfo?.state }}"
-              name="stateID"
-              [(ngModel)]="beneficiary.stateID"
-            >
-              <mat-option *ngFor="let state of states" [value]="state.stateID"
-                >{{ state.stateName | titlecase }}
-              </mat-option>
-            </mat-select>
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.ro?.locInfo?.state }}
+              </mat-label>
+              <mat-select
+                class="p-t-12"
+                (selectionChange)="onStateChange()"
+                name="stateID"
+                [(ngModel)]="beneficiary.stateID"
+              >
+                <mat-option *ngFor="let state of states" [value]="state.stateID"
+                  >{{ state.stateName | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
-            <mat-select
-              class="p-t-12"
-              [style.width]="'100%'"
-              placeholder="{{ currentLanguageSet?.travel?.district }}"
-              name="districtID"
-              [(ngModel)]="districtID"
-              (change)="onDistrictChange()"
-            >
-              <mat-option
-                *ngFor="let district of districts"
-                [value]="district.districtID"
-                >{{ district.districtName | titlecase }}
-              </mat-option>
-            </mat-select>
-          </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-6 box">
-          <div class="select-container">
-            <mat-select
-              class="p-t-12"
-              [style.width]="'100%'"
-              (change)="onBlockChange()"
-              placeholder="{{ currentLanguageSet?.block }}"
-              name="blockID"
-              [(ngModel)]="blockID"
-            >
-              <mat-option
-                *ngFor="let block of blockList"
-                [value]="block.blockID"
-                >{{ block.blockName | titlecase }}
-              </mat-option>
-            </mat-select>
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.travel?.district }}
+              </mat-label>
+              <mat-select
+                class="p-t-12"
+                name="districtID"
+                [(ngModel)]="districtID"
+                (selectionChange)="onDistrictChange()"
+              >
+                <mat-option
+                  *ngFor="let district of districts"
+                  [value]="district.districtID"
+                  >{{ district.districtName | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
 
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
-            <mat-select
-              class="p-t-12"
-              [style.width]="'100%'"
-              placeholder="{{ currentLanguageSet?.village }}"
-              name="villageID"
-              [(ngModel)]="villageID"
-            >
-              <mat-option
-                *ngFor="let village of villageList"
-                [value]="village.districtBranchID"
-                >{{ village.villageName | titlecase }}
-              </mat-option>
-            </mat-select>
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.block }}
+              </mat-label>
+              <mat-select
+                class="p-t-12"
+                (selectionChange)="onBlockChange()"
+                name="blockID"
+                [(ngModel)]="blockID"
+              >
+                <mat-option
+                  *ngFor="let block of blockList"
+                  [value]="block.blockID"
+                  >{{ block.blockName | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 box">
+          <div class="select-container">
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.village }}
+              </mat-label>
+              <mat-select
+                class="p-t-12"
+                placeholder=""
+                name="villageID"
+                [(ngModel)]="villageID"
+              >
+                <mat-option
+                  *ngFor="let village of villageList"
+                  [value]="village.districtBranchID"
+                  >{{ village.villageName | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
       </section>

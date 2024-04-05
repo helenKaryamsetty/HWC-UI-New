@@ -9,7 +9,8 @@
         formControlName="checked"
         (change)="checkMandatoryIsRequired($event)"
       >
-        <p>{{ currentLanguageSet?.deactivateMandatoryFields }}</p>
+        <!-- <p>{{ currentLanguageSet?.deactivateMandatoryFields }}</p> -->
+        <!-- <p>{{ currentLanguageSet | json }}</p> -->
       </mat-checkbox>
     </div>
   </div>
@@ -98,7 +99,6 @@
           <input
             autocomplete="off"
             matInput
-            placeholder="{{ currentLanguageSet?.ro?.otherInfo?.bankName }}"
             allowText="alphaspace"
             maxLength="100"
             formControlName="bankName"
@@ -113,7 +113,6 @@
           <input
             autocomplete="off"
             matInput
-            placeholder="{{ currentLanguageSet?.ro?.otherInfo?.branchName }}"
             allowText="alphanumericspace"
             maxLength="100"
             formControlName="branchName"
@@ -203,7 +202,6 @@
             autocomplete="off"
             readonly
             matInput
-            placeholder="{{ currentLanguageSet?.aBHA }}"
             formControlName="healthId"
             minlength="4"
             maxlength="32"
@@ -254,9 +252,6 @@
                   formControlName="type"
                   [required]="isGidRequired"
                   style="line-height: unset"
-                  placeholder="{{
-                    currentLanguageSet?.ro?.otherInfo?.govtIDType
-                  }}"
                 >
                   <mat-option
                     *ngFor="let govIDType of govIDMaster[i]?.govIdEntityMaster"
@@ -277,9 +272,6 @@
                 <input
                   autocomplete="off"
                   matInput
-                  placeholder="{{
-                    currentLanguageSet?.ro?.otherInfo?.govtIDNumber
-                  }}"
                   [pattern]="
                     otherDetailsForm.controls['govID'].value[i].pattern
                   "
@@ -393,9 +385,6 @@
                   formControlName="type"
                   (selectionChange)="filterOtherGovIDs(id.value.type, i)"
                   style="line-height: unset"
-                  placeholder="{{
-                    currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType
-                  }}"
                 >
                   <mat-option
                     *ngFor="
