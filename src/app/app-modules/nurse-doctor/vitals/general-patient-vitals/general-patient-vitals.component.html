@@ -63,7 +63,7 @@
               "
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTWeightModel()"
             >
@@ -614,7 +614,7 @@
               "
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTTempModel()"
             >
@@ -643,7 +643,7 @@
               formControlName="pulseRate"
               (change)="checkPulseRate(pulseRate)"
               [required]="
-                (visitCategory !== 'NCD screening' ===================&=&
+                (visitCategory !== 'NCD screening' &&
                   visitCategory !== 'ANC' &&
                   visitCategory !== 'General OPD' &&
                   visitCategory !== 'PNC' &&
@@ -652,7 +652,7 @@
               "
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTPulseRateModel()"
             >
@@ -676,7 +676,7 @@
               (change)="checkSpo2()"
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTSPO2Model()"
             >
@@ -720,7 +720,7 @@
               "
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTBPModel()"
             >
@@ -765,7 +765,7 @@
               "
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
               (click)="openIOTBPModel()"
             >
@@ -830,7 +830,7 @@
                     (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
                   />
                   <button
-                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
                     (click)="openIOTBGFastingModel()"
                   >
@@ -860,7 +860,7 @@
                     (change)="checkBloodSugarRandom(bloodGlucose_Random)"
                   />
                   <button
-                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
                     (click)="openIOTBGRandomModel()"
                   >
@@ -892,7 +892,7 @@
                     "
                   />
                   <button
-                    tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                    matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
                     (click)="openIOTBGPostPrandialModel()"
                   >
@@ -983,7 +983,7 @@
                 }"
               />
               <button
-                tooltip="{{ currentLanguageSet?.common?.startTest }}"
+                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
                 [disabled]="checkDiasableRBS()"
                 (click)="openIOTRBSModel()"

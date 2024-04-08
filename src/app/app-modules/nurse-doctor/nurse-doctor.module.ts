@@ -72,6 +72,10 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
 import { ChildhoodOralVitaminComponent } from './immunization-service/childhood-oral-vitamin/childhood-oral-vitamin.component';
 import { ImmunizationServiceComponent } from './immunization-service/immunization-service.component';
 import { NeonatalImmunizationServiceComponent } from './immunization-service/neonatal-immunization-service/neonatal-immunization-service.component';
+import { GeneralPatientVitalsComponent } from './vitals/general-patient-vitals/general-patient-vitals.component';
+import { NeonatalPatientVitalsComponent } from './vitals/neonatal-patient-vitals/neonatal-patient-vitals.component';
+import { VitalsComponent } from './vitals/vitals.component';
+import { TestInVitalsService } from './shared/services/test-in-vitals.service';
 
 @NgModule({
   imports: [
@@ -106,7 +110,7 @@ import { NeonatalImmunizationServiceComponent } from './immunization-service/neo
     // HeadToToeExaminationComponent,
     // GeneralExaminationComponent,
     // GeneralOpdExaminationComponent,
-    // GeneralPatientVitalsComponent,
+    GeneralPatientVitalsComponent,
     // MedicationHistoryComponent,
     // DevelopmentHistoryComponent,
     // FeedingHistoryComponent,
@@ -136,7 +140,7 @@ import { NeonatalImmunizationServiceComponent } from './immunization-service/neo
     UploadFilesComponent,
     // HistoryComponent,
     // ExaminationComponent,
-    // VitalsComponent,
+    VitalsComponent,
     // CaseRecordComponent,
     // AncComponent,
     // PncComponent,
@@ -204,6 +208,8 @@ import { NeonatalImmunizationServiceComponent } from './immunization-service/neo
     // VisitDeatilsCaseSheetComponent,
     // NeonatalPatientVitalsComponent,
     NeonatalImmunizationServiceComponent,
+    NeonatalPatientVitalsComponent,
+    // NeonatalImmunizationServiceComponent,
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
     FormImmunizationHistoryComponent,
@@ -231,7 +237,8 @@ import { NeonatalImmunizationServiceComponent } from './immunization-service/neo
     MasterdataService,
     NcdScreeningService,
     IdrsscoreService,
-    // WorkareaCanActivate, LabService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
+    // WorkareaCanActivate, LabService,RegistrarService,
+    TestInVitalsService, //FamilyTaggingService, NcdScreeningService, CDSSService
   ],
 })
 export class NurseDoctorModule {}

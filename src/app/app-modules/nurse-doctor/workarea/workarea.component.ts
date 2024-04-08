@@ -188,6 +188,7 @@ export class WorkareaComponent
 
   patientVisitForm!: FormGroup;
   patientImmunizationServicesForm!: FormGroup;
+  patientVitalsForm!: FormGroup;
 
   constructor(
     private router: Router,
