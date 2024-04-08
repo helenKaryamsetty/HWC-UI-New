@@ -69,6 +69,10 @@ import { DispensationDetailsComponent } from './family-planning/dispensation-det
 import { FamilyPlanningAndReproductiveComponent } from './family-planning/family-planning-and-reproductive-details/family-planning-and-reproductive-details.component';
 import { FamilyPlanningComponent } from './family-planning/family-planning.component';
 import { IecAndCounsellingComponent } from './family-planning/iec-and-counselling-details/iec-and-counselling-details.component';
+import { GeneralPatientVitalsComponent } from './vitals/general-patient-vitals/general-patient-vitals.component';
+import { NeonatalPatientVitalsComponent } from './vitals/neonatal-patient-vitals/neonatal-patient-vitals.component';
+import { VitalsComponent } from './vitals/vitals.component';
+import { TestInVitalsService } from './shared/services/test-in-vitals.service';
 
 @NgModule({
   imports: [
@@ -103,7 +107,7 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     // HeadToToeExaminationComponent,
     // GeneralExaminationComponent,
     // GeneralOpdExaminationComponent,
-    // GeneralPatientVitalsComponent,
+    GeneralPatientVitalsComponent,
     // MedicationHistoryComponent,
     // DevelopmentHistoryComponent,
     // FeedingHistoryComponent,
@@ -133,7 +137,7 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     UploadFilesComponent,
     // HistoryComponent,
     // ExaminationComponent,
-    // VitalsComponent,
+    VitalsComponent,
     // CaseRecordComponent,
     // AncComponent,
     // PncComponent,
@@ -199,7 +203,7 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     // TreatmentsOnSideEffectsComponent,
     // FamilyPlanningCaseSheetComponent,
     // VisitDeatilsCaseSheetComponent,
-    // NeonatalPatientVitalsComponent,
+    NeonatalPatientVitalsComponent,
     // NeonatalImmunizationServiceComponent,
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
@@ -228,7 +232,8 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     MasterdataService,
     NcdScreeningService,
     IdrsscoreService,
-    // WorkareaCanActivate, LabService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
+    // WorkareaCanActivate, LabService,RegistrarService,
+    TestInVitalsService, //FamilyTaggingService, NcdScreeningService, CDSSService
   ],
 })
 export class NurseDoctorModule {}

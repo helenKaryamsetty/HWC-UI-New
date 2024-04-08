@@ -1,19 +1,19 @@
 <section [formGroup]="neonatalVitalsForm">
-  <md-accordion>
-    <md-expansion-panel expanded="true">
-      <md-expansion-panel-header>
+  <mat-accordion>
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
         <h5>
           {{
             currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
           }}
         </h5>
-      </md-expansion-panel-header>
+      </mat-expansion-panel-header>
       <div class="row m-t-10">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <md-form-field class="input-full-width">
+          <mat-form-field class="input-full-width">
             <input
               autocomplete="off"
-              mdInput
+              matInput
               defaultNull
               placeholder="
             {{
@@ -28,13 +28,13 @@
               defaultNull
               allowMax="190"
             />
-          </md-form-field>
+          </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <md-form-field class="input-full-width">
+          <mat-form-field class="input-full-width">
             <input
               autocomplete="off"
-              mdInput
+              matInput
               defaultNull
               placeholder="
             {{
@@ -49,22 +49,22 @@
               allowMax="99"
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
-              mdSuffix
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matSuffix
               (click)="openIOTWeightModel()"
             >
               <span class="glyphicon glyphicon-scale"></span>
             </button>
-          </md-form-field>
+          </mat-form-field>
         </div>
 
         <div class="clearfix"></div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <md-form-field class="input-full-width">
+          <mat-form-field class="input-full-width">
             <input
               autocomplete="off"
-              mdInput
+              matInput
               defaultNull
               placeholder="
             {{
@@ -78,14 +78,14 @@
               formControlName="headCircumference_cm"
               allowMax="60"
             />
-          </md-form-field>
+          </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <md-form-field class="input-full-width">
+          <mat-form-field class="input-full-width">
             <input
               autocomplete="off"
-              mdInput
+              matInput
               defaultNull
               placeholder="
             {{
@@ -100,13 +100,13 @@
               allowMax="106"
             />
             <button
-              tooltip="{{ currentLanguageSet?.common?.startTest }}"
-              mdSuffix
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matSuffix
               (click)="openIOTTempModel()"
             >
               <span class="glyphicon glyphicon-scale"></span>
             </button>
-          </md-form-field>
+          </mat-form-field>
         </div>
 
         <!-- Audio Recording -->
@@ -117,7 +117,7 @@
 
             <div class="row col-xs-12 m-t-10 m-b-10">
               <button
-                md-raised-button
+                mat-raised-button
                 class="font-regular start-button"
                 *ngIf="!isRecording && !blobUrl"
                 (click)="startRecording()"
@@ -130,7 +130,7 @@
               </div>
 
               <button
-                md-raised-button
+                mat-raised-button
                 color="warn"
                 class="font-regular"
                 *ngIf="isRecording && !blobUrl"
@@ -141,7 +141,7 @@
 
               <div class="m-t-5 m-b-20">
                 <button
-                  md-raised-button
+                  mat-raised-button
                   color="warn"
                   class="font-regular"
                   *ngIf="!isRecording && blobUrl"
@@ -151,7 +151,7 @@
                 </button>
 
                 <button
-                  md-raised-button
+                  mat-raised-button
                   color="primary"
                   class="font-regular"
                   style="margin-left: 10px"
@@ -172,15 +172,15 @@
               <div class="checkbox-group" *ngIf="!isRecording && blobUrl">
                 <strong>Any Observed Symptoms:</strong>
                 <div class="col-xs-12 col-sm-12 col-md-12 m-t-15">
-                  <md-checkbox color='primary' class="valueCheck"  name="frequentCoughChecked" (change)="onCheckboxChange('frequentCough', $event)"> Frequent Cough </md-checkbox>
-                  <md-checkbox color='primary' class="valueCheck"  name="sputumChecked" (change)="onCheckboxChange('sputum', $event)"> Sputum </md-checkbox>
-                  <md-checkbox color='primary' class="valueCheck"  name="coughAtNightChecked" (change)="onCheckboxChange('coughAtNight', $event)"> Cough At Night </md-checkbox>
-                  <md-checkbox color='primary' class="valueCheck"  name="wheezingChecked" (change)="onCheckboxChange('wheezing', $event)"> Wheezing </md-checkbox>
-                  <md-checkbox color='primary' class="valueCheck"  name="painInChestChecked" (change)="onCheckboxChange('painInChest', $event)"> Pain in Chest </md-checkbox>
-                  <md-checkbox color='primary' class="valueCheck"  name="shortnessOfBreathChecked" (change)="onCheckboxChange('shortnessOfBreath', $event)"> Shortness Of Breath </md-checkbox>                                
+                  <mat-checkbox color='primary' class="valueCheck"  name="frequentCoughChecked" (change)="onCheckboxChange('frequentCough', $event)"> Frequent Cough </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="sputumChecked" (change)="onCheckboxChange('sputum', $event)"> Sputum </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="coughAtNightChecked" (change)="onCheckboxChange('coughAtNight', $event)"> Cough At Night </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="wheezingChecked" (change)="onCheckboxChange('wheezing', $event)"> Wheezing </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="painInChestChecked" (change)="onCheckboxChange('painInChest', $event)"> Pain in Chest </mat-checkbox>
+                  <mat-checkbox color='primary' class="valueCheck"  name="shortnessOfBreathChecked" (change)="onCheckboxChange('shortnessOfBreath', $event)"> Shortness Of Breath </mat-checkbox>                                
                 </div>
                 <div class="col-xs-12 m-t-15">
-                  <button md-raised-button class="pull-right" (click)="startAssessment()" color="primary">
+                  <button mat-raised-button class="pull-right" (click)="startAssessment()" color="primary">
                     {{currentLanguageSet?.common?.submit}}
                   </button>
                 </div>
@@ -213,6 +213,6 @@
         </div>
       </div> -->
       </div>
-    </md-expansion-panel>
-  </md-accordion>
+    </mat-expansion-panel>
+  </mat-accordion>
 </section>

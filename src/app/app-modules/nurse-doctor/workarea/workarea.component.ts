@@ -187,6 +187,7 @@ export class WorkareaComponent
   enableupdateButtonSubcriptionForScreening: Subscription = new Subscription();
 
   patientVisitForm!: FormGroup;
+  patientVitalsForm!: FormGroup;
 
   constructor(
     private router: Router,
