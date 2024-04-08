@@ -187,6 +187,7 @@ export class WorkareaComponent
   enableupdateButtonSubcriptionForScreening: Subscription = new Subscription();
 
   patientVisitForm!: FormGroup;
+  patientImmunizationServicesForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -1027,6 +1028,9 @@ export class WorkareaComponent
           'patientImmunizationServicesForm',
           new GeneralUtils(this.fb).createImmunizationServiceForm(),
         );
+        this.patientImmunizationServicesForm = this.patientMedicalForm.get(
+          'patientImmunizationServicesForm',
+        ) as FormGroup;
         this.patientMedicalForm.addControl(
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
@@ -1097,6 +1101,9 @@ export class WorkareaComponent
           'patientImmunizationServicesForm',
           new GeneralUtils(this.fb).createImmunizationServiceForm(),
         );
+        this.patientImmunizationServicesForm = this.patientMedicalForm.get(
+          'patientImmunizationServicesForm',
+        ) as FormGroup;
         this.patientMedicalForm.addControl(
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),

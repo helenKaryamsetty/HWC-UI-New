@@ -69,6 +69,9 @@ import { DispensationDetailsComponent } from './family-planning/dispensation-det
 import { FamilyPlanningAndReproductiveComponent } from './family-planning/family-planning-and-reproductive-details/family-planning-and-reproductive-details.component';
 import { FamilyPlanningComponent } from './family-planning/family-planning.component';
 import { IecAndCounsellingComponent } from './family-planning/iec-and-counselling-details/iec-and-counselling-details.component';
+import { ChildhoodOralVitaminComponent } from './immunization-service/childhood-oral-vitamin/childhood-oral-vitamin.component';
+import { ImmunizationServiceComponent } from './immunization-service/immunization-service.component';
+import { NeonatalImmunizationServiceComponent } from './immunization-service/neonatal-immunization-service/neonatal-immunization-service.component';
 
 @NgModule({
   imports: [
@@ -200,15 +203,15 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     // FamilyPlanningCaseSheetComponent,
     // VisitDeatilsCaseSheetComponent,
     // NeonatalPatientVitalsComponent,
-    // NeonatalImmunizationServiceComponent,
+    NeonatalImmunizationServiceComponent,
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
     FormImmunizationHistoryComponent,
     // FollowUpForImmunizationComponent,
     // NeonatalAndInfantServiceCaseSheetComponent,
     ChildAndAdolescentOralVitaminACaseSheetComponent,
-    // ChildhoodOralVitaminComponent,
-    // ImmunizationServiceComponent,
+    ChildhoodOralVitaminComponent,
+    ImmunizationServiceComponent,
     Nurse104RefferedWorklistComponent,
     // Referred104CdssDetailsComponent,
     // Referred104DetailsPopupComponent,
