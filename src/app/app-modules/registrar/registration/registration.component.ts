@@ -165,6 +165,7 @@ export class RegistrationComponent
     this.personalDetailsForm = this.beneficiaryRegistrationForm.get(
       'personalDetailsForm',
     ) as FormGroup;
+    //  this.personalDetailsForm = (this.beneficiaryRegistrationForm.controls['personalDetailsForm'] as FormGroup);
     this.demographicDetailsForm = this.beneficiaryRegistrationForm.get(
       'demographicDetailsForm',
     ) as FormGroup;
@@ -258,7 +259,7 @@ export class RegistrationComponent
   loadMasterDataObservable() {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res) => {
-        console.log('Registrar master data', res);
+        // console.log('Registrar master data', res);
         if (res !== null) {
           this.masterData = Object.assign({}, res);
           this.govIDMaster = Object.assign({}, res);
@@ -277,7 +278,7 @@ export class RegistrationComponent
     // this.registrarService.getPatientDataAsObservable(benRegID);
     this.revisitDataSubscription =
       this.registrarService.beneficiaryEditDetails$.subscribe((res) => {
-        console.log(JSON.stringify(res, null, 4), 'subject data here...');
+        // console.log(JSON.stringify(res, null, 4), 'subject data here...');
         if (res !== null && benID === res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
         } else {
@@ -437,7 +438,7 @@ export class RegistrationComponent
       registrationForm.controls['otherDetailsForm']
     );
 
-    console.log(personalForm, 'personalForm');
+    // console.log(personalForm, 'personalForm');
     // const govtIds = otherDetailsForm.value.govID;
     // let idsCount = 0;
     // const otherGovtIds = otherDetailsForm.value.otherGovID;
@@ -594,7 +595,7 @@ export class RegistrationComponent
       registrationForm.controls['otherDetailsForm']
     );
 
-    console.log(personalForm, 'personalForm');
+    // console.log(personalForm, 'personalForm');
     Object.keys(personalForm.controls).forEach((control) => {
       if (!personalForm.controls[control].valid) {
         if (
@@ -844,7 +845,7 @@ export class RegistrationComponent
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     phoneMaps[0]['createdBy'] = localStorage.getItem('userName');
 
-    console.log(JSON.stringify(iEMRForm, null, 4), ' biEMRFOrm');
+    // console.log(JSON.stringify(iEMRForm, null, 4), ' biEMRFOrm');
     this.registrarService.submitBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res.statusCode === 200) {
         // this.confirmationService.confirm('success',res.data.response + " Do you want to proceed for family tagging process?", 'yes','No').subscribe((res)) => {
@@ -938,7 +939,7 @@ export class RegistrationComponent
   updateBeneficiarynPassToNurse(passToNurse = true) {
     const iEMRForm: any = this.updateBenDataManipulation();
     iEMRForm['passToNurse'] = passToNurse;
-    console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
+    // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
     const otherDetailsForm = <FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
@@ -1126,7 +1127,7 @@ export class RegistrationComponent
       const iEMRForm: any = this.updateBenDataManipulation();
       iEMRForm['passToNurse'] = passToNurse;
 
-      console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
+      // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
       this.registrarService
         .updateBeneficiary(iEMRForm)
         .subscribe((res: any) => {
@@ -1193,7 +1194,7 @@ export class RegistrationComponent
     phoneMaps[0]['vanID'] = servicePointDetails.vanID;
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     phoneMaps[0]['modifiedBy'] = localStorage.getItem('userName');
-    console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrmupdate');
+    // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrmupdate');
     return iEMRForm;
   }
 
@@ -1434,7 +1435,7 @@ export class RegistrationComponent
       }
       return null;
     });
-    console.log(govArr, 'new', otherGovArr, 'nw');
+    // console.log(govArr, 'new', otherGovArr, 'nw');
 
     govID.forEach((gov) => {
       govArr.forEach((id) => {
@@ -1576,7 +1577,7 @@ export class RegistrationComponent
       });
     });
 
-    console.log('before return', iEMRids);
+    // console.log('before return', iEMRids);
     if (iEMRids.length) {
       return iEMRids;
     } else {
@@ -1615,9 +1616,9 @@ export class RegistrationComponent
       this.beneficiaryRegistrationForm.value.otherDetailsForm,
     );
     const iEMRids = this.iEMRids(othersForm.govID, othersForm.otherGovID);
-    console.log(iEMRids, 'ids our');
-    console.log(personalForm, demographicsForm, othersForm, 'forms');
-    console.log('submiting form', this.beneficiaryRegistrationForm.value);
+    // console.log(iEMRids, 'ids our');
+    // console.log(personalForm, demographicsForm, othersForm, 'forms');
+    // console.log('submiting form', this.beneficiaryRegistrationForm.value);
 
     const finalForm = {
       beneficiaryConsent: true,
@@ -1747,12 +1748,12 @@ export class RegistrationComponent
         }
       });
     });
-    console.log('before return', iEMRids);
+    // console.log('before return', iEMRids);
     return iEMRids;
   }
 
   canDeactivate(): Observable<boolean> {
-    console.log('deactivate called');
+    // console.log('deactivate called');
     if (this.beneficiaryRegistrationForm.dirty)
       return this.confirmationService.confirm(
         `info`,
@@ -1780,7 +1781,7 @@ export class RegistrationComponent
       day = ('0' + date.getDate()).slice(-2);
     const newDate = [date.getFullYear(), mnth, day].join('-');
     const date1 = new Date(newDate);
-    console.log('value1', demographicsForm.controls['addressLine3'].value);
+    // console.log('value1', demographicsForm.controls['addressLine3'].value);
     //combining address
     let addessValue = null;
     if (
@@ -1821,7 +1822,7 @@ export class RegistrationComponent
       );
     }
 
-    console.log('date1', personalForm.controls['gender'].value);
+    // console.log('date1', personalForm.controls['gender'].value);
     const dialogRef = this.dialog.open(HealthIdOtpGenerationComponent, {
       height: '250px',
       width: '420px',
@@ -1853,7 +1854,7 @@ export class RegistrationComponent
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('result', result);
+      // console.log('result', result);
       if (result) {
         (<FormGroup>(
           this.beneficiaryRegistrationForm.controls['otherDetailsForm']
@@ -1915,7 +1916,7 @@ export class RegistrationComponent
           : null,
       beneficiaryId: this.revisitData.beneficiaryID,
     };
-    console.log('reqObj', reqObj);
+    // console.log('reqObj', reqObj);
     this.router.navigate(['/registrar/familyTagging', reqObj]);
   }
 

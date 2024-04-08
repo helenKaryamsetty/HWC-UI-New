@@ -203,7 +203,6 @@ export class RegisterOtherDetailsComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-    console.log('this.currentLanguageSet ********', this.currentLanguageSet);
   }
 
   ngOnDestroy() {

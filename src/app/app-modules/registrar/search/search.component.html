@@ -217,6 +217,7 @@
               </td>
               <td (click)="patientRevisited(beneficiary.benObject)">
                 {{ beneficiary.genderName | titlecase }}
+                <!-- {{ beneficiary | json }} -->
               </td>
               <td (click)="patientRevisited(beneficiary.benObject)">
                 {{ beneficiary.age === "a year" ? "1 year" : beneficiary.age }}

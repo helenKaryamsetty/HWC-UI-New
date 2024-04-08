@@ -114,6 +114,7 @@ export class SearchComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.searchCategory = this.searchCategories[0];
+    console.log('this.searchCategory', this.searchCategory);
     // this.searchType = 'ID';
     // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     this.searchPattern = '/^[a-zA-Z0-9](.|@|-)*$/;';
@@ -178,7 +179,7 @@ export class SearchComponent implements OnInit, DoCheck {
             itemsPerPage: this.rowsPerPage,
           });
         }
-        console.log('hi', JSON.stringify(beneficiaryList, null, 4));
+        console.log('beneficiaryList*********', this.beneficiaryList);
       },
       (error: any) => {
         this.confirmationService.alert(error, 'error');
@@ -498,7 +499,7 @@ export class SearchComponent implements OnInit, DoCheck {
         benObject: element,
       });
     });
-    console.log(JSON.stringify(requiredBenData, null, 4), 'yoooo!');
+    // console.log(JSON.stringify(requiredBenData, null, 4), 'yoooo!');
 
     return requiredBenData;
   }
@@ -520,11 +521,11 @@ export class SearchComponent implements OnInit, DoCheck {
       );
   }
   pageChanged(event: any): void {
-    console.log('called', event);
+    // console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
     this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    console.log('list', this.pagedList);
+    // console.log('list', this.pagedList);
   }
 
   getCorrectPhoneNo(phoneMaps: any, benObject: any) {
@@ -678,13 +679,17 @@ export class SearchComponent implements OnInit, DoCheck {
   }
 
   editPatientInfo(beneficiary: any) {
+    console.log('beneficiary under edit', beneficiary);
+
     this.confirmationService
       .confirm(`info`, this.currentLanguageSet.alerts.info.editDetails)
       .subscribe((result) => {
+        console.log('result', result);
         if (result) {
           this.registrarService.saveBeneficiaryEditDataASobservable(
             beneficiary.benObject,
           );
+          console.log('beneficiary.benObject ****************', beneficiary);
           this.router.navigate([
             '/registrar/search/' + beneficiary.beneficiaryID,
           ]);

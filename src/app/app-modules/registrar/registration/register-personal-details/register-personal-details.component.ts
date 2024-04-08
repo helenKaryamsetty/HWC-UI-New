@@ -115,10 +115,10 @@ export class RegisterPersonalDetailsComponent
         if (res !== null && res !== undefined)
           this.setPersonalDetailsFromHealthId(res);
       });
-    console.log(
-      'personalDataOnHealthIDSubscription',
-      this.personalDataOnHealthIDSubscription,
-    );
+    // console.log(
+    //   'personalDataOnHealthIDSubscription',
+    //   this.personalDataOnHealthIDSubscription,
+    // );
   }
   setPersonalDetailsFromHealthId(res: any) {
     this.personalDetailsForm.patchValue({
@@ -183,7 +183,7 @@ export class RegisterPersonalDetailsComponent
    */
   loadMasterDataObservable() {
     this.masterDataSubscription =
-      this.registrarService.registrationMasterDetails$.subscribe((res) => {
+      this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
         // console.log('res personal', res)
         if (res !== null) {
           this.masterData = res;
@@ -197,7 +197,15 @@ export class RegisterPersonalDetailsComponent
   validateMaritalStatusMaster(revisitData: any) {
     if (revisitData.m_gender.genderID === 3) {
       this.maritalStatusMaster = this.masterData.maritalStatusMaster;
+      console.log(
+        'this.maritalStatusMaster line 200',
+        this.maritalStatusMaster,
+      );
     } else {
+      console.log(
+        'this.maritalStatusMaster line 202',
+        this.maritalStatusMaster,
+      );
       this.maritalStatusMaster = this.masterData.maritalStatusMaster.filter(
         (maritalStatus: any) => {
           if (
@@ -239,7 +247,7 @@ export class RegisterPersonalDetailsComponent
    * Load Editing Data to Form
    */
   pushEditingDatatoForm(element: any) {
-    console.log(element, 'datahere');
+    console.log('element in personal', element);
     this.dateForCalendar = moment(element.dOB).toDate(); //calendar ngModel
     this.personalDetailsForm.patchValue({
       beneficiaryID: element.beneficiaryID,
@@ -306,6 +314,7 @@ export class RegisterPersonalDetailsComponent
         null,
     });
     this.setFullName();
+    // this.patchGender();
     // this.onMaritalStatusChanged(); // Marital status Changed
     this.masterData.incomeMaster.forEach((stat: any) => {
       if (
@@ -337,6 +346,12 @@ export class RegisterPersonalDetailsComponent
       null
     }`;
   }
+
+  // patchGender() {
+  //   this.personalDetailsForm.patchValue({
+  //     gender: this.revisitData.m_gender.genderID,
+  //     genderName: this.revisitData.m_gender.genderName });
+  // }
 
   /**
    *
@@ -446,7 +461,6 @@ export class RegisterPersonalDetailsComponent
   maritalStatusMaster: any[] = [];
   onGenderSelected() {
     const genderMaster = this.masterData.genderMaster;
-    console.log('genderMaster', genderMaster);
     genderMaster.forEach((element: any, i: any) => {
       if (element.genderID === this.personalDetailsForm.value.gender) {
         this.personalDetailsForm.patchValue({
@@ -455,7 +469,7 @@ export class RegisterPersonalDetailsComponent
       }
     });
     console.log(
-      'this.masterData',
+      'this.masterData 464',
       genderMaster,
       this.masterData.maritalStatusMaster,
     );
@@ -472,6 +486,10 @@ export class RegisterPersonalDetailsComponent
               });
             } else {
               this.maritalStatusMaster = this.masterData.maritalStatusMaster;
+              console.log(
+                'this.maritalStatusMaster line 481',
+                this.maritalStatusMaster,
+              );
             }
           },
           (err) => {},
@@ -493,6 +511,10 @@ export class RegisterPersonalDetailsComponent
             return maritalStatus;
           }
         },
+      );
+      console.log(
+        'this.maritalStatusMaster and masterData line 506',
+        this.masterData.maritalStatusMaster,
       );
     }
   }
@@ -516,15 +538,16 @@ export class RegisterPersonalDetailsComponent
       searchObject['phoneNo'] = searchTerm;
       this.registrarService.identityQuickSearch(searchObject).subscribe(
         (beneficiaryList: any) => {
+          console.log(
+            'beneficiaryList ************* in  personal',
+            beneficiaryList,
+          );
+
           if (
             beneficiaryList &&
             beneficiaryList.length > 0 &&
             beneficiaryList[0].benPhoneMaps.length > 0
           ) {
-            console.log(
-              'ta d ad a d a',
-              JSON.stringify(beneficiaryList, null, 4),
-            );
             this.personalDetailsForm.patchValue({
               parentRegID: beneficiaryList[0].benPhoneMaps[0].parentBenRegID,
               parentRelation: 11,
@@ -808,6 +831,7 @@ export class RegisterPersonalDetailsComponent
     }
 
     const maritalMaster = this.masterData.maritalStatusMaster;
+    console.log('maritalMaster in line 816', maritalMaster);
     maritalMaster.forEach((element: any, i: any) => {
       if (
         element.maritalStatusID === this.personalDetailsForm.value.maritalStatus
