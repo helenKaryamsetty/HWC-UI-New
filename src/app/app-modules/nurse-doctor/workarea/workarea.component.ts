@@ -129,6 +129,7 @@ export class WorkareaComponent
 
   specialistFlag: any;
   patientMedicalForm!: FormGroup;
+  patientBirthImmunizationHistoryForm!: FormGroup;
 
   showESanjeevaniBtn = false;
   tm = false;
@@ -188,6 +189,8 @@ export class WorkareaComponent
   patientVisitForm!: FormGroup;
   patientANCForm!: FormGroup;
   patientPNCForm!: FormGroup;
+  patientImmunizationServicesForm!: FormGroup;
+  patientVitalsForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -1021,6 +1024,11 @@ export class WorkareaComponent
           'patientBirthImmunizationHistoryForm',
           new GeneralUtils(this.fb).createBirthImmunizationHistoryForm(),
         );
+
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientBirthImmunizationHistoryForm',
+        ) as FormGroup;
+
         this.patientMedicalForm.addControl(
           'patientVitalsForm',
           new GeneralUtils(this.fb).createNeonatalVitalDetailsForm(),
@@ -1029,6 +1037,9 @@ export class WorkareaComponent
           'patientImmunizationServicesForm',
           new GeneralUtils(this.fb).createImmunizationServiceForm(),
         );
+        this.patientImmunizationServicesForm = this.patientMedicalForm.get(
+          'patientImmunizationServicesForm',
+        ) as FormGroup;
         this.patientMedicalForm.addControl(
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
@@ -1086,6 +1097,11 @@ export class WorkareaComponent
           'patientBirthImmunizationHistoryForm',
           new GeneralUtils(this.fb).createBirthImmunizationHistoryForm(),
         );
+
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientBirthImmunizationHistoryForm',
+        ) as FormGroup;
+
         this.patientMedicalForm.addControl(
           'patientVitalsForm',
           new GeneralUtils(this.fb).createNeonatalVitalDetailsForm(),
@@ -1094,6 +1110,9 @@ export class WorkareaComponent
           'patientImmunizationServicesForm',
           new GeneralUtils(this.fb).createImmunizationServiceForm(),
         );
+        this.patientImmunizationServicesForm = this.patientMedicalForm.get(
+          'patientImmunizationServicesForm',
+        ) as FormGroup;
         this.patientMedicalForm.addControl(
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),

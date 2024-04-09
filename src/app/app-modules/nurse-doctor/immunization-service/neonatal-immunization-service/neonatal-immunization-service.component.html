@@ -1,0 +1,231 @@
+<div class="row m-t-20" [formGroup]="immunizationServicesForm">
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 div-height">
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">
+        {{ currentLanguageSet?.dateOfVisit }}
+      </mat-label>
+      <input
+        matInput
+        [max]="today"
+        [matDatepicker]="dateOfVisitPicker"
+        name="dateOfVisit"
+        formControlName="dateOfVisit"
+        readonly
+        (change)="onValueChange()"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="dateOfVisitPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #dateOfVisitPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 div-height">
+    <mat-form-field>
+      <mat-label>
+        {{ currentLanguageSet?.typeOfImmunizationServices }}
+      </mat-label>
+      <mat-select
+        class="full-width"
+        name="immunizationServicesTypeID"
+        formControlName="immunizationServicesTypeID"
+        (selectionchange)="
+          setImmunizationServiceType(
+            immunizationServicesForm.controls['immunizationServicesTypeID']
+              .value
+          )
+        "
+      >
+        <mat-option
+          *ngFor="let service of typeOfImmunizationServiceList"
+          [value]="service.id"
+        >
+          {{ service.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 div-height">
+    <mat-form-field>
+      <mat-label>
+        {{ currentLanguageSet?.currentImmunizationService }}
+      </mat-label>
+      <mat-select
+        class="full-width"
+        name="currentImmunizationServiceID"
+        formControlName="currentImmunizationServiceID"
+        (selectionchange)="
+          setCurrentImmunizationService(
+            immunizationServicesForm.controls['currentImmunizationServiceID']
+              .value
+          );
+          getVaccineListOnSelectedService(
+            immunizationServicesForm.controls['currentImmunizationServiceID']
+              .value,
+            immunizationServicesForm.controls['currentImmunizationService']
+              .value
+          )
+        "
+      >
+        <mat-option
+          *ngFor="let currentService of filteredImmunizationServiceList"
+          [value]="currentService.id"
+        >
+          {{ currentService.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<mat-card *ngIf="enableVaccineDetails" [formGroup]="immunizationServicesForm">
+  <ng-container formArrayName="vaccines">
+    <div *ngFor="let vaccine of getVaccines(); let i = index">
+      <ng-container [formGroupName]="i">
+        <div class="row">
+          <mat-card-header>
+            <mat-card-title>
+              <h5>
+                <strong>{{ vaccineList[i]?.vaccine }}</strong>
+              </h5>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 div-height">
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.currentVaccineStatus }}
+                </mat-label>
+                <mat-select
+                  class="full-width"
+                  name="status"
+                  formControlName="status"
+                  (selectionchange)="setVaccineName(vaccine.value.status, i)"
+                >
+                  <mat-option
+                    *ngFor="let status of vaccineStatus"
+                    [value]="status"
+                  >
+                    {{ status }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div
+              class="col-xs-12 col-sm-6 col-md-3 col-lg-3 div-height"
+              *ngIf="
+                (vaccine.value.status !== undefined &&
+                  vaccine.value.status !== null &&
+                  vaccine.value.status.toLowerCase() === 'given') ||
+                enableFieldsToCaptureMissedVaccineDetails
+              "
+            >
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.vaccineDose }}
+                </mat-label>
+                <mat-select
+                  class="full-width"
+                  name="vaccineDose"
+                  formControlName="vaccineDose"
+                  [id]="'vaccineDose' + i"
+                >
+                  <mat-option
+                    *ngFor="let dose of vaccineList[i]?.dose"
+                    [value]="dose.dose"
+                  >
+                    {{ dose.dose }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div
+              class="col-xs-12 col-sm-6 col-md-3 col-lg-3 div-height"
+              *ngIf="
+                (vaccine.value.status !== undefined &&
+                  vaccine.value.status !== null &&
+                  vaccine.value.status.toLowerCase() === 'given') ||
+                enableFieldsToCaptureMissedVaccineDetails
+              "
+            >
+              <mat-form-field class="full-width">
+                <mat-label>
+                  {{ currentLanguageSet?.batchNo }}
+                </mat-label>
+                <input
+                  autocomplete="off"
+                  type="text"
+                  matInput
+                  allowText="usernameValidator"
+                  maxlength="50"
+                  formControlName="batchNo"
+                />
+              </mat-form-field>
+            </div>
+
+            <div
+              class="col-xs-12 col-sm-6 col-md-3 col-lg-3 div-height"
+              *ngIf="
+                (vaccine.value.status !== undefined &&
+                  vaccine.value.status !== null &&
+                  vaccine.value.status.toLowerCase() === 'given') ||
+                enableFieldsToCaptureMissedVaccineDetails
+              "
+            >
+              <mat-form-field class="full-width">
+                <mat-label>
+                  {{ currentLanguageSet?.route }}
+                </mat-label>
+                <mat-select
+                  class="full-width"
+                  name="route"
+                  formControlName="route"
+                  [id]="'route' + i"
+                >
+                  <mat-option
+                    *ngFor="let item of vaccineList[i]?.route"
+                    [value]="item.route"
+                  >
+                    {{ item.route }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="clearfix"></div>
+            <div
+              class="col-xs-12 col-sm-6 col-md-3 col-lg-3 div-height"
+              *ngIf="
+                vaccineList[i]?.siteOfInjection?.length > 0 &&
+                ((vaccine.value.status !== undefined &&
+                  vaccine.value.status !== null &&
+                  vaccine.value.status.toLowerCase() === 'given') ||
+                  enableFieldsToCaptureMissedVaccineDetails)
+              "
+            >
+              <mat-form-field class="full-width">
+                <mat-label>
+                  {{ currentLanguageSet?.siteOfInjection }}
+                </mat-label>
+                <mat-select
+                  class="full-width"
+                  name="siteOfInjection"
+                  formControlName="siteOfInjection"
+                  [id]="'siteOfInjection' + i"
+                >
+                  <mat-option
+                    *ngFor="let injection of vaccineList[i]?.siteOfInjection"
+                    [value]="injection.siteofinjection"
+                  >
+                    {{ injection.siteofinjection }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </ng-container>
+    </div>
+  </ng-container>
+</mat-card>

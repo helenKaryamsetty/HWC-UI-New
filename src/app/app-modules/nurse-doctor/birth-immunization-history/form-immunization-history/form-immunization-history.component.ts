@@ -27,13 +27,15 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-// import { PreviousImmunizationServiceDetailsComponent } from 'app/app-modules/core/components/previous-immunization-service-details/previous-immunization-service-details.component';
-// import { SetLanguageComponent } from 'app/app-modules/core/components/set-language.component';
-// import { BeneficiaryDetailsService, ConfirmationService } from 'app/app-modules/core/services';
-// import { HttpServiceService } from 'app/app-modules/core/services/http-service.service';
 import { Subscription } from 'rxjs';
 import { PreviousImmunizationServiceDetailsComponent } from 'src/app/app-modules/core/component/previous-immunization-service-details/previous-immunization-service-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
@@ -54,7 +56,7 @@ export class FormImmunizationHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
-  mode: any;
+  immunizationHistoryMode: any;
 
   @Input()
   neonatalImmunizationHistoryForm: any;
@@ -75,7 +77,7 @@ export class FormImmunizationHistoryComponent
     },
   ];
 
-  vaccineReceivedList = [];
+  vaccineReceivedList: any = [];
   attendant: any;
   infantAndBirthHistoryDetailsSubscription: Subscription | undefined;
 
@@ -153,22 +155,6 @@ export class FormImmunizationHistoryComponent
           ) {
             immunizationAge.push(element.vaccinationTime);
           }
-          //  else if(this.getAgeValue(this.beneficiaryAge) <= 270  &&  this.getAgeValue(element.vaccinationTime) <= this.getAgeValue(this.beneficiaryAge))
-          //   {
-          //     immunizationAge.push(element.vaccinationTime);
-          //   }
-          //   else if(this.getAgeValue(this.beneficiaryAge) <= 97 && this.getAgeValue(element.vaccinationTime) <= this.getAgeValue(this.beneficiaryAge))
-          //   {
-          //     immunizationAge.push(element.vaccinationTime);
-          //   }
-          //   else if(this.getAgeValue(this.beneficiaryAge) <= 69 && this.getAgeValue(element.vaccinationTime) <= this.getAgeValue(this.beneficiaryAge))
-          //   {
-          //     immunizationAge.push(element.vaccinationTime);
-          //   }
-          //   else if(this.getAgeValue(this.beneficiaryAge) <= 41 && this.getAgeValue(element.vaccinationTime) <= this.getAgeValue(this.beneficiaryAge))
-          //   {
-          //     immunizationAge.push(element.vaccinationTime);
-          //   }
         }
     });
 
@@ -269,7 +255,7 @@ export class FormImmunizationHistoryComponent
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     )).patchValue(this.temp);
 
-    if (this.mode === 'view') {
+    if (this.immunizationHistoryMode === 'view') {
       this.getNurseFetchDetails();
     }
     const specialistFlagString = localStorage.getItem('specialistFlag');
@@ -402,7 +388,7 @@ export class FormImmunizationHistoryComponent
 
             immunizationListData.forEach((item: any, indexValue: any) => {
               this.vaccineReceivedList.forEach(
-                (vaccineValues: any, indexValues) => {
+                (vaccineValues: any, indexValues: any) => {
                   if (vaccineValues.name === item.vaccinationReceivedAt) {
                     const formArray = immunizationListValues
                       .at(indexValue)
@@ -472,7 +458,8 @@ export class FormImmunizationHistoryComponent
     });
 
     // for enabling update button in doctor
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -482,12 +469,8 @@ export class FormImmunizationHistoryComponent
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     );
 
-    //const vaccineArray = (<FormArray>immunizationList.controls[index]).controls[
-    //   'vaccines'
-    // ].value;
-
     const vaccineControl = (immunizationList.controls[index] as FormGroup)
-      .controls['vaccine'];
+      .controls['vaccines'];
 
     const vaccineArray = vaccineControl.value;
 
@@ -505,31 +488,19 @@ export class FormImmunizationHistoryComponent
       if (formArray) {
         formArray.patchValue(true);
       }
-      // (<FormArray>immunizationList.controls[index]).controls[
-      //   'enableVaccinationReceivedAt'
-      // ].patchValue(true);
     } else {
-      // (<FormArray>immunizationList.controls[index]).controls[
-      //   'enableVaccinationReceivedAt'
-      // ].patchValue(false);
       const formArray = immunizationList
         .at(index)
         .get('enableVaccinationReceivedAt') as FormControl;
       if (formArray) {
         formArray.patchValue(false);
       }
-      // (<FormArray>immunizationList.controls[index]).controls[
-      //   'vaccinationReceivedAtID'
-      // ].patchValue(null);
       const formArray1 = immunizationList
         .at(index)
         .get('vaccinationReceivedAtID') as FormControl;
       if (formArray1) {
         formArray.patchValue(null);
       }
-      // (<FormArray>immunizationList.controls[index]).controls[
-      //   'vaccinationReceivedAt'
-      // ].patchValue(null);
       const formArray3 = immunizationList
         .at(index)
         .get('vaccinationReceivedAt') as FormControl;
@@ -537,9 +508,9 @@ export class FormImmunizationHistoryComponent
         formArray.patchValue(null);
       }
     }
-
     // for enabling update button in doctor
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -580,5 +551,13 @@ export class FormImmunizationHistoryComponent
         title: this.currentLanguageSet.previousImmunizationServicesDetails,
       },
     });
+  }
+  getimmunizationList(): any {
+    return (
+      this.neonatalImmunizationHistoryForm.get('immunizationList') as FormArray
+    ).controls;
+  }
+  getVaccines(form: FormGroup): any {
+    return (form.get('vaccines') as FormGroup).controls;
   }
 }

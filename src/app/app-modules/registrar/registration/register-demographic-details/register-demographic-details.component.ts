@@ -234,9 +234,16 @@ export class RegisterDemographicDetailsComponent
    * Config States  for Ben Edit
    */
   configState() {
+    // this.demographicsMaster = Object.assign(
+    //   {},
+    //   localStorage.getItem('location'),
+    //   { servicePointID: localStorage.getItem('servicePointID') },
+    //   { servicePointName: localStorage.getItem('servicePointName') },
+    // );
+    const location: any = localStorage.getItem('location');
     this.demographicsMaster = Object.assign(
       {},
-      localStorage.getItem('location'),
+      JSON.parse(location),
       { servicePointID: localStorage.getItem('servicePointID') },
       { servicePointName: localStorage.getItem('servicePointName') },
     );
@@ -381,7 +388,6 @@ export class RegisterDemographicDetailsComponent
           null,
       },
     ];
-    console.log(this.demographicsMaster.otherLoc, 'zoneLocs------mm-------');
     this.demographicDetailsForm.patchValue({
       zoneID:
         (this.revisitData.i_bendemographics &&
@@ -465,8 +471,6 @@ export class RegisterDemographicDetailsComponent
       servicePointID: localStorage.getItem('servicePointID'),
       servicePointName: localStorage.getItem('servicePointName'),
     });
-
-    console.log(this.demographicsMaster, 'demographics master');
 
     if (
       this.demographicsMaster.otherLoc &&
@@ -578,7 +582,6 @@ export class RegisterDemographicDetailsComponent
         zoneName: this.demographicsMaster.otherLoc.zoneName,
       },
     ];
-    console.log(this.demographicsMaster.otherLoc, 'zoneLocs------mm-------');
     this.demographicDetailsForm.patchValue({
       zoneID: this.demographicsMaster.otherLoc.zoneID,
       zoneName: this.demographicsMaster.otherLoc.zoneName,

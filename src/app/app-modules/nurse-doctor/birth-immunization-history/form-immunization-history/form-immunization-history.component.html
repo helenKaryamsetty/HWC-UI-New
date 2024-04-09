@@ -1,30 +1,23 @@
-<!-- <div class="row m-t-20" [formGroup]="neonatalImmunizationHistoryForm">
+<div class="row m-t-20" [formGroup]="neonatalImmunizationHistoryForm">
   <div class="col-xs-12 text-right">
-    <mat-form-field>
-      <mat-label class="font-history-label m-t-10">
-        {{ currentLanguageSet?.previouslyCapturedImmunizationServices }}
-      </mat-label>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousDevelopmentalHistory"
-        class="pull-right"
-        color="primary"
-        (click)="getPreviousImmunizationServicesHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </mat-form-field>
+    <mat-label class="font-history-label m-t-10">
+      {{ currentLanguageSet?.previouslyCapturedImmunizationServices }}
+    </mat-label>
+    <button
+      type="button"
+      mat-icon-button
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      id="previousDevelopmentalHistory"
+      class="pull-right"
+      color="primary"
+      (click)="getPreviousImmunizationServicesHistory()"
+    >
+      <mat-icon class="md-18">history</mat-icon>
+    </button>
   </div>
   <div formArrayName="immunizationList">
     <ng-container
-      *ngFor="
-        let immunization of neonatalImmunizationHistoryForm.controls[
-          'immunizationList'
-        ]['controls'];
-        let i = index
-      "
+      *ngFor="let immunization of getimmunizationList(); let i = index"
     >
       <div class="col-xs-12">
         <mat-card [formGroupName]="i" class="row m-t-10">
@@ -41,7 +34,7 @@
             <ng-container formArrayName="vaccines">
               <div
                 *ngFor="
-                  let vaccines of immunization.controls['vaccines'].controls;
+                  let vaccines of getVaccines(immunization);
                   let j = index
                 "
               >
@@ -56,7 +49,7 @@
                         [id]="'status' + j"
                         name="status"
                         formControlName="status"
-                        (change)="enableReceivedAt(i)"
+                        (selectionChange)="enableReceivedAt(i)"
                       >
                         <mat-option
                           *ngFor="let element of vaccineReceivedStatus"
@@ -86,7 +79,7 @@
                 </mat-label>
                 <mat-select
                   class="input-full-width"
-                  (change)="setVaccineReceivedAt(i)"
+                  (selectionChange)="setVaccineReceivedAt(i)"
                   name="vaccinationReceivedAtID"
                   formControlName="vaccinationReceivedAtID"
                 >
@@ -104,4 +97,4 @@
       </div>
     </ng-container>
   </div>
-</div> -->
+</div>

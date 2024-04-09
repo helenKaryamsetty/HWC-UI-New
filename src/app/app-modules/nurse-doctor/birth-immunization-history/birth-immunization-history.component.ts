@@ -27,7 +27,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -53,7 +53,8 @@ export class BirthImmunizationHistoryComponent
   visitCategory!: string;
 
   @Input()
-  mode!: string;
+  immunizationHistoryMode!: string;
+
   infantBirthDetailsForm!: FormGroup;
   immunizationHistory!: FormGroup;
   currentLanguageSet: any;
@@ -80,7 +81,11 @@ export class BirthImmunizationHistoryComponent
     this.infantBirthDetailsForm = this.patientBirthImmunizationHistoryForm.get(
       'infantBirthDetailsForm',
     ) as FormGroup;
-    if (this.mode !== undefined && this.mode !== null && this.mode === 'view') {
+    if (
+      this.immunizationHistoryMode !== undefined &&
+      this.immunizationHistoryMode !== null &&
+      this.immunizationHistoryMode === 'view'
+    ) {
       this.getNurseImmunizationHistoryDetailsFromNurse();
     }
 
@@ -94,7 +99,7 @@ export class BirthImmunizationHistoryComponent
   }
 
   ngOnChanges() {
-    if (this.mode === 'update') {
+    if (this.immunizationHistoryMode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.updateBirthAndImmunizationHistoryFromDoctor(
         this.patientBirthImmunizationHistoryForm,
@@ -121,7 +126,8 @@ export class BirthImmunizationHistoryComponent
 
   getNurseImmunizationHistoryDetailsFromNurse() {
     if (
-      (this.mode === 'view' || this.mode === 'update') &&
+      (this.immunizationHistoryMode === 'view' ||
+        this.immunizationHistoryMode === 'update') &&
       this.visitCategory.toLowerCase() ===
         'neonatal and infant health care services'
     ) {
@@ -140,7 +146,8 @@ export class BirthImmunizationHistoryComponent
         });
     }
     if (
-      (this.mode === 'view' || this.mode === 'update') &&
+      (this.immunizationHistoryMode === 'view' ||
+        this.immunizationHistoryMode === 'update') &&
       this.visitCategory.toLowerCase() ===
         'childhood & adolescent healthcare services'
     ) {

@@ -63,7 +63,7 @@ export class GeneralPatientVitalsComponent
   @Input()
   visitCategory!: string;
 
-  female = false;
+  female: any;
   BMI: any;
   hideForANCAndQC = true;
   showGlucoseQC = false;
@@ -1031,7 +1031,8 @@ export class GeneralPatientVitalsComponent
       );
     }
   }
-  rbsResultChange() {
+
+  rbsResultChange(): boolean {
     if (
       this.patientVitalsForm.controls['rbsTestResult'].value &&
       this.patientVitalsForm.controls['rbsTestResult'].value !== null
@@ -1039,7 +1040,6 @@ export class GeneralPatientVitalsComponent
       this.nurseService.setRbsInCurrentVitals(
         this.patientVitalsForm.controls['rbsTestResult'].value,
       );
-      //this.patientVitalsForm.controls['rbsTestResult'].disable();
     } else {
       this.nurseService.setRbsInCurrentVitals(null);
     }
@@ -1051,10 +1051,12 @@ export class GeneralPatientVitalsComponent
       this.patientVitalsForm.controls['rbsTestResult'].disable();
       this.patientVitalsForm.controls['rbsTestRemarks'].disable();
       this.patientVitalsForm.controls['rbsCheckBox'].disable();
+      return true; // disable the controls
     } else {
       this.patientVitalsForm.controls['rbsTestResult'].enable();
       this.patientVitalsForm.controls['rbsTestRemarks'].enable();
       this.patientVitalsForm.controls['rbsCheckBox'].enable();
+      return false; // enable the controls
     }
   }
 

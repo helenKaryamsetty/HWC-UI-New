@@ -74,6 +74,13 @@ import { AncImmunizationComponent } from './anc/anc-immunization/anc-immunizatio
 import { AncComponent } from './anc/anc.component';
 import { ObstetricFormulaComponent } from './anc/obstetric-formula/obstetric-formula.component';
 import { PncComponent } from './pnc/pnc.component';
+import { ChildhoodOralVitaminComponent } from './immunization-service/childhood-oral-vitamin/childhood-oral-vitamin.component';
+import { ImmunizationServiceComponent } from './immunization-service/immunization-service.component';
+import { NeonatalImmunizationServiceComponent } from './immunization-service/neonatal-immunization-service/neonatal-immunization-service.component';
+import { GeneralPatientVitalsComponent } from './vitals/general-patient-vitals/general-patient-vitals.component';
+import { NeonatalPatientVitalsComponent } from './vitals/neonatal-patient-vitals/neonatal-patient-vitals.component';
+import { VitalsComponent } from './vitals/vitals.component';
+import { TestInVitalsService } from './shared/services/test-in-vitals.service';
 
 @NgModule({
   imports: [
@@ -108,7 +115,7 @@ import { PncComponent } from './pnc/pnc.component';
     // HeadToToeExaminationComponent,
     // GeneralExaminationComponent,
     // GeneralOpdExaminationComponent,
-    // GeneralPatientVitalsComponent,
+    GeneralPatientVitalsComponent,
     // MedicationHistoryComponent,
     // DevelopmentHistoryComponent,
     // FeedingHistoryComponent,
@@ -138,7 +145,7 @@ import { PncComponent } from './pnc/pnc.component';
     UploadFilesComponent,
     // HistoryComponent,
     // ExaminationComponent,
-    // VitalsComponent,
+    VitalsComponent,
     // CaseRecordComponent,
     PncComponent,
     // DashboardComponent,
@@ -204,6 +211,8 @@ import { PncComponent } from './pnc/pnc.component';
     // FamilyPlanningCaseSheetComponent,
     // VisitDeatilsCaseSheetComponent,
     // NeonatalPatientVitalsComponent,
+    NeonatalImmunizationServiceComponent,
+    NeonatalPatientVitalsComponent,
     // NeonatalImmunizationServiceComponent,
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
@@ -211,8 +220,8 @@ import { PncComponent } from './pnc/pnc.component';
     // FollowUpForImmunizationComponent,
     // NeonatalAndInfantServiceCaseSheetComponent,
     ChildAndAdolescentOralVitaminACaseSheetComponent,
-    // ChildhoodOralVitaminComponent,
-    // ImmunizationServiceComponent,
+    ChildhoodOralVitaminComponent,
+    ImmunizationServiceComponent,
     Nurse104RefferedWorklistComponent,
     // Referred104CdssDetailsComponent,
     // Referred104DetailsPopupComponent,
@@ -232,7 +241,8 @@ import { PncComponent } from './pnc/pnc.component';
     MasterdataService,
     NcdScreeningService,
     IdrsscoreService,
-    // WorkareaCanActivate, LabService,RegistrarService,TestInVitalsService,FamilyTaggingService, NcdScreeningService, CDSSService
+    // WorkareaCanActivate, LabService,RegistrarService,
+    TestInVitalsService, //FamilyTaggingService, NcdScreeningService, CDSSService
   ],
 })
 export class NurseDoctorModule {}

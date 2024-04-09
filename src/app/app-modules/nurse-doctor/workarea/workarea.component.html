@@ -240,7 +240,7 @@
             </div>
           </mat-step> -->
 
-          <!-- <mat-step
+          <mat-step
             *ngIf="showImmunizationHistory"
             label="Birth & Immunization History"
           >
@@ -251,7 +251,7 @@
               [immunizationHistoryMode]="immunizationHistoryMode"
               [visitCategory]="visitCategory"
               [patientBirthImmunizationHistoryForm]="
-                patientMedicalForm.controls.patientBirthImmunizationHistoryForm
+                patientBirthImmunizationHistoryForm
               "
             ></app-birth-immunization-history>
             <div class="row m-t-20">
@@ -285,21 +285,20 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
-          <!-- <mat-step *ngIf="showVitals" label="Vitals">
+          <mat-step *ngIf="showVitals" label="Vitals">
             <ng-template matStepLabel>{{
               current_language_set?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.vitals
             }}</ng-template>
-            <nurse-vitals
-              [vitalsMode]="vitalsMode"
+            <app-nurse-vitals
+              [mode]="vitalsMode"
               [pregnancyStatus]="pregnancyStatus"
               [visitCategory]="visitCategory"
-              [patientVitalsForm]="
-                patientMedicalForm.controls.patientVitalsForm
-              "
-            ></nurse-vitals>
+              [patientVitalsForm]="patientVitalsForm"
+            >
+            </app-nurse-vitals>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
@@ -351,7 +350,7 @@
                   *ngIf="vitalsMode"
                   (click)="updatePatientVitals()"
                   [disabled]="
-                    !patientMedicalForm.controls.patientVitalsForm.dirty &&
+                    !patientMedicalForm.controls['patientVitalsForm'].dirty &&
                     !enableUpdateButtonInVitals
                   "
                   type="button"
@@ -360,7 +359,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <!-- <mat-step *ngIf="showExamination" label="Examination">
             <ng-template matStepLabel>{{
@@ -421,7 +420,7 @@
             </div>
           </mat-step> -->
 
-          <!-- <mat-step
+          <mat-step
             *ngIf="showImmunizationService"
             label="Immunization Services"
           >
@@ -432,7 +431,7 @@
               [mode]="immunizationServiceMode"
               [visitCategory]="visitCategory"
               [patientImmunizationServicesForm]="
-                patientMedicalForm.controls.patientImmunizationServicesForm
+                patientImmunizationServicesForm
               "
             ></app-immunization-service>
             <div class="row m-t-20">
@@ -472,8 +471,9 @@
                   *ngIf="immunizationServiceMode"
                   (click)="updateImmunizationServiceForm()"
                   [disabled]="
-                    !patientMedicalForm.controls.patientImmunizationServicesForm
-                      .dirty
+                    !patientMedicalForm.controls[
+                      'patientImmunizationServicesForm'
+                    ].dirty
                   "
                   type="button"
                 >
@@ -481,7 +481,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <mat-step *ngIf="showFamilyPlanning" label="Family Planning">
             <ng-template matStepLabel>{{

@@ -47,32 +47,32 @@ export class InfantBirthDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   @Input()
   infantBirthDetailsForm!: FormGroup;
 
   @Input()
-  mode: any;
+  immunizationHistoryMode: any;
 
   currentLanguageSet: any;
   enableOtherDeliveryPlace!: boolean;
   enableOtherDeliveryType!: boolean;
   enableOtherBirthComplication!: boolean;
 
-  deliveryPlaceList = [];
+  deliveryPlaceList: any = [];
 
-  deliveryTypeList = [];
+  deliveryTypeList: any = [];
 
-  birthComplicationList = [];
+  birthComplicationList: any = [];
 
-  gestationList = [];
+  gestationList: any = [];
 
-  deliveryConductedByList = [];
+  deliveryConductedByList: any = [];
 
-  congenitalAnomaliesList = [];
+  congenitalAnomaliesList: any = [];
 
-  placeOfDelivery = [];
+  placeOfDelivery: any = [];
 
   attendant: any;
   today = new Date();
@@ -93,7 +93,6 @@ export class InfantBirthDetailsComponent
 
   ngOnInit() {
     this.doctorService.setInfantDataFetch(false);
-    console.log(this.visitType);
     this.assignSelectedLanguage();
     this.attendant = this.route.snapshot.params['attendant'];
     this.loadMasterData();
@@ -135,7 +134,7 @@ export class InfantBirthDetailsComponent
           this.gestationList = res.gestation;
           this.deliveryConductedByList = res.deliveryConductedByMaster;
           this.congenitalAnomaliesList = res.m_congenitalanomalies;
-          if (this.mode === 'view') {
+          if (this.immunizationHistoryMode === 'view') {
             this.getNurseFetchDetails();
           }
 
@@ -174,7 +173,8 @@ export class InfantBirthDetailsComponent
         );
       }
     });
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -188,7 +188,8 @@ export class InfantBirthDetailsComponent
         this.infantBirthDetailsForm.controls['gestation'].setValue(item.name);
       }
     });
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -204,7 +205,8 @@ export class InfantBirthDetailsComponent
         );
       }
     });
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -255,7 +257,8 @@ export class InfantBirthDetailsComponent
       this.enableOtherDeliveryPlace = false;
       this.infantBirthDetailsForm.get('otherDeliveryPlace')?.reset();
     }
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -280,7 +283,8 @@ export class InfantBirthDetailsComponent
       this.enableOtherBirthComplication = false;
       this.infantBirthDetailsForm.get('otherDeliveryComplication')?.reset();
     }
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -297,13 +301,15 @@ export class InfantBirthDetailsComponent
         this.currentLanguageSet.alerts.info.recheckValue,
       );
     }
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
 
   onValueChange() {
-    this.mode === 'view' || this.mode === 'update'
+    this.immunizationHistoryMode === 'view' ||
+    this.immunizationHistoryMode === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
