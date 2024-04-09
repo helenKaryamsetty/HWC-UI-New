@@ -32,18 +32,19 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService } from '../shared/services/doctor.service';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
-import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-oncologist-worklist',
-  templateUrl: './oncologist-worklist.component.html',
-  styleUrls: ['./oncologist-worklist.component.css'],
+  selector: 'app-radiologist-worklist',
+  templateUrl: './radiologist-worklist.component.html',
+  styleUrls: ['./radiologist-worklist.component.css'],
 })
-export class OncologistWorklistComponent implements OnInit, DoCheck {
+export class RadiologistWorklistComponent
+  implements OnInit, DoCheck, OnDestroy
+{
   rowsPerPage = 5;
   activePage = 1;
   pagedList: any = [];
@@ -70,18 +71,17 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   dataSource = new MatTableDataSource<any>();
 
   constructor(
-    private dialog: MatDialog,
     private cameraService: CameraService,
     private router: Router,
     private confirmationService: ConfirmationService,
-    public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
+    public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('currentRole', 'Oncologist');
+    localStorage.setItem('currentRole', 'Radiologist');
     this.removeBeneficiaryDataForVisit();
     this.loadWorklist();
   }
@@ -101,18 +101,16 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     localStorage.removeItem('specialistFlag');
   }
 
-  pageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    console.log('list', this.pagedList);
+  ngOnDestroy() {
+    localStorage.removeItem('currentRole');
   }
+
   loadWorklist() {
-    this.doctorService.getOncologistWorklist().subscribe(
+    this.doctorService.getRadiologistWorklist().subscribe(
       (data: any) => {
         if (data.statusCode === 200 && data.data !== null) {
-          console.log('worklist', data.data);
+          console.log('radiologist worklist', data.data);
+
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
@@ -193,7 +191,13 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
       });
     }
   }
-
+  pageChanged(event: any): void {
+    console.log('called', event);
+    const startItem = (event.page - 1) * event.itemsPerPage;
+    const endItem = event.page * event.itemsPerPage;
+    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
+    console.log('list', this.pagedList);
+  }
   patientImageView(benregID: any) {
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benregID)
@@ -207,6 +211,7 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   }
 
   loadDoctorExaminationPage(beneficiary: any) {
+    localStorage.setItem('benFlowID', beneficiary.benFlowID);
     localStorage.setItem('visitCode', beneficiary.visitCode);
     if (beneficiary.visitFlowStatusFlag === 'N') {
       this.confirmationService
@@ -216,7 +221,6 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
         )
         .subscribe((result) => {
           if (result) {
-            localStorage.setItem('benFlowID', beneficiary.benFlowID);
             localStorage.setItem('visitID', beneficiary.benVisitID);
             localStorage.setItem('doctorFlag', beneficiary.doctorFlag);
             localStorage.setItem('nurseFlag', beneficiary.nurseFlag);

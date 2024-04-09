@@ -18,7 +18,7 @@
     </div>
     <div class="col-xs-4 col-sm-6 col-md-8">
       <button
-        mat-button
+        mat-raised-button
         id="caseSheetButton"
         style="display: none"
         [disabled]="true"
@@ -28,9 +28,9 @@
       </button>
       <button
         mat-raised-button
-        id="refresh"
         class="pull-right btn-green"
         color="primary"
+        id="refresh"
         (click)="loadWorklist()"
       >
         {{ currentLanguageSet?.common?.refresh }}
@@ -45,7 +45,7 @@
           <table
             mat-table
             [dataSource]="dataSource"
-            aria-describedby="oncologistWorklist"
+            aria-describedby="radiologistWorklist"
           >
             <ng-container matColumnDef="sno">
               <th
@@ -54,7 +54,7 @@
                 *matHeaderCellDef
                 mat-sort-header
               >
-                {{ currentLanguageSet?.coreComponents?.sno }}
+                {{ currentLanguageSet?.casesheet?.serialNo }}
               </th>
               <td mat-cell *matCellDef="let element">
                 {{ element.sno }}
@@ -75,7 +75,7 @@
                 *matCellDef="let element"
                 (click)="loadDoctorExaminationPage(element)"
               >
-                {{ element?.beneficiaryID }}
+                {{ element.beneficiaryID }}
               </td>
             </ng-container>
 
@@ -243,7 +243,7 @@
             [pageSizeOptions]="[5, 10, 20]"
             [pageSize]="5"
             showFirstLastButtons
-            aria-label="Select patient in oncologistWorklist"
+            aria-label="Select patient in radiologistWorklist"
           >
           </mat-paginator>
         </section>

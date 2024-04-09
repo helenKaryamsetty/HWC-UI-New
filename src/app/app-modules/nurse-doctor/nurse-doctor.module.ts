@@ -81,6 +81,14 @@ import { GeneralPatientVitalsComponent } from './vitals/general-patient-vitals/g
 import { NeonatalPatientVitalsComponent } from './vitals/neonatal-patient-vitals/neonatal-patient-vitals.component';
 import { VitalsComponent } from './vitals/vitals.component';
 import { TestInVitalsService } from './shared/services/test-in-vitals.service';
+import { TcSpecialistWorklistComponent } from './tc-specialist-worklist/tc-specialist-worklist.component';
+import { TmFutureWorklistComponent } from './doctor-tm-future-worklist/tm-future-worklist.component';
+import { DoctorTmWorklistWrapperComponent } from './doctor-tm-worklist-wrapper/doctor-tm-worklist-wrapper.component';
+import { SchedulerComponent } from './scheduler/scheduler.component';
+import { TcSpecialistFutureWorklistComponent } from './tc-specialist-future-worklist/tc-specialist-future-worklist.component';
+import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
+import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
+import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
 
 @NgModule({
   imports: [
@@ -161,8 +169,8 @@ import { TestInVitalsService } from './shared/services/test-in-vitals.service';
     // PrescriptionComponent,
     // DoctorInvestigationsComponent,
     // TestAndRadiologyComponent,
-    // RadiologistWorklistComponent,
-    // OncologistWorklistComponent,
+    RadiologistWorklistComponent,
+    OncologistWorklistComponent,
     // GeneralOpdDiagnosisComponent,
     // AncDiagnosisComponent,
     CaseSheetComponent,
@@ -177,12 +185,12 @@ import { TestInVitalsService } from './shared/services/test-in-vitals.service';
     // DoctorDiagnosisCaseSheetComponent,
     // BeneficiaryMctsCallHistoryComponent,
     // BeneficiaryPlatformHistoryComponent,
-    // TcSpecialistWorklistComponent,
-    // DoctorTmWorklistWrapperComponent,
-    // TmFutureWorklistComponent,
-    // SchedulerComponent,
-    // TcSpecialistWorklistWrapperComponent,
-    // TcSpecialistFutureWorklistComponent,
+    TcSpecialistWorklistComponent,
+    DoctorTmWorklistWrapperComponent,
+    TmFutureWorklistComponent,
+    SchedulerComponent,
+    TcSpecialistWorklistWrapperComponent,
+    TcSpecialistFutureWorklistComponent,
     NurseWorklistWrapperComponent,
     NurseTmWorklistComponent,
     NurseTmFutureWorklistComponent,

@@ -29,6 +29,10 @@ import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.compo
 import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 import { WorkareaComponent } from './workarea/workarea.component';
 import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
+import { DoctorTmWorklistWrapperComponent } from './doctor-tm-worklist-wrapper/doctor-tm-worklist-wrapper.component';
+import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
+import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
+import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
 
 const routes: Routes = [
   {
@@ -48,26 +52,26 @@ const routes: Routes = [
         path: 'doctor-worklist',
         component: DoctorWorklistComponent,
       },
-      // {
-      //   path: 'doctor-worklist',
-      //   component: DoctorTmWorklistWrapperComponent,
-      // },
+      {
+        path: 'doctor-worklist',
+        component: DoctorTmWorklistWrapperComponent,
+      },
       // {
       //   path: 'oralscreening',
       //   component: OralCancerScreeningComponent,
       // },
-      // {
-      //   path: 'radiologist-worklist',
-      //   component: RadiologistWorklistComponent,
-      // },
-      // {
-      //   path: 'oncologist-worklist',
-      //   component: OncologistWorklistComponent,
-      // },
-      // {
-      //   path: 'tcspecialist-worklist',
-      //   component: TcSpecialistWorklistWrapperComponent,
-      // },
+      {
+        path: 'radiologist-worklist',
+        component: RadiologistWorklistComponent,
+      },
+      {
+        path: 'oncologist-worklist',
+        component: OncologistWorklistComponent,
+      },
+      {
+        path: 'tcspecialist-worklist',
+        component: TcSpecialistWorklistWrapperComponent,
+      },
       {
         path: 'attendant/:attendant/patient/:beneficiaryRegID',
         component: WorkareaComponent,

@@ -21,32 +21,31 @@
  */
 import {
   Component,
-  DoCheck,
-  OnDestroy,
   OnInit,
+  DoCheck,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { DoctorService } from '../shared/services/doctor.service';
+import { DoctorService, MasterdataService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
-import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { HttpServiceService } from '../../core/services/http-service.service';
 @Component({
-  selector: 'app-oncologist-worklist',
-  templateUrl: './oncologist-worklist.component.html',
-  styleUrls: ['./oncologist-worklist.component.css'],
+  selector: 'app-tc-specialist-future-worklist',
+  templateUrl: './tc-specialist-future-worklist.component.html',
+  styleUrls: ['./tc-specialist-future-worklist.component.css'],
 })
-export class OncologistWorklistComponent implements OnInit, DoCheck {
+export class TcSpecialistFutureWorklistComponent
+  implements OnInit, DoCheck, OnDestroy
+{
   rowsPerPage = 5;
   activePage = 1;
-  pagedList: any = [];
+  pagedList = [];
   rotate = true;
   beneficiaryList: any;
   filteredBeneficiaryList: any = [];
@@ -62,7 +61,6 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     'age',
     'visitCategory',
     'district',
-    'phoneNo',
     'visitDate',
     'image',
   ];
@@ -70,9 +68,8 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   dataSource = new MatTableDataSource<any>();
 
   constructor(
-    private dialog: MatDialog,
     private cameraService: CameraService,
-    private router: Router,
+    private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -81,12 +78,18 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('currentRole', 'Oncologist');
-    this.removeBeneficiaryDataForVisit();
+    localStorage.setItem('currentRole', 'Doctor');
+    this.removeBeneficiaryDataForDoctorVisit();
     this.loadWorklist();
+    this.beneficiaryDetailsService.reset();
+    this.masterdataService.reset();
   }
 
-  removeBeneficiaryDataForVisit() {
+  ngOnDestroy() {
+    localStorage.removeItem('currentRole');
+  }
+
+  removeBeneficiaryDataForDoctorVisit() {
     localStorage.removeItem('visitCode');
     localStorage.removeItem('beneficiaryGender');
     localStorage.removeItem('benFlowID');
@@ -98,7 +101,6 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     localStorage.removeItem('doctorFlag');
     localStorage.removeItem('nurseFlag');
     localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('specialistFlag');
   }
 
   pageChanged(event: any): void {
@@ -109,10 +111,19 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     console.log('list', this.pagedList);
   }
   loadWorklist() {
-    this.doctorService.getOncologistWorklist().subscribe(
+    this.filterTerm = null;
+    this.doctorService.getSpecialistFutureWorklist().subscribe(
       (data: any) => {
-        if (data.statusCode === 200 && data.data !== null) {
-          console.log('worklist', data.data);
+        if (data && data.statusCode === 200 && data.data) {
+          console.log(
+            'doctor future worklist',
+            JSON.stringify(data.data, null, 4),
+          );
+          data.data.map((item: any) => {
+            const temp = this.getVisitStatus(item);
+            item.statusMessage = temp.statusMessage;
+            item.statusCode = temp.statusCode;
+          });
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
@@ -123,11 +134,7 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
             sectionCount.sno = index + 1;
           });
           this.filterTerm = null;
-        } else {
-          this.confirmationService.alert(data.errorMessage, 'error');
-          this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
-        }
+        } else this.confirmationService.alert(data.errorMessage, 'error');
       },
       (err) => {
         this.confirmationService.alert(err, 'error');
@@ -144,12 +151,16 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
       element.benVisitNo = element.benVisitNo || 'Not Available';
       element.districtName = element.districtName || 'Not Available';
       element.villageName = element.villageName || 'Not Available';
+      element.arrival = false;
       element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
       element.visitDate =
-        moment(element.visitDate).format('DD-MM-YYYY HH:mm A ') ||
+        moment(element.visitDate).format('DD-MM-YYYY HH:mm A') ||
         'Not Available';
       element.benVisitDate =
         moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
+        'Not Available';
+      element.tCRequestDate =
+        moment(element.tCRequestDate).format('DD-MM-YYYY HH:mm A ') ||
         'Not Available';
     });
     return data;
@@ -162,12 +173,14 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
       this.dataSource.data = [];
       this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
+        console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
           if (
             key === 'beneficiaryID' ||
             key === 'benName' ||
             key === 'genderName' ||
             key === 'age' ||
+            key === 'statusMessage' ||
             key === 'VisitCategory' ||
             key === 'benVisitNo' ||
             key === 'districtName' ||
@@ -192,6 +205,12 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
         }
       });
     }
+    this.activePage = 1;
+    this.pageChanged({
+      page: 1,
+      itemsPerPage: this.rowsPerPage,
+    });
+    this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {
@@ -206,57 +225,56 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
       });
   }
 
-  loadDoctorExaminationPage(beneficiary: any) {
-    localStorage.setItem('visitCode', beneficiary.visitCode);
-    if (beneficiary.visitFlowStatusFlag === 'N') {
-      this.confirmationService
-        .confirm(
-          `info`,
-          this.currentLanguageSet.alerts.info.confirmtoProceedFurther,
-        )
-        .subscribe((result) => {
-          if (result) {
-            localStorage.setItem('benFlowID', beneficiary.benFlowID);
-            localStorage.setItem('visitID', beneficiary.benVisitID);
-            localStorage.setItem('doctorFlag', beneficiary.doctorFlag);
-            localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
-            localStorage.setItem(
-              'pharmacist_flag',
-              beneficiary.pharmacist_flag,
+  getBeneficiryStatus(beneficiary: any) {
+    this.confirmationService.alert(beneficiary.statusMessage);
+  }
+
+  getVisitStatus(beneficiaryVisitDetials: any) {
+    const status = {
+      statusCode: 0,
+      statusMessage: '',
+    };
+
+    status.statusMessage =
+      this.currentLanguageSet.alerts.info.scheduleForConsultation;
+    status.statusCode = 1;
+
+    return status;
+  }
+
+  cancelTCRequest(beneficiary: any) {
+    this.confirmationService
+      .confirm(
+        'info',
+        this.currentLanguageSet.alerts.info.cancelReq,
+        'Yes',
+        'No',
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.doctorService
+            .cancelBeneficiaryTCRequest({
+              benflowID: beneficiary.benFlowID,
+              benRegID: beneficiary.beneficiaryRegID,
+              visitCode: beneficiary.visitCode,
+              userID: beneficiary.tCSpecialistUserID,
+              modifiedBy: localStorage.getItem('userName'),
+            })
+            .subscribe(
+              (res: any) => {
+                if (res && res.statusCode && res.data) {
+                  this.confirmationService.alert(res.data.response, 'success');
+                  this.loadWorklist();
+                } else {
+                  this.confirmationService.alert(res.errorMessage, 'error');
+                }
+              },
+              (error) => {
+                this.confirmationService.alert(error, 'error');
+              },
             );
-            localStorage.setItem(
-              'beneficiaryRegID',
-              beneficiary.beneficiaryRegID,
-            );
-            localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-            localStorage.setItem('visitCategory', beneficiary.VisitCategory);
-            this.router.navigate([
-              '/nurse-doctor/patient',
-              beneficiary.beneficiaryRegID,
-            ]);
-          }
-        });
-    } else {
-      this.confirmationService
-        .confirm('info', this.currentLanguageSet.alerts.info.consulation)
-        .subscribe((res) => {
-          if (res) {
-            localStorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
-            localStorage.setItem(
-              'caseSheetVisitCategory',
-              beneficiary.VisitCategory,
-            );
-            localStorage.setItem(
-              'caseSheetBeneficiaryRegID',
-              beneficiary.beneficiaryRegID,
-            );
-            localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-            this.router.navigate([
-              '/nurse-doctor/print/' + 'TM' + '/' + 'current',
-            ]);
-          }
-        });
-    }
+        }
+      });
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
