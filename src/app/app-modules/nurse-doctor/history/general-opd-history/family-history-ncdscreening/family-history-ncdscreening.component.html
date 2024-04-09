@@ -110,10 +110,10 @@
                 currentLanguageSet?.historyData?.ancHistory
                   ?.familyHistoryDataANC_OPD_NCD_PNC?.familyMember
               }}"
-              [disableFormControl]="
+              [disabled]="
                 !familyDisease.value.diseaseType ||
                 familyDisease.value.diseaseType?.diseaseType === 'None'
-         ===================     "
+              "
               (change)="filterFamilyMembers($event, familyDisease)"
             >
               <mat-option

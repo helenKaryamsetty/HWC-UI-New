@@ -30,16 +30,9 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  FormArray,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { CameraService } from '../../../core/services/camera.service';
-// import { DateAdapter, NativeDateAdapter } from "@angular/material";
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import * as moment from 'moment';
@@ -201,14 +194,14 @@ export class RegisterPersonalDetailsComponent
       this.maritalStatusMaster = this.masterData.maritalStatusMaster.filter(
         (maritalStatus: any) => {
           if (
-            revisitData.m_gender.genderID === '1' &&
-            maritalStatus.maritalStatusID !== '5'
+            revisitData.m_gender.genderID === 1 &&
+            maritalStatus.maritalStatusID !== 5
           ) {
             return maritalStatus;
           }
           if (
-            revisitData.m_gender.genderID === '2' &&
-            maritalStatus.maritalStatusID !== '6'
+            revisitData.m_gender.genderID === 2 &&
+            maritalStatus.maritalStatusID !== 6
           ) {
             return maritalStatus;
           }
@@ -306,7 +299,6 @@ export class RegisterPersonalDetailsComponent
         null,
     });
     this.setFullName();
-    // this.onMaritalStatusChanged(); // Marital status Changed
     this.masterData.incomeMaster.forEach((stat: any) => {
       if (
         element.i_bendemographics.incomeStatus &&
@@ -443,7 +435,7 @@ export class RegisterPersonalDetailsComponent
    * Gender Selection - Transgender Confirmation
    */
 
-  maritalStatusMaster: any[] = [];
+  maritalStatusMaster: any = [];
   onGenderSelected() {
     const genderMaster = this.masterData.genderMaster;
     console.log('genderMaster', genderMaster);
@@ -460,7 +452,7 @@ export class RegisterPersonalDetailsComponent
       this.masterData.maritalStatusMaster,
     );
 
-    if (this.personalDetailsForm.value.gender === '3') {
+    if (this.personalDetailsForm.value.gender === 3) {
       this.confirmationService
         .confirm('info', this.current_language_set.alerts.info.transGender)
         .subscribe(
@@ -480,15 +472,15 @@ export class RegisterPersonalDetailsComponent
       this.maritalStatusMaster = this.masterData.maritalStatusMaster.filter(
         (maritalStatus: any) => {
           if (
-            this.personalDetailsForm.value.gender === '1' &&
-            maritalStatus.maritalStatusID !== '5'
+            this.personalDetailsForm.value.gender === 1 &&
+            maritalStatus.maritalStatusID !== 5
           ) {
             return maritalStatus;
           }
 
           if (
-            this.personalDetailsForm.value.gender === '2' &&
-            maritalStatus.maritalStatusID !== '6'
+            this.personalDetailsForm.value.gender === 2 &&
+            maritalStatus.maritalStatusID !== 6
           ) {
             return maritalStatus;
           }
@@ -574,7 +566,7 @@ export class RegisterPersonalDetailsComponent
    *
    * Age Entered in Input
    */
-  enableMaritalStatus: boolean | any = false;
+  enableMaritalStatus = false;
   onAgeEntered() {
     const valueEntered = this.personalDetailsForm.value.age;
     if (valueEntered) {
@@ -717,8 +709,6 @@ export class RegisterPersonalDetailsComponent
         maritalStatus: null,
         maritalStatusName: null,
       });
-      //  this.personalDetailsForm.controls['maritalStatus'].setErrors(null);
-      //  this.personalDetailsForm.controls['maritalStatus'].updateValueAndValidity();
 
       this.enableMarriageDetails = false;
       this.clearMarriageDetails();
@@ -757,38 +747,8 @@ export class RegisterPersonalDetailsComponent
    *
    * Marital Status Changed
    */
-
-  // enableMarriageDetails: Boolean = false;
-  // onMaritalStatusChanged() {
-  //   if (
-  //     this.personalDetailsForm.value.maritalStatus === 1 ||
-  //     this.personalDetailsForm.value.maritalStatus === 7
-
-  //   ) {
-  //     this.enableMarriageDetails = false;
-  //     this.clearMarriageDetails();
-  //   } else {
-  //     this.enableMarriageDetails = true;
-  //   }
-
-  //   const maritalMaster = this.masterData.maritalStatusMaster;
-  //   maritalMaster.forEach((element, i) => {
-  //     if (
-  //       element.maritalStatusID === this.personalDetailsForm.value.maritalStatus
-  //     ) {
-  //       this.personalDetailsForm.patchValue({
-  //         maritalStatusName: element.status,
-  //       });
-  //     }
-  //   });
-  // }
-
-  /**
-   *
-   * Marital Status Changed
-   */
-  enableMarriageDetails: boolean | any = false;
-  enableSpouseMandatory: boolean | any = false;
+  enableMarriageDetails = false;
+  enableSpouseMandatory = false;
   onMaritalStatusChanged() {
     if (
       this.personalDetailsForm.value.maritalStatus === 1 ||

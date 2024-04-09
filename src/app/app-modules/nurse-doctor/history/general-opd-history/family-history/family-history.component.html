@@ -98,11 +98,11 @@
               currentLanguageSet?.historyData?.ancHistory
                 ?.familyHistoryDataANC_OPD_NCD_PNC?.familyMember
             }}"
-            [disableFormControl]="
+            [disabled]="
               !familyDisease.value.diseaseType ||
               familyDisease.value.diseaseType?.diseaseType === 'None' ||
-    ===================          familyDisease.value.diseaseType?.diseaseType === 'Nil'
-        ===    "
+              familyDisease.value.diseaseType?.diseaseType === 'Nil'
+            "
           >
             <mat-option
               *ngFor="let member of familyMemeberMasterData"

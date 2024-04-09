@@ -27,7 +27,12 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormArray,
+  AbstractControl,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -105,7 +110,6 @@ export class ComorbidityConcurrentConditionsComponent
     );
   }
   ngOnChanges() {
-    //this.comorbidConditionHrp=[];
     console.log('test');
   }
 
@@ -118,6 +122,16 @@ export class ComorbidityConcurrentConditionsComponent
 
     if (this.beneficiaryDetailSubscription)
       this.beneficiaryDetailSubscription.unsubscribe();
+  }
+
+  getcomorbidityConcurrentConditions(): AbstractControl[] | null {
+    const comorbidityConcurrentConditionsControl =
+      this.comorbidityConcurrentConditionsForm.get(
+        'comorbidityConcurrentConditionsList',
+      );
+    return comorbidityConcurrentConditionsControl instanceof FormArray
+      ? comorbidityConcurrentConditionsControl.controls
+      : null;
   }
 
   beneficiaryDetailSubscription: any;

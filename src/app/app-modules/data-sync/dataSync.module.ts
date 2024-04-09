@@ -47,7 +47,6 @@ import { DataSyncLoginComponent } from './data-sync-login/data-sync-login.compon
     MasterDownloadComponent,
     DataSyncLoginComponent,
   ],
-  exports: [],
   providers: [DataSyncService, MasterDownloadComponent],
 })
 export class DataSYNCModule {}

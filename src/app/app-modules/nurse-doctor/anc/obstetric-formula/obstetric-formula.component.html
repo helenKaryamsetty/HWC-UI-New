@@ -10,6 +10,9 @@
     "
   >
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.casesheet?.gravida
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
@@ -18,102 +21,119 @@
         maxlength="2"
         name="gravida_G"
         formControlName="gravida_G"
-        placeholder="{{ current_language_set?.casesheet?.gravida }}"
         readonly
       />
     </mat-form-field>
   </div>
   <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
     "
   >
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <input
-          autocomplete="off"
-          matInput
-          defaultNull
-          allowText="number"
-          maxlength="1"
-          name="para"
-          formControlName="para"
-          placeholder="{{
-            current_language_set?.ancData?.obstetricDeatils?.para
-          }}"
-          (input)="calculateGravida('para')"
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.obstetricDeatils?.termDeliveries
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        allowText="number"
+        maxlength="1"
+        name="para"
+        formControlName="para"
+        (input)="calculateGravida('para')"
+      />
+    </mat-form-field>
+  </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <input
-          autocomplete="off"
-          matInput
-          defaultNull
-          allowText="number"
-          maxlength="1"
-          name="abortions_A"
-          formControlName="abortions_A"
-          placeholder="{{
-            current_language_set?.ancData?.obstetricDeatils?.abortions
-          }}"
-          (input)="calculateGravida('abortions_A')"
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <input
-          autocomplete="off"
-          matInput
-          defaultNull
-          allowText="number"
-          maxlength="1"
-          name="stillBirth"
-          formControlName="stillBirth"
-          placeholder="{{ current_language_set?.stillBirth }}"
-          (input)="calculateGravida('stillBirth')"
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <input
-          autocomplete="off"
-          matInput
-          defaultNull
-          allowText="number"
-          maxlength="2"
-          allowMax="18"
-          name="livebirths_L"
-          formControlName="livebirths_L"
-          placeholder="{{
-            current_language_set?.ancData?.obstetricDeatils?.livingChildren
-          }}"
-          (input)="checkLivingChildren(livebirths_L)"
-        />
-      </mat-form-field>
-    </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.casesheet?.preTermDeliveries
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        allowText="number"
+        maxlength="1"
+        name="abortions_A"
+        formControlName="abortions_A"
+        (input)="calculateGravida('abortions_A')"
+      />
+    </mat-form-field>
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.obstetricDeatils?.abortions
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        allowText="number"
+        maxlength="1"
+        name="stillBirth"
+        formControlName="stillBirth"
+        (input)="calculateGravida('stillBirth')"
+      />
+    </mat-form-field>
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.obstetricDeatils?.livingChildren
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        allowText="number"
+        maxlength="2"
+        allowMax="18"
+        name="livebirths_L"
+        formControlName="livebirths_L"
+        (input)="checkLivingChildren(livebirths_L)"
+      />
+    </mat-form-field>
   </div>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="input-full-width"
-      name="bloodGroup"
-      formControlName="bloodGroup"
-      placeholder="{{
+    <mat-form-field>
+      <mat-label class="mat-label-text">{{
         current_language_set?.ancData?.obstetricDeatils?.bloodGroupType
-      }}"
-      (change)="setBloodGroupHrp()"
-      [disabled]="disableBloodGroup"
-    >
-      <mat-option
-        *ngFor="let bloodGroups of selectBloodGroupType"
-        [value]="bloodGroups.bloodGroup"
+      }}</mat-label>
+      <mat-select
+        class="input-full-width"
+        name="bloodGroup"
+        formControlName="bloodGroup"
+        (change)="setBloodGroupHrp()"
+        [disabled]="disableBloodGroup"
       >
-        {{ bloodGroups.bloodGroup }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let bloodGroups of selectBloodGroupType"
+          [value]="bloodGroups.bloodGroup"
+        >
+          {{ bloodGroups.bloodGroup }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>

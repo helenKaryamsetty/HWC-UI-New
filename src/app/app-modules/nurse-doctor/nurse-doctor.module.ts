@@ -69,6 +69,11 @@ import { DispensationDetailsComponent } from './family-planning/dispensation-det
 import { FamilyPlanningAndReproductiveComponent } from './family-planning/family-planning-and-reproductive-details/family-planning-and-reproductive-details.component';
 import { FamilyPlanningComponent } from './family-planning/family-planning.component';
 import { IecAndCounsellingComponent } from './family-planning/iec-and-counselling-details/iec-and-counselling-details.component';
+import { AncDetailsComponent } from './anc/anc-details/anc-details.component';
+import { AncImmunizationComponent } from './anc/anc-immunization/anc-immunization.component';
+import { AncComponent } from './anc/anc.component';
+import { ObstetricFormulaComponent } from './anc/obstetric-formula/obstetric-formula.component';
+import { PncComponent } from './pnc/pnc.component';
 
 @NgModule({
   imports: [
@@ -118,10 +123,10 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     // PastHistoryComponent,
     // GeneralOpdHistoryComponent,
     DoctorWorklistComponent,
-    // AncComponent,
-    // AncDetailsComponent,
-    // AncImmunizationComponent,
-    // ObstetricFormulaComponent,
+    AncComponent,
+    AncDetailsComponent,
+    AncImmunizationComponent,
+    ObstetricFormulaComponent,
     VisitDetailsComponent,
     // VisitCategoryComponent,
     ChiefComplaintsComponent,
@@ -135,8 +140,7 @@ import { IecAndCounsellingComponent } from './family-planning/iec-and-counsellin
     // ExaminationComponent,
     // VitalsComponent,
     // CaseRecordComponent,
-    // AncComponent,
-    // PncComponent,
+    PncComponent,
     // DashboardComponent,
     WorkareaComponent,
     // GeneralCaseRecordComponent,

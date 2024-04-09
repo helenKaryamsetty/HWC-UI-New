@@ -193,7 +193,7 @@
   <mat-card
     class="row m-t-10"
     *ngIf="
-      (tobaccoUseStatus === 'Yes' ===================|| tobaccoUseStatus === 'Disco=ntinued') &&
+      (tobaccoUseStatus === 'Yes' || tobaccoUseStatus === 'Disco=ntinued') &&
       beneficiary?.ageVal >= 13
     "
   >
@@ -274,7 +274,7 @@
                 maxlength="2"
                 allowText="number"
                 formControlName="number"
-                [disableFormControl]="!tobacco.value.tobaccoUseType"
+                [disabled]="!tobacco.value.tobaccoUseType"
                 (blur)="perDayChange()"
               />
             </mat-form-field>
@@ -284,7 +284,7 @@
             <mat-radio-group
               formControlName="perDay"
               (change)="perDayChange()"
-              [disableFormControl]="!tobacco.value.number"
+              [disabled]="!tobacco.value.number"
             >
               <mat-radio-button
                 color="primary"
@@ -317,7 +317,7 @@
                 allowText="number"
                 formControlName="duration"
                 (change)="validateDuration(tobacco)"
-                [disableFormControl]="!tobacco.value.number"
+                [disabled]="!tobacco.value.number"
               />
             </mat-form-field>
           </div>
@@ -328,7 +328,7 @@
               placeholder="{{ currentLanguageSet?.DurationData?.durationUnit }}"
               formControlName="durationUnit"
               (change)="validateDuration(tobacco)"
-              [disableFormControl]="!tobacco.value.duration"
+              [disabled]="!tobacco.value.duration"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
@@ -439,7 +439,7 @@
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.freqofAlcohol
               }}"
-              [disableFormControl]="!alcohol.value.typeOfAlcohol"
+              [disabled]="!alcohol.value.typeOfAlcohol"
             >
               <mat-option
                 *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
@@ -459,7 +459,7 @@
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
                   ?.averageQuantityOfAlcoholConsumption
               }}"
-              [disableFormControl]="!alcohol.value.alcoholIntakeFrequency"
+              [disabled]="!alcohol.value.alcoholIntakeFrequency"
             >
               <mat-option
                 *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
@@ -484,7 +484,7 @@
                 allowText="number"
                 formControlName="duration"
                 (change)="validateDuration(alcohol)"
-                [disableFormControl]="!alcohol.value.avgAlcoholConsumption"
+                [disabled]="!alcohol.value.avgAlcoholConsumption"
               />
             </mat-form-field>
           </div>
@@ -495,7 +495,7 @@
               placeholder="{{ currentLanguageSet?.DurationData?.durationUnit }}"
               formControlName="durationUnit"
               (change)="validateDuration(alcohol)"
-              [disableFormControl]="!alcohol.value.duration"
+              [disabled]="!alcohol.value.duration"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
@@ -589,7 +589,7 @@
                 maxlength="50"
                 formControlName="snomedTerm"
                 (change)="removeSnomedCode(allergy, i)"
-                [disableFormControl]="!allergy.value.allergyType"
+                [disabled]="!allergy.value.allergyType"
                 (keyup.enter)="
                   searchComponents(allergy.value.snomedTerm, i, allergy)
                 "
@@ -632,7 +632,7 @@
                   ?.typeOfAllergicReaction
               }}"
               (change)="canEnableOtherAllergy(allergy)"
-              [disableFormControl]="!allergy.value.snomedTerm"
+              [disabled]="!allergy.value.snomedTerm"
             >
               <mat-option
                 *ngFor="

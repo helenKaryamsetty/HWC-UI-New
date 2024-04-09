@@ -133,7 +133,7 @@
                 placeholder="{{
                   current_language_set?.nurseData?.chiefComplaintsDetails?.SCTID
                 }}"
-                [disableFormControl]="!complaint.value.chiefComplaint"
+                [disabled]="!complaint.value.chiefComplaint"
               />
             </mat-form-field>
           </div> -->
@@ -151,7 +151,7 @@
                   current_language_set?.nurseData?.chiefComplaintsDetails
                     ?.duration
                 }}"
-                [disableFormControl]="!complaint.value.chiefComplaint"
+                [disabled]="!complaint.value.chiefComplaint"
                 (change)="validateDuration(complaint)"
               />
             </mat-form-field>
@@ -165,7 +165,7 @@
                 current_language_set?.nurseData?.chiefComplaintsDetails
                   ?.selectunitOfDuration
               }}"
-              [disableFormControl]="!complaint.value.duration"
+              [disabled]="!complaint.value.duration"
               (change)="validateDuration(complaint)"
             >
               <mat-option value="Hours">Hour(s)</mat-option>
@@ -183,7 +183,7 @@
                 defaultNull
                 matTextareaAutosize
                 name="description"
-                [disableFormControl]="!complaint.value.chiefComplaint"
+                [disabled]="!complaint.value.chiefComplaint"
                 formControlName="description"
                 placeholder="{{
                   current_language_set?.nurseData?.chiefComplaintsDetails

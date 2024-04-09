@@ -106,14 +106,14 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step *ngIf="showAnc" label="ANC">
+          <mat-step *ngIf="showAnc" label="ANC">
             <ng-template matStepLabel>{{
               current_language_set?.ancData?.anc
             }}</ng-template>
-            <nurse-anc
+            <app-nurse-anc
               [mode]="ancMode"
-              [patientANCForm]="patientMedicalForm.controls.patientANCForm"
-            ></nurse-anc>
+              [patientANCForm]="patientANCForm"
+            ></app-nurse-anc>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
@@ -137,7 +137,9 @@
                   color="primary"
                   class="btn-green button-update-disabled"
                   *ngIf="ancMode"
-                  [disabled]="!patientMedicalForm.controls.patientANCForm.dirty"
+                  [disabled]="
+                    !patientMedicalForm.controls['patientANCForm'].dirty
+                  "
                   (click)="updatePatientANC()"
                   type="button"
                 >
@@ -145,16 +147,16 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
-          <!-- <mat-step *ngIf="showPNC" label="PNC">
+          <mat-step *ngIf="showPNC" label="PNC">
             <ng-template matStepLabel>{{
               current_language_set?.pncData?.pnc
             }}</ng-template>
-            <nurse-pnc
+            <app-nurse-pnc
               [mode]="pncMode"
-              [patientPNCForm]="patientMedicalForm.controls.patientPNCForm"
-            ></nurse-pnc>
+              [patientPNCForm]="patientPNCForm"
+            ></app-nurse-pnc>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
@@ -178,7 +180,9 @@
                   color="primary"
                   class="btn-green button-update-disabled"
                   *ngIf="pncMode"
-                  [disabled]="!patientMedicalForm.controls.patientPNCForm.dirty"
+                  [disabled]="
+                    !patientMedicalForm.controls['patientPNCForm'].dirty
+                  "
                   (click)="updatePatientPNC()"
                   type="button"
                 >
@@ -186,7 +190,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <!-- <mat-step *ngIf="showHistory" label="History">
             <ng-template matStepLabel>{{

@@ -87,16 +87,20 @@ const routes: Routes = [
         (m) => m.NurseDoctorModule,
       ),
   },
-  // {
-  //   path: 'lab',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: './app-modules/lab/lab.module#LabModule'
-  // },
-  // {
-  //   path: 'pharmacist',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: './app-modules/pharmacist/pharmacist.module#PharmacistModule'
-  // },
+  {
+    path: 'lab',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./app-modules/lab/lab.module').then((module) => module.LabModule),
+  },
+  {
+    path: 'pharmacist',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./app-modules/pharmacist/pharmacist.module').then(
+        (module) => module.PharmacistModule,
+      ),
+  },
   // {
   //   path: 'datasync',
   //   canActivate: [AuthGuard],

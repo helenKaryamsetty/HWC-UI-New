@@ -410,9 +410,8 @@
     class="col-xs-12 col-sm-12 col-md-4 col-lg-4 dropdown-height"
     *ngIf="
       visitCategory !== undefined &&
-      visitCategory.toLowerCase() !== 'covid===================-19 screening' &&
-      visitCategory.toLowerCase() !==
-        'fp & =========================================================================================contraceptive services'
+      visitCategory.toLowerCase() !== 'covid-19 screening' &&
+      visitCategory.toLowerCase() !== 'fp & contraceptive services'
     "
   >
     <div class="form-group">
@@ -434,8 +433,8 @@
           [disabled]="
             disableNoneOption !== null &&
             ((!disableNoneOption && counselling.name === 'None') ||
- ===================             (disableNoneOption && counselling.name !== 'None'))
-   =       "
+              (disableNoneOption && counselling.name !== 'None'))
+          "
         >
           {{ counselling.name }}
         </mat-option>
@@ -446,10 +445,8 @@
     class="col-md-10 box"
     *ngIf="
       visitCategory !== undefined &&
-      (visitCategory.toLowerCase() ===
-        'covid===================-19 screening' ||
-        visitCategory.toLowerCase() ===
-          'fp & =========================================================================================contraceptive services')
+      (visitCategory.toLowerCase() === 'covid-19 screening' ||
+        visitCategory.toLowerCase() === 'fp & contraceptive services')
     "
   >
     <mat-form-field class="input-full-width">

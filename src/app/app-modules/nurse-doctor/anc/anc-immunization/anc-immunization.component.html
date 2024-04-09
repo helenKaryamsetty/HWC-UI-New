@@ -5,11 +5,13 @@
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="enableTTStatus_1_2 || enableTTStatus_1_2_b"
     >
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.ancImmune?.tt1Status
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         name="tT_1Status"
         formControlName="tT_1Status"
-        placeholder="{{ current_language_set?.ancData?.ancImmune?.tt1Status }}"
         (change)="checkTT_1Status(tT_1Status)"
       >
         <mat-option
@@ -78,21 +80,22 @@
       </mat-radio-group>
     </div>
   </div>
-  <!-- || (enableTTStatus_1_2_b && tT_1Status !== null) -->
   <div class="row">
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="
         (enableTTStatus_1_2_b || enableTTStatus_1_2) &&
         tT_1Status !== null &&
-        tT_1Status === 'Receive===================d'
+        tT_1Status === 'Received'
       "
     >
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.ancImmune?.tt2Status
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         name="tT_2Status"
         formControlName="tT_2Status"
-        placeholder="{{ current_language_set?.ancData?.ancImmune?.tt2Status }}"
         (change)="checkTT_2Status(tT_2Status)"
       >
         <mat-option
@@ -106,8 +109,8 @@
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="
-        (tT_2Status === 'Receive===================d' && enableTTStatus_1_2) ||
-        (tT_2Status === 'Receive===================d' && enableTTStatus_1_2_b)
+        (tT_2Status === 'Received' && enableTTStatus_1_2) ||
+        (tT_2Status === 'Received' && enableTTStatus_1_2_b)
       "
     >
       <mat-form-field class="fieldAlignment fontStyle">
@@ -135,8 +138,8 @@
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="
-        (tT_2Status === 'Receive===================d' && enableTTStatus_1_2) ||
-        (tT_2Status === 'Receive===================d' && enableTTStatus_1_2_b)
+        (tT_2Status === 'Received' && enableTTStatus_1_2) ||
+        (tT_2Status === 'Received' && enableTTStatus_1_2_b)
       "
     >
       <label class="control-label" for="facilityName">{{
@@ -174,17 +177,17 @@
       *ngIf="
         enableTTStatus_1_2_b &&
         tT_1Status !== null &&
-        ((enableTTStatus_1_2_b && tT_1Status !== 'Receive===================d') ||
+        ((enableTTStatus_1_2_b && tT_1Status !== 'Received') ||
           (enableTTStatus_1_2 && tT_1Status === 'NA'))
- ===================     "
+      "
     >
+      <mat-label class="mat-label-text">{{
+        current_language_set?.ancData?.ancImmune?.ttBoosterStatus
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         name="tT_3Status"
         formControlName="tT_3Status"
-        placeholder="{{
-          current_language_set?.ancData?.ancImmune?.ttBoosterStatus
-        }}"
         (change)="checkTT_3Status(tT_3Status)"
       >
         <mat-option
@@ -198,11 +201,11 @@
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="
-        (tT_3Status === 'Receive===================d' && enableTTStatus_1_2_b) ||
-        (tT_3Status === 'Receive===================d' &&
+        (tT_3Status === 'Received' && enableTTStatus_1_2_b) ||
+        (tT_3Status === 'Received' &&
           enableTTStatus_1_2 &&
           tT_1Status === 'NA' &&
-===================          tT_2Status !== null)
+          tT_2Status !== null)
       "
     >
       <mat-form-field class="fieldAlignment fontStyle">
@@ -229,11 +232,11 @@
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="
-        (tT_3Status === 'Receive===================d' && enableTTStatus_1_2_b) ||
-        (tT_3Status === 'Receive===================d' &&
+        (tT_3Status === 'Received' && enableTTStatus_1_2_b) ||
+        (tT_3Status === 'Received' &&
           enableTTStatus_1_2 &&
           tT_1Status === 'NA' &&
-===================          tT_2Status !== null)
+          tT_2Status !== null)
       "
     >
       <label class="control-label" for="facilityName">{{

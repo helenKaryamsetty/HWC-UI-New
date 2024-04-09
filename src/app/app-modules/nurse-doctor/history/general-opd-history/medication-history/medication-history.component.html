@@ -65,7 +65,7 @@
               maxlength="2"
               formControlName="timePeriodAgo"
               name="timePeriodAgo"
-              [disableFormControl]="!medicationHistory.value.currentMedication"
+              [disabled]="!medicationHistory.value.currentMedication"
               (change)="validateDuration(medicationHistory)"
             />
           </mat-form-field>
@@ -77,7 +77,7 @@
             placeholder="{{ currentLanguageSet?.DurationData?.durationUnit }}"
             formControlName="timePeriodUnit"
             name="timePeriodAgoUnit"
-            [disableFormControl]="!medicationHistory.value.timePeriodAgo"
+            [disabled]="!medicationHistory.value.timePeriodAgo"
             (change)="validateDuration(medicationHistory)"
           >
             <mat-option value="Days">Day(s)</mat-option>

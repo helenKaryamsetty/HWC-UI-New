@@ -2,12 +2,12 @@
 <section class="m-t-20">
   <app-general-opd-diagnosis
     *ngIf="
-      visitCategory === 'Gener===================al OPD' ||
-      visitCategory === 'FP & ===================Contraceptive Services' ||
+      visitCategory === 'General OPD' ||
+      visitCategory === 'FP & Contraceptive Services' ||
       visitCategory.toLowerCase() ===
-        'neona=========================================================================================tal and infant health care services' ||
+        'neonatal and infant health care services' ||
       visitCategory.toLowerCase() ===
-        'child=========================================================================================hood & adolescent healthcare services'
+        'childhood & adolescent healthcare services'
     "
     [caseRecordMode]="caseRecordMode"
     [generalDiagnosisForm]="generalDiagnosisForm"

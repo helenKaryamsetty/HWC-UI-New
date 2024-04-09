@@ -673,3 +673,7 @@ input:-internal-autofill-selected {
 .mdc-form-field>label {
   color: #000;
 }
+
+.mdc-text-field--filled, .mdc-text-field--focused, .mat-mdc-form-field-focus-overlay, .mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay, .mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
+  background-color: unset !important;
+}

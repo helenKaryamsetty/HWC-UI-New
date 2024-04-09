@@ -108,7 +108,7 @@
               allowText="number"
               name="actualReceivingAge"
               formControlName="actualReceivingAge"
-              [disableFormControl]="!vaccine.value.vaccineName"
+              [disabled]="!vaccine.value.vaccineName"
               (change)="validateAge(vaccine)"
             />
           </mat-form-field>
@@ -119,7 +119,7 @@
             (change)="onAgeUnitEntered(i, vaccine)"
             placeholder="{{ currentLanguageSet?.ro?.personalInfo?.ageUnit }}"
             formControlName="ageUnit"
-            [disableFormControl]="!vaccine.value.vaccineName"
+            [disabled]="!vaccine.value.vaccineName"
           >
             <mat-option
               *ngFor="let ageUnit of registrarMasterData?.ageUnit"
@@ -146,7 +146,7 @@
               currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.otherVaccine
                 ?.facilityName
             }}"
-            [disableFormControl]="!vaccine.value.actualReceivingAge"
+            [disabled]="!vaccine.value.actualReceivingAge"
           >
             <mat-option value="Govt Facility">Govt Facility</mat-option>
             <mat-option value="Pvt Facility">Pvt Facility</mat-option>

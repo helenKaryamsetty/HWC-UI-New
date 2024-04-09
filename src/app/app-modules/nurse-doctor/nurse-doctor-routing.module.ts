@@ -29,7 +29,6 @@ import { DoctorWorklistComponent } from './doctor-worklist/doctor-worklist.compo
 import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 import { WorkareaComponent } from './workarea/workarea.component';
 import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
-//import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 
 const routes: Routes = [
   {

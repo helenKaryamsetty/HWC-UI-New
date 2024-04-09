@@ -98,10 +98,10 @@
                 maxlength="2"
                 name="timePeriodAgo"
                 formControlName="timePeriodAgo"
-                [disableFormControl]="
+                [disabled]="
                   !pastIllness.value.illnessType ||
                   pastIllness.value.illnessType?.illnessType === 'Nil'
-            ====================    "
+                "
                 (change)="validateDuration(pastIllness)"
               />
             </mat-form-field>
@@ -116,7 +116,7 @@
               name="timePeriodUnit"
               formControlName="timePeriodUnit"
               (change)="validateDuration(pastIllness)"
-              [disableFormControl]="!pastIllness.value.timePeriodAgo"
+              [disabled]="!pastIllness.value.timePeriodAgo"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
@@ -226,10 +226,10 @@
               maxlength="2"
               name="timePeriodAgo"
               formControlName="timePeriodAgo"
-              [disableFormControl]="
+              [disabled]="
                 !pastSurgery.value.surgeryType ||
                 pastSurgery.value.surgeryType?.surgeryType === 'Nil'
-          ====================    "
+              "
               (change)="validateDuration(pastSurgery)"
             />
           </mat-form-field>
@@ -241,7 +241,7 @@
             formControlName="timePeriodUnit"
             placeholder="{{ currentLanguageSet?.DurationData?.timeperiodAgo }}"
             name="timePeriodUnit"
-            [disableFormControl]="!pastSurgery.value.timePeriodAgo"
+            [disabled]="!pastSurgery.value.timePeriodAgo"
             (change)="validateDuration(pastSurgery)"
           >
             <mat-option value="Days">Day(s)</mat-option>

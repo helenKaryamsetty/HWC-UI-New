@@ -96,8 +96,8 @@
 
   <ng-template
     [ngIf]="
-      menstrualCycleStatus?.name === 'Activ===================e=' ||
-      menstrualCycleStatus?.name === 'Ameno===================r=rhea'
+      menstrualCycleStatus?.name === 'Active' ||
+      menstrualCycleStatus?.name === 'Amenorrhea'
     "
   >
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
@@ -116,9 +116,9 @@
           [disabled]="
             disableNoneMenstrualProblem !== null &&
             ((problem?.problemName === 'None' &&
-  ===================            disableNoneMenstrualProblem === false) ||
+              disableNoneMenstrualProblem === false) ||
               (problem?.problemName !== 'None' &&
-  ===================              disableNoneMenstrualProblem === true))
+                disableNoneMenstrualProblem === true))
           "
           *ngFor="let problem of masterData?.menstrualProblem"
           [value]="problem"

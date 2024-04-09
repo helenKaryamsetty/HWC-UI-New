@@ -53,9 +53,9 @@
   <div
     class="col-xs-12 col-sm-6 col-md-6 m-t-15"
     *ngIf="
-      visitCategory !== 'NCD c=========are' &&
-      visitCategory !== 'Gener=========al OPD (QC)' &&
-      visitCategory !== 'COVID=========-19 Screening'
+      visitCategory !== 'NCD care' &&
+      visitCategory !== 'General OPD (QC)' &&
+      visitCategory !== 'COVID-19 Screening'
     "
   >
     <mat-checkbox
@@ -156,8 +156,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-6 m-t-15"
     *ngIf="
-      visitCategory.toLowerCase() !==
-      'neona=========================================================================================tal and infant health care services'
+      visitCategory.toLowerCase() !== 'neonatal and infant health care services'
     "
   >
     <mat-checkbox
@@ -228,8 +227,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-6 m-t-15"
     *ngIf="
-      visitCategory.toLowerCase() ===
-      'neona=========================================================================================tal and infant health care services'
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
     "
   >
     <mat-checkbox
@@ -244,7 +242,7 @@
     class="col-xs-12 col-sm-6 col-md-6 m-t-15"
     *ngIf="
       visitCategory.toLowerCase() ===
-      'child=========================================================================================hood & adolescent healthcare services'
+      'childhood & adolescent healthcare services'
     "
   >
     <mat-checkbox

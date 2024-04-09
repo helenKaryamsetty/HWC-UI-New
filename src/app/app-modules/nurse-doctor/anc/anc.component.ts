@@ -24,11 +24,10 @@ import {
   OnInit,
   Input,
   OnChanges,
-  Output,
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DoctorService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { ActivatedRoute } from '@angular/router';
@@ -52,8 +51,11 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   current_language_set: any;
   visitReason: any;
   attendant: any;
+  patientANCDetailsForm!: FormGroup;
+  obstetricFormulaForm!: FormGroup;
+  patientANCImmunizationForm!: FormGroup;
+
   constructor(
-    private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
@@ -64,12 +66,20 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   ngOnInit() {
     this.assignSelectedLanguage();
     this.attendant = this.route.snapshot.params['attendant'];
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     (<FormGroup>this.patientANCForm.controls['patientANCDetailsForm']).controls[
       'primiGravida'
     ].valueChanges.subscribe((gravidaData) => {
       this.gravidaStatus = gravidaData;
     });
+    this.patientANCDetailsForm = this.patientANCForm.get(
+      'patientANCDetailsForm',
+    ) as FormGroup;
+    this.obstetricFormulaForm = this.patientANCForm.get(
+      'obstetricFormulaForm',
+    ) as FormGroup;
+    this.patientANCImmunizationForm = this.patientANCForm.get(
+      'patientANCImmunizationForm',
+    ) as FormGroup;
     this.visitReason = localStorage.getItem('visitReason');
     if (
       localStorage.getItem('visitReason') !== undefined &&

@@ -172,7 +172,7 @@ export class PatientVisitDetailsComponent
       parseInt(specialistFlagString) === 100
     ) {
       this.loadNurseMasters();
-      console.log('MMUSpecialist===========');
+      console.log('MMUSpecialist');
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getMMUVisitDetails(visitID, benRegID);
@@ -831,7 +831,7 @@ export class PatientVisitDetailsComponent
 
   //             if(parseInt(localStorage.getItem("specialistFlag")) === 100)
   //             {
-  //                console.log("MMUSpecialist===========")
+  //                console.log("MMUSpecialist")
   //                let visitID = localStorage.getItem('visitID');
   //               let benRegID = localStorage.getItem('beneficiaryRegID')
   //               this.getMMUVisitDetails(visitID, benRegID);
