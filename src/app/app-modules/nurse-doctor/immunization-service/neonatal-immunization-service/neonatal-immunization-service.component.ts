@@ -87,8 +87,8 @@ export class NeonatalImmunizationServiceComponent
   ngOnInit() {
     this.assignSelectedLanguage();
     this.today = new Date();
-    this.getNurseMasterData();
     this.getBeneficiaryDetails();
+    this.getNurseMasterData();
     this.todayDate.setDate(this.today.getDate());
     this.immunizationServicesForm.patchValue({ dateOfVisit: this.todayDate });
   }

@@ -29,7 +29,7 @@
         class="full-width"
         name="immunizationServicesTypeID"
         formControlName="immunizationServicesTypeID"
-        (selectionchange)="
+        (selectionChange)="
           setImmunizationServiceType(
             immunizationServicesForm.controls['immunizationServicesTypeID']
               .value
@@ -54,7 +54,7 @@
         class="full-width"
         name="currentImmunizationServiceID"
         formControlName="currentImmunizationServiceID"
-        (selectionchange)="
+        (selectionChange)="
           setCurrentImmunizationService(
             immunizationServicesForm.controls['currentImmunizationServiceID']
               .value
@@ -101,7 +101,7 @@
                   class="full-width"
                   name="status"
                   formControlName="status"
-                  (selectionchange)="setVaccineName(vaccine.value.status, i)"
+                  (selectionChange)="setVaccineName(vaccine.value.status, i)"
                 >
                   <mat-option
                     *ngFor="let status of vaccineStatus"
