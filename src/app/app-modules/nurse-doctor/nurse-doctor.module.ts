@@ -89,6 +89,29 @@ import { TcSpecialistFutureWorklistComponent } from './tc-specialist-future-work
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
 import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
 import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
+import {
+  MatNativeDateModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS,
+} from '@angular/material/core';
+import {
+  MomentDateModule,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MM/YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MM/YYYY',
+  },
+};
 
 @NgModule({
   imports: [
@@ -106,6 +129,8 @@ import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist
     MatInputModule,
     MatSelectModule,
     MatIconModule,
+    MatNativeDateModule,
+    MomentDateModule,
   ],
   declarations: [
     NurseWorklistComponent,
@@ -251,6 +276,12 @@ import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist
     IdrsscoreService,
     // WorkareaCanActivate, LabService,RegistrarService,
     TestInVitalsService, //FamilyTaggingService, NcdScreeningService, CDSSService
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
 export class NurseDoctorModule {}
