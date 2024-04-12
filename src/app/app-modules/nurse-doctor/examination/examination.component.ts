@@ -19,53 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-nurse-vitals',
-  templateUrl: './vitals.component.html',
-  styleUrls: ['./vitals.component.css'],
+  selector: 'app-nurse-examination',
+  templateUrl: './examination.component.html',
+  styleUrls: ['./examination.component.css'],
 })
-export class VitalsComponent implements OnChanges {
-  @Input()
-  patientVitalsDataForm!: FormGroup;
-
+export class ExaminationComponent implements OnChanges {
   @Input()
   visitCategory!: string;
 
   @Input()
-  mode!: string;
+  patientExaminationForm!: FormGroup;
 
   @Input()
-  pregnancyStatus!: string;
+  examinationMode!: string;
 
   showGeneralOPD = false;
-  showNeonatal = false;
-  showChildAndAdolescent = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   ngOnChanges() {
     if (this.visitCategory) {
       this.showGeneralOPD =
-        this.visitCategory !== 'Neonatal and Infant Health Care Services' &&
-        this.visitCategory !== 'Childhood & Adolescent Healthcare Services'
-          ? true
-          : false;
-      this.showNeonatal =
-        this.visitCategory === 'Neonatal and Infant Health Care Services'
-          ? true
-          : false;
-      this.showChildAndAdolescent =
-        this.visitCategory === 'Childhood & Adolescent Healthcare Services'
+        this.visitCategory === 'General OPD' ||
+        this.visitCategory === 'ANC' ||
+        this.visitCategory === 'PNC'
           ? true
           : false;
     }

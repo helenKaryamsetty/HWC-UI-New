@@ -1200,7 +1200,10 @@ export class DoctorService {
     });
   }
 
-  getGeneralExamintionData(beneficiaryID: string, visitID: string) {
+  getGeneralExamintionData(
+    beneficiaryID: string,
+    visitID: string,
+  ): Observable<any> {
     const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: beneficiaryID,
@@ -1220,6 +1223,10 @@ export class DoctorService {
     if (visitCategory === 'PNC') {
       return this.http.post(environment.getPNCExaminationDataUrl, otherDetails);
     }
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   updateGeneralHistory(
@@ -1806,7 +1813,7 @@ export class DoctorService {
     patientExaminationForm: any,
     visitCategory: any,
     updateDetails: any,
-  ) {
+  ): Observable<any> {
     let updatedExaminationDetails;
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1991,6 +1998,10 @@ export class DoctorService {
         updatedExaminationDetails,
       );
     }
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   updateGeneralExaminationForm(

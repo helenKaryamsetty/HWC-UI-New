@@ -4,13 +4,13 @@
       *ngIf="showGeneralOPD"
       [mode]="mode"
       [visitCategory]="visitCategory"
-      [patientVitalsForm]="patientVitalsForm"
+      [patientVitalsForm]="patientVitalsDataForm"
     ></app-nurse-general-patient-vitals>
     <app-nurse-neonatal-patient-vitals
       *ngIf="showNeonatal || showChildAndAdolescent"
       [mode]="mode"
       [visitCategory]="visitCategory"
-      [neonatalVitalsForm]="patientVitalsForm"
+      [neonatalVitalsForm]="patientVitalsDataForm"
     >
     </app-nurse-neonatal-patient-vitals>
   </div>

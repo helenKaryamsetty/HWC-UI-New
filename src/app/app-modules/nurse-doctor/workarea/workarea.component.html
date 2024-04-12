@@ -296,7 +296,7 @@
               [mode]="vitalsMode"
               [pregnancyStatus]="pregnancyStatus"
               [visitCategory]="visitCategory"
-              [patientVitalsForm]="patientVitalsForm"
+              [patientVitalsDataForm]="patientVitalsForm"
             >
             </app-nurse-vitals>
             <div class="row m-t-20">
@@ -365,13 +365,11 @@
             <ng-template matStepLabel>{{
               current_language_set?.ExaminationData?.examination
             }}</ng-template>
-            <nurse-examination
+            <app-nurse-examination
               [examinationMode]="examinationMode"
               [visitCategory]="visitCategory"
-              [patientExaminationForm]="
-                patientMedicalForm.controls.patientExaminationForm
-              "
-            ></nurse-examination>
+              [patientExaminationForm]="patientExaminationForm"
+            ></app-nurse-examination>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
@@ -409,7 +407,7 @@
                   *ngIf="examinationMode"
                   (click)="updatePatientExamination()"
                   [disabled]="
-                    !patientMedicalForm.controls.patientExaminationForm.dirty &&
+                    !patientMedicalForm.controls['patientExaminationForm'].dirty &&
                     !enableExaminationUpdateForHrp
                   "
                   type="button"
