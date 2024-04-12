@@ -1127,7 +1127,6 @@ export class RegistrationComponent
       const iEMRForm: any = this.updateBenDataManipulation();
       iEMRForm['passToNurse'] = passToNurse;
 
-      // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
       this.registrarService
         .updateBeneficiary(iEMRForm)
         .subscribe((res: any) => {

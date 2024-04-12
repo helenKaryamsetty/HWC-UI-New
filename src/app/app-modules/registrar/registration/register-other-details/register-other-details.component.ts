@@ -153,6 +153,7 @@ export class RegisterOtherDetailsComponent
     // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     //console.log(this.currentLanguageSet);
     //  console.log(this.patientRevisit,'revisit others');
+    console.log('currentLanguageSet in ngOnInit', this.currentLanguageSet);
   }
 
   getGovIDControls(): AbstractControl[] | null {

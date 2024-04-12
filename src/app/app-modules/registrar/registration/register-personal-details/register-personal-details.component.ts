@@ -60,7 +60,7 @@ export class RegisterPersonalDetailsComponent
 
   masterData: any;
   masterDataSubscription: any;
-
+  genderCategory: any = 'Male';
   revisitData: any;
   revisitDataSubscription: any;
 
@@ -272,6 +272,7 @@ export class RegisterPersonalDetailsComponent
         null
       }`,
       gender: element.m_gender.genderID,
+
       genderName: element.m_gender.genderName,
       name: element.name,
       dob: moment(element.dOB).toDate(),
@@ -306,6 +307,12 @@ export class RegisterPersonalDetailsComponent
           element.i_bendemographics.occupationName) ||
         null,
     });
+    this.onGenderSelected();
+    console.log(
+      'personalDetailsForm in 317',
+      this.personalDetailsForm.value.genderName,
+    );
+    this.genderCategory = this.personalDetailsForm.value;
     this.setFullName();
     this.masterData.incomeMaster.forEach((stat: any) => {
       if (
@@ -461,8 +468,8 @@ export class RegisterPersonalDetailsComponent
     });
     console.log(
       'this.masterData 464',
-      genderMaster,
-      this.masterData.maritalStatusMaster,
+
+      this.masterData,
     );
 
     if (this.personalDetailsForm.value.gender === 3) {

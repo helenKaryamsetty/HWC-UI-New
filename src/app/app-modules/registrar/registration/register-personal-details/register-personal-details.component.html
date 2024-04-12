@@ -170,19 +170,20 @@
           <mat-form-field>
             <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.gender }}
+              {{ masterData?.genderMaster.gender }}
             </mat-label>
             <mat-select
               style="width: 100%"
               required
               (selectionChange)="onGenderSelected()"
               formControlName="gender"
+              [(value)]="genderCategory"
             >
               <mat-option
                 *ngFor="let gender of masterData?.genderMaster"
-                value="gender.genderID"
+                [value]="gender.genderID"
               >
                 {{ gender.genderName }}
-                <!-- {{ gender | json }} -->
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -264,11 +265,6 @@
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
           *ngIf="enableMaritalStatus"
         >
-          <table>
-            <tr>
-              <td>{{ maritalStatusMaster }}</td>
-            </tr>
-          </table>
           <mat-form-field>
             <mat-label class="mat-label-text">
               {{ current_language_set?.ro?.personalInfo?.maritalStatus }}

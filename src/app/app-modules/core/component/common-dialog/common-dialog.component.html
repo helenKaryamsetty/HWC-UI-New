@@ -6,13 +6,13 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial
     >
@@ -27,7 +27,7 @@
   <div class="action">
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       cdkFocusInitial
     >
       {{ btnOkText }}
@@ -43,13 +43,13 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial
     >
@@ -66,13 +66,13 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial
     >
@@ -117,13 +117,13 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial
     >
@@ -169,14 +169,14 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       mat-raised-button
       class="background-success"
-      (click)="dialogRef.close(remarksRef.value)"
+      (click)="matDialogRef.close(remarksRef.value)"
     >
       {{ btnOkText }}
     </button>
@@ -202,14 +202,14 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
       class="background-success"
-      (click)="dialogRef.close(remarksRef.value + '.')"
+      (click)="matDialogRef.close(remarksRef.value + '.')"
     >
       {{ btnOkText }}
     </button>
@@ -259,7 +259,7 @@
   <div class="action">
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(true)"
+      (click)="matDialogRef.close(true)"
       cdkFocusInitial
     >
       {{ btnOkText }}
@@ -289,13 +289,13 @@
   <div class="action">
     <button
       class="full-width-login button-reset"
-      (click)="dialogRef.close(false)"
+      (click)="matDialogRef.close(false)"
     >
       {{ btnCancelText }}
     </button>
     <button
       class="full-width-login button-ok"
-      (click)="dialogRef.close(selectedValue)"
+      (click)="matDialogRef.close(selectedValue)"
       cdkFocusInitial
     >
       {{ btnOkText }}
@@ -349,13 +349,13 @@
     <div class="action">
       <button
         class="full-width-login button-reset"
-        (click)="dialogRef.close(false)"
+        (click)="matDialogRef.close(false)"
       >
         {{ btnCancelText }}
       </button>
       <button
         class="full-width-login button-ok"
-        (click)="dialogRef.close(selectedOption)"
+        (click)="matDialogRef.close(selectedOption)"
         cdkFocusInitial
       >
         {{ btnOkText }}
