@@ -27,7 +27,12 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { SetLanguageComponent } from '../../../core/component/set-language.component';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
@@ -333,143 +338,44 @@ export class NeonatalImmunizationServiceComponent
       true,
     );
   }
-  setVaccineName(vaccineStatus: any, index: any) {
+  setVaccineName(vaccineStatus: any, index: any, vaccine: AbstractControl) {
     if (vaccineStatus.toLowerCase() === 'given') {
-      (<FormArray>this.immunizationServicesForm.controls['vaccines'])
-        .at(index)
-        .patchValue({
-          vaccineName: this.vaccineList[index].vaccine,
-        });
-      this.setDefaultVaccineDetailsForSelectedWeeks(index);
+      vaccine.patchValue({
+        vaccineName: this.vaccineList[index].vaccine,
+      });
+      this.setDefaultVaccineDetailsForSelectedWeeks(vaccine, index);
     } else {
-      (this.immunizationServicesForm.get('vaccines') as FormArray).controls;
-      // (<FormArray>(
-      //   this.immunizationServicesForm.controls["vaccines"]["controls"]
-      // ))
-      //   .at(index)
-      //   ["controls"].vaccineName.reset();
-      this.resetVaccineDetails(index);
+      vaccine.get('vaccineName')?.reset();
+      this.resetVaccineDetails(vaccine);
     }
   }
   /* Set default doses, route and site of injection for selected vaccine on weeks */
-  setDefaultVaccineDetailsForSelectedWeeks(index: any) {
-    // let vaccineArrayControls = (<FormArray>(
-    //   this.immunizationServicesForm.controls["vaccines"]["controls"]
-    // )).at(index);
-    const vaccineArrayControls = (
-      this.immunizationServicesForm.get('vaccines') as FormArray
-    ).controls;
+  setDefaultVaccineDetailsForSelectedWeeks(
+    vaccine: AbstractControl,
+    index: any,
+  ) {
     if (this.vaccineList[index].dose.length === 1) {
-      // vaccineArrayControls.patchValue({
-      //   vaccineDose: this.vaccineList[index].dose[0].dose,
-      // });
+      vaccine.patchValue({
+        vaccineDose: this.vaccineList[index].dose[0].dose,
+      });
     }
     if (this.vaccineList[index].route.length === 1) {
-      // vaccineArrayControls.patchValue({
-      //   route: this.vaccineList[index].route[0].route,
-      // });
+      vaccine.patchValue({
+        route: this.vaccineList[index].route[0].route,
+      });
     }
     if (this.vaccineList[index].siteOfInjection.length === 1) {
-      // vaccineArrayControls.patchValue({
-      //   siteOfInjection:
-      //     this.vaccineList[index].siteOfInjection[0].siteofinjection,
-      // });
-    }
-  }
-  /* Selected Missing vaccine name */
-  setMissingVaccineName(vaccinename: any, index: any) {
-    this.resetVaccineDetails(index);
-    (<FormArray>this.immunizationServicesForm.controls['vaccines'])
-      .at(index)
-      .patchValue({
-        vaccineName: vaccinename,
+      vaccine.patchValue({
+        siteOfInjection:
+          this.vaccineList[index].siteOfInjection[0].siteofinjection,
       });
-    this.fetchVaccineDetailsOnSelectedMissingVaccine(vaccinename, index);
-    this.enableFieldsToCaptureMissedVaccineDetails = true;
-  }
-  /* Set default doses, route and site of injection for selected missing vaccine */
-  fetchVaccineDetailsOnSelectedMissingVaccine(vaccinename: any, index: any) {
-    let doses;
-    let route;
-    let siteOfInjection;
-    if (
-      vaccinename !== undefined &&
-      vaccinename !== null &&
-      this.missingVaccine !== undefined &&
-      this.missingVaccine.length > 0
-    ) {
-      this.missingVaccine.forEach((vaccine: any) => {
-        if (
-          vaccine.vaccine.trim().toLowerCase() ===
-          vaccinename.trim().toLowerCase()
-        ) {
-          doses = vaccine.dose;
-          route = vaccine.route;
-          siteOfInjection = vaccine.siteOfInjection;
-        }
-      });
-      this.vaccineList[index].dose = doses;
-      this.vaccineList[index].route = route;
-      this.vaccineList[index].siteOfInjection = siteOfInjection;
-      this.setDefaultVaccineDetailsOnSelectedMissedVaccine(
-        index,
-        doses,
-        route,
-        siteOfInjection,
-      );
     }
   }
-  /* Set default doses, route and site of injection for selected missing vaccine */
-  setDefaultVaccineDetailsOnSelectedMissedVaccine(
-    index: any,
-    doses: any,
-    route: any,
-    siteOfInjection: any,
-  ) {
-    // let vaccineControls = (<FormArray>(
-    //   this.immunizationServicesForm.controls["vaccines"]["controls"]
-    // )).at(index);
-
-    const vaccineControls = (
-      this.immunizationServicesForm.get('vaccines') as FormArray
-    ).controls;
-    if (
-      this.vaccineList[index].dose !== undefined &&
-      this.vaccineList[index].dose.length === 1
-    ) {
-      // vaccineControls.patchValue({
-      //   vaccineDose: doses[0].dose,
-      // });
-    }
-    if (
-      this.vaccineList[index].route !== undefined &&
-      this.vaccineList[index].route.length === 1
-    ) {
-      // vaccineControls.patchValue({
-      //   route: route[0].route,
-      // });
-    }
-    if (
-      this.vaccineList[index].siteOfInjection !== undefined &&
-      this.vaccineList[index].siteOfInjection.length === 1
-    ) {
-      // vaccineControls.patchValue({
-      //   siteOfInjection: siteOfInjection[0].siteofinjection,
-      // });
-    }
-  }
-
-  resetVaccineDetails(index: any) {
-    // let getControls = (<FormArray>(
-    //   this.immunizationServicesForm.controls["vaccines"]["controls"]
-    // )).at(index);
-    const getControls = (
-      this.immunizationServicesForm.get('vaccines') as FormArray
-    ).controls;
-    // getControls["controls"].batchNo.reset();
-    // getControls["controls"].vaccineDose.reset();
-    // getControls["controls"].route.reset();
-    // getControls["controls"].siteOfInjection.reset();
+  resetVaccineDetails(vaccine: AbstractControl) {
+    vaccine.get('batchNo')?.reset();
+    vaccine.get('vaccineDose')?.reset();
+    vaccine.get('route')?.reset();
+    vaccine.get('siteOfInjection')?.reset();
   }
   /** Nurse fetch */
   getNurseFetchImmunizationServiceDetails() {

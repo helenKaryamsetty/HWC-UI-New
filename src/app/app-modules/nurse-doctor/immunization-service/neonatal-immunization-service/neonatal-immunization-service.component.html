@@ -101,7 +101,9 @@
                   class="full-width"
                   name="status"
                   formControlName="status"
-                  (selectionChange)="setVaccineName(vaccine.value.status, i)"
+                  (selectionChange)="
+                    setVaccineName(vaccine.value.status, i, vaccine)
+                  "
                 >
                   <mat-option
                     *ngFor="let status of vaccineStatus"
