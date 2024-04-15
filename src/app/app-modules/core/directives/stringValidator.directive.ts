@@ -37,6 +37,7 @@ export class StringValidatorDirective {
   numerichyphen = /^[0-9- ]+$/;
   number = /^\d+$/;
   decimal = /^\d+(\.\d{0,2})?$/;
+  tempDecimal = /^\d+(\.\d{0,1})?$/;
   numberslash = /^[0-9/]+$/;
   address = /^[a-zA-Z0-9-./,# ]+$/;
 
@@ -87,6 +88,9 @@ export class StringValidatorDirective {
       case 'decimal':
         this.result = this.decimal.test(input);
         break;
+      case 'tempDecimal':
+        this.result = this.tempDecimal.test(input);
+        break;
       case 'address':
         this.result = this.address.test(input);
         break;
@@ -129,8 +133,13 @@ export class StringValidatorDirective {
 
     const lastVal = this.lastValue;
     const maxlength = event.target.maxLength;
-
-    if (this.allowText.trim() === 'decimal') {
+    if (this.allowText.trim() == 'tempDecimal') {
+      if (val == '') {
+        event.target.value = '';
+      } else if (!this.validate(val)) {
+        event.target.value = lastVal;
+      }
+    } else if (this.allowText.trim() === 'decimal') {
       if (val === '') {
         event.target.value = '';
       } else if (!this.validate(val)) {

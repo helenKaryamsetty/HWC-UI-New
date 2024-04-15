@@ -865,6 +865,9 @@ export class NurseService {
   }
 
   postGenericVitalForm(patientVitalForm: any, benVisitID: any) {
+    if (patientVitalForm.value.temperature === '') {
+      patientVitalForm.value.temperature = null;
+    }
     const patientVitalsDetails = Object.assign({}, patientVitalForm.value, {
       beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
       benVisitID: benVisitID,
