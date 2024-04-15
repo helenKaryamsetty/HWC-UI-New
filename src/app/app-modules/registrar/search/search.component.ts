@@ -477,6 +477,7 @@ export class SearchComponent implements OnInit, DoCheck {
   searchRestruct(benList: any, benObject: any) {
     console.log('benList', benList);
     const requiredBenData: any[] = [];
+    console.log('benList in line 480', benList);
     benList.data.forEach((element: any, i: any) => {
       requiredBenData.push({
         beneficiaryID: element.beneficiaryID,

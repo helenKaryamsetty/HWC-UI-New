@@ -133,6 +133,11 @@
                                               !component.value.abnormal
                                           }"
                                         >
+                                          <mat-label>
+                                            {{
+                                              currentLanguageSet?.common?.result
+                                            }}
+                                          </mat-label>
                                           <input
                                             autocomplete="off"
                                             matInput
@@ -141,9 +146,6 @@
                                               component.value.allowText
                                             "
                                             maxLength="50"
-                                            placeholder="{{
-                                              currentLanguageSet?.common?.result
-                                            }}"
                                             (input)="checkNormalRange(i, j)"
                                             (blur)="checkRange(i, j)"
                                             [required]="

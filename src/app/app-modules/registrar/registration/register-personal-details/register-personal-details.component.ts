@@ -312,7 +312,7 @@ export class RegisterPersonalDetailsComponent
       'personalDetailsForm in 317',
       this.personalDetailsForm.value.genderName,
     );
-    this.genderCategory = this.personalDetailsForm.value;
+    this.genderCategory = this.personalDetailsForm.value.genderName;
     this.setFullName();
     this.masterData.incomeMaster.forEach((stat: any) => {
       if (

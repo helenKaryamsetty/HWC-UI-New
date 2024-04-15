@@ -15,12 +15,14 @@
         <section class="row m-t-10">
           <div class="col-xs-12 col-sm-6 box text-field">
             <mat-form-field [style.width]="'100%'">
+              <mat-label>
+                {{ currentLanguageSet?.familyName }}
+              </mat-label>
               <input
                 autocomplete="off"
                 matInput
                 required
                 allowText="alphaspace"
-                placeholder="{{ currentLanguageSet?.familyName }}"
                 name="familyName"
                 [(ngModel)]="familyName"
                 #familyNameV="ngModel"
@@ -37,53 +39,64 @@
           </div>
           <div class="col-xs-12 col-sm-6 box">
             <div class="select-container">
-              <mat-select
-                class="p-t-12"
-                required
-                [style.width]="'100%'"
-                placeholder="{{ currentLanguageSet?.isHeadOftheFamily }}"
-                name="isHeadOfTheFamily"
-                (change)="populateRelation(isHeadOfTheFamily)"
-                [(ngModel)]="isHeadOfTheFamily"
-              >
-                <mat-option
-                  *ngFor="let familyHead of isHeadOfFamilies"
-                  [value]="familyHead"
-                  >{{ familyHead }}
-                </mat-option>
-              </mat-select>
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.isHeadOftheFamily }}
+                </mat-label>
+                <mat-select
+                  class="p-t-12"
+                  required
+                  [style.width]="'100%'"
+                  name="isHeadOfTheFamily"
+                  (selectionChange)="populateRelation(isHeadOfTheFamily)"
+                  [(ngModel)]="isHeadOfTheFamily"
+                >
+                  <mat-option
+                    *ngFor="let familyHead of isHeadOfFamilies"
+                    [value]="familyHead"
+                    >{{ familyHead }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
 
           <div class="col-xs-12 col-sm-6 box">
             <div class="select-container">
-              <mat-select
-                class="p-t-12"
-                required
-                [style.width]="'100%'"
-                placeholder="{{
-                  currentLanguageSet?.benRelationWithHeadOfFamily
-                }}"
-                name="relationWithHeadOfFamily"
-                (change)="checkOtherRelation(relationWithHeadOfFamily)"
-                [(ngModel)]="relationWithHeadOfFamily"
-              >
-                <mat-option
-                  *ngFor="let relationType of relationShipList"
-                  [value]="relationType.benRelationshipID"
-                  >{{ relationType.benRelationshipType }}
-                </mat-option>
-              </mat-select>
+              <mat-form-field>
+                <mat-label>
+                  {{ currentLanguageSet?.benRelationWithHeadOfFamily }}
+                </mat-label>
+
+                <mat-select
+                  class="p-t-12"
+                  required
+                  [style.width]="'100%'"
+                  name="relationWithHeadOfFamily"
+                  (selectionChange)="
+                    checkOtherRelation(relationWithHeadOfFamily)
+                  "
+                  [(ngModel)]="relationWithHeadOfFamily"
+                >
+                  <mat-option
+                    *ngFor="let relationType of relationShipList"
+                    [value]="relationType.benRelationshipID"
+                    >{{ relationType.benRelationshipType }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
           <div class="col-xs-12 col-sm-6 box" *ngIf="enableOther">
             <mat-form-field [style.width]="'100%'" required>
+              <mat-label>
+                {{ currentLanguageSet?.otherRelation }}
+              </mat-label>
               <input
                 autocomplete="off"
                 matInput
                 required
                 allowText="alphaspace"
-                placeholder="{{ currentLanguageSet?.otherRelation }}"
                 name="otherRelation"
                 [(ngModel)]="otherRelation"
                 #otherRelationV="ngModel"

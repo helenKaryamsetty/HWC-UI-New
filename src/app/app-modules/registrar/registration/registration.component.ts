@@ -853,6 +853,7 @@ export class RegistrationComponent
         //     this.router.navigate(['/registrar/search/']);
         //   }
         // }
+        // this.confirmationService.alert(res.data.response, 'success');
         const responseValue = res.data.response;
         const benId = responseValue.replace(/^\D+/g, '');
 
@@ -898,9 +899,14 @@ export class RegistrationComponent
         this.confirmationService
           .confirm('success', successRes, 'Yes', 'No')
           .subscribe((responseData) => {
+            console.log('responseData under confirmationService', responseData);
             if (responseData) {
               this.getBeneficiaryDetailsForFamilyTagging(benId);
             } else {
+              console.log(
+                'responseData under confirmationService in else part',
+                responseData,
+              );
               this.resetBeneficiaryForm();
               this.router.navigate(['/registrar/search/']);
             }
@@ -1048,6 +1054,7 @@ export class RegistrationComponent
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
       (beneficiaryDetails: any) => {
+        console.log('beneficiaryDetails in line 1054', beneficiaryDetails);
         if (beneficiaryDetails && beneficiaryDetails.length === 1) {
           const beneficiaryRegID =
             beneficiaryDetails[0].beneficiaryRegID !== undefined &&

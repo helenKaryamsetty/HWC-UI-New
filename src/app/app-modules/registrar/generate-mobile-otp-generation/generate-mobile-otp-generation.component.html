@@ -25,6 +25,9 @@
       *ngIf="!enableMobileOTPForm"
     >
       <mat-form-field [style.width]="'100%'">
+        <mat-label>
+          {{ currentLanguageSet?.enterMobileNo }}
+        </mat-label>
         <input
           defaultNull
           autocomplete="off"
@@ -34,7 +37,6 @@
           minlength="10"
           maxlength="10"
           [min]="10"
-          placeholder="{{ currentLanguageSet?.enterMobileNo }}"
           formControlName="mobileNo"
         />
         <mat-error
@@ -61,6 +63,9 @@
       *ngIf="enableMobileOTPForm"
     >
       <mat-form-field [style.width]="'100%'">
+        <mat-label>
+          {{ currentLanguageSet?.enterOTP }}
+        </mat-label>
         <input
           defaultNull
           autocomplete="off"
@@ -69,7 +74,6 @@
           matInput
           minlength="6"
           maxlength="6"
-          placeholder="{{ currentLanguageSet?.enterOTP }}"
           (keypress)="numberOnly($event)"
           formControlName="mobileOtp"
         />
