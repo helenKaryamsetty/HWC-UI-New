@@ -182,7 +182,7 @@ export class FamilyPlanningAndReproductiveComponent
         ].setValue(itemId.id);
       }
     });
-    // (this.familyPlanningMode == "view" || this.familyPlanningMode == "update")
+    // (this.familyPlanningMode === "view" || this.familyPlanningMode === "update")
     //   ? this.doctorService.familyPlanningValueChanged(true)
     //   : null;
     if (

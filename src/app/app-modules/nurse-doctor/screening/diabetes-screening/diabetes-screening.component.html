@@ -1,0 +1,124 @@
+<mat-card class="m-t-10 m-b-5">
+  <form [formGroup]="diabetesScreeningForm">
+    <div
+      class="pull-right"
+      [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
+    >
+      <button mat-icon-button>
+        <mat-icon
+          matTooltip="Remove"
+          class="md-24 matIcon-button-style"
+          (click)="hideDiabetesForm()"
+          >close</mat-icon
+        >
+      </button>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <h5>
+          <strong>{{ currentLanguageSet?.diabetes }}</strong>
+        </h5>
+
+        <div>
+          <mat-label
+            *ngIf="isDiabetesSuspected"
+            style="color: red; margin-bottom: 15px"
+            >* {{ currentLanguageSet?.screeningIsPositive }}</mat-label
+          >
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-right">
+        <mat-checkbox
+          [disabled]="disableCheckbox"
+          [checked]="isDiabetesSuspected"
+          (change)="markAsUnsuspected($event.checked)"
+        ></mat-checkbox>
+        <mat-label style="color: grey; margin-bottom: 15px">{{
+          currentLanguageSet?.MarkAsSuspected
+        }}</mat-label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+        <mat-select
+          class="input-full-width"
+          formControlName="bloodGlucoseTypeID"
+          placeholder="{{ currentLanguageSet?.bloodGlucoseSampleType }}"
+          (change)="resetDiabeticValues()"
+          required
+        >
+          <mat-option
+            *ngFor="let sampleType of bloodGlucoseSampleTypes"
+            [value]="sampleType.id"
+          >
+            {{ sampleType.name }}
+          </mat-option>
+        </mat-select>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+        <mat-form-field class="input-full-width">
+          <input
+            autocomplete="off"
+            matInput
+            defaultNull
+            placeholder="{{ currentLanguageSet?.bloodGlucoseMgDl }}"
+            allowText="number"
+            name="bloodGlucose"
+            id="testValue"
+            formControlName="bloodGlucose"
+            maxlength="3"
+            allowMin="10"
+            allowMax="600"
+            (blur)="checkingDiabeticStatus()"
+            required
+            [ngClass]="{
+              abnormal: bloodGlucose > 140
+            }"
+          />
+          <button
+            tooltip="{{ currentLanguageSet?.common?.startTest }}"
+            matSuffix
+            (click)="openIOTRBSModel()"
+          >
+            <span class="glyphicon glyphicon-scale"></span>
+          </button>
+          <mat-error *ngIf="disableFindStatuButton === true">
+            <p>currentLanguageSet?.rangeDL</p>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+        <mat-form-field class="input-full-width">
+          <input
+            autocomplete="off"
+            matInput
+            allowText="textAreaValidator"
+            defaultNull
+            matTextareaAutosize
+            maxlength="300"
+            name="bloodGlucoseRemarks"
+            formControlName="bloodGlucoseRemarks"
+            placeholder="{{ currentLanguageSet?.testRemarks }}"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
+        *ngIf="hideStatusButton === false"
+      >
+        <button
+          mat-raised-button
+          class="full-width-status button-status-disabled"
+          (click)="getDiabetes()"
+          [disabled]="disableFindStatuButton"
+          color="primary"
+        >
+          {{ currentLanguageSet?.findStatus }}
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-card>

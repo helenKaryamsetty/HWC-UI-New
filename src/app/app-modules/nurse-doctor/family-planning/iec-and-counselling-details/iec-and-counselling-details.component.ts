@@ -144,7 +144,7 @@ export class IecAndCounsellingComponent
   // getMastersOfContraceptiveOpted() {
   //   this.selectContraceptive = [];
   //     this.masterdataService.nurseMasterData$.subscribe((res) => {
-  //         if (res != undefined && res != null) {
+  //         if (res !== undefined && res !== null) {
   //         this.selectContraceptive = res.m_fpmethodfollowup;
   //         } else{
   //           console.log("Error in fetching nurse master data details");

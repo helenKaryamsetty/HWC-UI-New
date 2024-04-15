@@ -3380,7 +3380,10 @@ export class DoctorService {
     }
   }
 
-  updateNCDSreeningDetails(medicalForm: any, visitCategory: any) {
+  updateNCDSreeningDetails(
+    medicalForm: any,
+    visitCategory: any,
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -3411,6 +3414,10 @@ export class DoctorService {
         patientNCDScreeningData,
       );
     }
+
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   enableHrpReasonsStatus(enablingHrp: any) {
