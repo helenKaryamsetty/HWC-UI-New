@@ -133,8 +133,8 @@ export class StringValidatorDirective {
 
     const lastVal = this.lastValue;
     const maxlength = event.target.maxLength;
-    if (this.allowText.trim() == 'tempDecimal') {
-      if (val == '') {
+    if (this.allowText.trim() === 'tempDecimal') {
+      if (val === '') {
         event.target.value = '';
       } else if (!this.validate(val)) {
         event.target.value = lastVal;
