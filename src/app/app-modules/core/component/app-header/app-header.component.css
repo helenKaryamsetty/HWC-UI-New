@@ -78,6 +78,14 @@ li a {
     padding: 6px 8px;
 }
  
+li.logout a span.logoutIcon {
+    height: 21px;
+    width: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url(../../../../../assets/images/logoutIcon.png) no-repeat;
+}
+
 li.telemed a img {
     height: 24px;
     width: 24px;
@@ -95,6 +103,42 @@ li.logout a span.logoutIcon:hover {
     text-align: center;
     /* box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.1); */
     box-shadow: none;
+}
+
+@media (min-width: 768px) {
+
+    #main-navbar ul.navbar-nav:focus ul.navbar-nav:hover ul.navbar-nav>span:focus ul.navbar-nav>span:hover {
+    /* float: left; */
+    margin: 0;
+    border: 1px solid #336CFB;
+    background-color: #336CFB !important;
+    color: #ffffff;
+    margin-right: 10px;
+    display: inline-block;
+    border-radius: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    float: none;
+    }
+}
+
+@media (min-width: 768px) {
+
+    #main-navbar ul.navbar-nav {
+    /* float: left; */
+    margin: 0;
+    border: 1px solid white;
+    background-color: white !important;
+    color: gray;
+    margin-right: 10px;
+    display: inline-block;
+    border-radius: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    float: none;
+    }
 }
  
 .active {
@@ -132,7 +176,16 @@ mat-menu {
         /* float: left; */
         text-align: center;
     }
+    .navbar-right {
+        float: right !important;
+        margin-right: -15px;
+    }
 }
+@media (min-width: 1200px) {
+    .hidden-lg  {
+        display: inline-block !important;
+    }
+    }
  
 .iot {
     font-size: 26px;
@@ -158,4 +211,8 @@ mat-menu {
 
 .link {
     text-decoration: none;
+}
+
+.navbar-collapse.menu-font{
+    display: contents !important;
 }

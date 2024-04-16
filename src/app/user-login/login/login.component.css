@@ -117,8 +117,12 @@ mat-card-title {
     justify-content: space-between;
 }
 
-.input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
-    box-shadow: 0 0 0 20px white inset !important;
+/* .input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
+    box-shadow: 0 0 0 20px #e1eaff inset !important;
+} */
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #e1eaff  inset !important;
+    border: unset;
 }
 
 input::-ms-reveal,

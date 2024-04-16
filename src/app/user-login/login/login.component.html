@@ -9,46 +9,50 @@
       (ngSubmit)="loginForm.valid && login()"
     >
       <div class="row" style="text-align: center">
-        <div class="col-xs-1 col-md-1 col-sm-1 m-t-25">
-          <mat-form-field class="full-width text-input-fullwidth">
-            <mat-icon matPrefix>account_box</mat-icon>
-            <mat-label class="mat-label-text">Enter User Name</mat-label>
-            <input
-              matInput
-              allowText="usernameValidator"
-              type="text"
-              id="userID"
-              formControlName="userName"
-              name="userName"
-              #focus
-            />
-          </mat-form-field>
+        <div class="col-xs-12 col-md-12 col-sm-12 m-t-25">
+          <div class="col-xs-11 col-md-11 col-sm-11">
+            <mat-form-field class="full-width text-input-fullwidth">
+              <mat-icon matPrefix>account_box</mat-icon>
+              <mat-label class="mat-label-text">Enter User Name</mat-label>
+              <input
+                matInput
+                allowText="usernameValidator"
+                type="text"
+                id="userID"
+                formControlName="userName"
+                name="userName"
+                #focus
+              />
+            </mat-form-field>
+          </div>
         </div>
       </div>
       <div class="row" fxLayoutAlign="start end" style="text-align: center">
-        <div class="col-xs-1 col-md-1 col-sm-1 m-t-25">
-          <mat-form-field class="full-width text-input-fullwidth">
-            <mat-icon matPrefix>lock</mat-icon>
-            <mat-label class="mat-label-text">Enter Password</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              [type]="dynamictype"
-              id="password"
-              formControlName="password"
-              name="password"
-            />
-            <mat-icon
-              matSuffix
-              class="mat-icon material-icons cursorPointer"
-              role="img"
-              aria-hidden="true"
-              matTooltip="Show Password"
-              (mousedown)="showPWD()"
-              (mouseup)="hidePWD()"
-              >remove_red_eye</mat-icon
-            >
-          </mat-form-field>
+        <div class="col-xs-12 col-md-12 col-sm-12 m-t-25">
+          <div class="col-xs-11 col-md-11 col-sm-11">
+            <mat-form-field class="full-width text-input-fullwidth">
+              <mat-icon matPrefix>lock</mat-icon>
+              <mat-label class="mat-label-text">Enter Password</mat-label>
+              <input
+                autocomplete="off"
+                matInput
+                [type]="dynamictype"
+                id="password"
+                formControlName="password"
+                name="password"
+              />
+              <mat-icon
+                matSuffix
+                class="mat-icon material-icons cursorPointer"
+                role="img"
+                aria-hidden="true"
+                matTooltip="Show Password"
+                (mousedown)="showPWD()"
+                (mouseup)="hidePWD()"
+                >remove_red_eye</mat-icon
+              >
+            </mat-form-field>
+          </div>
         </div>
       </div>
       <div class="row">
