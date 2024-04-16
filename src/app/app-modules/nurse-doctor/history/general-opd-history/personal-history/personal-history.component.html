@@ -211,9 +211,7 @@
       <div
         class="row multi-row-select"
         *ngFor="
-          let tobacco of generalPersonalHistoryForm.controls.tobaccoList[
-            'controls'
-          ];
+          let tobacco of getTobaccoList();
           let i = index;
           let isLast = last;
           let isOdd = odd
@@ -230,7 +228,7 @@
                   ?.typeofTobaccoUse
               }}"
               formControlName="tobaccoUseType"
-              (change)="filterTobaccoList($event.value, i)"
+              (change)="filterTobaccoList($event, i)"
             >
               <mat-option
                 *ngFor="let tobacco of tobaccoSelectList[i]"
@@ -316,7 +314,7 @@
                 maxlength="2"
                 allowText="number"
                 formControlName="duration"
-                (change)="validateDuration(tobacco)"
+                (selectionChange)="validateDuration(tobacco)"
                 [disabled]="!tobacco.value.number"
               />
             </mat-form-field>
@@ -327,7 +325,7 @@
               class="select-full-width lineheight"
               placeholder="{{ currentLanguageSet?.DurationData?.durationUnit }}"
               formControlName="durationUnit"
-              (change)="validateDuration(tobacco)"
+              (selectionChange)="validateDuration(tobacco)"
               [disabled]="!tobacco.value.duration"
             >
               <mat-option value="Days">Day(s)</mat-option>
@@ -382,9 +380,7 @@
       <div
         class="row multi-row-select"
         *ngFor="
-          let alcohol of generalPersonalHistoryForm.controls.alcoholList[
-            'controls'
-          ];
+          let alcohol of getAlcoholList();
           let i = index;
           let isLast = last;
           let isOdd = odd
@@ -400,7 +396,7 @@
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.typeofAlcohol
               }}"
-              (change)="filterAlcoholList($event.value, i)"
+              (change)="filterAlcoholList($event, i)"
             >
               <mat-option
                 *ngFor="let alcohol of alcoholSelectList[i]"
@@ -483,7 +479,7 @@
                 maxlength="2"
                 allowText="number"
                 formControlName="duration"
-                (change)="validateDuration(alcohol)"
+                (selectionChange)="validateDuration(alcohol)"
                 [disabled]="!alcohol.value.avgAlcoholConsumption"
               />
             </mat-form-field>
@@ -494,7 +490,7 @@
               class="select-full-width"
               placeholder="{{ currentLanguageSet?.DurationData?.durationUnit }}"
               formControlName="durationUnit"
-              (change)="validateDuration(alcohol)"
+              (selectionChange)="validateDuration(alcohol)"
               [disabled]="!alcohol.value.duration"
             >
               <mat-option value="Days">Day(s)</mat-option>
@@ -546,9 +542,7 @@
       <div
         class="row multi-row-select"
         *ngFor="
-          let allergy of generalPersonalHistoryForm.controls.allergicList[
-            'controls'
-          ];
+          let allergy of getAllergyList();
           let i = index;
           let isLast = last;
           let isOdd = odd
@@ -564,7 +558,7 @@
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergyType
               }}"
-              (change)="filterAlleryList($event.value, i)"
+              (change)="filterAlleryList($event, i)"
             >
               <mat-option
                 *ngFor="let allergy of allerySelectList[i]"
@@ -681,8 +675,8 @@
               color="primary"
               *ngIf="
                 isLast &&
-                generalPersonalHistoryForm.controls.allergicList['controls']
-                  .length < allergyMasterData.length
+                generalPersonalHistoryForm.get('allergicList')?.value?.length <
+                  allergyMasterData.length
               "
               [disabled]="checkAllergyValidity(allergy)"
               class="button-overall-disabled"

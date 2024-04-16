@@ -31,7 +31,7 @@
         name="totalNoOfPreg "
         allowText="number"
         allowMax="10"
-        [attr.readonly]="visitType === 'ANC' ? 'readonly' : null"
+        [attr.readonly]="visitCategory === 'ANC' ? 'readonly' : null"
         formControlName="totalNoOfPreg"
         (blur)="checkTotalPregnancy(totalNoOfPreg)"
       />
@@ -49,9 +49,7 @@
     <div class="checkbox-group" formArrayName="complicationPregList">
       <ng-container
         *ngFor="
-          let number of pastObstericHistoryForm.controls[
-            'complicationPregList'
-          ]['controls'];
+          let number of getComplicationPregList();
           let i = index;
           trackBy: trackComplication
         "
@@ -73,9 +71,7 @@
     <mat-card
       class="row"
       *ngFor="
-        let pastObstericHistory of pastObstericHistoryForm.controls[
-          'pastObstericHistoryList'
-        ]['controls'];
+        let pastObstericHistory of getPastObstericHistoryList();
         let i = index
       "
     >

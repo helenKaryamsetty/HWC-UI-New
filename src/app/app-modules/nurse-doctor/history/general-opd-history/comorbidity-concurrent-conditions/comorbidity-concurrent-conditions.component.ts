@@ -62,7 +62,7 @@ export class ComorbidityConcurrentConditionsComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   comorbidtyData: any;
   comorbidityMasterData: any;
@@ -262,7 +262,7 @@ export class ComorbidityConcurrentConditionsComponent
 
   removeComorbidityConcurrentConditions(
     i: any,
-    comorbidityConcurrentConditionsForm?: FormGroup,
+    comorbidityConcurrentConditionsForm?: AbstractControl<any, any>,
   ) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
@@ -333,7 +333,7 @@ export class ComorbidityConcurrentConditionsComponent
   filterComorbidityConcurrentConditionsType(
     comorbidityConcurrentConditions: any,
     i: any,
-    comorbidityConcurrentConditionsForm?: FormGroup,
+    comorbidityConcurrentConditionsForm?: AbstractControl<any, any>,
   ) {
     const previousValue = this.previousSelectedComorbidity[i];
     if (comorbidityConcurrentConditions.comorbidCondition === 'None') {
@@ -413,7 +413,7 @@ export class ComorbidityConcurrentConditionsComponent
   getPreviousComorbidityHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousComorbidityHistory(benRegID, this.visitType)
+      .getPreviousComorbidityHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -462,7 +462,7 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
 
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;

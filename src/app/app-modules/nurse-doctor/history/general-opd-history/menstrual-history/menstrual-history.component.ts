@@ -52,7 +52,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   menstrualHistoryData: any;
   masterData: any;
@@ -118,7 +118,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   checkVisitType() {
-    if (this.visitType === 'ANC') {
+    if (this.visitCategory === 'ANC') {
       let temp = 'Amenorrhea';
       temp = this.masterData.menstrualCycleStatus.filter((item: any) => {
         return item.name === temp;
@@ -193,7 +193,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousMenstrualHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousMenstrualHistory(benRegID, this.visitType)
+      .getPreviousMenstrualHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -241,7 +241,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   checkMenstrualCycleStatus() {
     console.log('here in to check');
 
-    if (this.visitType === 'ANC') {
+    if (this.visitCategory === 'ANC') {
       this.menstrualHistoryForm.patchValue({
         menstrualCycleStatusID: null,
         regularity: null,

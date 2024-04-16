@@ -20,7 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormArray,
+  FormGroup,
+  FormControl,
+  AbstractControl,
+} from '@angular/forms';
 
 import {
   MasterdataService,
@@ -46,7 +52,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any;
   familyHistoryData: any;
@@ -80,6 +86,14 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
     if (this.generalHistorySubscription)
       this.generalHistorySubscription.unsubscribe();
+  }
+
+  getFamilyDiseases(): AbstractControl[] | null {
+    const familyDiseaseControl =
+      this.familyHistoryForm.get('familyDiseaseList');
+    return familyDiseaseControl instanceof FormArray
+      ? familyDiseaseControl.controls
+      : null;
   }
 
   nurseMasterDataSubscription: any;
@@ -213,7 +227,11 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     familyDiseaseList.push(this.initFamilyDiseaseList());
   }
 
-  filterFamilyDiseaseList(disease: any, i: any, familyDiseaseForm?: FormGroup) {
+  filterFamilyDiseaseList(
+    disease: any,
+    i: any,
+    familyDiseaseForm?: AbstractControl<any, any>,
+  ) {
     const previousValue = this.previousSelectedDiseaseList[i];
     if (disease.diseaseType === 'None') {
       this.removeFamilyDiseaseExecptNone();
@@ -269,7 +287,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  removeFamilyDisease(i: any, familyHistoryForm?: FormGroup) {
+  removeFamilyDisease(i: any, familyHistoryForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -303,7 +321,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousFamilyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFamilyHistory(benRegID, this.visitType)
+      .getPreviousFamilyHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {

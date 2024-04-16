@@ -192,19 +192,19 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step *ngIf="showHistory" label="History">
+          <mat-step *ngIf="showHistory" label="History">
             <ng-template matStepLabel>{{
               current_language_set?.common?.history
             }}</ng-template>
-            <nurse-history
-              [historyMode]="historyMode"
+            <app-nurse-history
+              [mode]="historyMode"
               [visitCategory]="visitCategory"
               [pregnancyStatus]="pregnancyStatus"
               [primeGravidaStatus]="primeGravidaStatus"
-              [patientHistoryForm]="
-                patientMedicalForm.controls.patientHistoryForm
-              "
-            ></nurse-history>
+              [patientHistoryForm]="patientHistoryForm"
+            >
+            </app-nurse-history>
+
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
@@ -230,7 +230,7 @@
                   *ngIf="historyMode"
                   (click)="updatePatientHistory()"
                   [disabled]="
-                    !patientMedicalForm.controls.patientHistoryForm.dirty
+                    !patientMedicalForm.controls['patientHistoryForm'].dirty
                   "
                   type="button"
                 >
@@ -238,7 +238,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <mat-step
             *ngIf="showImmunizationHistory"
