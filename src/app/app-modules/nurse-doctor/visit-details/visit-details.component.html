@@ -71,17 +71,18 @@
       <h5>{{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.cdss }}</h5>
     </mat-expansion-panel-header>
     <h5>{{ currentLanguageSet?.previousvisit?.ChiefComplaint104 }}</h5>
-    <!-- <app-cdss-form [mode]="mode" 
-    [presentChiefComplaintDb]="presentChiefComplaintDb">
-  </app-cdss-form> -->
+    <app-cdss-form [mode]="mode" [cdssForm]="presentChiefComplaintDb">
+    </app-cdss-form>
     <h5>
       {{
         currentLanguageSet?.nurseData?.chiefComplaintsDetails?.diseaseSummary
       }}
     </h5>
-    <!-- <app-diseaseSummary-form [mode]="mode" 
-    [diseaseSummaryDb]="diseaseSummaryDb">
-  </app-diseaseSummary-form> -->
+    <app-disease-summary-form
+      [mode]="mode"
+      [DiseaseSummaryForm]="diseaseSummaryDb"
+    >
+    </app-disease-summary-form>
   </mat-expansion-panel>
 
   <mat-expansion-panel

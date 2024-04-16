@@ -91,7 +91,7 @@
                         name="modeOfTravelDomestic"
                         formControlName="modeOfTravelDomestic"
                         id="modeOfTravelDomestic"
-                        (change)="
+                        (selectionChange)="
                           traveldomesticStatuschange(modeOfTravelDomestic)
                         "
                       >
@@ -112,7 +112,7 @@
                         name="fromStateDom"
                         id="fromStateDom"
                         formControlName="fromStateDom"
-                        (change)="GetDistrictsFromDom(fromStateDom)"
+                        (selectionChange)="GetDistrictsFromDom(fromStateDom)"
                       >
                         <mat-option
                           *ngFor="let state of states"
@@ -128,7 +128,9 @@
                         id="fromDistrictDom"
                         name="fromDistrictDom"
                         formControlName="fromDistrictDom"
-                        (change)="GetSubDistrictFromDom(fromDistrictDom)"
+                        (selectionChange)="
+                          GetSubDistrictFromDom(fromDistrictDom)
+                        "
                       >
                         <mat-option
                           *ngFor="let district of districtsFromDom"
@@ -146,7 +148,7 @@
                         id="fromSubDistrictDom"
                         formControlName="fromSubDistrictDom"
                         name="fromSubDistrictDom"
-                        (change)="getVillage(fromSubDistrictDom)"
+                        (selectionChange)="getVillage(fromSubDistrictDom)"
                       >
                         <mat-option
                           *ngFor="let item of subDistrictsFromDom"
@@ -165,7 +167,7 @@
                         name="toStateDom"
                         formControlName="toStateDom"
                         id="toStateDom"
-                        (change)="GetDistrictsToDom(toStateDom)"
+                        (selectionChange)="GetDistrictsToDom(toStateDom)"
                       >
                         <mat-option
                           *ngFor="let state of states"
@@ -181,7 +183,7 @@
                         name="toDistrictDom"
                         formControlName="toDistrictDom"
                         id="toDistrictDom"
-                        (change)="getSubDistrictToDom(toDistrictDom)"
+                        (selectionChange)="getSubDistrictToDom(toDistrictDom)"
                       >
                         <mat-option
                           *ngFor="let district of districtsToDom"
@@ -199,7 +201,9 @@
                         name="toSubDistrictDom"
                         id="toSubDistrictDom"
                         formControlName="toSubDistrictDom"
-                        (change)="getVillageTosubDistrictDom(toSubDistrictDom)"
+                        (selectionChange)="
+                          getVillageTosubDistrictDom(toSubDistrictDom)
+                        "
                       >
                         <mat-option
                           *ngFor="let item of subDistrictsToDom"
@@ -255,7 +259,7 @@
                           currentLanguageSet?.travel?.modeofTravel
                         }}"
                         name="modeOfTravelInter"
-                        (change)="
+                        (selectionChange)="
                           travelinternationalStatuschange(modeOfTravelInter)
                         "
                       >
@@ -278,7 +282,7 @@
                         id="fromCountryInter"
                         formControlName="fromCountryInter"
                         name="fromCountryInter"
-                        (change)="getCitiesFromInter(fromCountryInter)"
+                        (selectionChange)="getCitiesFromInter(fromCountryInter)"
                       >
                         <mat-option
                           *ngFor="let country of countries"
@@ -294,7 +298,7 @@
                         formControlName="fromCityInter"
                         id="fromCityInter"
                         name="fromCityInter"
-                        (change)="CitiesFromInter(fromCityInter)"
+                        (selectionChange)="CitiesFromInter(fromCityInter)"
                       >
                         <mat-option
                           *ngFor="let city of citiesFromInter"
@@ -314,7 +318,7 @@
                         formControlName="toCountryInter"
                         name="toCountryInter"
                         id="toCountryInter"
-                        (change)="getCitiesToInter(toCountryInter)"
+                        (selectionChange)="getCitiesToInter(toCountryInter)"
                       >
                         <mat-option
                           *ngFor="let country of countries"
@@ -330,7 +334,7 @@
                         name="toCityInter"
                         id="toCityInter"
                         formControlName="toCityInter"
-                        (change)="CitiesToInter(toCityInter)"
+                        (selectionChange)="CitiesToInter(toCityInter)"
                       >
                         <mat-option
                           *ngFor="let city of citiesToInter"

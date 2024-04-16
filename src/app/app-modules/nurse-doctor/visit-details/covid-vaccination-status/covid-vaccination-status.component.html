@@ -5,7 +5,7 @@
       placeholder="{{ currentLanguageSet?.ageGroup }}"
       formControlName="ageGroup"
       name="ageGroup"
-      (change)="setIsApplicable()"
+      (selectionChange)="setIsApplicable()"
     >
       <mat-option *ngFor="let ageGroups of ageGroupsList" [value]="ageGroups">
         {{ ageGroups }}
@@ -39,7 +39,7 @@
       placeholder="{{ currentLanguageSet?.vaccineStatus }}"
       formControlName="vaccineStatus"
       name="vaccineStatus"
-      (change)="enableVaccineTypeAndDoseTaken()"
+      (selectionChange)="enableVaccineTypeAndDoseTaken()"
       [required]="enableVaccinationStatusFields === true"
     >
       <mat-option value="YES">YES</mat-option>
@@ -56,7 +56,7 @@
       formControlName="vaccineTypes"
       name="vaccineTypes"
       [required]="enableVaccineTypeAndDoseTakenFlag === true"
-      (change)="enableSaveButtonInForm()"
+      (selectionChange)="enableSaveButtonInForm()"
     >
       <mat-option
         *ngFor="let vaccineType of vaccineTypeList"
@@ -76,7 +76,7 @@
       formControlName="doseTaken"
       name="doseTaken"
       [required]="enableVaccineTypeAndDoseTakenFlag === true"
-      (change)="enableSaveButtonInForm()"
+      (selectionChange)="enableSaveButtonInForm()"
     >
       <mat-option
         *ngFor="let doseType of doseTypeList"

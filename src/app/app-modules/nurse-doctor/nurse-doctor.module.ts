@@ -100,6 +100,11 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { CdssFormComponent } from './cdss/cdss-form/cdss-form.component';
+import { CdssFormResultPopupComponent } from './cdss/cdss-form-result-popup/cdss-form-result-popup.component';
+import { CDSSService } from './shared/services/cdss-service';
+import { DiseaseFormComponent } from './cdss/diseaseSummary/diseaseSummary.component';
+import { ViewDiseaseSummaryDetailsComponent } from './cdss/viewDiseaseSummaryDetails/viewDiseaseSummaryDet.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -260,11 +265,11 @@ export const MY_FORMATS = {
     // Referred104DetailsPopupComponent,
     Referred104WorkareaComponent,
     // Referred104CdssDetailsComponent,
-    // CdssFormComponent,
-    // DiseaseFormComponent,
+    CdssFormComponent,
+    DiseaseFormComponent,
     // Cdss104FormComponent,
-    // ViewDiseaseSummaryDetailsComponent,
-    // CdssFormResultPopupComponent,
+    ViewDiseaseSummaryDetailsComponent,
+    CdssFormResultPopupComponent,
     // Referred104BeneficiaryDetailsComponent
   ],
 
@@ -275,7 +280,8 @@ export const MY_FORMATS = {
     NcdScreeningService,
     IdrsscoreService,
     // WorkareaCanActivate, LabService,RegistrarService,
-    TestInVitalsService, //FamilyTaggingService, NcdScreeningService, CDSSService
+    TestInVitalsService, //FamilyTaggingService, NcdScreeningService,
+    CDSSService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

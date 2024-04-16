@@ -9,7 +9,7 @@
       placeholder="{{
         currentLanguageSet?.nurseData?.investigationsDetails?.laboratory
       }}"
-      (change)="checkTestName($event)"
+      (selectionChange)="checkTestName($event)"
     >
       <mat-option
         *ngFor="let laboratary of selectLabTest"

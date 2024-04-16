@@ -95,7 +95,7 @@
                 ?.unitOfDuration
             }}"
             [disabled]="!complaint.value.duration"
-            (change)="validateDuration(complaint)"
+            (selectionChange)="validateDuration(complaint)"
           >
             <mat-option value="Hours">Hour(s)</mat-option>
             <mat-option value="Days">Day(s)</mat-option>

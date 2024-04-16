@@ -3,7 +3,7 @@
     <mat-select
       [style.width]="'50%'"
       multiple
-      (change)="symptomSelected()"
+      (selectionChange)="symptomSelected()"
       id="symptom"
       placeholder="{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination

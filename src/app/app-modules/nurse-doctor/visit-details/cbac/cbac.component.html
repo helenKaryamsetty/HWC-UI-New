@@ -68,7 +68,7 @@
                         name="cbacAge"
                         class="answer"
                         formControlName="cbacAge"
-                        (change)="calculateAgeScore()"
+                        (selectionChange)="calculateAgeScore()"
                       >
                         <mat-option
                           *ngFor="let cbacAgeValues of cbacAgeOptions"
@@ -94,7 +94,7 @@
                         name="cbacConsumeGutka"
                         class="answer"
                         formControlName="cbacConsumeGutka"
-                        (change)="calculatecbacConsumeGutka()"
+                        (selectionChange)="calculatecbacConsumeGutka()"
                       >
                         <mat-option
                           *ngFor="
@@ -148,7 +148,7 @@
                         name="cbacWaistMale"
                         class="answer"
                         formControlName="cbacWaistMale"
-                        (change)="calculatecbacWaistMaleScore()"
+                        (selectionChange)="calculatecbacWaistMaleScore()"
                       >
                         <mat-option
                           *ngFor="
@@ -173,7 +173,7 @@
                         name="cbacWaistFemale"
                         class="answer"
                         formControlName="cbacWaistFemale"
-                        (change)="calculatecbacWaistFemaleScore()"
+                        (selectionChange)="calculatecbacWaistFemaleScore()"
                       >
                         <mat-option
                           *ngFor="
@@ -201,7 +201,7 @@
                         name="cbacPhysicalActivity"
                         class="answer"
                         formControlName="cbacPhysicalActivity"
-                        (change)="calculateCbacPhysicalActivity()"
+                        (selectionChange)="calculateCbacPhysicalActivity()"
                       >
                         <mat-option
                           *ngFor="

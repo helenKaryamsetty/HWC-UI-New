@@ -33,6 +33,7 @@ import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { VisitDetailUtils } from '../../shared/utility';
 
 @Component({
   selector: 'app-cdss-form',
@@ -64,6 +65,8 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   disableVisit = false;
   presentChiefComplaintID: any;
   presentChiefComplaintView: any;
+  formUtility: any;
+
   constructor(
     private httpServiceService: HttpServiceService,
     private fb: FormBuilder,
@@ -73,7 +76,10 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     private masterdataService: MasterdataService,
     private router: Router,
     private doctorService: DoctorService,
-  ) {}
+  ) {
+    this.formUtility = new VisitDetailUtils(this.fb);
+    this.formUtility.createCdssForm();
+  }
 
   ngOnInit() {
     this.showingCdssForm();
