@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -28,12 +28,17 @@ export class LabService {
   constructor(private http: HttpClient) {}
 
   getLabWorklist() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.labWorklist + fetchUrl);
+    return this.http.get(environment.labWorklist + fetchUrl, httpOptions);
   }
 
   saveLabWork(techForm: any) {

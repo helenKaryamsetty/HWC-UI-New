@@ -108,6 +108,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   getNurseWorklist() {
     this.nurseService.getNurseWorklist().subscribe(
       (res: any) => {
+        console.log('res in line 111', res);
         if (res.statusCode === 200 && res.data !== null) {
           const benlist = this.loadDataToBenList(res.data);
           this.beneficiaryList = benlist;
