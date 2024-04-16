@@ -757,7 +757,6 @@ export class RegistrationComponent
    */
   postButtonCall() {
     const valid = this.checkValids(this.beneficiaryRegistrationForm);
-
     if (valid && this.checkValidHealthID(null)) {
       if (this.patientRevisit) {
         this.updateBeneficiarynPassToNurse();
@@ -835,9 +834,9 @@ export class RegistrationComponent
     );
 
     // createdBy, vanID, servicePointID
-
-    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
-
+    // const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
+    const servicePointObject: any = localStorage.getItem('serviceLineDetails');
+    const servicePointDetails = JSON.parse(servicePointObject);
     iEMRForm['vanID'] = servicePointDetails.vanID;
     iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     iEMRForm['createdBy'] = localStorage.getItem('userName');
@@ -1011,6 +1010,8 @@ export class RegistrationComponent
           benBlockId: benBlockId,
           benVillageId: benVillageId,
         },
+        // benDistrictId: 60, 3465
+        // benBlockId: benBlockId,
       },
     );
     mdDialogRef.afterClosed().subscribe((result) => {
@@ -1054,50 +1055,53 @@ export class RegistrationComponent
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
       (beneficiaryDetails: any) => {
-        console.log('beneficiaryDetails in line 1054', beneficiaryDetails);
-        if (beneficiaryDetails && beneficiaryDetails.length === 1) {
+        console.log('beneficiaryDetails in line 1057', beneficiaryDetails);
+        if (beneficiaryDetails && beneficiaryDetails.data.length === 1) {
           const beneficiaryRegID =
-            beneficiaryDetails[0].beneficiaryRegID !== undefined &&
-            beneficiaryDetails[0].beneficiaryRegID !== null
-              ? beneficiaryDetails[0].beneficiaryRegID
+            beneficiaryDetails.data[0].beneficiaryRegID !== undefined &&
+            beneficiaryDetails.data[0].beneficiaryRegID !== null
+              ? beneficiaryDetails.data[0].beneficiaryRegID
               : null;
           const benSurname =
-            beneficiaryDetails[0].lastName !== undefined &&
-            beneficiaryDetails[0].lastName !== null
-              ? beneficiaryDetails[0].lastName
+            beneficiaryDetails.data[0].lastName !== undefined &&
+            beneficiaryDetails.data[0].lastName !== null
+              ? beneficiaryDetails.data[0].lastName
               : null;
           let benName =
-            beneficiaryDetails[0].firstName !== undefined &&
-            beneficiaryDetails[0].firstName !== null
-              ? beneficiaryDetails[0].firstName
+            beneficiaryDetails.data[0].firstName !== undefined &&
+            beneficiaryDetails.data[0].firstName !== null
+              ? beneficiaryDetails.data[0].firstName
               : null;
           if (
-            beneficiaryDetails[0].lastName !== undefined &&
-            beneficiaryDetails[0].lastName !== null &&
-            beneficiaryDetails[0].lastName !== ''
+            beneficiaryDetails.data[0].lastName !== undefined &&
+            beneficiaryDetails.data[0].lastName !== null &&
+            beneficiaryDetails.data[0].lastName !== ''
           ) {
-            benName = benName + ' ' + beneficiaryDetails[0].lastName;
+            benName = benName + ' ' + beneficiaryDetails.data[0].lastName;
           }
           const benDistrictId =
-            beneficiaryDetails[0].i_bendemographics.districtID !== undefined &&
-            beneficiaryDetails[0].i_bendemographics.districtID !== null
-              ? beneficiaryDetails[0].i_bendemographics.districtID
+            beneficiaryDetails.data[0].i_bendemographics.districtID !==
+              undefined &&
+            beneficiaryDetails.data[0].i_bendemographics.districtID !== null
+              ? beneficiaryDetails.data[0].i_bendemographics.districtID
               : null;
           const benBlockId =
-            beneficiaryDetails[0].i_bendemographics.blockID !== undefined &&
-            beneficiaryDetails[0].i_bendemographics.blockID !== null
-              ? beneficiaryDetails[0].i_bendemographics.blockID
+            beneficiaryDetails.data[0].i_bendemographics.blockID !==
+              undefined &&
+            beneficiaryDetails.data[0].i_bendemographics.blockID !== null
+              ? beneficiaryDetails.data[0].i_bendemographics.blockID
               : null;
           const benVillageId =
-            beneficiaryDetails[0].i_bendemographics.districtBranchID !==
+            beneficiaryDetails.data[0].i_bendemographics.districtBranchID !==
               undefined &&
-            beneficiaryDetails[0].i_bendemographics.districtBranchID !== null
-              ? beneficiaryDetails[0].i_bendemographics.districtBranchID
+            beneficiaryDetails.data[0].i_bendemographics.districtBranchID !==
+              null
+              ? beneficiaryDetails.data[0].i_bendemographics.districtBranchID
               : null;
           const beneficiaryId =
-            beneficiaryDetails[0].beneficiaryID !== undefined &&
-            beneficiaryDetails[0].beneficiaryID !== null
-              ? beneficiaryDetails[0].beneficiaryID
+            beneficiaryDetails.data[0].beneficiaryID !== undefined &&
+            beneficiaryDetails.data[0].beneficiaryID !== null
+              ? beneficiaryDetails.data[0].beneficiaryID
               : null;
 
           this.openSearchFamily(

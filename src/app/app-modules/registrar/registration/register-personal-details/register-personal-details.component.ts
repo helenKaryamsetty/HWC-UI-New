@@ -240,7 +240,7 @@ export class RegisterPersonalDetailsComponent
    * Load Editing Data to Form
    */
   pushEditingDatatoForm(element: any) {
-    console.log('element in personal', element);
+    console.log('element in personal 243', element);
     this.dateForCalendar = moment(element.dOB).toDate(); //calendar ngModel
     this.personalDetailsForm.patchValue({
       beneficiaryID: element.beneficiaryID,
@@ -308,10 +308,6 @@ export class RegisterPersonalDetailsComponent
         null,
     });
     this.onGenderSelected();
-    console.log(
-      'personalDetailsForm in 317',
-      this.personalDetailsForm.value.genderName,
-    );
     this.genderCategory = this.personalDetailsForm.value.genderName;
     this.setFullName();
     this.masterData.incomeMaster.forEach((stat: any) => {

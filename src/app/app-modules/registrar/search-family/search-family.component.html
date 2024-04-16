@@ -20,20 +20,20 @@
               <mat-label>
                 {{ currentLanguageSet?.district }}
               </mat-label>
+              <mat-select
+                class="p-t-12"
+                required
+                (selectionChange)="onDistrictChange()"
+                name="districtID"
+                formControlName="districtID"
+              >
+                <mat-option
+                  *ngFor="let district of districtList"
+                  [value]="district.districtID"
+                  >{{ district.districtName | titlecase }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
-            <mat-select
-              class="p-t-12"
-              required
-              (selectionChange)="onDistrictChange()"
-              name="districtID"
-              formControlName="districtID"
-            >
-              <mat-option
-                *ngFor="let district of districtList"
-                [value]="district.districtID"
-                >{{ district.districtName | titlecase }}
-              </mat-option>
-            </mat-select>
           </div>
         </div>
 

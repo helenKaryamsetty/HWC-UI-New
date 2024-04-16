@@ -179,7 +179,10 @@ export class SearchComponent implements OnInit, DoCheck {
             itemsPerPage: this.rowsPerPage,
           });
         }
-        console.log('beneficiaryList*********', this.beneficiaryList);
+        console.log(
+          'beneficiaryList********* in line 182',
+          this.beneficiaryList,
+        );
       },
       (error: any) => {
         this.confirmationService.alert(error, 'error');

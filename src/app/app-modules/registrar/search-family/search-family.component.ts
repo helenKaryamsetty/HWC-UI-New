@@ -104,6 +104,7 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
     this.showProgressBar = true;
     this.createFamilySearchForm();
     this.assignSelectedLanguage();
+    console.log('this.familySearchForm line 107', this.familySearchForm.value);
     // this.configState();
     if (this.data !== null && this.data !== undefined) {
       this.familySearchForm.controls['surname'].setValue(
@@ -285,6 +286,10 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
   }
 
   fetchBlockSelection() {
+    console.log(
+      'this.familySearchForm.value.districtID in 288',
+      this.familySearchForm.value,
+    );
     this.registrarService
       .getSubDistrictList(this.familySearchForm.value.districtID)
       .subscribe((res: any) => {
@@ -326,6 +331,10 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
   }
 
   fetchBlockSelectionInitial() {
+    console.log(
+      'this.familySearchForm.value.districtID in 330',
+      this.familySearchForm.value,
+    );
     this.registrarService
       .getSubDistrictList(this.familySearchForm.value.districtID)
       .subscribe((res: any) => {
