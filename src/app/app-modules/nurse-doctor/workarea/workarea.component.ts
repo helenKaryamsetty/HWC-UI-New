@@ -4946,10 +4946,11 @@ export class WorkareaComponent
     const required = [];
 
     let count = 0;
-    const familyDiseaseList =
+    const familyDiseasesList =
       historyForm.controls.patientHistoryForm.controls.familyHistory.controls
         .familyDiseaseList.value;
-    familyDiseaseList.forEach((element: any) => {
+    familyDiseasesList;
+    familyDiseasesList.forEach((element: any) => {
       if (
         element.diseaseType !== null &&
         element.deleted === false &&
@@ -4969,9 +4970,7 @@ export class WorkareaComponent
     }
 
     let familyMember = 0;
-    const familyDiseasesList =
-      historyForm.controls.patientHistoryForm.controls.familyHistory.controls
-        .familyDiseaseList.value;
+
     let familyDiseasesLength = familyDiseasesList.length;
     for (let element = 0; element < familyDiseasesList.length; element++) {
       if (
