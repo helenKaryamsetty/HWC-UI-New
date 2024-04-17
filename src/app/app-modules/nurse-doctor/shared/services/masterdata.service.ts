@@ -75,13 +75,8 @@ export class MasterdataService {
    * Visit details master data api call
    */
   getVisitDetailMasterData() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     return this.http
-      .get(this.visitDetailMasterDataUrl, httpOptions)
+      .get(this.visitDetailMasterDataUrl)
       .subscribe((res: any) => {
         this.visitDetailMasterDataSource.next(res.data);
       });
@@ -91,11 +86,6 @@ export class MasterdataService {
    * Nurse master data api call
    */
   getNurseMasterData(visitID: string, providerServiceID: any) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     const gender = localStorage.getItem('beneficiaryGender');
     return this.http
       .get(
@@ -105,7 +95,6 @@ export class MasterdataService {
           providerServiceID +
           '/' +
           gender,
-        httpOptions,
       )
       .subscribe((res: any) => {
         this.nurseMasterDataSource.next(res.data);

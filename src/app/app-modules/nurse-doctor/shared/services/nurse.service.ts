@@ -95,11 +95,6 @@ export class NurseService {
       'getNurseWorklistUrl',
       localStorage.getItem('providerServiceID'),
     );
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     console.log('environment in 98', environment.nurseWorklist);
     const newNurseWorklist = environment.nurseWorklist;
 
@@ -108,53 +103,32 @@ export class NurseService {
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(newNurseWorklist + fetchUrl, httpOptions);
+    return this.http.get(newNurseWorklist + fetchUrl);
   }
 
   getNurseTMFutureWorklist() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(
-      environment.getNurseTMFutureWorklistUrl + fetchUrl,
-      httpOptions,
-    );
+    return this.http.get(environment.getNurseTMFutureWorklistUrl + fetchUrl);
   }
   getNurseTMWorklist() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(
-      environment.getNurseTMWorklistUrl + fetchUrl,
-      httpOptions,
-    );
+    return this.http.get(environment.getNurseTMWorklistUrl + fetchUrl);
   }
   getMMUNurseWorklist() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.mmuNurseWorklist + fetchUrl, httpOptions);
+    return this.http.get(environment.mmuNurseWorklist + fetchUrl);
   }
 
   getPreviousVisitData(obj: any) {

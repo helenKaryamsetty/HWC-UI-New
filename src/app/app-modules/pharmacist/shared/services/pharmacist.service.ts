@@ -29,19 +29,11 @@ export class PharmacistService {
   constructor(private http: HttpClient) {}
 
   getPharmacistWorklist() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(
-      environment.pharmacistWorklist + fetchUrl,
-      httpOptions,
-    );
+    return this.http.get(environment.pharmacistWorklist + fetchUrl);
   }
 }

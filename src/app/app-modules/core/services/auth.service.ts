@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -60,12 +60,7 @@ export class AuthService {
     return this.http.post(environment.logoutUrl, '');
   }
   getSwymedLogout() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
-    return this.http.get(environment.getSwymedLogoutUrl, httpOptions);
+    return this.http.get(environment.getSwymedLogoutUrl);
   }
 
   getUIVersionAndCommitDetails(url: any) {
