@@ -57,7 +57,7 @@ const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v0.1`;
+const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 
