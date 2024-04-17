@@ -361,7 +361,7 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step *ngIf="showExamination" label="Examination">
+          <mat-step *ngIf="showExamination" label="Examination">
             <ng-template matStepLabel>{{
               current_language_set?.ExaminationData?.examination
             }}</ng-template>
@@ -375,7 +375,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
                   type="button"
                   *ngIf="!showRefer"
                   [disabled]="disableSubmitButton"
@@ -386,6 +386,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   *ngIf="showCaseRecord"
                   matStepperNext
                   type="button"
@@ -395,6 +396,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -402,13 +404,13 @@
                 </button>
                 <button
                   mat-raised-button
-                  class="btn-green button-update-disabled"
+                  class="mat_green button-update-disabled"
                   color="primary"
                   *ngIf="examinationMode"
                   (click)="updatePatientExamination()"
                   [disabled]="
-                    !patientMedicalForm.controls['patientExaminationForm'].dirty &&
-                    !enableExaminationUpdateForHrp
+                    !patientMedicalForm.controls['patientExaminationForm']
+                      .dirty && !enableExaminationUpdateForHrp
                   "
                   type="button"
                 >
@@ -416,7 +418,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <mat-step
             *ngIf="showImmunizationService"

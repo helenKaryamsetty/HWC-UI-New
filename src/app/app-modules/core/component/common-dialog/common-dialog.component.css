@@ -33,7 +33,7 @@
 }
 
 .success {
-    background: #43a047;
+    background: green;
 }
 
 .info {
@@ -75,7 +75,7 @@
 }
 
 .background-success {
-    background-color: #43a047 !important;
+    background-color: green !important;
     color: white !important;
 }
 

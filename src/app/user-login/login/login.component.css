@@ -28,7 +28,7 @@ button {
 }
 
 button.submit {
-    background: #0277bd;
+    background: #336CFB;
 }
   
 .forgotBtn {
@@ -71,7 +71,7 @@ mat-card-title {
 }
   
 .fbBtn {
-    background-color: #0277bd;
+    background-color: #336CFB;
     color: white;
 }
   

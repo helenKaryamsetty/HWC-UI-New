@@ -71,7 +71,7 @@
 }
 
 .mat_blue {
-  background-color: #0277bd !important;
+  background-color: #336CFB !important;
   border-color: unset !important;
   color: white;
   border: unset;
@@ -89,7 +89,7 @@
   min-width: 88px;
 }
 .mat_green {
-  background-color: #43a047 !important;
+  background-color: green !important;
   border-color: unset !important;
   color: white;
   border: unset;
@@ -118,7 +118,7 @@
 }
 
 .mat_blue_circle {
-  background-color: #0277bd;
+  background-color: #336CFB;
   min-width: 0;
   border-radius: 50%;
   border-color: unset !important;
@@ -160,7 +160,7 @@
   z-index: 3;
 }
 .mat_warn_circle {
-  background-color: #ff5252;
+  background-color: #C21F1F;
   min-width: 0;
   border-radius: 50%;
   border-color: unset !important;
@@ -178,7 +178,7 @@
   min-width: 0;
   border-radius: 50%;
   border-color: unset !important;
-  color:#0277bd ;
+  color:#336CFB ;
   border: unset;
   width: 40px;
   height: 40px;
@@ -188,7 +188,7 @@
   z-index: 3;
 }
 .mat_icon_white{
-  background-color: #0277bd;
+  background-color: #336CFB;
   min-width: 0;
   border-radius: 50%;
   border-color: unset !important;

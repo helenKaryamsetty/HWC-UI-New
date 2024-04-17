@@ -121,6 +121,19 @@ import { PerinatalHistoryComponent } from './history/general-opd-history/perinat
 import { PastObstericHistoryComponent } from './history/general-opd-history/past-obsteric-history/past-obsteric-history.component';
 import { ImmunizationHistoryComponent } from './history/general-opd-history/immunization-history/immunization-history.component';
 import { OtherVaccinesComponent } from './history/general-opd-history/other-vaccines/other-vaccines.component';
+import { ExaminationComponent } from './examination/examination.component';
+import { GeneralExaminationComponent } from './examination/general-opd-examination/general-examination/general-examination.component';
+import { GeneralOpdExaminationComponent } from './examination/general-opd-examination/general-opd-examination.component';
+import { HeadToToeExaminationComponent } from './examination/general-opd-examination/head-to-toe-examination/head-to-toe-examination.component';
+import { CardioVascularSystemComponent } from './examination/general-opd-examination/systemic-examination/cardio-vascular-system/cardio-vascular-system.component';
+import { CentralNervousSystemComponent } from './examination/general-opd-examination/systemic-examination/central-nervous-system/central-nervous-system.component';
+import { GastroIntestinalSystemComponent } from './examination/general-opd-examination/systemic-examination/gastro-intestinal-system/gastro-intestinal-system.component';
+import { GenitoUrinarySystemComponent } from './examination/general-opd-examination/systemic-examination/genito-urinary-system/genito-urinary-system.component';
+import { MusculoskeletalSystemComponent } from './examination/general-opd-examination/systemic-examination/musculoskeletal-system/musculoskeletal-system.component';
+import { ObstetricExaminationComponent } from './examination/general-opd-examination/systemic-examination/obstetric-examination/obstetric-examination.component';
+import { RespiratorySystemComponent } from './examination/general-opd-examination/systemic-examination/respiratory-system/respiratory-system.component';
+import { SystemicExaminationComponent } from './examination/general-opd-examination/systemic-examination/systemic-examination.component';
+import { GeneralOralExaminationComponent } from './examination/general-opd-examination/general-oral-examination/general-oral-examination.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -158,17 +171,17 @@ export const MY_FORMATS = {
     PatientVisitDetailsComponent,
     // PrintPageSelectComponent,
     // QuickConsultComponent,
-    // ObstetricExaminationComponent,
-    // GenitoUrinarySystemComponent,
-    // CentralNervousSystemComponent,
-    // MusculoskeletalSystemComponent,
-    // RespiratorySystemComponent,
-    // GastroIntestinalSystemComponent,
-    // CardioVascularSystemComponent,
-    // SystemicExaminationComponent,
-    // HeadToToeExaminationComponent,
-    // GeneralExaminationComponent,
-    // GeneralOpdExaminationComponent,
+    ObstetricExaminationComponent,
+    GenitoUrinarySystemComponent,
+    CentralNervousSystemComponent,
+    MusculoskeletalSystemComponent,
+    RespiratorySystemComponent,
+    GastroIntestinalSystemComponent,
+    CardioVascularSystemComponent,
+    SystemicExaminationComponent,
+    HeadToToeExaminationComponent,
+    GeneralExaminationComponent,
+    GeneralOpdExaminationComponent,
     GeneralPatientVitalsComponent,
     MedicationHistoryComponent,
     DevelopmentHistoryComponent,
@@ -198,7 +211,7 @@ export const MY_FORMATS = {
     InvestigationsComponent,
     UploadFilesComponent,
     HistoryComponent,
-    // ExaminationComponent,
+    ExaminationComponent,
     VitalsComponent,
     // CaseRecordComponent,
     PncComponent,
@@ -256,7 +269,7 @@ export const MY_FORMATS = {
     // BreastCancerScreeningComponent,
     // CervicalCancerScreeningComponent,
     // ScreeningCaseSheetComponent,
-    // GeneralOralExaminationComponent,
+    GeneralOralExaminationComponent,
     FamilyPlanningComponent,
     DispensationDetailsComponent,
     FamilyPlanningAndReproductiveComponent,
