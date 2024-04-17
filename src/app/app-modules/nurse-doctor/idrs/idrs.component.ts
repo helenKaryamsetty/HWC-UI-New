@@ -61,7 +61,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   patientMedicalForm!: FormGroup;
 
   @Input()
-  mode!: string;
+  ncdScreeningMode!: string;
 
   @Input()
   visitType: any;
@@ -134,7 +134,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     this.idrsScoreService.finalDiagnosisDiabetesConfirm(null);
     this.idrsScoreService.finalDiagnosisHypertensionConfirm(null);
     this.assignSelectedLanguage();
-    console.log('currentMode', this.mode);
+    console.log('currentMode', this.ncdScreeningMode);
     /* Load disease questions and disease names master data  */
     this.getNurseMasterData();
     this.getBeneficiaryDetails();
@@ -703,7 +703,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     }
   }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (this.ncdScreeningMode === 'view') {
       this.doctorScreen = true;
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -726,7 +726,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
         this.getIDRSDetailsFrmNurse(visitID, benRegID);
       }
     }
-    if (this.mode === 'update') {
+    if (this.ncdScreeningMode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.doctorScreen = true;
       this.updateIDRSDetails(this.idrsScreeningForm, visitCategory);
@@ -997,7 +997,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
             )
               this.getPreviousVisit();
           }
-          if (this.mode === 'view') {
+          if (this.ncdScreeningMode === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             if (visitID !== null && benRegID !== null) {

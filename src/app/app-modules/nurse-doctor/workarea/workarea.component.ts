@@ -193,6 +193,7 @@ export class WorkareaComponent
   patientVitalsForm!: FormGroup;
   patientExaminationForm!: FormGroup;
   patientHistoryForm!: FormGroup;
+  idrsScreeningForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -1227,6 +1228,8 @@ export class WorkareaComponent
     }
   }
   addControlsToNCDScreeningForm() {
+    console.log(this.patientMedicalForm);
+
     this.patientMedicalForm.addControl(
       'patientVitalsForm',
       new GeneralUtils(this.fb).createGeneralVitalDetailsForm(),
@@ -1241,6 +1244,7 @@ export class WorkareaComponent
     this.patientHistoryForm = this.patientMedicalForm.get(
       'patientHistoryForm',
     ) as FormGroup;
+
     this.patientMedicalForm.addControl(
       'idrsScreeningForm',
       new NCDScreeningUtils(this.fb).createIDRSForm(),
@@ -1265,6 +1269,9 @@ export class WorkareaComponent
       'cervical',
       new NCDScreeningUtils(this.fb).createCervicalCancerForm(),
     );
+    this.idrsScreeningForm = this.patientMedicalForm.get(
+      'idrsScreeningForm',
+    ) as FormGroup;
   }
 
   hideAll() {
@@ -2685,6 +2692,9 @@ export class WorkareaComponent
     let count = 0;
 
     if (this.showIDRSScreen === true) {
+      this.idrsScreeningForm = this.patientMedicalForm.get(
+        'idrsScreeningForm',
+      ) as FormGroup;
       /* If diabetes suspected then rbs test has to perform under vitals */
       if (
         this.attendant === 'nurse' &&

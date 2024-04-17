@@ -41,29 +41,35 @@
 
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-select
-          class="input-full-width"
-          formControlName="bloodGlucoseTypeID"
-          placeholder="{{ currentLanguageSet?.bloodGlucoseSampleType }}"
-          (change)="resetDiabeticValues()"
-          required
-        >
-          <mat-option
-            *ngFor="let sampleType of bloodGlucoseSampleTypes"
-            [value]="sampleType.id"
+        <mat-form-field>
+          <mat-label>
+            {{ currentLanguageSet?.bloodGlucoseSampleType }}
+          </mat-label>
+          <mat-select
+            class="input-full-width"
+            formControlName="bloodGlucoseTypeID"
+            (selectionChange)="resetDiabeticValues()"
+            required
           >
-            {{ sampleType.name }}
-          </mat-option>
-        </mat-select>
+            <mat-option
+              *ngFor="let sampleType of bloodGlucoseSampleTypes"
+              [value]="sampleType.id"
+            >
+              {{ sampleType.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
         <mat-form-field class="input-full-width">
+          <mat-label>
+            {{ currentLanguageSet?.bloodGlucoseMgDl }}
+          </mat-label>
           <input
             autocomplete="off"
             matInput
             defaultNull
-            placeholder="{{ currentLanguageSet?.bloodGlucoseMgDl }}"
             allowText="number"
             name="bloodGlucose"
             id="testValue"
@@ -78,9 +84,9 @@
             }"
           />
           <button
-            tooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTRBSModel()"
+            matTooltip="{{ currentLanguageSet?.common?.startTest }}"
           >
             <span class="glyphicon glyphicon-scale"></span>
           </button>
@@ -92,6 +98,9 @@
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
         <mat-form-field class="input-full-width">
+          <mat-label>
+            {{ currentLanguageSet?.testRemarks }}
+          </mat-label>
           <input
             autocomplete="off"
             matInput
@@ -101,7 +110,6 @@
             maxlength="300"
             name="bloodGlucoseRemarks"
             formControlName="bloodGlucoseRemarks"
-            placeholder="{{ currentLanguageSet?.testRemarks }}"
           />
         </mat-form-field>
       </div>

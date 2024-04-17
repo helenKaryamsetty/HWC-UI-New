@@ -42,20 +42,24 @@
         class="col-xs-12 col-sm-6 col-md-6 col-lg-5 box"
         style="white-space: nowrap"
       >
-        <mat-select
-          class="input-full-width"
-          placeholder="{{ currentLanguageSet?.visualExamination }}"
-          formControlName="visualExaminationId"
-          (change)="checkCervicalCancerSuspect()"
-          required
-        >
-          <mat-option
-            *ngFor="let visualExamination of visualExaminations"
-            [value]="visualExamination.id"
+        <mat-form-field>
+          <mat-label>
+            {{ currentLanguageSet?.visualExamination }}
+          </mat-label>
+          <mat-select
+            class="input-full-width"
+            formControlName="visualExaminationId"
+            (selectionChange)="checkCervicalCancerSuspect()"
+            required
           >
-            {{ visualExamination.name }}
-          </mat-option>
-        </mat-select>
+            <mat-option
+              *ngFor="let visualExamination of visualExaminations"
+              [value]="visualExamination.id"
+            >
+              {{ visualExamination.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </div>

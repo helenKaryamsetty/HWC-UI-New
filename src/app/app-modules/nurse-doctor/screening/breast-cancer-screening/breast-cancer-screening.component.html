@@ -40,55 +40,67 @@
     <div class="row m-t-10">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-          <mat-select
-            class="input-full-width"
-            placeholder="{{ currentLanguageSet?.inspectionOfBreasts }}"
-            formControlName="inspectionBreastsId"
-            (change)="setNameBasedOnSelectedID()"
-            required
-          >
-            <mat-option
-              *ngFor="let inspectionOfBreast of inspectionOfBreasts"
-              [value]="inspectionOfBreast.id"
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.inspectionOfBreasts }}
+            </mat-label>
+            <mat-select
+              class="input-full-width"
+              formControlName="inspectionBreastsId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
             >
-              {{ inspectionOfBreast.name }}
-            </mat-option>
-          </mat-select>
+              <mat-option
+                *ngFor="let inspectionOfBreast of inspectionOfBreasts"
+                [value]="inspectionOfBreast.id"
+              >
+                {{ inspectionOfBreast.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-          <mat-select
-            class="input-full-width"
-            placeholder="{{ currentLanguageSet?.palpationOfBreasts }}"
-            formControlName="palpationBreastsId"
-            (change)="setNameBasedOnSelectedID()"
-            required
-          >
-            <mat-option
-              class="mat-option"
-              *ngFor="let palpationOfBreast of palpationOfBreasts"
-              [value]="palpationOfBreast.id"
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.palpationOfBreasts }}
+            </mat-label>
+            <mat-select
+              class="input-full-width"
+              formControlName="palpationBreastsId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
             >
-              {{ palpationOfBreast.name }}
-            </mat-option>
-          </mat-select>
+              <mat-option
+                class="mat-option"
+                *ngFor="let palpationOfBreast of palpationOfBreasts"
+                [value]="palpationOfBreast.id"
+              >
+                {{ palpationOfBreast.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-          <mat-select
-            class="input-full-width"
-            placeholder="{{ currentLanguageSet?.palpationOfLymphNodes }}"
-            formControlName="palpationLymphNodesId"
-            (change)="setNameBasedOnSelectedID()"
-            required
-          >
-            <mat-option
-              *ngFor="let palpationOfLymphNode of palpationOfLymphNodes"
-              [value]="palpationOfLymphNode.id"
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.palpationOfLymphNodes }}
+            </mat-label>
+            <mat-select
+              class="input-full-width"
+              formControlName="palpationLymphNodesId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
             >
-              {{ palpationOfLymphNode.name }}
-            </mat-option>
-          </mat-select>
+              <mat-option
+                *ngFor="let palpationOfLymphNode of palpationOfLymphNodes"
+                [value]="palpationOfLymphNode.id"
+              >
+                {{ palpationOfLymphNode.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </div>

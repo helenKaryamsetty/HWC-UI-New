@@ -121,6 +121,13 @@ import { PerinatalHistoryComponent } from './history/general-opd-history/perinat
 import { PastObstericHistoryComponent } from './history/general-opd-history/past-obsteric-history/past-obsteric-history.component';
 import { ImmunizationHistoryComponent } from './history/general-opd-history/immunization-history/immunization-history.component';
 import { OtherVaccinesComponent } from './history/general-opd-history/other-vaccines/other-vaccines.component';
+import { BreastCancerScreeningComponent } from './screening/breast-cancer-screening/breast-cancer-screening.component';
+import { CervicalCancerScreeningComponent } from './screening/cervical-cancer-screening/cervical-cancer-screening.component';
+import { DiabetesScreeningComponent } from './screening/diabetes-screening/diabetes-screening.component';
+import { HypertensionScreeningComponent } from './screening/hypertension-screening/hypertension-screening.component';
+import { OralCancerScreeningComponent } from './screening/oral-cancer-screening/oral-cancer-screening.component';
+import { ScreeningComponent } from './screening/screening.component';
+import { IdrsComponent } from './idrs/idrs.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -241,20 +248,20 @@ export const MY_FORMATS = {
     NurseTmWorklistComponent,
     NurseTmFutureWorklistComponent,
     // CovidDiagnosisComponent,
-    // IdrsComponent,
+    IdrsComponent,
     PhysicalActivityHistoryComponent,
     FamilyHistoryNcdscreeningComponent,
     // NcdScreeningDiagnosisComponent,
     NurseMmuTmReferredWorklistComponent,
     DiseaseconfirmationComponent,
     CovidVaccinationStatusComponent,
-    // DiabetesScreeningComponent,
-    // OralCancerScreeningComponent,
-    // ScreeningComponent,
+    DiabetesScreeningComponent,
+    OralCancerScreeningComponent,
+    ScreeningComponent,
     CbacComponent,
-    // HypertensionScreeningComponent,
-    // BreastCancerScreeningComponent,
-    // CervicalCancerScreeningComponent,
+    HypertensionScreeningComponent,
+    BreastCancerScreeningComponent,
+    CervicalCancerScreeningComponent,
     // ScreeningCaseSheetComponent,
     // GeneralOralExaminationComponent,
     FamilyPlanningComponent,

@@ -51,7 +51,7 @@ export class ScreeningComponent
   patientMedicalForm!: FormGroup;
 
   @Input()
-  mode!: string;
+  ncdScreeningMode!: string;
 
   oral = false;
   hypertension = false;
@@ -83,11 +83,11 @@ export class ScreeningComponent
   ncdOralData = null;
   ncdCervicalData = null;
 
-  diabeticForm!: FormGroup;
-  hypertensionForm!: FormGroup;
-  oralForm!: FormGroup;
-  breastForm!: FormGroup;
-  cervicalForm!: FormGroup;
+  diabetesScreeningForm!: FormGroup;
+  hypertensionScreeningForm!: FormGroup;
+  oralCancerForm!: FormGroup;
+  breastCancerScreeningForm!: FormGroup;
+  cervicalScreeningForm!: FormGroup;
   @Output() screeningValueChanged: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private ncdScreeningService: NcdScreeningService,
@@ -101,6 +101,21 @@ export class ScreeningComponent
     this.ncdScreeningService.clearConfirmedDiseasesForScreening();
     this.ncdScreeningService.screeningValueChanged(false);
     this.resetSuspectedDiseases();
+    console.log(this.patientMedicalForm);
+
+    this.diabetesScreeningForm = this.patientMedicalForm.get(
+      'diabetes',
+    ) as FormGroup;
+    this.hypertensionScreeningForm = this.patientMedicalForm.get(
+      'hypertension',
+    ) as FormGroup;
+    this.oralCancerForm = this.patientMedicalForm.get('oral') as FormGroup;
+    this.breastCancerScreeningForm = this.patientMedicalForm.get(
+      'breast',
+    ) as FormGroup;
+    this.cervicalScreeningForm = this.patientMedicalForm.get(
+      'cervical',
+    ) as FormGroup;
     this.ncdScreeningService.confirmedDiseasesListCheck$.subscribe(
       (response: any) => {
         if (
@@ -232,7 +247,7 @@ export class ScreeningComponent
     this.disableButtonOnConfirmedDiseases();
   }
   ngOnChanges() {
-    if (this.mode === 'update') {
+    if (this.ncdScreeningMode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       // this.doctorScreen = true;
       this.updateNCDScreeningDataFromDoctor(
@@ -242,7 +257,7 @@ export class ScreeningComponent
     }
   }
   getNcdScreeningDataForCbac() {
-    if (this.mode === 'view') {
+    if (this.ncdScreeningMode === 'view') {
       this.doctorService.getNcdScreeningForCbac().subscribe((res: any) => {
         if (
           res.statusCode === 200 &&
@@ -611,7 +626,7 @@ export class ScreeningComponent
         this.ncdScreeningDiseases.push(disease);
       }
     });
-    if (this.mode === 'view') {
+    if (this.ncdScreeningMode === 'view') {
       this.loadScreeningFormBasedOnFetchResponse();
     }
   }

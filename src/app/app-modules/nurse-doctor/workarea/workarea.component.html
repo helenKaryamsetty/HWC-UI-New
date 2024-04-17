@@ -534,7 +534,7 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step *ngIf="showNCDScreening" label="IDRS">
+          <mat-step *ngIf="showNCDScreening" label="IDRS">
             <ng-template matStepLabel>{{
               current_language_set?.idrs?.screening
             }}</ng-template>
@@ -548,9 +548,7 @@
               [ncdScreeningMode]="ncdScreeningMode"
               [patientMedicalForm]="patientMedicalForm"
               (IDRSChanged)="idrsChange($event)"
-              [idrsScreeningForm]="
-                patientMedicalForm.controls.idrsScreeningForm
-              "
+              [idrsScreeningForm]="idrsScreeningForm"
             ></app-idrs>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
@@ -606,7 +604,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
           <!-- <mat-step
             *ngIf="showCaseRecord"
             label="{{ current_language_set?.common?.caseRecord }}"
