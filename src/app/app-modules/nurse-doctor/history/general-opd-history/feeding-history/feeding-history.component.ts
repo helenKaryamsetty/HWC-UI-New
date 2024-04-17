@@ -50,7 +50,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   feedingHistoryForm!: FormGroup;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   @Input()
   mode!: string;
@@ -166,7 +166,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousFeedingHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFeedingHistory(benRegID, this.visitType)
+      .getPreviousFeedingHistory(benRegID, this.visitCategory)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {

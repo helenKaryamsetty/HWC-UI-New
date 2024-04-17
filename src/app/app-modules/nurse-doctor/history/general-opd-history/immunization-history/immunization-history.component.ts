@@ -41,7 +41,7 @@ export class ImmunizationHistoryComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any;
   temp: any;

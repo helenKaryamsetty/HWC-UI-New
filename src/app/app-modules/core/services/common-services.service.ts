@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CommonService {
-  //headers = new Headers( { 'Content-Type': 'application/json' } );
+  // headers = new Headers( { 'Content-Type': 'application/json' } );
 
   commonServices = new Subject<any>();
   commonServices$ = this.commonServices.asObservable();

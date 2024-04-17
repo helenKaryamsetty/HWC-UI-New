@@ -25,7 +25,7 @@
     <div
       class="row multi-row-select"
       *ngFor="
-        let vaccine of otherVaccinesForm.controls['otherVaccines']['controls'];
+        let vaccine of getOtherVaccines();
         let i = index;
         let isLast = last;
         let isOdd = odd
@@ -42,7 +42,7 @@
               currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.otherVaccine
                 ?.nameofVaccine
             }}"
-            (change)="filterOtherVaccineList($event.value, i, vaccine)"
+            (change)="filterOtherVaccineList($event, i, vaccine)"
           >
             <mat-option
               *ngFor="let vaccine of vaccineSelectList[i]"

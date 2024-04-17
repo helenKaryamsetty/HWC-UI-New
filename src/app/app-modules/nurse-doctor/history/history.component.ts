@@ -31,7 +31,7 @@ import { DoctorService } from '../shared/services/doctor.service';
 })
 export class HistoryComponent implements OnChanges, OnInit {
   @Input()
-  patientHistoryForm: FormGroup | undefined;
+  patientHistoryForm!: FormGroup;
 
   @Input()
   visitCategory!: string;

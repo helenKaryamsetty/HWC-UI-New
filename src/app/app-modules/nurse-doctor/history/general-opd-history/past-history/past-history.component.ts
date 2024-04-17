@@ -28,7 +28,12 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  FormBuilder,
+  AbstractControl,
+} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
@@ -58,7 +63,7 @@ export class PastHistoryComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   surgeryMasterData: any;
   filteredSurgeryMasterData: any;
@@ -379,7 +384,7 @@ export class PastHistoryComponent
     pastIllnessList.push(this.initPastIllness());
   }
 
-  removePastIllness(i: any, pastIllnessForm?: FormGroup) {
+  removePastIllness(i: any, pastIllnessForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -451,7 +456,18 @@ export class PastHistoryComponent
     this.sortIllnessList(this.pastIllnessSelectList[0]);
   }
 
-  filterPastIllnessType(illness: any, i: any, pastIllnessForm?: FormGroup) {
+  getPastIllness(): AbstractControl[] | null {
+    const pastIllnessControl = this.pastHistoryForm.get('pastIllness');
+    return pastIllnessControl instanceof FormArray
+      ? pastIllnessControl.controls
+      : null;
+  }
+
+  filterPastIllnessType(
+    illness: any,
+    i: any,
+    pastIllnessForm?: AbstractControl<any, any>,
+  ) {
     const previousValue = this.previousSelectedIllnessTypeList[i];
 
     if (pastIllnessForm && illness.illnessType !== 'Other')
@@ -524,7 +540,7 @@ export class PastHistoryComponent
     pastSurgeryList.push(this.initPastSurgery());
   }
 
-  removePastSurgery(i: any, pastSurgeryForm?: FormGroup) {
+  removePastSurgery(i: any, pastSurgeryForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -583,7 +599,18 @@ export class PastHistoryComponent
     }
   }
 
-  filterPastSurgeryType(surgery: any, i: any, pastSurgeryForm?: FormGroup) {
+  getPastSurgery(): AbstractControl[] | null {
+    const pastSurgeryControl = this.pastHistoryForm.get('pastSurgery');
+    return pastSurgeryControl instanceof FormArray
+      ? pastSurgeryControl.controls
+      : null;
+  }
+
+  filterPastSurgeryType(
+    surgery: any,
+    i: any,
+    pastSurgeryForm?: AbstractControl<any, any>,
+  ) {
     const previousValue = this.previousSelectedSurgeryTypeList[i];
 
     if (pastSurgeryForm && surgery.surgeryType !== 'Other')
@@ -634,7 +661,7 @@ export class PastHistoryComponent
   getPreviousPastHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousPastHistory(benRegID, this.visitType)
+      .getPreviousPastHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -672,7 +699,7 @@ export class PastHistoryComponent
     });
   }
 
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl<any, any>) {
     let duration = null;
     let durationUnit = null;
     let flag = true;

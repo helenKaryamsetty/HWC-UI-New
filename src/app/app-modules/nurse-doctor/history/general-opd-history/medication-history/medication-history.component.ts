@@ -27,7 +27,12 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormArray,
+  AbstractControl,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -56,7 +61,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
   currentLanguageSet: any;
 
   constructor(
@@ -154,7 +159,19 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     medicationHistoryList.push(this.initMedicationHistory());
   }
 
-  removeMedicationHistory(i: any, medicationHistoryForm?: FormGroup) {
+  getMedicationHistory(): AbstractControl[] | null {
+    const getMedicationHistory = this.medicationHistoryForm.get(
+      'medicationHistoryList',
+    );
+    return getMedicationHistory instanceof FormArray
+      ? getMedicationHistory.controls
+      : null;
+  }
+
+  removeMedicationHistory(
+    i: any,
+    medicationHistoryForm?: AbstractControl<any, any>,
+  ) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -186,7 +203,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousMedicationHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousMedicationHistory(benRegID, this.visitType)
+      .getPreviousMedicationHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -232,7 +249,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     });
   }
 
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;

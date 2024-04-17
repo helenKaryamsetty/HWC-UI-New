@@ -20,7 +20,12 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormArray,
+  FormGroup,
+  AbstractControl,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -49,7 +54,7 @@ export class FamilyHistoryNcdscreeningComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any;
   familyHistoryData: any;
@@ -95,6 +100,14 @@ export class FamilyHistoryNcdscreeningComponent
 
     if (this.generalHistorySubscription)
       this.generalHistorySubscription.unsubscribe();
+  }
+
+  getFamilyDiseases(): AbstractControl[] | null {
+    const familyDiseaseControl =
+      this.familyHistoryForm.get('familyDiseaseList');
+    return familyDiseaseControl instanceof FormArray
+      ? familyDiseaseControl.controls
+      : null;
   }
 
   nurseMasterDataSubscription: any;
@@ -277,7 +290,11 @@ export class FamilyHistoryNcdscreeningComponent
     familyDiseaseList.push(this.initFamilyDiseaseList());
   }
 
-  filterFamilyDiseaseList(disease: any, i: any, familyDiseaseForm?: FormGroup) {
+  filterFamilyDiseaseList(
+    disease: any,
+    i: any,
+    familyDiseaseForm?: AbstractControl<any, any>,
+  ) {
     const familyDiseaseList = <FormArray>(
       this.familyHistoryForm.controls['familyDiseaseList']
     );
@@ -360,7 +377,7 @@ export class FamilyHistoryNcdscreeningComponent
     }
   }
 
-  removeFamilyDisease(i: any, familyHistoryForm?: FormGroup) {
+  removeFamilyDisease(i: any, familyHistoryForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -450,7 +467,7 @@ export class FamilyHistoryNcdscreeningComponent
   getPreviousFamilyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousFamilyHistory(benRegID, this.visitType)
+      .getPreviousFamilyHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {

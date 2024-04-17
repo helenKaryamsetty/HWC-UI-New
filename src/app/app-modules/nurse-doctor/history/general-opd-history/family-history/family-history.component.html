@@ -23,9 +23,7 @@
     <div
       class="row multi-row-select"
       *ngFor="
-        let familyDisease of familyHistoryForm.controls.familyDiseaseList[
-          'controls'
-        ];
+        let familyDisease of getFamilyDiseases();
         let i = index;
         let isLast = last;
         let isOdd = odd
@@ -42,7 +40,9 @@
               currentLanguageSet?.historyData?.ancHistory
                 ?.familyHistoryDataANC_OPD_NCD_PNC?.diseaseType
             }}"
-            (change)="filterFamilyDiseaseList($event.value, i, familyDisease)"
+            (selectionChange)="
+              filterFamilyDiseaseList($event.value, i, familyDisease)
+            "
           >
             <mat-option
               *ngFor="let disease of diseaseSelectList[i]"

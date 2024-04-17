@@ -60,7 +60,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any;
   registrarMasterData: any;
@@ -146,6 +146,13 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
           this.beneficiary = beneficiary;
         },
       );
+  }
+
+  getOtherVaccines(): AbstractControl[] | null {
+    const otherVaccinesControl = this.otherVaccinesForm.get('otherVaccines');
+    return otherVaccinesControl instanceof FormArray
+      ? otherVaccinesControl.controls
+      : null;
   }
 
   onAgeUnitEntered(index: any, vaccineForm: AbstractControl<any, any>) {
@@ -276,7 +283,12 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     otherVaccineList.push(this.initOtherVaccinesForm());
   }
 
-  filterOtherVaccineList(vaccine: any, i: any, vaccineForm?: FormGroup) {
+  filterOtherVaccineList(
+    event: any,
+    i: any,
+    vaccineForm?: AbstractControl<any, any>,
+  ) {
+    const vaccine: any = event.value;
     const previousValue = this.previousSelectedVaccineList[i];
     const snomedCTCode = vaccine.sctCode;
     const snomedCTTerm = vaccine.sctTerm;
@@ -312,7 +324,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     this.previousSelectedVaccineList[i] = vaccine;
   }
 
-  removeOtherVaccine(i: any, vaccineForm?: FormGroup) {
+  removeOtherVaccine(i: any, vaccineForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -361,7 +373,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   getPreviousOtherVaccineDetails() {
     const benRegID = localStorage.getItem('beneficiaryRegID') || '{}';
     this.nurseService
-      .getPreviousOtherVaccines(benRegID, this.visitType)
+      .getPreviousOtherVaccines(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {

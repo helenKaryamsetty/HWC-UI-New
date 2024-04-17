@@ -105,6 +105,22 @@ import { CdssFormResultPopupComponent } from './cdss/cdss-form-result-popup/cdss
 import { CDSSService } from './shared/services/cdss-service';
 import { DiseaseFormComponent } from './cdss/diseaseSummary/diseaseSummary.component';
 import { ViewDiseaseSummaryDetailsComponent } from './cdss/viewDiseaseSummaryDetails/viewDiseaseSummaryDet.component';
+import { HistoryComponent } from './history/history.component';
+import { GeneralOpdHistoryComponent } from './history/general-opd-history/general-opd-history.component';
+import { GeneralPersonalHistoryComponent } from './history/general-opd-history/personal-history/personal-history.component';
+import { PastHistoryComponent } from './history/general-opd-history/past-history/past-history.component';
+import { PhysicalActivityHistoryComponent } from './history/general-opd-history/physical-activity-history/physical-activity-history.component';
+import { DevelopmentHistoryComponent } from './history/general-opd-history/development-history/development-history.component';
+import { FamilyHistoryNcdscreeningComponent } from './history/general-opd-history/family-history-ncdscreening/family-history-ncdscreening.component';
+import { FeedingHistoryComponent } from './history/general-opd-history/feeding-history/feeding-history.component';
+import { MedicationHistoryComponent } from './history/general-opd-history/medication-history/medication-history.component';
+import { FamilyHistoryComponent } from './history/general-opd-history/family-history/family-history.component';
+import { ComorbidityConcurrentConditionsComponent } from './history/general-opd-history/comorbidity-concurrent-conditions/comorbidity-concurrent-conditions.component';
+import { MenstrualHistoryComponent } from './history/general-opd-history/menstrual-history/menstrual-history.component';
+import { PerinatalHistoryComponent } from './history/general-opd-history/perinatal-history/perinatal-history.component';
+import { PastObstericHistoryComponent } from './history/general-opd-history/past-obsteric-history/past-obsteric-history.component';
+import { ImmunizationHistoryComponent } from './history/general-opd-history/immunization-history/immunization-history.component';
+import { OtherVaccinesComponent } from './history/general-opd-history/other-vaccines/other-vaccines.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -154,19 +170,19 @@ export const MY_FORMATS = {
     // GeneralExaminationComponent,
     // GeneralOpdExaminationComponent,
     GeneralPatientVitalsComponent,
-    // MedicationHistoryComponent,
-    // DevelopmentHistoryComponent,
-    // FeedingHistoryComponent,
-    // OtherVaccinesComponent,
-    // ImmunizationHistoryComponent,
-    // PastObstericHistoryComponent,
-    // PerinatalHistoryComponent,
-    // MenstrualHistoryComponent,
-    // FamilyHistoryComponent,
-    // ComorbidityConcurrentConditionsComponent,
-    // GeneralPersonalHistoryComponent,
-    // PastHistoryComponent,
-    // GeneralOpdHistoryComponent,
+    MedicationHistoryComponent,
+    DevelopmentHistoryComponent,
+    FeedingHistoryComponent,
+    OtherVaccinesComponent,
+    ImmunizationHistoryComponent,
+    PastObstericHistoryComponent,
+    PerinatalHistoryComponent,
+    MenstrualHistoryComponent,
+    FamilyHistoryComponent,
+    ComorbidityConcurrentConditionsComponent,
+    GeneralPersonalHistoryComponent,
+    PastHistoryComponent,
+    GeneralOpdHistoryComponent,
     DoctorWorklistComponent,
     AncComponent,
     AncDetailsComponent,
@@ -181,7 +197,7 @@ export const MY_FORMATS = {
     ContactHistoryComponent,
     InvestigationsComponent,
     UploadFilesComponent,
-    // HistoryComponent,
+    HistoryComponent,
     // ExaminationComponent,
     VitalsComponent,
     // CaseRecordComponent,
@@ -226,8 +242,8 @@ export const MY_FORMATS = {
     NurseTmFutureWorklistComponent,
     // CovidDiagnosisComponent,
     // IdrsComponent,
-    // PhysicalActivityHistoryComponent,
-    // FamilyHistoryNcdscreeningComponent,
+    PhysicalActivityHistoryComponent,
+    FamilyHistoryNcdscreeningComponent,
     // NcdScreeningDiagnosisComponent,
     NurseMmuTmReferredWorklistComponent,
     DiseaseconfirmationComponent,

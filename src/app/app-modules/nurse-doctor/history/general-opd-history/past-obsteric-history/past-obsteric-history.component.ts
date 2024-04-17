@@ -63,7 +63,7 @@ export class PastObstericHistoryComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any;
   formUtility: any;
@@ -206,6 +206,24 @@ export class PastObstericHistoryComponent
           this.handlePastObstetricHistoryData();
         }
       });
+  }
+
+  getComplicationPregList(): AbstractControl[] | null {
+    const complicationPregListControl = this.pastObstericHistoryForm.get(
+      'complicationPregList',
+    );
+    return complicationPregListControl instanceof FormArray
+      ? complicationPregListControl.controls
+      : null;
+  }
+
+  getPastObstericHistoryList(): AbstractControl[] | null {
+    const pastObstericHistoryListControl = this.pastObstericHistoryForm.get(
+      'pastObstericHistoryList',
+    );
+    return pastObstericHistoryListControl instanceof FormArray
+      ? pastObstericHistoryListControl.controls
+      : null;
   }
 
   handlePastObstetricHistoryData() {
@@ -417,7 +435,7 @@ export class PastObstericHistoryComponent
   getPreviousObstetricHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousObstetricHistory(benRegID, this.visitType)
+      .getPreviousObstetricHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -479,7 +497,7 @@ export class PastObstericHistoryComponent
       console.log('%c status', 'color:green', value);
 
       if (value) {
-        if (this.visitType === 'ANC') {
+        if (this.visitCategory === 'ANC') {
           this.createPregnancyWithComplList(value - 1);
         } else {
           this.createPregnancyWithComplList(value);
@@ -530,15 +548,15 @@ export class PastObstericHistoryComponent
   checkTotalPregnancy(totalNoOfPreg: any) {
     if (
       totalNoOfPreg === 0 &&
-      (this.visitType === 'ANC' || this.visitType === 'PNC')
+      (this.visitCategory === 'ANC' || this.visitCategory === 'PNC')
     ) {
       this.confirmationService.alert(
         this.currentLanguageSet.totalNumberOfPastPregnancyFor + ' ',
-        this.visitType,
+        this.visitCategory,
         ' ' + this.currentLanguageSet.cannotBeZero,
       );
     }
-    // if (this.visitType === 'ANC' && totalNoOfPreg === 0)
+    // if (this.visitCategory === 'ANC' && totalNoOfPreg === 0)
     //   this.confirmationService.alert("Total number of past pregnancy for ANC(MultiGravida) can not be zero(0)");
   }
 
@@ -779,12 +797,15 @@ export class PastObstericHistoryComponent
     this.hrpPastObstetricDetails(true);
   }
 
-  onAbortionType(pastObstericHistoryForm: FormGroup, name: any) {
+  onAbortionType(
+    pastObstericHistoryForm: AbstractControl<any, any>,
+    name: any,
+  ) {
     if (name !== 'Induced') {
       pastObstericHistoryForm.patchValue({ typeofFacility: null });
     }
   }
-  checkDurationType(pastObstericHistoryForm: FormGroup) {
+  checkDurationType(pastObstericHistoryForm: AbstractControl<any, any>) {
     if (
       Number(pastObstericHistoryForm.value.pregDuration) > 24 ||
       Number(pastObstericHistoryForm.value.pregDuration < 4)

@@ -26,7 +26,7 @@ import { NcdScreeningService } from './ncd-screening.service';
 import { shareReplay } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class NurseService {
@@ -95,37 +95,66 @@ export class NurseService {
       'getNurseWorklistUrl',
       localStorage.getItem('providerServiceID'),
     );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    console.log('environment in 98', environment.nurseWorklist);
+    const newNurseWorklist = environment.nurseWorklist;
+
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklist + fetchUrl);
+    return this.http.get(newNurseWorklist + fetchUrl, httpOptions);
   }
 
   getNurseTMFutureWorklist() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.getNurseTMFutureWorklistUrl + fetchUrl);
+    return this.http.get(
+      environment.getNurseTMFutureWorklistUrl + fetchUrl,
+      httpOptions,
+    );
   }
   getNurseTMWorklist() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.getNurseTMWorklistUrl + fetchUrl);
+    return this.http.get(
+      environment.getNurseTMWorklistUrl + fetchUrl,
+      httpOptions,
+    );
   }
   getMMUNurseWorklist() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
       localStorage.getItem('providerServiceID') +
       `/${localStorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.mmuNurseWorklist + fetchUrl);
+    return this.http.get(environment.mmuNurseWorklist + fetchUrl, httpOptions);
   }
 
   getPreviousVisitData(obj: any) {

@@ -32,9 +32,7 @@
       <div
         class="row multi-row-select"
         *ngFor="
-          let pastIllness of pastHistoryForm.controls['pastIllness'][
-            'controls'
-          ];
+          let pastIllness of getPastIllness();
           let i = index;
           let isLast = last;
           let isOdd = odd
@@ -51,7 +49,9 @@
                 currentLanguageSet?.historyData?.ancHistory
                   ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
               }}"
-              (change)="filterPastIllnessType($event.value, i, pastIllness)"
+              (selectionChange)="
+                filterPastIllnessType($event.value, i, pastIllness)
+              "
             >
               <mat-option
                 *ngFor="let illness of pastIllnessSelectList[i]"
@@ -142,7 +142,7 @@
               color="primary"
               *ngIf="isLast"
               [disabled]="checkIllnessValidity(pastIllness)"
-              (click)="addPastIllness(i)"
+              (click)="addPastIllness()"
               class="button-overall-disabled"
             >
               <mat-icon class="md-18">add</mat-icon>
@@ -165,7 +165,7 @@
     <div
       class="row multi-row-select"
       *ngFor="
-        let pastSurgery of pastHistoryForm.controls['pastSurgery']['controls'];
+        let pastSurgery of getPastSurgery();
         let i = index;
         let isLast = last;
         let isOdd = odd
@@ -182,7 +182,7 @@
             }}"
             formControlName="surgeryType"
             name="surgeryType"
-            (change)="filterPastSurgeryType($event.value, i, pastSurgery)"
+            (change)="filterPastSurgeryType($event, i, pastSurgery)"
           >
             <mat-option
               *ngFor="let surgery of pastSurgerySelectList[i]"

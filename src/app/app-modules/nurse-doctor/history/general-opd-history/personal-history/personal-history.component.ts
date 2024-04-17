@@ -66,7 +66,7 @@ export class GeneralPersonalHistoryComponent
   mode!: string;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   masterData: any = null;
   personalHistoryData: any;
@@ -185,6 +185,16 @@ export class GeneralPersonalHistoryComponent
           this.addMasters();
         }
       });
+  }
+
+  getTobaccoList(): AbstractControl[] | null {
+    const tobaccoControl = this.generalPersonalHistoryForm.get('tobaccoList');
+    return tobaccoControl instanceof FormArray ? tobaccoControl.controls : null;
+  }
+
+  getAllergyList(): AbstractControl[] | null {
+    const allergyControl = this.generalPersonalHistoryForm.get('allergicList');
+    return allergyControl instanceof FormArray ? allergyControl.controls : null;
   }
 
   addMasters() {
@@ -434,7 +444,8 @@ export class GeneralPersonalHistoryComponent
     console.log('tobacco Lists', this.tobaccoSelectList);
   }
 
-  filterTobaccoList(tobacco: any, i: any, tobaccoForm?: FormGroup) {
+  filterTobaccoList(event: any, i: any, tobaccoForm?: FormGroup) {
+    const tobacco: any = event.value;
     const previousValue = this.previousSelectedTobaccoList[i];
 
     if (tobaccoForm && tobacco.tobaccoUseType !== 'Other')
@@ -458,7 +469,7 @@ export class GeneralPersonalHistoryComponent
     this.previousSelectedTobaccoList[i] = tobacco;
   }
 
-  removeTobacco(i: any, tobaccoForm?: FormGroup) {
+  removeTobacco(i: any, tobaccoForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -507,7 +518,14 @@ export class GeneralPersonalHistoryComponent
     alcoholList.push(this.initAlcoholList());
   }
 
-  filterAlcoholList(alcohol: any, i: any, alcoholForm?: FormGroup) {
+  getAlcoholList(): AbstractControl[] | null {
+    const alcoholControl = this.generalPersonalHistoryForm.get('alcoholList');
+    return alcoholControl instanceof FormArray ? alcoholControl.controls : null;
+  }
+
+  filterAlcoholList(event: any, i: any, alcoholForm?: FormGroup) {
+    const alcohol: any = event.value;
+
     const previousValue = this.previousSelectedAlcoholList[i];
 
     if (alcoholForm && alcohol.typeOfAlcohol !== 'Other')
@@ -532,7 +550,7 @@ export class GeneralPersonalHistoryComponent
     this.previousSelectedAlcoholList[i] = alcohol;
   }
 
-  removeAlcohol(i: any, alcoholForm?: FormGroup) {
+  removeAlcohol(i: any, alcoholForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -589,7 +607,8 @@ export class GeneralPersonalHistoryComponent
     }
   }
 
-  filterAlleryList(allergy: any, i: any) {
+  filterAlleryList(event: any, i: any) {
+    const allergy: any = event.value;
     const previousValue = this.previousSelectedAlleryList[i];
     if (previousValue) {
       this.allerySelectList.map((item: any, t: any) => {
@@ -606,7 +625,7 @@ export class GeneralPersonalHistoryComponent
     this.previousSelectedAlleryList[i] = allergy;
   }
 
-  removeAllergy(i: any, allergyForm?: FormGroup) {
+  removeAllergy(i: any, allergyForm?: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.currentLanguageSet.alerts.info.warn)
       .subscribe((result) => {
@@ -676,7 +695,7 @@ export class GeneralPersonalHistoryComponent
   getPreviousTobaccoHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousTobaccoHistory(benRegID, this.visitType)
+      .getPreviousTobaccoHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -737,7 +756,7 @@ export class GeneralPersonalHistoryComponent
   getPreviousAlcoholHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousAlcoholHistory(benRegID, this.visitType)
+      .getPreviousAlcoholHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -769,7 +788,7 @@ export class GeneralPersonalHistoryComponent
   getPreviousAllergyHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
-      .getPreviousAllergyHistory(benRegID, this.visitType)
+      .getPreviousAllergyHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -828,7 +847,7 @@ export class GeneralPersonalHistoryComponent
     return this.generalPersonalHistoryForm.controls['allergyStatus'].value;
   }
 
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;

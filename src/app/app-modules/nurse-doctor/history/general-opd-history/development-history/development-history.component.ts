@@ -49,7 +49,7 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   developmentHistoryForm!: FormGroup;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   @Input()
   mode!: string;
@@ -128,10 +128,10 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   getPreviousDevelopmentalHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
-    console.log('here checkig', this.visitType);
+    console.log('here checkig', this.visitCategory);
 
     this.nurseService
-      .getPreviousDevelopmentalHistory(benRegID, this.visitType)
+      .getPreviousDevelopmentalHistory(benRegID, this.visitCategory)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {

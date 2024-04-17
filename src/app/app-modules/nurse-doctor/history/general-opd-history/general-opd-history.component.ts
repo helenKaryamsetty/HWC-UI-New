@@ -70,6 +70,21 @@ export class GeneralOpdHistoryComponent
   benAge!: number;
   showHistory = false;
 
+  pastHistory!: FormGroup;
+  comorbidityHistory!: FormGroup;
+  medicationHistory!: FormGroup;
+  personalHistory!: FormGroup;
+  familyHistory!: FormGroup;
+  menstrualHistory!: FormGroup;
+  perinatalHistory!: FormGroup;
+  pastObstericHistory!: FormGroup;
+  immunizationHistory!: FormGroup;
+  otherVaccines!: FormGroup;
+  feedingHistory!: FormGroup;
+  developmentHistory!: FormGroup;
+  physicalActivityHistory!: FormGroup;
+  generalPersonalHistory!: FormGroup;
+
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
@@ -79,6 +94,7 @@ export class GeneralOpdHistoryComponent
   ) {}
 
   ngOnInit() {
+    this.loadFormData();
     this.assignSelectedLanguage();
     this.getBeneficiaryDetails();
     this.enableIdrsHistoryForm();
@@ -99,7 +115,51 @@ export class GeneralOpdHistoryComponent
 
   // }
 
+  loadFormData() {
+    this.pastHistory = this.patientHistoryForm.get('pastHistory') as FormGroup;
+    this.comorbidityHistory = this.patientHistoryForm.get(
+      'comorbidityHistory',
+    ) as FormGroup;
+    this.medicationHistory = this.patientHistoryForm.get(
+      'medicationHistory',
+    ) as FormGroup;
+    this.personalHistory = this.patientHistoryForm.get(
+      'personalHistory',
+    ) as FormGroup;
+    this.familyHistory = this.patientHistoryForm.get(
+      'familyHistory',
+    ) as FormGroup;
+    this.menstrualHistory = this.patientHistoryForm.get(
+      'menstrualHistory',
+    ) as FormGroup;
+    this.perinatalHistory = this.patientHistoryForm.get(
+      'perinatalHistory',
+    ) as FormGroup;
+    this.pastObstericHistory = this.patientHistoryForm.get(
+      'pastObstericHistory',
+    ) as FormGroup;
+    this.immunizationHistory = this.patientHistoryForm.get(
+      'immunizationHistory',
+    ) as FormGroup;
+    this.otherVaccines = this.patientHistoryForm.get(
+      'otherVaccines',
+    ) as FormGroup;
+    this.feedingHistory = this.patientHistoryForm.get(
+      'feedingHistory',
+    ) as FormGroup;
+    this.developmentHistory = this.patientHistoryForm.get(
+      'developmentHistory',
+    ) as FormGroup;
+    this.physicalActivityHistory = this.patientHistoryForm.get(
+      'physicalActivityHistory',
+    ) as FormGroup;
+    this.generalPersonalHistory = this.patientHistoryForm.get(
+      'generalPersonalHistory',
+    ) as FormGroup;
+  }
+
   ngOnChanges(changes: any) {
+    this.loadFormData();
     if (changes.mode && this.mode === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       if (visitCategory === 'NCD screening') {

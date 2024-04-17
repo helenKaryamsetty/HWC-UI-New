@@ -24,9 +24,7 @@
     <div
       class="row multi-row-select"
       *ngFor="
-        let medicationHistory of medicationHistoryForm.controls[
-          'medicationHistoryList'
-        ]['controls'];
+        let medicationHistory of getMedicationHistory();
         let i = index;
         let isLast = last;
         let isOdd = odd
@@ -78,7 +76,7 @@
             formControlName="timePeriodUnit"
             name="timePeriodAgoUnit"
             [disabled]="!medicationHistory.value.timePeriodAgo"
-            (change)="validateDuration(medicationHistory)"
+            (selectionChange)="validateDuration(medicationHistory)"
           >
             <mat-option value="Days">Day(s)</mat-option>
             <mat-option value="Weeks">Week(s)</mat-option>

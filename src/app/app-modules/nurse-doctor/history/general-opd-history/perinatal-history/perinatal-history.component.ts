@@ -49,7 +49,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   perinatalHistoryForm!: FormGroup;
 
   @Input()
-  visitType: any;
+  visitCategory: any;
 
   @Input()
   mode!: string;
@@ -202,10 +202,10 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   getPreviousPerinatalHistory() {
     const benRegID: any = localStorage.getItem('beneficiaryRegID');
-    console.log('here checkig', this.visitType);
+    console.log('here checkig', this.visitCategory);
 
     this.nurseService
-      .getPreviousPerinatalHistory(benRegID, this.visitType)
+      .getPreviousPerinatalHistory(benRegID, this.visitCategory)
       .subscribe(
         (data: any) => {
           if (data !== null && data.data !== null) {
