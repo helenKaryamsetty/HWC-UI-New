@@ -30,44 +30,36 @@ export class FamilyTaggingService {
 
   getRelationShips(servicePointID: any) {
     const tmpSPID = { spID: servicePointID };
-    return this.http
-      .post(environment.relationShipUrl, tmpSPID)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.relationShipUrl, tmpSPID);
   }
 
   saveFamilyTagging(requestObj: any) {
-    return this.http
-      .post(environment.saveFamilyTaggingUrl, requestObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.saveFamilyTaggingUrl, requestObj);
+    // .pipe(map((res: any) => res.json()));
   }
 
   editFamilyTagging(requestObj: any) {
-    return this.http
-      .post(environment.editFamilyTaggingUrl, requestObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.editFamilyTaggingUrl, requestObj);
+    // .pipe(map((res: any) => res.json()));
   }
 
   untagFamilyMember(requestObj: any) {
-    return this.http
-      .post(environment.untagFamilyUrl, requestObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.untagFamilyUrl, requestObj);
+    // .pipe(map((res: any) => res.json()));
   }
 
   benFamilySearch(requestObj: any) {
-    return this.http
-      .post(environment.familySearchUrl, requestObj)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.familySearchUrl, requestObj);
+    // .pipe(map((res: any) => res.json()));
   }
 
   createFamilyTagging(reqObject: any) {
-    return this.http
-      .post(environment.createFamilyUrl, reqObject)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.createFamilyUrl, reqObject);
+    // .pipe(map((res: any) => res.json()));
   }
 
   getFamilyMemberDetails(reqObject: any) {
-    return this.http
-      .post(environment.getFamilyMemberUrl, reqObject)
-      .pipe(map((res: any) => res.json()));
+    return this.http.post(environment.getFamilyMemberUrl, reqObject);
+    // .pipe(map((res: any) => res.json()));
   }
 }

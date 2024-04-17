@@ -144,9 +144,9 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
       identity: null,
     };
     this.registrarService.identityQuickSearch(reqObj).subscribe((res: any) => {
-      if (res && res.length === 1) {
-        this.beneficiary = res[0];
-        this.benFamilyId = res[0].familyId;
+      if (res && res.data.length === 1) {
+        this.beneficiary = res.data[0];
+        this.benFamilyId = res.data[0].familyId;
         this.beneficiaryName =
           this.beneficiary.firstName +
           (this.beneficiary.lastName !== undefined
