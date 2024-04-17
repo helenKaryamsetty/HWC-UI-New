@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -75,8 +75,13 @@ export class MasterdataService {
    * Visit details master data api call
    */
   getVisitDetailMasterData() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     return this.http
-      .get(this.visitDetailMasterDataUrl)
+      .get(this.visitDetailMasterDataUrl, httpOptions)
       .subscribe((res: any) => {
         this.visitDetailMasterDataSource.next(res.data);
       });
@@ -86,6 +91,11 @@ export class MasterdataService {
    * Nurse master data api call
    */
   getNurseMasterData(visitID: string, providerServiceID: any) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
     const gender = localStorage.getItem('beneficiaryGender');
     return this.http
       .get(
@@ -95,6 +105,7 @@ export class MasterdataService {
           providerServiceID +
           '/' +
           gender,
+        httpOptions,
       )
       .subscribe((res: any) => {
         this.nurseMasterDataSource.next(res.data);
