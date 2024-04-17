@@ -2,64 +2,70 @@
 <div class="row m-t-20" [formGroup]="generalExaminationForm">
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="consciousness"
-        name="consciousness"
-        formControlName="consciousness"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.consciousness
-        }}"
-      >
-        <mat-option
-          *ngFor="let consciousness of selectConsciousness"
-          [value]="consciousness.name"
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="consciousness"
+          name="consciousness"
+          formControlName="consciousness"
         >
-          {{ consciousness.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let consciousness of selectConsciousness"
+            [value]="consciousness.name"
+          >
+            {{ consciousness.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="cooperation"
-        name="cooperation"
-        formControlName="cooperation"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.cooperation
-        }}"
-      >
-        <mat-option
-          *ngFor="let cooperation of selectCooperation"
-          [value]="cooperation.name"
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="cooperation"
+          name="cooperation"
+          formControlName="cooperation"
         >
-          {{ cooperation.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let cooperation of selectCooperation"
+            [value]="cooperation.name"
+          >
+            {{ cooperation.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="builtAndAppearance"
-        name="builtAndAppearance"
-        formControlName="builtAndAppearance"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.built
-        }}"
-      >
-        <mat-option *ngFor="let built of selectBuilt" [value]="built.name">
-          {{ built.name }}
-        </mat-option>
-      </mat-select>
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="builtAndAppearance"
+          name="builtAndAppearance"
+          formControlName="builtAndAppearance"
+        >
+          <mat-option *ngFor="let built of selectBuilt" [value]="built.name">
+            {{ built.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
@@ -161,25 +167,27 @@
     [hidden]="dangerSigns !== 'Yes'"
   >
     <div class="form-group">
-      <mat-select
-        multiple
-        class="select-full-width"
-        id="typeOfDangerSigns"
-        name="typeOfDangerSigns"
-        formControlName="typeOfDangerSigns"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.dangersigns
-        }}"
-        [required]="dangerSigns === 'Yes'"
-      >
-        <mat-option
-          *ngFor="let signs of selectDangerSigns"
-          [value]="signs.name"
+        }}</mat-label>
+        <mat-select
+          multiple
+          class="select-full-width"
+          id="typeOfDangerSigns"
+          name="typeOfDangerSigns"
+          formControlName="typeOfDangerSigns"
+          [required]="dangerSigns === 'Yes'"
         >
-          {{ signs.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let signs of selectDangerSigns"
+            [value]="signs.name"
+          >
+            {{ signs.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
@@ -283,24 +291,26 @@
     [hidden]="lymphadenopathy !== 'Present'"
   >
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="lymphnodesInvolved"
-        name="lymphnodesInvolved"
-        formControlName="lymphnodesInvolved"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.lymph
-        }}"
-        [required]="lymphadenopathy === 'Present'"
-      >
-        <mat-option
-          *ngFor="let lymphNodes of selectLymphNodes"
-          [value]="lymphNodes.name"
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="lymphnodesInvolved"
+          name="lymphnodesInvolved"
+          formControlName="lymphnodesInvolved"
+          [required]="lymphadenopathy === 'Present'"
         >
-          {{ lymphNodes.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let lymphNodes of selectLymphNodes"
+            [value]="lymphNodes.name"
+          >
+            {{ lymphNodes.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
@@ -309,24 +319,26 @@
     [hidden]="lymphadenopathy !== 'Present'"
   >
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="typeOfLymphadenopathy"
-        name="typeOfLymphadenopathy"
-        formControlName="typeOfLymphadenopathy"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.typeofLymphadenopathy
-        }}"
-        [required]="lymphadenopathy === 'Present'"
-      >
-        <mat-option
-          *ngFor="let typeOfLymphadenopathy of selectTypeOfLymphadenopathy"
-          [value]="typeOfLymphadenopathy.name"
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="typeOfLymphadenopathy"
+          name="typeOfLymphadenopathy"
+          formControlName="typeOfLymphadenopathy"
+          [required]="lymphadenopathy === 'Present'"
         >
-          {{ typeOfLymphadenopathy.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let typeOfLymphadenopathy of selectTypeOfLymphadenopathy"
+            [value]="typeOfLymphadenopathy.name"
+          >
+            {{ typeOfLymphadenopathy.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
@@ -402,24 +414,26 @@
     [hidden]="edema !== 'Present'"
   >
     <div class="form-group">
-      <mat-select
-        class="select-full-width"
-        id="extentOfEdema"
-        name="extentOfEdema"
-        formControlName="extentOfEdema"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.extentofEdema
-        }}"
-        [required]="edema === 'Present'"
-      >
-        <mat-option
-          *ngFor="let extentOfEdema of selectExtentOfEdema"
-          [value]="extentOfEdema.name"
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          id="extentOfEdema"
+          name="extentOfEdema"
+          formControlName="extentOfEdema"
+          [required]="edema === 'Present'"
         >
-          {{ extentOfEdema.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let extentOfEdema of selectExtentOfEdema"
+            [value]="extentOfEdema.name"
+          >
+            {{ extentOfEdema.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 

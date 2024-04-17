@@ -20,7 +20,7 @@
   background-color: grey;
 }
   .btn-group button {
-    background-color: #ff5252; /* Green background */
+    background-color: #C21F1F; /* Green background */
     margin:5px;
     color: white; /* White text */
     float: left; 
@@ -28,7 +28,7 @@
 
 
   .btn-stylConfirm button {
-    background-color: #ff5252;
+    background-color: #C21F1F;
     margin:5px;
     color: white;
     float: left; /* Float the buttons side by side */

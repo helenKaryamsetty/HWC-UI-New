@@ -23,348 +23,350 @@
     </div>
   </div>
   <div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="head"
-            name="head"
-            formControlName="head"
-            placeholder="{{
+    <div class="row" style="display: flex">
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Head
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="head"
+              name="head"
+              formControlName="head"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="eyes"
-            name="eyes"
-            formControlName="eyes"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Eyes
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="eyes"
+              name="eyes"
+              formControlName="eyes"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="ears"
-            name="ears"
-            formControlName="ears"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Ears
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="ears"
+              name="ears"
+              formControlName="ears"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="nose"
-            name="nose"
-            formControlName="nose"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Nose
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="nose"
+              name="nose"
+              formControlName="nose"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="oralCavity"
-            name="oralCavity"
-            formControlName="oralCavity"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Oralcavity
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="oralCavity"
+              name="oralCavity"
+              formControlName="oralCavity"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="throat"
-            name="throat"
-            formControlName="throat"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Throat
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="throat"
+              name="throat"
+              formControlName="throat"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="breastAndNipples"
-            name="breastAndNipples"
-            formControlName="breastAndNipples"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Breast
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="breastAndNipples"
+              name="breastAndNipples"
+              formControlName="breastAndNipples"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="visitCategory === 'PNC' && headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="nipples"
-            name="nipples"
-            formControlName="nipples"
-            placeholder="{{ current_language_set?.nipples }}"
-            maxlength="300"
-          />
-        </mat-form-field>
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="visitCategory === 'PNC' && headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{ current_language_set?.nipples }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="nipples"
+              name="nipples"
+              formControlName="nipples"
+              maxlength="300"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="trunk"
-            name="trunk"
-            formControlName="trunk"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Trunk
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="trunk"
+              name="trunk"
+              formControlName="trunk"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="upperLimbs"
-            name="upperLimbs"
-            formControlName="upperLimbs"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.upperlimbs
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="upperLimbs"
+              name="upperLimbs"
+              formControlName="upperLimbs"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="lowerLimbs"
-            name="lowerLimbs"
-            formControlName="lowerLimbs"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.lowerlimbs
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="lowerLimbs"
+              name="lowerLimbs"
+              formControlName="lowerLimbs"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="skin"
-            name="skin"
-            formControlName="skin"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Skin
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="skin"
+              name="skin"
+              formControlName="skin"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="hair"
-            name="hair"
-            formControlName="hair"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Hairs
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="hair"
+              name="hair"
+              formControlName="hair"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'"
-    >
-      <div class="form-group">
-        <mat-form-field class="input-full-width" class="input-full-width">
-          <input
-            autocomplete="off"
-            matInput
-            allowText="textAreaValidator"
-            defaultNull
-            matTextareaAutosize
-            id="nails"
-            name="nails"
-            formControlName="nails"
-            placeholder="{{
+      <div
+        class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
+        *ngIf="headtoToeExam === 'Abnormal'"
+      >
+        <div class="form-group">
+          <mat-form-field class="input-full-width" class="input-full-width">
+            <mat-label>{{
               current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
                 ?.headToToe?.Nails
-            }}"
-            maxlength="50"
-          />
-        </mat-form-field>
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              allowText="textAreaValidator"
+              defaultNull
+              matTextareaAutosize
+              id="nails"
+              name="nails"
+              formControlName="nails"
+              maxlength="50"
+            />
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>

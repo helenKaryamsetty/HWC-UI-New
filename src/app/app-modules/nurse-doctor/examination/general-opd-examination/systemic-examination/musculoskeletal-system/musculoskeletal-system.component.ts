@@ -37,7 +37,7 @@ export class MusculoskeletalSystemComponent
   musculoSkeletalSystemForm!: FormGroup;
   current_language_set: any;
 
-  selectTypeOfJoint = [];
+  selectTypeOfJoint: any = [];
 
   selectJointLaterality = [
     {

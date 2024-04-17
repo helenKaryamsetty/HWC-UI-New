@@ -30,7 +30,7 @@ mat-card {
 
 .sync-login-title {
   text-align: center;
-  background-color: #0277bd; 
+  background-color: #336CFB; 
   color: white;
   border: 1px solid white;
 }
@@ -100,5 +100,5 @@ mat-card {
 }
 
 button.submit {
-  background: #0277bd;
+  background: #336CFB;
 }

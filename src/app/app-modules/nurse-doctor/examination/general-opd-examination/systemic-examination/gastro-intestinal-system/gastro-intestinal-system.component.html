@@ -2,6 +2,9 @@
 <div class="row m-t-20" [formGroup]="gastroIntestinalSystemForm">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <mat-form-field class="textarea-full-width">
+      <mat-label>{{
+        current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.inspection
+      }}</mat-label>
       <textarea
         matInput
         allowText="textAreaValidator"
@@ -9,62 +12,64 @@
         matTextareaAutosize
         name="inspection"
         formControlName="inspection"
-        placeholder="{{
-          current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
-            ?.inspection
-        }}"
         maxlength="300"
       ></textarea>
     </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="select-full-width"
-      name="palpation_AbdomenTexture"
-      formControlName="palpation_AbdomenTexture"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
           ?.abdomenTexture
-      }}"
-    >
-      <mat-option
-        *ngFor="let texture of selectAbdomenTexture"
-        [value]="texture.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_AbdomenTexture"
+        formControlName="palpation_AbdomenTexture"
       >
-        {{ texture.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let texture of selectAbdomenTexture"
+          [value]="texture.name"
+        >
+          {{ texture.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="select-full-width"
-      name="palpation_Liver"
-      formControlName="palpation_Liver"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.liver
-      }}"
-    >
-      <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
-        {{ liver.name }}
-      </mat-option>
-    </mat-select>
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_Liver"
+        formControlName="palpation_Liver"
+      >
+        <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
+          {{ liver.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="select-full-width"
-      name="palpation_Spleen"
-      formControlName="palpation_Spleen"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.spleen
-      }}"
-    >
-      <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
-        {{ spleen.name }}
-      </mat-option>
-    </mat-select>
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_Spleen"
+        formControlName="palpation_Spleen"
+      >
+        <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
+          {{ spleen.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
@@ -92,6 +97,9 @@
     *ngIf="palpation_Tenderness === 'Present'"
   >
     <mat-form-field class="input-full-width" class="textarea-full-width">
+      <mat-label>{{
+        current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.location
+      }}</mat-label>
       <textarea
         matInput
         allowText="textAreaValidator"
@@ -100,9 +108,6 @@
         id="palpation_LocationOfTenderness"
         name="palpation_LocationOfTenderness"
         formControlName="palpation_LocationOfTenderness"
-        placeholder="{{
-          current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.location
-        }}"
         maxlength="300"
       ></textarea>
     </mat-form-field>
@@ -110,6 +115,9 @@
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <mat-form-field class="input-full-width" class="textarea-full-width">
+      <mat-label>{{
+        current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.percussion
+      }}</mat-label>
       <textarea
         matInput
         allowText="textAreaValidator"
@@ -117,10 +125,6 @@
         matTextareaAutosize
         name="percussion"
         formControlName="percussion"
-        placeholder="{{
-          current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
-            ?.percussion
-        }}"
         maxlength="300"
       ></textarea>
     </mat-form-field>
@@ -128,6 +132,10 @@
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <mat-form-field class="input-full-width" class="textarea-full-width">
+      <mat-label>{{
+        current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
+          ?.auscultation
+      }}</mat-label>
       <textarea
         matInput
         allowText="textAreaValidator"
@@ -135,10 +143,6 @@
         matTextareaAutosize
         name="auscultation"
         formControlName="auscultation"
-        placeholder="{{
-          current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
-            ?.auscultation
-        }}"
         maxlength="300"
       ></textarea>
     </mat-form-field>
@@ -146,6 +150,9 @@
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <mat-form-field class="input-full-width" class="textarea-full-width">
+      <mat-label>{{
+        current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro?.analregion
+      }}</mat-label>
       <textarea
         matInput
         allowText="textAreaValidator"
@@ -153,10 +160,6 @@
         matTextareaAutosize
         name="analRegion"
         formControlName="analRegion"
-        placeholder="{{
-          current_language_set?.ExaminationData?.genralOPD_PNC?.Gastro
-            ?.analregion
-        }}"
         maxlength="300"
       ></textarea>
     </mat-form-field>

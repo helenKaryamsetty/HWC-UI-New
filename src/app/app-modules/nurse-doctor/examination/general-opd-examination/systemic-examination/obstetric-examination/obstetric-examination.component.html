@@ -1,59 +1,65 @@
 <!-- {{obstetricExaminationForANCForm.value | json}} -->
 <div class="row m-t-20" [formGroup]="obstetricExaminationForANCForm">
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="fundalHeight"
-      formControlName="fundalHeight"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fundalHeight
-      }}"
-    >
-      <mat-option
-        *ngFor="let fundalHeight of selectFundalHeight"
-        [value]="fundalHeight.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fundalHeight"
+        formControlName="fundalHeight"
       >
-        {{ fundalHeight.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let fundalHeight of selectFundalHeight"
+          [value]="fundalHeight.name"
+        >
+          {{ fundalHeight.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="fHAndPOA_Status"
-      formControlName="fHAndPOA_Status"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fHandPOAStatus
-      }}"
-    >
-      <mat-option
-        *ngFor="let FHPOAStatus of selectFHPOAStatus"
-        [value]="FHPOAStatus.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fHAndPOA_Status"
+        formControlName="fHAndPOA_Status"
       >
-        {{ FHPOAStatus.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let FHPOAStatus of selectFHPOAStatus"
+          [value]="FHPOAStatus.name"
+        >
+          {{ FHPOAStatus.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="fHAndPOA_Interpretation"
-      formControlName="fHAndPOA_Interpretation"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.interpretationFHandPOA
-      }}"
-    >
-      <mat-option
-        *ngFor="let interpretationFHAndPOA of selectInterpretationFHAndPOA"
-        [value]="interpretationFHAndPOA.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fHAndPOA_Interpretation"
+        formControlName="fHAndPOA_Interpretation"
       >
-        {{ interpretationFHAndPOA.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let interpretationFHAndPOA of selectInterpretationFHAndPOA"
+          [value]="interpretationFHAndPOA.name"
+        >
+          {{ interpretationFHAndPOA.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
@@ -100,89 +106,97 @@
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10"
     *ngIf="fetalHeartSounds === 'Audible'"
   >
-    <mat-select
-      class="select-full-width"
-      name="fetalHeartRate_BeatsPerMinute"
-      formControlName="fetalHeartRate_BeatsPerMinute"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalHeartRate
-      }}"
-    >
-      <mat-option
-        *ngFor="let fetalHeartRate of selectFetalHeartRate"
-        [value]="fetalHeartRate.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fetalHeartRate_BeatsPerMinute"
+        formControlName="fetalHeartRate_BeatsPerMinute"
       >
-        {{ fetalHeartRate.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let fetalHeartRate of selectFetalHeartRate"
+          [value]="fetalHeartRate.name"
+        >
+          {{ fetalHeartRate.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="fetalPositionOrLie"
-      formControlName="fetalPositionOrLie"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalposition
-      }}"
-    >
-      <mat-option
-        *ngFor="let fetalPositionOrLie of selectFetalPositionOrLie"
-        [value]="fetalPositionOrLie.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fetalPositionOrLie"
+        formControlName="fetalPositionOrLie"
       >
-        {{ fetalPositionOrLie.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let fetalPositionOrLie of selectFetalPositionOrLie"
+          [value]="fetalPositionOrLie.name"
+        >
+          {{ fetalPositionOrLie.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="fetalPresentation"
-      formControlName="fetalPresentation"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalPresentation
-      }}"
-    >
-      <mat-option
-        *ngFor="let fetalPresentation of selectFetalPresentation"
-        [value]="fetalPresentation.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="fetalPresentation"
+        formControlName="fetalPresentation"
       >
-        {{ fetalPresentation.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let fetalPresentation of selectFetalPresentation"
+          [value]="fetalPresentation.name"
+        >
+          {{ fetalPresentation.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
-    <mat-select
-      class="select-full-width"
-      name="abdominalScars"
-      formControlName="abdominalScars"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label>{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.abdominalScars
-      }}"
-    >
-      <mat-option
-        *ngFor="let abdominalScars of selectAbdominalScars"
-        [value]="abdominalScars.name"
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="abdominalScars"
+        formControlName="abdominalScars"
       >
-        {{ abdominalScars.name }}
-      </mat-option>
-    </mat-select>
+        <mat-option
+          *ngFor="let abdominalScars of selectAbdominalScars"
+          [value]="abdominalScars.name"
+        >
+          {{ abdominalScars.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-10">
     <mat-form-field class="select-full-width">
+      <mat-label>{{ current_language_set?.sfhCms }}</mat-label>
       <textarea
         matInput
         matTextareaAutosize
         name="sfh"
         formControlName="sfh"
-        placeholder="{{ current_language_set?.sfhCms }}"
         allowText="decimal"
         allowMax="100.0"
       ></textarea>
