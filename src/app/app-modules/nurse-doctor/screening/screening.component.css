@@ -39,6 +39,9 @@
     color: white;
     float: left; /* Float the buttons side by side */
   }
+  .center-align{
+    align-content: center;
+  }
   /* .btn-group:after {
     content: "";
     clear: both;
