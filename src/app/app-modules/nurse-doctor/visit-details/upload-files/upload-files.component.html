@@ -8,9 +8,9 @@
     <br />
     <section>
       <button
-        md-raised-button
+        mat-raised-button
         color="primary"
-        class="button-overall-disabled"
+        class="mat_blue"
         [disabled]="disableFileSelection"
         (click)="triggerLog($event)"
       >
@@ -27,20 +27,21 @@
         />
       </span>
       <button
-        md-raised-button
+        mat-raised-button
         color="primary"
-        class="pull-right"
+        class="mat_blue pull-right"
         (click)="checkForDuplicateUpload()"
         *ngIf="!disableFileSelection"
       >
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
       </button>
       <button
+        style="margin-left: 10px"
         *ngIf="disableFileSelection || enableForNCDScreening"
         [disabled]="disableViewFiles"
-        md-raised-button
+        mat-raised-button
         color="primary"
-        class="button-upload-files-disabled"
+        class="mat_blue"
         (click)="viewNurseSelectedFiles()"
       >
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}

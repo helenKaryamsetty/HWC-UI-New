@@ -246,7 +246,7 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
       //   this.visitCategory === 'PNC' || this.visitCategory === 'General OPD'
       // ) {
       //   this.showPNC = true;
-      // } else if (this.visitCategory === 'COVID-19 Screening') {
+    } else if (this.visitCategory === 'COVID-19 Screening') {
       this.showCOVID = true;
     } else {
       this.hideAll = false;
