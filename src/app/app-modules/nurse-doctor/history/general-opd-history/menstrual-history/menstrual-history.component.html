@@ -1,5 +1,5 @@
 <!-- {{ menstrualHistoryForm.value | json }} -->
-<div class="row m-t-10 text-right">
+<div class="col-12" style="text-align: end">
   <p class="font-history-label m-t-10">
     {{
       currentLanguageSet?.historyData?.Previousmenstrualhistory
@@ -11,7 +11,7 @@
     mat-icon-button
     matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
     id="previousANCMenstrualHistory"
-    class="pull-right"
+    class="mat_icon_blue"
     color="primary"
     (click)="getPreviousMenstrualHistory()"
   >
@@ -139,7 +139,7 @@
     <mat-form-field class="fieldAlignment fontStyle">
       <mat-label class="mat-label-text" class="fontStyle"
         >{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+          currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.menstrual
             ?.lastMenstrualPeriod
         }}
       </mat-label>

@@ -48,7 +48,7 @@ export class SchedulerComponent implements OnInit, DoCheck {
   ) {}
   today!: Date;
   schedulerDate!: Date;
-  scheduledData: any;
+  scheduledData: any = null;
   ngOnInit() {
     this.assignSelectedLanguage();
     if (this.dialogData) {
@@ -67,7 +67,6 @@ export class SchedulerComponent implements OnInit, DoCheck {
 
     localStorage.setItem('setComorbid', 'false');
     this.ansComorbid = localStorage.getItem('setComorbid');
-    //this.outputToParent.emit( this.answer1);
     this.nurseService.filter(this.ansComorbid);
     this.mdDialogRef.close(modalClear);
   }
@@ -112,6 +111,7 @@ export class SchedulerComponent implements OnInit, DoCheck {
       });
       this.schedulerDate = checkdate;
       this.today = today;
+      this.getMasterSpecializationSchedule();
     }
   }
 
@@ -138,6 +138,28 @@ export class SchedulerComponent implements OnInit, DoCheck {
     this.masterSpecialistDetails = [];
     const today = new Date();
     this.allocationDate.setMinutes(today.getMinutes() + 330);
+    this.schedulerForm.patchValue({
+      specialization: null,
+      specialistDetails: null,
+    });
+    this.doctorService.getMasterSpecialization().subscribe(
+      (response: any) => {
+        if (response && response.statusCode === 200) {
+          this.masterSpecialization = response.data;
+        } else {
+          this.confirmationService.alert(response.errorMessage, 'error');
+        }
+      },
+      (err) => {
+        this.confirmationService.alert(err, 'error');
+      },
+    );
+  }
+
+  getMasterSpecializationSchedule() {
+    this.availableSlotList = null;
+    this.masterSpecialization = [];
+    this.masterSpecialistDetails = [];
     this.schedulerForm.patchValue({
       specialization: null,
       specialistDetails: null,
@@ -232,7 +254,6 @@ export class SchedulerComponent implements OnInit, DoCheck {
 
       localStorage.setItem('setComorbid', 'true');
       this.ansComorbid = localStorage.getItem('setComorbid');
-      //this.outputToParent.emit( this.answer1);
       this.nurseService.filter(this.ansComorbid);
 
       this.mdDialogRef.close(modalData);

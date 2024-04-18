@@ -8,7 +8,7 @@
   font-size: 18px;
   line-height: 32px;
   font-weight: 400;
-  background: #336CFB !important;
+  background: #336CFB;
 }
 
 .title h4 {
@@ -33,23 +33,19 @@
 }
 
 .available {
-  background: white;
+  background: white !important;
   border: 1px solid green;
-}
-
-.unavailable {
-  /* background: grey; */
 }
 
 .booked {
   background: red;
 }
 
-.mat-chip:not(.mat-basic-chip)+.mat-chip:not(.mat-basic-chip) {
+.mat-chip-option:not(.mat-basic-chip)+.mat-chip-option:not(.mat-basic-chip) {
   margin: unset;
 }
 
-.mat-chip:not(.mat-basic-chip) {
+.mat-chip-option:not(.mat-basic-chip) {
   margin: 4px !important;
   width: 150px;
   text-align: center;
@@ -58,4 +54,9 @@
 .step-btn button {
   float: right;
   margin-left: 5px;
+}
+
+.mat-chip-option.mat-chip-option-selected.mat-primary {
+  background-color: #336CFB !important;
+  color: white !important;
 }

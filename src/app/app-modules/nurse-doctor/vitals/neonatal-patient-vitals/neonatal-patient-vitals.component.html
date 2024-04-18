@@ -11,15 +11,14 @@
       <div class="row m-t-10">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+            }}</mat-label>
             <input
               autocomplete="off"
               matInput
               defaultNull
-              placeholder="
-            {{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-              }}"
               allowText="decimal"
               id="height_cm"
               name="height_cm"
@@ -32,15 +31,14 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+            }}</mat-label>
             <input
               autocomplete="off"
               matInput
               defaultNull
-              placeholder="
-            {{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-              }}"
               (change)="checkWeight(weight_Kg)"
               allowText="decimal"
               name="weight_Kg"
@@ -62,15 +60,14 @@
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
+            }}</mat-label>
             <input
               autocomplete="off"
               matInput
               defaultNull
-              placeholder="
-            {{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
-              }}"
               allowText="decimal"
               (change)="checkHeadCircumference(headCircumference_cm)"
               name="headCircumference_cm"
@@ -83,15 +80,14 @@
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
           <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                ?.temperature
+            }}</mat-label>
             <input
               autocomplete="off"
               matInput
               defaultNull
-              placeholder="
-            {{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.temperature
-              }}"
               allowText="tempDecimal"
               name="temperature"
               id="temperature"

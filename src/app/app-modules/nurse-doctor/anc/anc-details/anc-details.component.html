@@ -33,7 +33,7 @@
         [max]="today"
         [matDatepicker]="lmpPicker"
         required
-        readonly
+        ng-readonly="true"
         (dateChange)="checkupLMP(lmpDate)"
       />
       <mat-hint>MM/DD/YYYY</mat-hint>
@@ -103,7 +103,6 @@
         formControlName="duration"
         allowText="number"
         allowMax="10"
-        readonly
         (change)="checkPeriodOfPregnancy(patientANCDetailsForm.value.duration)"
       />
     </mat-form-field>
@@ -123,7 +122,7 @@
         defaultNull
         name="trimesterNumber"
         formControlName="trimesterNumber"
-        readonly
+        [readonly]="true"
       />
     </mat-form-field>
   </div>

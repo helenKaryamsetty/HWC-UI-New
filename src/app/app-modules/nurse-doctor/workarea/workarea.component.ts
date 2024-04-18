@@ -185,6 +185,7 @@ export class WorkareaComponent
   isCbac = false;
   enableExaminationUpdateForHrp = false;
   enableupdateButtonSubcriptionForScreening: Subscription = new Subscription();
+  showProgressBar = false;
 
   patientVisitForm!: FormGroup;
   patientANCForm!: FormGroup;
@@ -1307,6 +1308,7 @@ export class WorkareaComponent
 
   submitPatientMedicalDetailsForm(medicalForm: any) {
     this.disableSubmitButton = true;
+    this.showProgressBar = true;
     if (this.visitCategory === 'NCD screening')
       this.submitNurseNCDScreeningVisitDetails(medicalForm);
 
@@ -1353,6 +1355,7 @@ export class WorkareaComponent
   }
   resetSpinnerandEnableTheSubmitButton() {
     this.disableSubmitButton = false;
+    this.showProgressBar = false;
   }
   navigateToNurseWorklist() {
     this.patientMedicalForm.reset();
@@ -1373,6 +1376,7 @@ export class WorkareaComponent
   }
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
+    this.showProgressBar = true;
     if (this.visitCategory === 'General OPD (QC)')
       this.submitQuickConsultDiagnosisForm();
 
@@ -1603,6 +1607,7 @@ export class WorkareaComponent
 
   updateDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
+    this.showProgressBar = false;
 
     const visitCategory = localStorage.getItem('visitCategory');
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
