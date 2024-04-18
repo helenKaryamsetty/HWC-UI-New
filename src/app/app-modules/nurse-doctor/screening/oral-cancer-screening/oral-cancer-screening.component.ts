@@ -135,7 +135,7 @@ export class OralCancerScreeningComponent
     this.assignSelectedLanguage();
   }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       // this.getNcdScreeningDataForCbac();
     }
   }
@@ -222,7 +222,7 @@ export class OralCancerScreeningComponent
               this.nurseMasterData.temporomandibularJoin;
             this.cervicalLymphNodesFindings =
               this.nurseMasterData.cervicalLymphNode;
-            if (this.mode === 'view') {
+            if (String(this.mode) === 'view') {
               this.getNcdScreeningDataForCbac();
               this.markAsUnSuspectedOnLoad(this.suspectOralCavity);
             }
@@ -407,7 +407,7 @@ export class OralCancerScreeningComponent
           this.oralFormStatus.emit(false);
           this.oralCancerForm.reset();
           this.ncdScreeningService.oralSuspectStatus(false);
-          if (this.mode === 'view' || this.mode === 'update')
+          if (String(this.mode) === 'view' || String(this.mode) === 'update')
             this.ncdScreeningService.screeningValueChanged(true);
         } else {
           this.hideOralForm = false;

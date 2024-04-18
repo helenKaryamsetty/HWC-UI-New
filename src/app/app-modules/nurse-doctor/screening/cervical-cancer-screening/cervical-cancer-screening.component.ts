@@ -124,7 +124,7 @@ export class CervicalCancerScreeningComponent
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       // this.getNcdScreeningDataForCbac();
     }
   }
@@ -198,7 +198,7 @@ export class CervicalCancerScreeningComponent
           ) {
             this.nurseMasterData = data.cervicalCancer;
             this.visualExaminations = this.nurseMasterData.visualExamination;
-            if (this.mode === 'view') {
+            if (String(this.mode) === 'view') {
               this.getNcdScreeningDataForCbac();
               this.markAsUnSuspectedOnLoad(this.visualExaminationSuspected);
             }
@@ -279,7 +279,7 @@ export class CervicalCancerScreeningComponent
           this.cervicalFormStatus.emit(false);
           this.cervicalScreeningForm.reset();
           this.ncdScreeningService.cervicalSuspectStatus(false);
-          if (this.mode === 'view' || this.mode === 'update')
+          if (String(this.mode) === 'view' || String(this.mode) === 'update')
             this.ncdScreeningService.screeningValueChanged(true);
         } else {
           this.hideCervicalForm = false;

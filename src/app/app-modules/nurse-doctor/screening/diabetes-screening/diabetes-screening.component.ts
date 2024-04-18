@@ -126,7 +126,7 @@ export class DiabetesScreeningComponent
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.getNcdScreeningDataForCbac();
       this.disableFindStatuButton = true;
     }
@@ -225,7 +225,7 @@ export class DiabetesScreeningComponent
                 });
               }
             });
-            if (this.mode === 'view') {
+            if (String(this.mode) === 'view') {
               this.getNcdScreeningDataForCbac();
               this.markAsUnSuspectedOnLoad(this.isDiabetesSuspected);
               this.disableFindStatuButton = true;
@@ -373,7 +373,7 @@ export class DiabetesScreeningComponent
           this.diabetesFormStatus.emit(false);
           this.diabetesScreeningForm.reset();
           this.ncdScreeningService.diabetesSuspectStatus(false);
-          if (this.mode === 'view' || this.mode === 'update')
+          if (String(this.mode) === 'view' || String(this.mode) === 'update')
             this.ncdScreeningService.screeningValueChanged(true);
         } else {
           this.hideForm = false;

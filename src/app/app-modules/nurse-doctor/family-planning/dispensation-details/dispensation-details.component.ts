@@ -92,8 +92,8 @@ export class DispensationDetailsComponent
 
   ngOnDestroy() {
     if (
-      this.familyPlanningMode === 'view' ||
-      this.familyPlanningMode === 'update'
+      String(this.familyPlanningMode) === 'view' ||
+      String(this.familyPlanningMode) === 'update'
     ) {
       this.resetDispensationDetailsForm();
     } else {
@@ -155,7 +155,7 @@ export class DispensationDetailsComponent
         this.typeOfIucdInsertedList = res.m_TypeofIUCDinserted;
         this.iucdInsertionByList = res.m_IUCDinsertiondoneby;
         if (
-          this.familyPlanningMode === 'view' &&
+          String(this.familyPlanningMode) === 'view' &&
           this.doctorService.enableDispenseFlag === false
         ) {
           this.getFamilyPlanningNurseFetchDetails();
@@ -184,7 +184,8 @@ export class DispensationDetailsComponent
         'otherTypeOfContraceptivePrescribed'
       ].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -230,7 +231,8 @@ export class DispensationDetailsComponent
       this.enableIucdFields = false;
       this.resetIUCDFields();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -254,7 +256,8 @@ export class DispensationDetailsComponent
       this.dispensationDetailsForm.controls['dosesTaken'].reset();
       this.dispensationDetailsForm.controls['dateOfLastDoseTaken'].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -299,7 +302,8 @@ export class DispensationDetailsComponent
       this.disableNoneOption = false;
       this.disableAllOptions = false;
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -307,7 +311,7 @@ export class DispensationDetailsComponent
   ngOnChanges() {
     this.attendant = this.route.snapshot.params['attendant'];
     if (
-      this.familyPlanningMode === 'view' &&
+      String(this.familyPlanningMode) === 'view' &&
       this.doctorService.enableDispenseFlag === false
     ) {
       this.getFamilyPlanningNurseFetchDetails();
@@ -413,7 +417,8 @@ export class DispensationDetailsComponent
       });
   }
   onValueChange() {
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }

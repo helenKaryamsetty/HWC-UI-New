@@ -255,7 +255,7 @@ export class FormImmunizationHistoryComponent
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     )).patchValue(this.temp);
 
-    if (this.immunizationHistoryMode === 'view') {
+    if (String(this.immunizationHistoryMode) === 'view') {
       this.getNurseFetchDetails();
     }
     const specialistFlagString = localStorage.getItem('specialistFlag');
@@ -458,8 +458,8 @@ export class FormImmunizationHistoryComponent
     });
 
     // for enabling update button in doctor
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -509,8 +509,8 @@ export class FormImmunizationHistoryComponent
       }
     }
     // for enabling update button in doctor
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }

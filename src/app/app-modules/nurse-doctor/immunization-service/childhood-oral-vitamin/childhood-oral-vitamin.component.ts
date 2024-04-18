@@ -101,7 +101,7 @@ export class ChildhoodOralVitaminComponent
           masterData.oralVitaminNoDose
         ) {
           this.oralVitaminADoses = masterData.oralVitaminNoDose;
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getNurseFetchOralVitaminADetails();
           }
         }
@@ -109,7 +109,7 @@ export class ChildhoodOralVitaminComponent
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.getNurseFetchOralVitaminADetails();
     }
   }
@@ -122,13 +122,13 @@ export class ChildhoodOralVitaminComponent
       if (vaccineStatus === 'Not Given')
         this.resetFormOnChangeOfVaccineStatus();
     }
-    this.mode === 'view' || this.mode === 'update'
+    String(this.mode) === 'view' || String(this.mode) === 'update'
       ? this.doctorService.immunizationServiceChildhoodValueChanged(true)
       : null;
   }
 
   onValueChange() {
-    this.mode === 'view' || this.mode === 'update'
+    String(this.mode) === 'view' || String(this.mode) === 'update'
       ? this.doctorService.immunizationServiceChildhoodValueChanged(true)
       : null;
   }
@@ -208,7 +208,7 @@ export class ChildhoodOralVitaminComponent
         );
       }
     });
-    this.mode === 'view' || this.mode === 'update'
+    String(this.mode) === 'view' || String(this.mode) === 'update'
       ? this.doctorService.immunizationServiceChildhoodValueChanged(true)
       : null;
   }

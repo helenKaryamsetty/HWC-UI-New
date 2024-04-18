@@ -247,7 +247,7 @@ export class ScreeningComponent
     this.disableButtonOnConfirmedDiseases();
   }
   ngOnChanges() {
-    if (this.ncdScreeningMode === 'update') {
+    if (String(this.ncdScreeningMode) === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       // this.doctorScreen = true;
       this.updateNCDScreeningDataFromDoctor(
@@ -257,7 +257,7 @@ export class ScreeningComponent
     }
   }
   getNcdScreeningDataForCbac() {
-    if (this.ncdScreeningMode === 'view') {
+    if (String(this.ncdScreeningMode) === 'view') {
       this.doctorService.getNcdScreeningForCbac().subscribe((res: any) => {
         if (
           res.statusCode === 200 &&
@@ -626,7 +626,7 @@ export class ScreeningComponent
         this.ncdScreeningDiseases.push(disease);
       }
     });
-    if (this.ncdScreeningMode === 'view') {
+    if (String(this.ncdScreeningMode) === 'view') {
       this.loadScreeningFormBasedOnFetchResponse();
     }
   }

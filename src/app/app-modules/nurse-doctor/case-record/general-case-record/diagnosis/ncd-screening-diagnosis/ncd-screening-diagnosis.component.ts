@@ -122,9 +122,6 @@ export class NcdScreeningDiagnosisComponent
           }
         },
       );
-
-    console.log('caseRecordMode', this.caseRecordMode);
-    console.log('doctorDiagnosis', this.doctorDiagnosis);
     this.designation = localStorage.getItem('designation');
     this.benGender = localStorage.getItem('beneficiaryGender');
     if (this.designation === 'TC Specialist') {
@@ -170,7 +167,7 @@ export class NcdScreeningDiagnosisComponent
   }
 
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
       const visitID = localStorage.getItem('visitID');
       const visitCategory = localStorage.getItem('visitCategory');

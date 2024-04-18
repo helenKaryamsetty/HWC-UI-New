@@ -84,7 +84,7 @@ export class BirthImmunizationHistoryComponent
     if (
       this.immunizationHistoryMode !== undefined &&
       this.immunizationHistoryMode !== null &&
-      this.immunizationHistoryMode === 'view'
+      String(this.immunizationHistoryMode) === 'view'
     ) {
       this.getNurseImmunizationHistoryDetailsFromNurse();
     }
@@ -99,7 +99,7 @@ export class BirthImmunizationHistoryComponent
   }
 
   ngOnChanges() {
-    if (this.immunizationHistoryMode === 'update') {
+    if (String(this.immunizationHistoryMode) === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.updateBirthAndImmunizationHistoryFromDoctor(
         this.patientBirthImmunizationHistoryForm,
@@ -126,8 +126,8 @@ export class BirthImmunizationHistoryComponent
 
   getNurseImmunizationHistoryDetailsFromNurse() {
     if (
-      (this.immunizationHistoryMode === 'view' ||
-        this.immunizationHistoryMode === 'update') &&
+      (String(this.immunizationHistoryMode) === 'view' ||
+        String(this.immunizationHistoryMode) === 'update') &&
       this.visitCategory.toLowerCase() ===
         'neonatal and infant health care services'
     ) {
@@ -146,8 +146,8 @@ export class BirthImmunizationHistoryComponent
         });
     }
     if (
-      (this.immunizationHistoryMode === 'view' ||
-        this.immunizationHistoryMode === 'update') &&
+      (String(this.immunizationHistoryMode) === 'view' ||
+        String(this.immunizationHistoryMode) === 'update') &&
       this.visitCategory.toLowerCase() ===
         'childhood & adolescent healthcare services'
     ) {

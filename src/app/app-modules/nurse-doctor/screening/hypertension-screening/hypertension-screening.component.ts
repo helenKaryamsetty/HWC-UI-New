@@ -86,7 +86,7 @@ export class HypertensionScreeningComponent
   ngOnInit() {
     this.ncdScreeningService.setScreeningDataFetch(false);
     this.assignSelectedLanguage();
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.getNcdScreeningDataForCbac();
       this.markAsUnSuspectedOnLoad(this.isHypertensionSuspected);
       this.disableStatusButton = true;
@@ -611,7 +611,7 @@ export class HypertensionScreeningComponent
           this.hypertensionFormStatus.emit(false);
           this.hypertensionScreeningForm.reset();
           this.ncdScreeningService.hypertensionSuspectStatus(false);
-          if (this.mode === 'view' || this.mode === 'update')
+          if (String(this.mode) === 'view' || String(this.mode) === 'update')
             this.ncdScreeningService.screeningValueChanged(true);
         } else {
           this.hideBpForm = false;

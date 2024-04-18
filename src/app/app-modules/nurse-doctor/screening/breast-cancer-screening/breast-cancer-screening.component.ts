@@ -126,7 +126,7 @@ export class BreastCancerScreeningComponent
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       // this.getNcdScreeningDataForCbac();
     }
   }
@@ -211,7 +211,7 @@ export class BreastCancerScreeningComponent
             this.palpationOfBreasts = this.nurseMasterData.palpationOfBreasts;
             this.palpationOfLymphNodes =
               this.nurseMasterData.palpationLymphNodes;
-            if (this.mode === 'view') {
+            if (String(this.mode) === 'view') {
               this.getNcdScreeningDataForCbac();
               this.markAsUnSuspectedOnLoad(this.breastCancerSuspected);
             }

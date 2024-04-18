@@ -101,11 +101,11 @@ export class NeonatalImmunizationServiceComponent
     this.assignSelectedLanguage();
   }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.getNurseFetchImmunizationServiceDetailsForChildhood();
       this.getNurseFetchImmunizationServiceDetails();
     }
-    if (this.mode === 'update') {
+    if (String(this.mode) === 'update') {
       this.updateImmunizationServiceFromDoctor(this.immunizationServicesForm);
     }
   }
@@ -130,7 +130,7 @@ export class NeonatalImmunizationServiceComponent
           this.checkCurrentImmunizationService(
             masterData.m_currentimmunizationservice,
           );
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getNurseFetchImmunizationServiceDetailsForChildhood();
             this.getNurseFetchImmunizationServiceDetails();
           }
@@ -262,7 +262,7 @@ export class NeonatalImmunizationServiceComponent
             /* patchVaccineDetailsOnView - variable used to restrict the method call on change of immunization
           service dropdown on doctor */
             if (
-              this.mode === 'view' &&
+              String(this.mode) === 'view' &&
               this.patchVaccineDetailsOnView === true
             ) {
               this.viewImmunizationServices();
@@ -281,7 +281,7 @@ export class NeonatalImmunizationServiceComponent
       this.visitCategory.toLowerCase ===
       'childhood & adolescent healthcare services'
     ) {
-      this.mode === 'view' || this.mode === 'update'
+      String(this.mode) === 'view' || String(this.mode) === 'update'
         ? this.doctorService.immunizationServiceChildhoodValueChanged(true)
         : null;
     }

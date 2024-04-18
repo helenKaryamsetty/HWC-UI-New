@@ -108,7 +108,7 @@ export class FamilyPlanningComponent
   }
 
   ngOnChanges() {
-    if (this.familyPlanningMode === 'update') {
+    if (String(this.familyPlanningMode) === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.updateFamilyPlanningFromDoctor(
         this.patientMedicalForm,
@@ -150,8 +150,8 @@ export class FamilyPlanningComponent
   getFamilyPlanningNurseFetchDetails() {
     this.doctorService.familyPlanningDetailsResponseFromNurse = null;
     if (
-      this.familyPlanningMode === 'view' ||
-      this.familyPlanningMode === 'update'
+      String(this.familyPlanningMode) === 'view' ||
+      String(this.familyPlanningMode) === 'update'
     ) {
       this.doctorService
         .getFamilyPlanningFetchDetails()

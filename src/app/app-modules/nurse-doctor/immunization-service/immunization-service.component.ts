@@ -107,7 +107,7 @@ export class ImmunizationServiceComponent
           : false;
     }
 
-    if (this.mode === 'update') {
+    if (String(this.mode) === 'update') {
       this.updateChildhoodImmunizationServicesFromDoctor(
         this.patientImmunizationServicesForm,
         this.visitCategory,
@@ -157,7 +157,7 @@ export class ImmunizationServiceComponent
 
   getNurseDetailsForAdolescentImmunizationServices() {
     if (
-      this.mode === 'view' &&
+      String(this.mode) === 'view' &&
       this.visitCategory.toLowerCase() ===
         'childhood & adolescent healthcare services'
     ) {

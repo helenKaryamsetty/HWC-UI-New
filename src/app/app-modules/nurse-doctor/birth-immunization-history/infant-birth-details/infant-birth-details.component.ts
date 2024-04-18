@@ -134,7 +134,7 @@ export class InfantBirthDetailsComponent
           this.gestationList = res.gestation;
           this.deliveryConductedByList = res.deliveryConductedByMaster;
           this.congenitalAnomaliesList = res.m_congenitalanomalies;
-          if (this.immunizationHistoryMode === 'view') {
+          if (String(this.immunizationHistoryMode) === 'view') {
             this.getNurseFetchDetails();
           }
 
@@ -173,8 +173,8 @@ export class InfantBirthDetailsComponent
         );
       }
     });
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -188,8 +188,8 @@ export class InfantBirthDetailsComponent
         this.infantBirthDetailsForm.controls['gestation'].setValue(item.name);
       }
     });
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -205,8 +205,8 @@ export class InfantBirthDetailsComponent
         );
       }
     });
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -257,8 +257,8 @@ export class InfantBirthDetailsComponent
       this.enableOtherDeliveryPlace = false;
       this.infantBirthDetailsForm.get('otherDeliveryPlace')?.reset();
     }
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -283,8 +283,8 @@ export class InfantBirthDetailsComponent
       this.enableOtherBirthComplication = false;
       this.infantBirthDetailsForm.get('otherDeliveryComplication')?.reset();
     }
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
@@ -301,15 +301,15 @@ export class InfantBirthDetailsComponent
         this.currentLanguageSet.alerts.info.recheckValue,
       );
     }
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }
 
   onValueChange() {
-    this.immunizationHistoryMode === 'view' ||
-    this.immunizationHistoryMode === 'update'
+    String(this.immunizationHistoryMode) === 'view' ||
+    String(this.immunizationHistoryMode) === 'update'
       ? this.doctorService.BirthAndImmunizationValueChanged(true)
       : null;
   }

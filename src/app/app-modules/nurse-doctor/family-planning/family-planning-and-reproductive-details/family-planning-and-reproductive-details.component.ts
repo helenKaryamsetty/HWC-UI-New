@@ -160,7 +160,8 @@ export class FamilyPlanningAndReproductiveComponent
     // let fertilityStatusDetails =
     //   this.familyPlanningAndReproductiveForm.controls.fertilityStatus.value;
 
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
 
@@ -273,7 +274,8 @@ export class FamilyPlanningAndReproductiveComponent
       ].reset();
     }
     this.checktotalChildrenBorn();
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    this.familyPlanningMode === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -304,7 +306,8 @@ export class FamilyPlanningAndReproductiveComponent
       ].reset();
     }
     this.checktotalChildrenBorn();
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -329,7 +332,8 @@ export class FamilyPlanningAndReproductiveComponent
         'totalNoOfChildrenBorn'
       ].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -360,7 +364,8 @@ export class FamilyPlanningAndReproductiveComponent
       ].reset();
     }
     this.checkLiveNoOfChildrenBorn();
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -392,7 +397,8 @@ export class FamilyPlanningAndReproductiveComponent
       ` `;
     }
     this.checkLiveNoOfChildrenBorn();
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -413,7 +419,8 @@ export class FamilyPlanningAndReproductiveComponent
         }
       }
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -438,7 +445,8 @@ export class FamilyPlanningAndReproductiveComponent
         'numberOfLiveChildren'
       ].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -459,7 +467,7 @@ export class FamilyPlanningAndReproductiveComponent
           this.familyPlanningAndReproductiveForm.patchValue({
             unitOfAge: 'Years',
           });
-          if (this.familyPlanningMode === 'view') {
+          if (String(this.familyPlanningMode) === 'view') {
             this.getFamilyPlanningNurseFetchDetails();
           }
         } else {
@@ -474,7 +482,8 @@ export class FamilyPlanningAndReproductiveComponent
         this.current_language_set.alerts.info.recheckValue,
       );
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -484,7 +493,8 @@ export class FamilyPlanningAndReproductiveComponent
         this.current_language_set.alerts.info.recheckValue,
       );
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -504,7 +514,8 @@ export class FamilyPlanningAndReproductiveComponent
         'dateOfLastDoseTaken'
       ].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -528,7 +539,8 @@ export class FamilyPlanningAndReproductiveComponent
         'placeOfSterilization'
       ].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -549,7 +561,8 @@ export class FamilyPlanningAndReproductiveComponent
   }
 
   onValueChange() {
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -571,7 +584,8 @@ export class FamilyPlanningAndReproductiveComponent
       this.disableCurrentlyUsingFPNone = false;
       this.disableAllOptions = false;
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -678,7 +692,7 @@ export class FamilyPlanningAndReproductiveComponent
 
   ngOnChanges() {
     this.attendant = this.route.snapshot.params['attendant'];
-    if (this.familyPlanningMode === 'view') {
+    if (String(this.familyPlanningMode) === 'view') {
       this.getFamilyPlanningNurseFetchDetails();
     }
     if (

@@ -119,7 +119,7 @@ export class IecAndCounsellingComponent
         this.disableNoneOption = false;
         this.disableAllOptions = false;
       }
-      this.familyPlanningMode === 'view'
+      String(this.familyPlanningMode) === 'view'
         ? this.doctorService.familyPlanningValueChanged(true)
         : null;
     }
@@ -131,7 +131,7 @@ export class IecAndCounsellingComponent
       if (res !== undefined && res !== null) {
         this.selectCounselling = res.m_FPCounselledOn;
         this.selectContraceptive = res.m_fpmethodfollowup;
-        if (this.familyPlanningMode === 'view') {
+        if (String(this.familyPlanningMode) === 'view') {
           this.getFamilyPlanningNurseFetchDetails();
         }
       } else {
@@ -153,7 +153,8 @@ export class IecAndCounsellingComponent
   // }
 
   onValueChange() {
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -169,7 +170,8 @@ export class IecAndCounsellingComponent
       this.enableCounselledOnOther = false;
       this.IecCounsellingForm.controls['otherCounselledOn'].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
@@ -185,14 +187,15 @@ export class IecAndCounsellingComponent
       this.enablecontraceptiveOptedForOther = false;
       this.IecCounsellingForm.controls['otherTypeOfContraceptiveOpted'].reset();
     }
-    this.familyPlanningMode === 'view' || this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'view' ||
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }
 
   ngOnChanges() {
     this.attendant = this.route.snapshot.params['attendant'];
-    if (this.familyPlanningMode === 'view') {
+    if (String(this.familyPlanningMode) === 'view') {
       this.getFamilyPlanningNurseFetchDetails();
     }
     if (
