@@ -306,6 +306,7 @@
     "
   >
     <mat-radio-group
+      *ngIf="isRadioGroupVisible"
       formControlName="IdrsOrCbac"
       (selectionChange)="enableHistoryScreenOnIdrs(IdrsOrCbac)"
       [(ngModel)]="keyType"

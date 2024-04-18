@@ -84,14 +84,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.showingCdssForm();
     this.getChiefComplaintSymptoms();
-    this.filteredOptions = this.cdssForm.controls[
-      'presentChiefComplaint'
-    ].valueChanges.pipe(
-      startWith(null),
-      map((val: any) =>
-        val ? this.filter(val) : this.chiefComplaints.slice(),
-      ),
-    );
   }
 
   filter(val: string): string[] {
@@ -184,6 +176,14 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           // this.cdssForm.patchValue({ presentChiefComplaintView : value.data.Cdss.presentChiefComplaint.presentChiefComplaint});
         });
     }
+    this.filteredOptions = this.cdssForm.controls[
+      'presentChiefComplaint'
+    ].valueChanges.pipe(
+      startWith(null),
+      map((val: any) =>
+        val ? this.filter(val) : this.chiefComplaints.slice(),
+      ),
+    );
   }
 
   assignSelectedLanguage() {

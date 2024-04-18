@@ -84,6 +84,7 @@ export class PatientVisitDetailsComponent
   subVisitCategory: any;
   templateSubVisitCategories: any = [];
   subVisitCategoryList: any = [];
+  isRadioGroupVisible = false;
   constructor(
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
