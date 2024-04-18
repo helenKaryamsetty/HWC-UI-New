@@ -300,7 +300,7 @@ export const environment = {
   savePNCDoctorDetailsUrl: `${TM_API}PNC/save/doctorData`,
 
   getPNCVisitDetailsUrl: `${TM_API}PNC/getBenVisitDetailsFrmNursePNC`,
-  getPNCDetailsUrl: `${TM_API}PNC//getBenPNCDetailsFrmNursePNC`,
+  getPNCDetailsUrl: `${TM_API}PNC/getBenPNCDetailsFrmNursePNC`,
   getPNCVitalsDetailsUrl: `${TM_API}PNC/getBenVitalDetailsFrmNurse`,
   getPNCHistoryDetailsUrl: `${TM_API}PNC/getBenHistoryDetails`,
   getPNCExaminationDataUrl: `${TM_API}PNC/getBenExaminationDetailsPNC`,

@@ -26,18 +26,16 @@
       {{ currentLanguageSet?.pleaseperformthenecessaryexaminationstoconfirm }}
     </div>
   </ng-container>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" *ngIf="mode === 'view'">
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="mode?.toLowerCase() === 'view'"
+  >
     <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.Reports?.visitcode
       }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        defaultNull
-        name="visitCode"
-        formControlName="visitCode"
-      />
+      <input matInput name="visitCode" formControlName="visitCode" />
     </mat-form-field>
   </div>
 
@@ -306,7 +304,6 @@
     "
   >
     <mat-radio-group
-      *ngIf="isRadioGroupVisible"
       formControlName="IdrsOrCbac"
       (selectionChange)="enableHistoryScreenOnIdrs(IdrsOrCbac)"
       [(ngModel)]="keyType"

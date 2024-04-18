@@ -154,7 +154,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.doctorService.getDoctorWorklist().subscribe(
       (data: any) => {
         if (data && data.statusCode === 200 && data.data) {
-          console.log('doctor worklist', JSON.stringify(data.data, null, 4));
+          // console.log('doctor worklist', JSON.stringify(data.data, null, 4));
           this.beneficiaryMetaData = data.data;
           data.data.map((item: any) => {
             const temp = this.getVisitStatus(item);

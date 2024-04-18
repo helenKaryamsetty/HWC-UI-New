@@ -157,7 +157,7 @@ export class PatientVisitDetailsComponent
   ngOnChanges() {
     this.attendant = this.route.snapshot.params['attendant'];
     this.nurseService.mmuVisitData = false;
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.loadNurseMasters();
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -194,6 +194,8 @@ export class PatientVisitDetailsComponent
 
     //   "visitCode": 300220001700413
     // }
+
+    console.log('obj in enableCbacIdrs', obj);
 
     this.nurseService
       .getCbacDetailsFromNurse(obj)
@@ -234,17 +236,10 @@ export class PatientVisitDetailsComponent
 
   visitCategorySubscription: any;
   getVisitReasonAndCategory() {
-    console.log('masterData ');
-
     this.visitCategorySubscription =
       this.masterdataService.visitDetailMasterData$.subscribe((masterData) => {
         if (masterData) {
-          console.log('masterData ', masterData);
           this.templateNurseMasterData = masterData;
-          console.log(
-            'Visit reason and category',
-            this.templateNurseMasterData,
-          );
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
           this.templateVisitCategories =
             this.templateNurseMasterData.visitCategories;
@@ -353,6 +348,7 @@ export class PatientVisitDetailsComponent
 
   visitDetailsSubscription: any;
   getVisitDetails(visitID: any, benRegID: any) {
+    console.log('visitID and benRegID in 356', visitID, benRegID);
     // localStorage.setItem('visitCategory', "General OPD");
     const visitCategory = localStorage.getItem('visitCategory');
     this.visitDetailsSubscription = this.doctorService

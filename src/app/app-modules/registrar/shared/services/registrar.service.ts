@@ -106,7 +106,7 @@ export class RegistrarService {
     return this.http
       .post(environment.registrarMasterDataUrl, tmpSPID)
       .subscribe((res: any) => {
-        console.log(JSON.stringify(res.data), 'json data');
+        // console.log(JSON.stringify(res.data), 'json data');
         if (res.data) this.registrationMasterDetails.next(res.data);
       });
   }

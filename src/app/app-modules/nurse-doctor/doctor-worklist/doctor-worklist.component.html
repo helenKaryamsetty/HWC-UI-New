@@ -264,16 +264,6 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                   <button
-                    (click)="cancelTCRequest(element)"
-                    matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
-                    class="full-width-login button-reset box button-overall-disabled"
-                    [disabled]="element.specialist_flag !== 1"
-                  >
-                    {{ currentLanguageSet?.common?.cancel }}
-                  </button>
-                </td>
-                <td mat-cell *matCellDef="let element">
-                  <button
                     (click)="openScheduler(element)"
                     matTooltip="{{ currentLanguageSet?.tc?.reschedule }}"
                     class="full-width-login-schedule box"
@@ -281,8 +271,14 @@
                   >
                     {{ currentLanguageSet?.tc?.schedule }}
                   </button>
-                </td>
-                <td mat-cell *matCellDef="let element">
+                  <button
+                    (click)="cancelTCRequest(element)"
+                    matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
+                    class="full-width-login button-reset box button-overall-disabled"
+                    [disabled]="element.specialist_flag !== 1"
+                  >
+                    {{ currentLanguageSet?.common?.cancel }}
+                  </button>
                   <button
                     (click)="initiateTC(element)"
                     matTooltip="{{ currentLanguageSet?.tc?.startTc }}"

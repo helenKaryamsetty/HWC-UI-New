@@ -45,5 +45,6 @@ export class DoctorTmWorklistWrapperComponent implements OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    console.log('this.current_language_set ', this.current_language_set);
   }
 }

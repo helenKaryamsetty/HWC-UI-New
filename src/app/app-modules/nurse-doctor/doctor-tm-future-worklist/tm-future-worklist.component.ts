@@ -120,12 +120,17 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
           this.filteredBeneficiaryList = benlist;
-          this.filterTerm = null;
-          this.currentPage = 1;
-          this.pageChanged({
-            page: this.activePage,
-            itemsPerPage: this.rowsPerPage,
+          this.dataSource.data = benlist;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.data.forEach((sectionCount: any, index: number) => {
+            sectionCount.sno = index + 1;
           });
+          this.filterTerm = null;
+          // this.currentPage = 1;
+          // this.pageChanged({
+          //   page: this.activePage,
+          //   itemsPerPage: this.rowsPerPage,
+          // });
         } else this.confirmationService.alert(data.errorMessage, 'error');
       },
       (err) => {
@@ -162,6 +167,8 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
     else {
       this.filteredBeneficiaryList = [];
+      this.dataSource.data = [];
+      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         console.log('item', JSON.stringify(item, null, 4));
         for (const key in item) {
@@ -182,18 +189,25 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
               this.filteredBeneficiaryList.push(item);
+              this.dataSource.data.push(item);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.data.forEach(
+                (sectionCount: any, index: number) => {
+                  sectionCount.sno = index + 1;
+                },
+              );
               break;
             }
           }
         }
       });
     }
-    this.activePage = 1;
-    this.pageChanged({
-      page: 1,
-      itemsPerPage: this.rowsPerPage,
-    });
-    this.currentPage = 1;
+    // this.activePage = 1;
+    // this.pageChanged({
+    //   page: 1,
+    //   itemsPerPage: this.rowsPerPage,
+    // });
+    // this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {
