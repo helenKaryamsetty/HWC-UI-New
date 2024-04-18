@@ -254,7 +254,7 @@ export class GeneralPatientVitalsComponent
       this.showGlucoseQC = false;
     }
 
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
@@ -493,8 +493,8 @@ export class GeneralPatientVitalsComponent
         if (vitalsData) {
           const temp = Object.assign(
             {},
-            vitalsData.benAnthropometryDetail,
-            vitalsData.benPhysicalVitalDetail,
+            vitalsData.data.benAnthropometryDetail,
+            vitalsData.data.benPhysicalVitalDetail,
           );
           this.patientVitalsForm.patchValue(temp);
 
@@ -506,11 +506,6 @@ export class GeneralPatientVitalsComponent
               this.patientVitalsForm.controls['hemoglobin'].value,
             );
           }
-          // if(this.attendant =="nurse")
-          // this.patientVitalsForm.patchValue({
-          //   rbsTestResult: null,
-          //   rbsTestRemarks: null
-          // });
           this.rbsResult = temp.rbsTestResult;
           this.rbsRemarks = temp.rbsTestRemarks;
           if (temp.systolicBP_1stReading !== null) {
@@ -554,9 +549,9 @@ export class GeneralPatientVitalsComponent
 
           //Sending RBS Test Result to patch in Lab Reports
 
-          if (vitalsData.benPhysicalVitalDetail) {
+          if (vitalsData.data.benPhysicalVitalDetail) {
             this.testInVitalsService.setVitalsRBSValueInReports(
-              vitalsData.benPhysicalVitalDetail,
+              vitalsData.data.benPhysicalVitalDetail,
             );
           }
         } else {

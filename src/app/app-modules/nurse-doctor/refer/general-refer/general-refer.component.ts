@@ -325,7 +325,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
             }
           }
 
-          if (this.referMode === 'view') {
+          if (String(this.referMode) === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');

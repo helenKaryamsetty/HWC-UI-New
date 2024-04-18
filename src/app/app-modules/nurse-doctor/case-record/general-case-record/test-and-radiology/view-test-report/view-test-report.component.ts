@@ -38,12 +38,11 @@ export class ViewTestReportComponent implements OnInit, DoCheck {
     public matDialogRef: MatDialogRef<ViewTestReportComponent>,
   ) {}
 
-  testReport = [];
+  testReport: any = [];
   ngOnInit() {
     console.log('data', this.data);
     this.testReport = this.data;
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     console.log('this.testReport ', this.testReport);
   }
 

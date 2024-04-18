@@ -95,7 +95,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) {
           // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
           const specialistFlagString = localStorage.getItem('specialistFlag');

@@ -81,7 +81,7 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   dob!: Date;
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
     }

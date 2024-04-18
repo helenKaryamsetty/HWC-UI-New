@@ -31,6 +31,8 @@ import { TestInVitalsService } from '../../../shared/services/test-in-vitals.ser
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LabService } from 'src/app/app-modules/lab/shared/services';
+import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 
 @Component({
   selector: 'app-test-and-radiology',
@@ -52,7 +54,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
-    //private labService: LabService,
+    private labService: LabService,
     private confirmationService: ConfirmationService,
     private idrsScoreService: IdrsscoreService,
     public sanitizer: DomSanitizer,
@@ -73,7 +75,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     this.assignSelectedLanguage();
     this.testInVitalsService.clearVitalsRBSValueInReports();
     this.testInVitalsService.clearVitalsRBSValueInReportsInUpdate();
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.visitCategory = localStorage.getItem('visitCategory');
     if (
       this.visitCategory.toLowerCase() ===
@@ -118,19 +119,19 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             ],
           };
         }
+      }
 
-        if (
-          localStorage.getItem('referredVisitCode') === 'undefined' ||
-          localStorage.getItem('referredVisitCode') === null
-        ) {
-          this.getTestResults(this.visitCategory);
-        } else {
-          this.getMMUTestResults(
-            this.beneficiaryRegID,
-            this.visitID,
-            this.visitCategory,
-          );
-        }
+      if (
+        localStorage.getItem('referredVisitCode') === 'undefined' ||
+        localStorage.getItem('referredVisitCode') === null
+      ) {
+        this.getTestResults(this.visitCategory);
+      } else {
+        this.getMMUTestResults(
+          this.beneficiaryRegID,
+          this.visitID,
+          this.visitCategory,
+        );
       }
     });
 
@@ -185,8 +186,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         )
           this.labResults.splice(index, 1);
       });
-
-      //  this.labResults.push(vitalsRBSResponse);
       this.labResults = [vitalsRBSResponse].concat(this.labResults);
 
       this.filteredLabResults = this.labResults;
@@ -228,6 +227,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           this.labResults = res.data.LabReport.filter((lab: any) => {
             return lab.procedureType === 'Laboratory';
           });
+          this.filteredLabResults = this.labResults;
 
           if (visitCategory === 'NCD screening') {
             this.filteredLabResults.forEach((element: any) => {
@@ -243,7 +243,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           console.log('stripsNotAvailable', this.filteredLabResults);
 
           if (this.vitalsRBSResp) {
-            // this.labResults.push(this.vitalsRBSResp);
             this.labResults = [this.vitalsRBSResp].concat(this.labResults);
           }
 
@@ -389,12 +388,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
       })
       .subscribe((vitalsData: any) => {
         if (vitalsData.benPhysicalVitalDetail) {
-          // let temp = Object.assign(
-          //   {},
-          //   vitalsData.benAnthropometryDetail,
-          //   vitalsData.benPhysicalVitalDetail
-          // );
-
           if (vitalsData.benPhysicalVitalDetail.rbsTestResult) {
             let vitalsRBSResponse = null;
             vitalsRBSResponse = {
@@ -417,7 +410,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
               ],
             };
 
-            // this.labResults.push(vitalsRBSResponse);
             this.labResults = [vitalsRBSResponse].concat(this.labResults);
             this.filteredLabResults = this.labResults;
 
@@ -450,7 +442,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
       itemsPerPage: this.currentLabRowsPerPage,
     });
   }
-  currentLabPagedList = [];
+  currentLabPagedList: any = [];
   currentLabPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -463,35 +455,35 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   showTestResult(fileIDs: any) {
-    // const ViewTestReport = this.dialog.open(
-    //   ViewRadiologyUploadedFilesComponent,
-    //   {
-    //     width: '40%',
-    //     data: {
-    //       filesDetails: fileIDs,
-    //       panelClass: 'dialog-width',
-    //       disableClose: false,
-    //     },
-    //   },
-    // );
-    // ViewTestReport.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     const fileID = {
-    //       fileID: result,
-    //     };
-    //     this.labService.viewFileContent(fileID).subscribe(
-    //       (res: any) => {
-    //         if (res.data.statusCode === 200) {
-    //           const fileContent = res.data.data.response;
-    //           location.href = fileContent;
-    //         }
-    //       },
-    //       (err: any) => {
-    //         this.confirmationService.alert(err.errorMessage, 'err');
-    //       },
-    //     );
-    //   }
-    // });
+    const ViewTestReport = this.dialog.open(
+      ViewRadiologyUploadedFilesComponent,
+      {
+        width: '40%',
+        data: {
+          filesDetails: fileIDs,
+          panelClass: 'dialog-width',
+          disableClose: false,
+        },
+      },
+    );
+    ViewTestReport.afterClosed().subscribe((result) => {
+      if (result) {
+        const fileID = {
+          fileID: result,
+        };
+        this.labService.viewFileContent(fileID).subscribe(
+          (res: any) => {
+            if (res.data.statusCode === 200) {
+              const fileContent = res.data.data.response;
+              location.href = fileContent;
+            }
+          },
+          (err: any) => {
+            this.confirmationService.alert(err.errorMessage, 'err');
+          },
+        );
+      }
+    });
   }
   enableArchiveView = false;
   archivedLabResults: any = [];
@@ -548,7 +540,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     });
   }
 
-  previousLabPagedList = [];
+  previousLabPagedList: any = [];
   previousLabPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -584,9 +576,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   fetosenseView: Array<{ name: string; value: number }> = [];
   showFetosenseReport(fetosenseDataToshow: any) {
     this.fetosenseView = [];
-    // if (this.enableFetosenseView)
-    //   this.enableFetosenseView = false;
-    // else
     this.enableFetosenseView = true;
     this.fetosenseDataToView = fetosenseDataToshow;
 
@@ -624,7 +613,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   getTestName(foetalMonitorTestId: any) {}
   showFetosenseGraph() {
     let content = undefined;
-    //let srcPath=content.replace('data:application/pdf;base64,','');
     const reportPath = this.amritFilePath;
     const obj = {
       aMRITFilePath: reportPath,
@@ -643,11 +631,6 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             const blob1 = new Blob([byteArray], {
               type: 'application/pdf;base64',
             });
-            // let reader = new FileReader();
-            // reader.readAsDataURL(blob1);
-            // reader.onload = (_event) => {
-            //   this.imgUrl = reader.result;
-            // }
             const fileURL = URL.createObjectURL(blob1);
             this.imgUrl =
               this.sanitizer.bypassSecurityTrustResourceUrl(fileURL);
@@ -658,8 +641,5 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         this.confirmationService.alert(err, 'error');
       },
     );
-
-    // else
-    // this.confirmationService.alert("Report not found", 'info');
   }
 }

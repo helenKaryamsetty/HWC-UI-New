@@ -227,7 +227,7 @@ export class ImmunizationHistoryComponent
       this.immunizationHistoryForm.controls['immunizationList']
     )).patchValue(this.temp);
 
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       this.loadVaccineData();
     }
 

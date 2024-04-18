@@ -101,7 +101,7 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.patchDataToFields(benRegID, visitID);

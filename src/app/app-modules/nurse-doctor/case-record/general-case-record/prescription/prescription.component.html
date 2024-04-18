@@ -57,25 +57,30 @@
   </section>
   <section class="row no-row">
     <div class="col-md-3 box">
-      <mat-select
-        class="input-full-width"
-        name="form"
-        [(ngModel)]="currentPrescription.formName"
-        placeholder="{{ current_language_set?.Prescription?.form }}"
-        (change)="getFormValueChanged()"
-        required
-      >
-        <mat-option
-          *ngFor="let item of drugFormMaster"
-          [value]="item.itemFormName"
+      <mat-form-field>
+        <mat-label>{{ current_language_set?.Prescription?.form }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="form"
+          [(ngModel)]="currentPrescription.formName"
+          (selectionChange)="getFormValueChanged()"
+          required
         >
-          {{ item.itemFormName }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of drugFormMaster"
+            [value]="item.itemFormName"
+          >
+            {{ item.itemFormName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-md-3 box">
       <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.Prescription?.medicine
+        }}</mat-label>
         <input
           autocomplete="off"
           type="text"
@@ -85,7 +90,6 @@
           matInput
           [(ngModel)]="tempDrugName"
           (keyup)="filterMedicine(tempDrugName)"
-          placeholder="{{ current_language_set?.Prescription?.medicine }}"
           (blur)="reEnterMedicine()"
           required
           [matAutocomplete]="autoGroup"
@@ -107,76 +111,86 @@
     </div>
 
     <div class="col-md-2 box">
-      <mat-select
-        class="input-full-width"
-        name="dose"
-        [(ngModel)]="currentPrescription.dose"
-        [disabled]="!currentPrescription.drugID"
-        placeholder="{{ current_language_set?.Prescription?.dosage }}"
-        required
-      >
-        <mat-option
-          *ngFor="let item of filteredDrugDoseMaster"
-          [value]="item.drugDose"
+      <mat-form-field>
+        <mat-label>{{ current_language_set?.Prescription?.dosage }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="dose"
+          [(ngModel)]="currentPrescription.dose"
+          [disabled]="!currentPrescription.drugID"
+          required
         >
-          {{ item.drugDose }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of filteredDrugDoseMaster"
+            [value]="item.drugDose"
+          >
+            {{ item.drugDose }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-md-4 box">
-      <mat-select
-        class="input-full-width"
-        name="frequency"
-        [(ngModel)]="currentPrescription.frequency"
-        [disabled]="!currentPrescription.drugID"
-        placeholder="{{ current_language_set?.Prescription?.frequency }}"
-        required
-      >
-        <mat-option
-          *ngFor="let item of drugFrequencyMaster"
-          [value]="item.frequency"
+      <mat-form-field>
+        <mat-label>{{
+          current_language_set?.Prescription?.frequency
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="frequency"
+          [(ngModel)]="currentPrescription.frequency"
+          [disabled]="!currentPrescription.drugID"
+          required
         >
-          {{ item.frequency }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of drugFrequencyMaster"
+            [value]="item.frequency"
+          >
+            {{ item.frequency }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </section>
 
   <section class="row no-row" style="margin-top: 10px !important">
     <div class="col-md-3 box">
-      <mat-select
-        class="input-full-width"
-        name="duration"
-        [(ngModel)]="currentPrescription.duration"
-        [disabled]="!currentPrescription.drugID"
-        placeholder="{{
+      <mat-form-field>
+        <mat-label>{{
           current_language_set?.nurseData?.chiefComplaintsDetails?.duration
-        }}"
-        [required]="prescriptionForm.value.frequency !== 'SOS'"
-      >
-        <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
-          {{ item }}
-        </mat-option>
-      </mat-select>
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="duration"
+          [(ngModel)]="currentPrescription.duration"
+          [disabled]="!currentPrescription.drugID"
+          [required]="prescriptionForm.value.frequency !== 'SOS'"
+        >
+          <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-md-3 box">
-      <mat-select
-        class="input-full-width"
-        name="unit"
-        [(ngModel)]="currentPrescription.unit"
-        placeholder="{{ current_language_set?.Prescription?.unit }}"
-        [disabled]="!currentPrescription.drugID"
-        [required]="prescriptionForm.value.frequency !== 'SOS'"
-      >
-        <mat-option
-          *ngFor="let item of drugDurationUnitMaster"
-          [value]="item.drugDuration"
+      <mat-form-field>
+        <mat-label>{{ current_language_set?.Prescription?.unit }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="unit"
+          [(ngModel)]="currentPrescription.unit"
+          [disabled]="!currentPrescription.drugID"
+          [required]="prescriptionForm.value.frequency !== 'SOS'"
         >
-          {{ item.drugDuration }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of drugDurationUnitMaster"
+            [value]="item.drugDuration"
+          >
+            {{ item.drugDuration }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div
@@ -187,53 +201,65 @@
         currentPrescription.formID !== '2'
       "
     >
-      <mat-select
-        class="input-full-width"
-        name="quantity"
-        [(ngModel)]="currentPrescription.qtyPrescribed"
-        [disabled]="!currentPrescription.drugID"
-        placeholder="{{ current_language_set?.Prescription?.quantity }}"
-        required
-      >
-        <mat-option
-          *ngFor="let item of drugDurationMaster | slice: 0 : 5"
-          [value]="item"
+      <mat-form-field>
+        <mat-label>{{
+          current_language_set?.Prescription?.quantity
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="quantity"
+          [(ngModel)]="currentPrescription.qtyPrescribed"
+          [disabled]="!currentPrescription.drugID"
+          required
         >
-          {{ item }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of drugDurationMaster | slice: 0 : 5"
+            [value]="item"
+          >
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div
       class="box"
       [ngClass]="{
-        'col-md-6':
+        'col-md-4':
           !currentPrescription.formID ||
           (currentPrescription.formID && currentPrescription.formID <= '2'),
-        'col-md-4':
+        'col-md-3':
           currentPrescription.formID && currentPrescription.formID > '2'
       }"
     >
-      <mat-select
-        class="input-full-width"
-        name="route"
-        [(ngModel)]="currentPrescription.route"
-        placeholder="{{ current_language_set?.Prescription?.Route }}"
-        [disabled]="!currentPrescription.drugID"
-      >
-        <mat-option
-          *ngFor="let item of drugRouteMaster"
-          [value]="item.routeName"
+      <mat-form-field>
+        <mat-label>{{ current_language_set?.Prescription?.Route }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="route"
+          [(ngModel)]="currentPrescription.route"
+          [disabled]="!currentPrescription.drugID"
         >
-          {{ item.routeName }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let item of drugRouteMaster"
+            [value]="item.routeName"
+          >
+            {{ item.routeName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </section>
 
-  <section class="row no-row" style="margin-top: 10px !important">
+  <section
+    class="row no-row"
+    style="margin-top: 10px !important; padding-bottom: 30px"
+  >
     <div class="col-md-10 box">
       <mat-form-field class="input-full-width">
+        <mat-label>{{
+          current_language_set?.Prescription?.instructions
+        }}</mat-label>
         <textarea
           matInput
           allowText="textAreaValidator"
@@ -244,7 +270,6 @@
           name="instructions"
           [disabled]="!currentPrescription.drugID"
           [(ngModel)]="currentPrescription.instructions"
-          placeholder="{{ current_language_set?.Prescription?.instructions }}"
         >
         </textarea>
       </mat-form-field>
@@ -252,9 +277,9 @@
     <div class="col-md-2 box centered-button">
       <button
         id="add-button"
-        class="button-add-disabled"
         [disabled]="prescriptionForm.invalid"
-        md-raised-button
+        mat-raised-button
+        class="mat_green"
         color="primary"
         type="button"
         (click)="submitForUpload()"
@@ -265,16 +290,13 @@
   </section>
 </form>
 
-<div *ngIf="drugPrescriptionForm.controls.prescribedDrugs.value.length > 0">
+<div *ngIf="drugPrescriptionForm.controls['prescribedDrugs'].value.length > 0">
   <hr />
   <div [formGroup]="drugPrescriptionForm">
     <div class="row" formArrayName="prescribedDrugs">
       <div
         class="col-xs-12"
-        *ngFor="
-          let drug of drugPrescriptionForm?.controls.prescribedDrugs?.controls;
-          let j = index
-        "
+        *ngFor="let drug of getPrescribedDrugs(); let j = index"
       >
         <ng-container
           [formGroupName]="j"
@@ -290,93 +312,97 @@
             </legend>
             <div class="row">
               <div class="col-md-1">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.Prescription?.form
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="formName"
-                    placeholder="{{ current_language_set?.Prescription?.form }}"
                   />
                 </mat-form-field>
-                <!-- {{drug.value.formName}} -->
               </div>
               <div class="col-md-2">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.casesheet?.dose
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="dose"
-                    placeholder="{{ current_language_set?.casesheet?.dose }}"
                   />
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.Prescription?.frequency
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="frequency"
-                    placeholder="{{
-                      current_language_set?.Prescription?.frequency
-                    }}"
                   />
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.nurseData?.chiefComplaintsDetails
+                      ?.duration
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="durationView"
-                    placeholder="{{
-                      current_language_set?.nurseData?.chiefComplaintsDetails
-                        ?.duration
-                    }}"
                   />
                 </mat-form-field>
               </div>
               <div class="col-md-1">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.Prescription?.quantity
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="qtyPrescribed"
-                    placeholder="{{
-                      current_language_set?.Prescription?.quantity
-                    }}"
                   />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field class="input-full-width">
+                <mat-form-field class="input-full-width input-full-width-one">
+                  <mat-label class="mat-label-text">{{
+                    current_language_set?.Prescription?.instructions
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     readonly="true"
                     type="text"
                     matInput
                     formControlName="instructions"
-                    placeholder="{{
-                      current_language_set?.Prescription?.instructions
-                    }}"
                   />
                 </mat-form-field>
               </div>
-              <div class="col-md-1 centered-button">
+              <div class="col-md-12 centered-button">
                 <button
                   mat-mini-fab
                   id="editMedicine"
                   (click)="editMedicine(j, drug.value.id)"
                   color="primary"
+                  class="mat_blue_circle"
                 >
                   <span class="material-icons">edit</span>
                 </button>
@@ -386,6 +412,7 @@
                   id="deleteMedicine"
                   (click)="deleteMedicine(j, drug.value.id)"
                   color="warn"
+                  class="mat_warn_circle"
                 >
                   <span class="material-icons">close</span>
                 </button>
@@ -397,10 +424,13 @@
     </div>
   </div>
   <mat-paginator
-    [length]="drugPrescriptionForm?.controls.prescribedDrugs?.value.length"
+    [length]="drugPrescriptionForm.get('prescribedDrugs')?.value.length"
+    [pageSizeOptions]="[5, 10, 20]"
     [pageSize]="pageSize"
     hidePageSize="true"
     (page)="setLimits($event.pageIndex)"
+    showFirstLastButtons
+    aria-label="Select patient in prescriptionWorklist"
   >
   </mat-paginator>
 </div>
@@ -415,30 +445,32 @@
     "
   >
     <div class="form-group">
-      <mat-select
-        multiple
-        class="input-full-width"
-        placeholder="{{ current_language_set?.counsellingProvided }}"
-        formControlName="counsellingProvidedList"
-        id="prescriptionAndCounselling"
-        name="prescriptionAndCounselling"
-        (change)="
-          counsellingProvidedoneOptionValidation(prescriptionAndCounselling)
-        "
-      >
-        <mat-option
-          class="dropdownValue"
-          *ngFor="let counselling of counsellingProvidedList"
-          [value]="counselling.name"
-          [disabled]="
-            disableNoneOption !== null &&
-            ((!disableNoneOption && counselling.name === 'None') ||
-              (disableNoneOption && counselling.name !== 'None'))
+      <mat-form-field>
+        <mat-label>{{ current_language_set?.counsellingProvided }}</mat-label>
+        <mat-select
+          multiple
+          class="input-full-width"
+          formControlName="counsellingProvidedList"
+          id="prescriptionAndCounselling"
+          name="prescriptionAndCounselling"
+          (selectionChange)="
+            counsellingProvidedoneOptionValidation(prescriptionAndCounselling)
           "
         >
-          {{ counselling.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            class="dropdownValue"
+            *ngFor="let counselling of counsellingProvidedList"
+            [value]="counselling.name"
+            [disabled]="
+              disableNoneOption !== null &&
+              ((!disableNoneOption && counselling.name === 'None') ||
+                (disableNoneOption && counselling.name !== 'None'))
+            "
+          >
+            {{ counselling.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
   <div
@@ -450,6 +482,7 @@
     "
   >
     <mat-form-field class="input-full-width">
+      <mat-label>{{ current_language_set?.counsellingProvided }}</mat-label>
       <textarea
         matInput
         defaultNull
@@ -457,7 +490,6 @@
         allowText="textAreaValidator"
         matTextareaAutosize
         class="input-full-width"
-        placeholder="{{ current_language_set?.counsellingProvided }}"
         formControlName="counsellingProvidedList"
         id="prescriptionAndCounselling"
         name="prescriptionAndCounselling"

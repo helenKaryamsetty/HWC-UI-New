@@ -140,16 +140,13 @@ export class PreviousVisitDetailsComponent
   previousVisitDetailsSubscription!: Subscription;
   constructor(
     private doctorService: DoctorService,
-    private confirmationService: ConfirmationService,
     private cameraService: CameraService,
     private router: Router,
     public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
-    // this.getPreviousVisitDetails();
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.loadGraphData();
   }
 
@@ -263,16 +260,6 @@ export class PreviousVisitDetailsComponent
     }
   }
 
-  // getPreviousVisitDetails() {
-  //   const benRegID = localStorage.getItem('beneficiaryRegID');
-  //   this.doctorService.getPreviousVisitDetails(benRegID)
-  //     .subscribe((data) => {
-  //       if (data && data.benVisitDetails && data.benVisitDetails.length > 0)
-  //         this.previousVisitDetails = data.benVisitDetails.slice(0, 5);
-  //       console.log("previous visit Details", this.previousVisitDetails);
-  //     });
-  // }
-
   calculateBMI() {
     if (this.vitals)
       return +(
@@ -280,6 +267,7 @@ export class PreviousVisitDetailsComponent
           (this.vitals.height_cm * this.vitals.height_cm)) *
         10000
       ).toFixed(1);
+    else return 0;
   }
 
   visitDateTime: any;

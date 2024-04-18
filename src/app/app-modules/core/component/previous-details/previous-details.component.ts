@@ -19,44 +19,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { HttpServiceService } from '../../services/http-service.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-// import moment = require('moment');
+import { SetLanguageComponent } from '../set-language.component';
 
 @Component({
   selector: 'app-previous-details',
   templateUrl: './previous-details.component.html',
   styleUrls: ['./previous-details.component.css'],
 })
-export class PreviousDetailsComponent implements OnInit {
+export class PreviousDetailsComponent implements OnInit, DoCheck {
   dataList: any = [];
-  filteredDataList: any = [];
-  columnList = [];
+  columnList: any = [];
   current_language_set: any;
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  filteredDataList = new MatTableDataSource<any>();
+  displayedColumns: any = ['sno'];
+
   constructor(
     public dialogRef: MatDialogRef<PreviousDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public input: any,
     public httpServiceService: HttpServiceService,
+    @Inject(MAT_DIALOG_DATA) public input: any,
   ) {}
 
-  displayedColumns: string[] = ['sno', 'columnName'];
-  dataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-
   ngOnInit() {
-    this.httpServiceService.currentLangugae$.subscribe(
-      (response) => (this.current_language_set = response),
-    );
-    if (this.input.dataList.data instanceof Array) {
+    this.assignSelectedLanguage();
+    if (
+      this.input.dataList.data !== null &&
+      this.input.dataList.data !== undefined &&
+      this.input.dataList.data instanceof Array
+    ) {
       this.dataList = this.input.dataList.data;
-      this.filteredDataList = this.dataList.slice();
+      this.filteredDataList.data = this.dataList.slice();
     }
-    if (this.input.dataList.columns instanceof Array)
+    if (
+      this.input.dataList.columns !== null &&
+      this.input.dataList.columns !== undefined &&
+      this.input.dataList.columns instanceof Array
+    )
       this.columnList = this.input.dataList.columns;
+    this.input.dataList.columns.filter((item: any) => {
+      if (item.keyName) {
+        this.displayedColumns.push(item.keyName);
+      }
+    });
 
     if (this.input.title === 'MMU Referral Details') {
       const newArray = [];
@@ -69,8 +79,7 @@ export class PreviousDetailsComponent implements OnInit {
       }
 
       for (let i = 0; i < additionalArray.length; i++) {
-        newArray[i] = additionalArray[i];
-        // newArray[i]=additionalArray[i].serviceName;
+        newArray[i] = additionalArray[i].serviceName;
       }
       const serviceData = newArray.join(',');
 
@@ -88,7 +97,7 @@ export class PreviousDetailsComponent implements OnInit {
       };
 
       this.dataList = [];
-      this.filteredDataList = [];
+      this.columnList = [];
       this.dataList[0] = dataResp;
       this.filteredDataList = this.dataList.slice();
     }
@@ -110,25 +119,24 @@ export class PreviousDetailsComponent implements OnInit {
 
     if (this.input.title === 'MMU Prescription Details') {
       this.dataList = [];
-      this.filteredDataList = [];
+      this.columnList = [];
       this.dataList = this.loadDataPrescriptionList(this.input.dataList.data);
       this.filteredDataList = this.dataList.slice();
     }
   }
 
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.current_language_set = getLanguageJson.currentLanguageObject;
+  }
+
   loadDataPrescriptionList(data: any) {
     data.forEach((element: any) => {
-      data.formName = element.formName;
-      data.drugName = element.drugName;
-      data.drugStrength = element.drugStrength;
-      data.dose = element.dose;
-      data.route = element.route;
-      data.frequency = element.frequency;
-      data.duration = element.duration;
-      data.unit = element.unit;
-      data.instructions = element.instructions;
-      data.qtyPrescribed = element.qtyPrescribed;
-      data.createdDate = moment(element.createdDate).format(
+      element.createdDate = moment(element.createdDate).format(
         'DD-MM-YYYY HH:mm A ',
       );
     });
@@ -137,14 +145,17 @@ export class PreviousDetailsComponent implements OnInit {
 
   filterPreviousData(searchTerm: any) {
     console.log('searchTerm', searchTerm);
-    if (!searchTerm) this.filteredDataList = this.dataList;
-    else {
-      this.filteredDataList = [];
+    if (!searchTerm) {
+      this.filteredDataList.data = this.dataList;
+      this.filteredDataList.paginator = this.paginator;
+    } else {
+      this.filteredDataList.data = [];
       this.dataList.forEach((item: any) => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-            this.filteredDataList.push(item);
+            this.filteredDataList.data.push(item);
+            this.filteredDataList.paginator = this.paginator;
             break;
           }
         }

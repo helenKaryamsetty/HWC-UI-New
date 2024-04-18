@@ -74,6 +74,14 @@ import { StringValidatorDirective } from './directives/stringValidator.directive
 import { MyHealthIdDirective } from './directives/myHealthId/myHealthId.directive';
 import { DisableFormControlDirective } from './directives/disableFormControl.directive';
 import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.directive';
+import { MatTableModule } from '@angular/material/table';
+import { NgChartsModule } from 'ng2-charts';
+import { WebcamModule } from 'ngx-webcam';
+import { MasterdataService } from '../nurse-doctor/shared/services';
+import { RegistrarService } from '../registrar/shared/services/registrar.service';
+import { SetLanguageComponent } from './component/set-language.component';
+import { ClinicalObservationsDirective } from './directives/clinical-observations.directive';
+import { SignificantFindingsDirective } from './directives/significant-findings.directive';
 
 @NgModule({
   imports: [
@@ -85,9 +93,9 @@ import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.dire
     ReactiveFormsModule,
     UserLoginModule,
     MatGridListModule,
-    // ChartsModule,
-
-    // PaginationModule.forRoot()
+    NgChartsModule,
+    WebcamModule,
+    MatTableModule,
   ],
   declarations: [
     CommonDialogComponent,
@@ -112,16 +120,15 @@ import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.dire
     NullDefaultValueDirective,
     NumberValidatorDirective,
     DiagnosisSearchDirective,
+    SignificantFindingsDirective,
+    ClinicalObservationsDirective,
     StringValidatorDirective,
     ShowCommitAndVersionDetailsComponent,
     IotcomponentComponent,
     IotBluetoothComponent,
     AllergenSearchComponent,
     CalibrationComponent,
-    // SetLanguageComponent,
     HealthIdDisplayModalComponent,
-    // ClinicalObservationsDirective, SignificantFindingsDirective,
-    // myHealthId,
     OpenPreviousVisitDetailsComponent,
   ],
   exports: [
@@ -149,15 +156,17 @@ import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.dire
     NullDefaultValueDirective,
     NumberValidatorDirective,
     DiagnosisSearchDirective,
+    SignificantFindingsDirective,
+    ClinicalObservationsDirective,
     StringValidatorDirective,
     IotcomponentComponent,
     IotBluetoothComponent,
     AllergenSearchComponent,
     CalibrationComponent,
-    // SetLanguageComponent,
     HealthIdDisplayModalComponent,
-    //  ClinicalObservationsDirective, SignificantFindingsDirective,
     OpenPreviousVisitDetailsComponent,
+    WebcamModule,
+    NgChartsModule,
   ],
 })
 export class CoreModule {
@@ -181,6 +190,9 @@ export class CoreModule {
         TelemedicineService,
         IotService,
         HttpServiceService,
+        SetLanguageComponent,
+        MasterdataService,
+        RegistrarService,
       ],
     };
   }

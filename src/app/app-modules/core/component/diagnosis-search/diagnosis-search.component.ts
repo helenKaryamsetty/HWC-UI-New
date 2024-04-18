@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  DoCheck,
+  OnChanges,
+} from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../set-language.component';
@@ -32,12 +39,15 @@ import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/servi
   templateUrl: './diagnosis-search.component.html',
   styleUrls: ['./diagnosis-search.component.css'],
 })
-export class DiagnosisSearchComponent implements OnInit, DoCheck {
+export class DiagnosisSearchComponent implements OnInit, DoCheck, OnChanges {
   searchTerm: any;
-  // diagnosis$: Observable<any>;
   diagnosis$ = [];
   pageCount: any;
   selectedDiagnosisList: any = [];
+  displayedColumns: any = ['ConceptID', 'term', 'empty'];
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  diagnosis = new MatTableDataSource<any>();
+
   currentPage = 1;
   pager: any = {
     totalItems: 0,
@@ -48,13 +58,8 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     pages: 0,
   };
   pagedItems = [];
-  diagnosisType: any;
+  placeHolderSearch: any;
   currentLanguageSet: any;
-  fetchSnomedListBasedOnDiagnosisType: any;
-
-  displayedColumns: string[] = ['ConceptID', 'term', 'action'];
-  dataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -63,9 +68,15 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.assignSelectedLanguage();
-    this.checkDiagnosisType();
+    await this.search(this.input.searchTerm, 0);
+    if (this.input.diagonasisType) console.log(this.input, 'ADDED Diagnosis');
+    this.placeHolderSearch = this.input.diagonasisType;
+  }
+
+  ngOnChanges() {
+    console.log(this.input, 'ADDED Diagnosis');
   }
 
   ngDoCheck() {
@@ -77,39 +88,40 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  checkDiagnosisType() {
-    if (this.input.diagonasisType === 'ClinicalObservations') {
-      this.diagnosisType = this.input.diagonasisType;
-      this.fetchSnomedListBasedOnDiagnosisType = 'clinicalObservation';
-      this.searchClinicalFindings(
-        this.input.searchTerm,
-        0,
-        this.fetchSnomedListBasedOnDiagnosisType,
-      );
-    } else if (this.input.diagonasisType === 'ClinicalFindings') {
-      this.fetchSnomedListBasedOnDiagnosisType = 'clinicalFinding';
-      this.searchClinicalFindings(
-        this.input.searchTerm,
-        0,
-        this.fetchSnomedListBasedOnDiagnosisType,
-      );
-    } else {
-      this.diagnosisType = null;
-      this.search(this.input.searchTerm, 0);
-    }
-  }
+
   selectDiagnosis(event: any, item: any) {
     if (event.checked) {
       item.selected = true;
       this.selectedDiagnosisList.push(item);
     } else {
       const index = this.selectedDiagnosisList.indexOf(item);
-      if (index >= 0) {
-        this.selectedDiagnosisList.splice(index, 1);
-        item.selected = false;
+      this.selectedDiagnosisList.splice(index, 1);
+      item.selected = false;
+    }
+  }
+
+  selectedDiagnosis(item: any) {
+    const addedDiagnosis = this.input.addedDiagnosis;
+    const temp = addedDiagnosis.filter(
+      (diagnosis: any) => diagnosis.conceptID === item.conceptID,
+    );
+    if (temp.length > 0) return true;
+    else {
+      const currentSelection = this.selectedDiagnosisList.filter(
+        (diagnosis: any) => diagnosis.conceptID === item.conceptID,
+      );
+      if (currentSelection.length > 0) {
+        return true;
+      } else {
+        return false;
       }
     }
   }
+
+  submitDiagnosisList() {
+    this.dialogRef.close(this.selectedDiagnosisList);
+  }
+
   checkSelectedDiagnosis(item: any) {
     const addedDiagnosis = this.input.addedDiagnosis;
     if (addedDiagnosis.length > 1) {
@@ -144,19 +156,26 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
   }
   disableSelection(item: any) {
     const addedDiagnosis = this.input.addedDiagnosis;
-    if (addedDiagnosis.length > 1) {
-      const temp = addedDiagnosis.filter(
+    const temp = addedDiagnosis.filter(
+      (diagnosis: any) => diagnosis.conceptID === item.conceptID,
+    );
+    if (temp.length > 0) {
+      return true;
+    } else {
+      const currentSelection = this.selectedDiagnosisList.filter(
         (diagnosis: any) => diagnosis.conceptID === item.conceptID,
       );
-      if (temp.length > 0) {
-        return true;
+      const selectedDiagnosislength =
+        this.input.addedDiagnosis.length +
+        this.selectedDiagnosisList.length -
+        1;
+      if (currentSelection.length > 0) {
+        return false;
+      } else if (selectedDiagnosislength < 30) {
+        return false;
       } else {
-        const enableCurrent = this.enableCurrentSelection(item);
-        return enableCurrent;
+        return true;
       }
-    } else {
-      const enableCurrent = this.enableCurrentSelection(item);
-      return enableCurrent;
     }
   }
   enableCurrentSelection(item: any) {
@@ -186,9 +205,6 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
     }
   }
 
-  submitDiagnosisList() {
-    this.dialogRef.close(this.selectedDiagnosisList);
-  }
   showProgressBar = false;
   search(term: string, pageNo: any): void {
     if (term.length > 2) {
@@ -201,11 +217,11 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = true;
-                this.diagnosis$ = res.data.sctMaster;
+                this.diagnosis.data = res.data.sctMaster;
+                this.diagnosis.paginator = this.paginator;
                 if (pageNo === 0) {
                   this.pageCount = res.data.pageCount;
                 }
-                this.pager = this.getPager(pageNo);
                 this.showProgressBar = false;
               }
             } else {
@@ -213,105 +229,16 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck {
               this.showProgressBar = false;
             }
           },
-          (err) => {
+          (err: any) => {
             this.resetData();
             this.showProgressBar = false;
           },
         );
     }
   }
-  searchClinicalFindings(term: string, pageNo: any, diagnosisType: any): void {
-    if (term.length > 2) {
-      this.showProgressBar = true;
-      this.masterdataService
-        .searchDiagnosisBasedOnPageNo(term, pageNo, diagnosisType)
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200) {
-              this.showProgressBar = false;
-              if (res.data && res.data.sctMaster.length > 0) {
-                this.showProgressBar = true;
-                this.diagnosis$ = res.data.sctMaster;
-                if (pageNo === 0) {
-                  this.pageCount = res.data.pageCount;
-                }
-                this.pager = this.getPager(pageNo);
-                this.showProgressBar = false;
-              }
-            } else {
-              this.resetData();
-              this.showProgressBar = false;
-            }
-          },
-          (err) => {
-            this.resetData();
-            this.showProgressBar = false;
-          },
-        );
-    }
-  }
-  checkPager(pager: any, page: any) {
-    if (page === 0 && pager.currentPage !== 0) {
-      this.setPage(page);
-    } else if (pager.currentPage < page) {
-      this.setPage(page);
-    }
-  }
-  setPage(page: number) {
-    if (page <= this.pageCount - 1 && page >= 0) {
-      this.search(this.input.searchTerm, page);
-      // get pager object
-      this.pager = this.getPager(page);
-    }
-  }
-  getPager(page: any) {
-    // Total page count
-    const totalPages = this.pageCount;
-    // ensure current page isn't out of range
-    if (page > totalPages) {
-      page = totalPages - 1;
-    }
-    let startPage: number, endPage: number;
-    if (totalPages <= 5) {
-      // less than 5 total pages so show all
-      startPage = 0;
-      endPage = totalPages - 1;
-    } else {
-      // more than 5 total pages so calculate start and end pages
-      if (page <= 2) {
-        startPage = 0;
-        endPage = 4;
-      } else if (page + 2 >= totalPages) {
-        startPage = totalPages - 5;
-        endPage = totalPages - 1;
-      } else {
-        startPage = page - 2;
-        endPage = page + 2;
-      }
-    }
-    // create an array of pages to ng-repeat in the pager control
-    const pages = Array.from(Array(endPage + 1 - startPage).keys()).map(
-      (i) => startPage + i,
-    );
-    // return object with all pager properties required by the view
-    return {
-      currentPage: page,
-      totalPages: totalPages,
-      startPage: startPage,
-      endPage: endPage,
-      pages: pages,
-    };
-  }
+
   resetData() {
-    this.diagnosis$ = [];
-    this.pageCount = null;
-    this.pager = {
-      totalItems: 0,
-      currentPage: 0,
-      totalPages: 0,
-      startPage: 0,
-      endPage: 0,
-      pages: 0,
-    };
+    this.diagnosis.data = [];
+    this.diagnosis.paginator = this.paginator;
   }
 }

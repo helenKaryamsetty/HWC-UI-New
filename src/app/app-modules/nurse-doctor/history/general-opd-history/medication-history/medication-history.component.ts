@@ -98,7 +98,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
           // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
           const specialistFlagString = localStorage.getItem('specialistFlag');

@@ -141,6 +141,28 @@ import { ObstetricExaminationComponent } from './examination/general-opd-examina
 import { RespiratorySystemComponent } from './examination/general-opd-examination/systemic-examination/respiratory-system/respiratory-system.component';
 import { SystemicExaminationComponent } from './examination/general-opd-examination/systemic-examination/systemic-examination.component';
 import { GeneralOralExaminationComponent } from './examination/general-opd-examination/general-oral-examination/general-oral-examination.component';
+import { BeneficiaryMctsCallHistoryComponent } from './case-record/beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
+import { BeneficiaryPlatformHistoryComponent } from './case-record/beneficiary-platform-history/beneficiary-platform-history.component';
+import { CaseRecordComponent } from './case-record/case-record.component';
+import { AncDiagnosisComponent } from './case-record/general-case-record/diagnosis/anc-diagnosis/anc-diagnosis.component';
+import { CovidDiagnosisComponent } from './case-record/general-case-record/diagnosis/covid-diagnosis/covid-diagnosis.component';
+import { DiagnosisComponent } from './case-record/general-case-record/diagnosis/diagnosis.component';
+import { GeneralOpdDiagnosisComponent } from './case-record/general-case-record/diagnosis/general-opd-diagnosis/general-opd-diagnosis.component';
+import { NcdCareDiagnosisComponent } from './case-record/general-case-record/diagnosis/ncd-care-diagnosis/ncd-care-diagnosis.component';
+import { NcdScreeningDiagnosisComponent } from './case-record/general-case-record/diagnosis/ncd-screening-diagnosis/ncd-screening-diagnosis.component';
+import { PncDiagnosisComponent } from './case-record/general-case-record/diagnosis/pnc-diagnosis/pnc-diagnosis.component';
+import { DoctorInvestigationsComponent } from './case-record/general-case-record/doctor-investigations/doctor-investigations.component';
+import { FindingsComponent } from './case-record/general-case-record/findings/findings.component';
+import { GeneralCaseRecordComponent } from './case-record/general-case-record/general-case-record.component';
+import { PrescriptionComponent } from './case-record/general-case-record/prescription/prescription.component';
+import { PreviousSignificiantFindingsComponent } from './case-record/general-case-record/previous-significiant-findings/previous-significiant-findings.component';
+import { PreviousVisitDetailsComponent } from './case-record/general-case-record/previous-visit-details/previous-visit-details.component';
+import { TestAndRadiologyComponent } from './case-record/general-case-record/test-and-radiology/test-and-radiology.component';
+import { ViewTestReportComponent } from './case-record/general-case-record/test-and-radiology/view-test-report/view-test-report.component';
+import { TreatmentsOnSideEffectsComponent } from './case-record/general-case-record/treatments-on-side-effects/treatments-on-side-effects.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { GeneralReferComponent } from './refer/general-refer/general-refer.component';
+import { ReferComponent } from './refer/refer.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -157,7 +179,6 @@ export const MY_FORMATS = {
 @NgModule({
   imports: [
     CommonModule,
-    // ChartsModule,
     NurseDoctorRoutingModule,
     CoreModule,
     ReactiveFormsModule,
@@ -172,6 +193,7 @@ export const MY_FORMATS = {
     MatIconModule,
     MatNativeDateModule,
     MomentDateModule,
+    NgxPaginationModule,
   ],
   declarations: [
     NurseWorklistComponent,
@@ -220,37 +242,37 @@ export const MY_FORMATS = {
     HistoryComponent,
     ExaminationComponent,
     VitalsComponent,
-    // CaseRecordComponent,
+    CaseRecordComponent,
     PncComponent,
     // DashboardComponent,
     WorkareaComponent,
-    // GeneralCaseRecordComponent,
-    // GeneralReferComponent,
+    GeneralCaseRecordComponent,
+    GeneralReferComponent,
     // GeneralCaseSheetComponent,
-    // ReferComponent,
+    ReferComponent,
     // PrintPageSelectComponent,
-    // PreviousVisitDetailsComponent,
-    // FindingsComponent,
-    // DiagnosisComponent,
-    // PrescriptionComponent,
-    // DoctorInvestigationsComponent,
-    // TestAndRadiologyComponent,
+    PreviousVisitDetailsComponent,
+    FindingsComponent,
+    DiagnosisComponent,
+    PrescriptionComponent,
+    DoctorInvestigationsComponent,
+    TestAndRadiologyComponent,
     RadiologistWorklistComponent,
     OncologistWorklistComponent,
-    // GeneralOpdDiagnosisComponent,
-    // AncDiagnosisComponent,
+    GeneralOpdDiagnosisComponent,
+    AncDiagnosisComponent,
     CaseSheetComponent,
-    // NcdCareDiagnosisComponent,
-    // PncDiagnosisComponent,
-    // PreviousSignificiantFindingsComponent,
-    // ViewTestReportComponent,
+    NcdCareDiagnosisComponent,
+    PncDiagnosisComponent,
+    PreviousSignificiantFindingsComponent,
+    ViewTestReportComponent,
     // HistoryCaseSheetComponent,
     ExaminationCaseSheetComponent,
     AncCaseSheetComponent,
     // PncCaseSheetComponent,
     // DoctorDiagnosisCaseSheetComponent,
-    // BeneficiaryMctsCallHistoryComponent,
-    // BeneficiaryPlatformHistoryComponent,
+    BeneficiaryMctsCallHistoryComponent,
+    BeneficiaryPlatformHistoryComponent,
     TcSpecialistWorklistComponent,
     DoctorTmWorklistWrapperComponent,
     TmFutureWorklistComponent,
@@ -260,11 +282,11 @@ export const MY_FORMATS = {
     NurseWorklistWrapperComponent,
     NurseTmWorklistComponent,
     NurseTmFutureWorklistComponent,
-    // CovidDiagnosisComponent,
+    CovidDiagnosisComponent,
     IdrsComponent,
     PhysicalActivityHistoryComponent,
     FamilyHistoryNcdscreeningComponent,
-    // NcdScreeningDiagnosisComponent,
+    NcdScreeningDiagnosisComponent,
     NurseMmuTmReferredWorklistComponent,
     DiseaseconfirmationComponent,
     CovidVaccinationStatusComponent,
@@ -281,7 +303,7 @@ export const MY_FORMATS = {
     DispensationDetailsComponent,
     FamilyPlanningAndReproductiveComponent,
     IecAndCounsellingComponent,
-    // TreatmentsOnSideEffectsComponent,
+    TreatmentsOnSideEffectsComponent,
     // FamilyPlanningCaseSheetComponent,
     // VisitDeatilsCaseSheetComponent,
     // NeonatalPatientVitalsComponent,

@@ -819,7 +819,7 @@ export class PatientVisitDetailsComponent
   //         this.sideEffectsList = masterResp.m_FPSideEffects;
   //             }
 
-  //             if (this.mode === 'view') {
+  //             if (String(this.mode) === 'view') {
   //               let visitID = localStorage.getItem('visitID');
   //               let benRegID = localStorage.getItem('beneficiaryRegID')
   //               this.disableVisit=true;

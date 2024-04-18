@@ -195,6 +195,9 @@ export class WorkareaComponent
   patientExaminationForm!: FormGroup;
   patientHistoryForm!: FormGroup;
   idrsScreeningForm!: FormGroup;
+  patientCaseRecordForm!: FormGroup;
+  patientReferForm!: FormGroup;
+  provideCounsellingForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -619,16 +622,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new CancerUtils(this.fb).createCancerDiagnosisForm(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchCancerFindings();
 
@@ -683,16 +695,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createGeneralCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -733,12 +754,18 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createNCDScreeningCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patchGeneralFinding();
           this.showCaseRecord = true;
           this.visitMode = new String(mode);
@@ -751,6 +778,9 @@ export class WorkareaComponent
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
           this.showCaseRecord = true;
           this.showRefer = true;
           this.showFollowUpImmunization = false;
@@ -806,16 +836,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createPNCCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -881,16 +920,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createANCCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
           this.getANCDiagnosis();
@@ -938,16 +986,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createCovidCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -992,16 +1049,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createNCDCareCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -1037,6 +1103,9 @@ export class WorkareaComponent
           'patientReferForm',
           new CancerUtils(this.fb).createCancerReferForm(),
         );
+        this.patientReferForm = this.patientMedicalForm.get(
+          'patientReferForm',
+        ) as FormGroup;
 
         this.getCurrentVitals();
         this.showFamilyPlanning = true;
@@ -1047,16 +1116,25 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createFamilyPlanningCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounsellingForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientReferForm',
             new CancerUtils(this.fb).createCancerReferForm(),
           );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 

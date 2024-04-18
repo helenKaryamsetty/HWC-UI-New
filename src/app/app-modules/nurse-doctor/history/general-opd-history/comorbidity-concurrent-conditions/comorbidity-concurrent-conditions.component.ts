@@ -157,7 +157,7 @@ export class ComorbidityConcurrentConditionsComponent
           this.addComorbidityConcurrentConditions();
           const specialistFlagString = localStorage.getItem('specialistFlag');
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
           if (

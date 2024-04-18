@@ -2,44 +2,55 @@
 <div class="m-t-10" [formGroup]="generalDiagnosisForm">
   <div class="row">
     <div class="col-xs-12 col-xs-6 box" *ngIf="enableNCDCondition">
-      <mat-select
-        class="input-full-width"
-        name="ncdScreeningCondition"
-        placeholder="{{ current_language_set?.casesheet?.ncdCondition }}*"
-        multiple
-        (change)="changeNcdScreeningCondition($event.value, $event)"
-        [(ngModel)]="temp"
-        [ngModelOptions]="{ standalone: true }"
-      >
-        <mat-option
-          *ngFor="let ncdCareCondition of ncdCareConditions"
-          [value]="ncdCareCondition.screeningCondition"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text"
+          >{{ current_language_set?.casesheet?.ncdCondition }}*</mat-label
         >
-          {{ ncdCareCondition.screeningCondition }}</mat-option
+        <mat-select
+          class="input-full-width"
+          name="ncdScreeningCondition"
+          multiple
+          (selectionChange)="changeNcdScreeningCondition($event.value, $event)"
+          [(ngModel)]="temp"
+          [ngModelOptions]="{ standalone: true }"
         >
-      </mat-select>
+          <mat-option
+            *ngFor="let ncdCareCondition of ncdCareConditions"
+            [value]="ncdCareCondition.screeningCondition"
+          >
+            {{ ncdCareCondition.screeningCondition }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-xs-12 col-xs-6 box" *ngIf="!enableNCDCondition">
-      <mat-select
-        class="input-full-width"
-        name="ncdScreeningCondition"
-        placeholder="{{ current_language_set?.casesheet?.ncdCondition }}*"
-        multiple
-        (change)="changeNcdScreeningCondition($event.value, $event)"
-        [(ngModel)]="temp"
-        [ngModelOptions]="{ standalone: true }"
-      >
-        <mat-option
-          *ngFor="let ncdCareCondition of ncdCareConditions"
-          [value]="ncdCareCondition.screeningCondition"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.casesheet?.ncdCondition
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="ncdScreeningCondition"
+          multiple
+          (selectionChange)="changeNcdScreeningCondition($event.value, $event)"
+          [(ngModel)]="temp"
+          [ngModelOptions]="{ standalone: true }"
         >
-          {{ ncdCareCondition.screeningCondition }}</mat-option
-        >
-      </mat-select>
+          <mat-option
+            *ngFor="let ncdCareCondition of ncdCareConditions"
+            [value]="ncdCareCondition.screeningCondition"
+          >
+            {{ ncdCareCondition.screeningCondition }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="col-xs-12" *ngIf="isNcdScreeningConditionOther">
       <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ncdConditionOther
+        }}</mat-label>
         <textarea
           matInput
           allowText="textAreaValidator"
@@ -48,29 +59,34 @@
           name="ncdScreeningConditionOther"
           maxlength="20"
           formControlName="ncdScreeningConditionOther"
-          placeholder="
-        {{ current_language_set?.ncdConditionOther }}"
         >
         </textarea>
       </mat-form-field>
     </div>
     <div class="col-xs-12 col-xs-6 box">
-      <mat-select
-        class="input-full-width"
-        name="ncdCareType"
-        formControlName="ncdCareType"
-        placeholder="{{ current_language_set?.casesheet?.typeOfNcd }}"
-      >
-        <mat-option
-          *ngFor="let ncdCareType of ncdCareTypes"
-          [value]="ncdCareType"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.casesheet?.typeOfNcd
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="ncdCareType"
+          formControlName="ncdCareType"
         >
-          {{ ncdCareType.ncdCareType }}</mat-option
-        >
-      </mat-select>
+          <mat-option
+            *ngFor="let ncdCareType of ncdCareTypes"
+            [value]="ncdCareType"
+          >
+            {{ ncdCareType.ncdCareType }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" style="display: none">
       <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.casesheet?.ncdComplication
+        }}</mat-label>
         <textarea
           matInput
           allowText="textAreaValidator"
@@ -79,7 +95,6 @@
           name="ncdComplication"
           maxlength="300"
           formControlName="ncdComplication"
-          placeholder="{{ current_language_set?.casesheet?.ncdComplication }}"
         >
         </textarea>
       </mat-form-field>
@@ -90,16 +105,10 @@
       <header class="mat-expansion-panel-header tabcolor m-t-5">
         <h4>{{ current_language_set?.casesheet?.provisionalDiag }}</h4>
       </header>
-      <!-- <header class="mat-expansion-panel-header m-t-5">
-        <h4 *ngIf="visitCat !== 'FP & Contraceptive Services' && visitCat.toLowerCase() !== 'neonatal and infant health care services' && visitCat.toLowerCase() !==  'childhood & adolescent healthcare services'">{{current_language_set?.casesheet?.provisionalDiag}}*</h4>
-        <h4 *ngIf="visitCat === 'FP & Contraceptive Services' || visitCat.toLowerCase() === 'neonatal and infant health care services' || visitCat.toLowerCase() ===  'childhood & adolescent healthcare services'">{{current_language_set?.casesheet?.provisionalDiag}}</h4>
-      </header> -->
       <ng-container formArrayName="provisionalDiagnosisList">
         <div
           *ngFor="
-            let diagnosis of generalDiagnosisForm.controls[
-              'provisionalDiagnosisList'
-            ]['controls'];
+            let diagnosis of getProvisionalDiagnosisList();
             let i = index;
             let isLast = last
           "
@@ -117,20 +126,19 @@
                   maxlength="100"
                   minlength="3"
                   [previousSelected]="
-                    generalDiagnosisForm?.value?.provisionalDiagnosisList
+                    generalDiagnosisForm.value.provisionalDiagnosisList
                   "
                 />
                 <mat-icon
                   class="search-btn cursorPointer"
                   *ngIf="
-                    !diagnosis.controls['viewProvisionalDiagnosisProvided']
-                      .disabled
+                    !diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled
                   "
                   matSuffix
                   appDiagnosisSearch
                   [diagnosisListForm]="diagnosis"
                   [previousSelected]="
-                    generalDiagnosisForm?.value?.provisionalDiagnosisList
+                    generalDiagnosisForm.value.provisionalDiagnosisList
                   "
                   >search</mat-icon
                 >
@@ -140,19 +148,17 @@
               <button
                 mat-mini-fab
                 type="button"
-                class="pull-left"
+                class="mat_warn_circle"
+                style="margin-right: 5px"
                 color="warn"
                 *ngIf="
-                  diagnosis.controls['viewProvisionalDiagnosisProvided']
-                    .disabled ||
+                  diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled ||
                   i !== 0 ||
                   (i === 0 &&
-                    generalDiagnosisForm.controls['provisionalDiagnosisList']
-                      .controls[i].controls.viewProvisionalDiagnosisProvided
-                      .value !== null &&
-                    generalDiagnosisForm.controls['provisionalDiagnosisList']
-                      .controls[i].controls.viewProvisionalDiagnosisProvided
-                      .value !== '')
+                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                      .viewProvisionalDiagnosisProvided !== null &&
+                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                      .viewProvisionalDiagnosisProvided !== '')
                 "
                 (click)="removeDiagnosisFromList(i, diagnosis)"
               >
@@ -161,7 +167,7 @@
               <button
                 mat-mini-fab
                 type="button"
-                class="pull-right button-overall-disabled"
+                class="mat_blue_circle"
                 color="primary"
                 *ngIf="isLast"
                 [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"

@@ -183,7 +183,7 @@ export class PastHistoryComponent
           this.addPastSurgery();
 
           console.log('Add Past Illness Called==');
-          // if (this.mode === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
+          // if (String(this.mode) === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
           //   this.addPastIllness();
           //   this.addPastSurgery();
           // }
@@ -199,7 +199,7 @@ export class PastHistoryComponent
             console.log('General History Called==');
           }
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
         }
@@ -227,7 +227,7 @@ export class PastHistoryComponent
 
   //         this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
 
-  //         // if (this.mode === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
+  //         // if (String(this.mode) === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
   //         //   this.addPastIllness();
   //         //   this.addPastSurgery();
   //         // }

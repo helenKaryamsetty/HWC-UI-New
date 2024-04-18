@@ -36,7 +36,6 @@ import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/servi
 export class CalibrationComponent implements OnInit, DoCheck {
   searchTerm: any;
   pageNo: any;
-  components = [];
   message = '';
   pageCount: any;
   selectedComponentsList = [];
@@ -55,9 +54,9 @@ export class CalibrationComponent implements OnInit, DoCheck {
   filteredDataList = [];
   current_language_set: any;
 
-  displayedColumns: string[] = ['sno', 'stripCode', 'expiryDate'];
-  dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  components = new MatTableDataSource<any>();
+  displayedColumns: any = ['sno', 'SCode', 'ExpiryDate'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -182,7 +181,8 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.components = [];
+    this.components.data = [];
+    this.components.paginator = this.paginator;
     this.pageCount = null;
     this.pager = {
       totalItems: 0,
@@ -196,14 +196,18 @@ export class CalibrationComponent implements OnInit, DoCheck {
 
   filterPreviousData(searchTerm: any) {
     console.log('searchTerm', searchTerm);
-    if (!searchTerm) this.components = this.dataList;
-    else {
-      this.components = [];
+    if (!searchTerm) {
+      this.components.data = this.dataList;
+      this.components.paginator = this.paginator;
+    } else {
+      this.components.data = [];
+      this.components.paginator = this.paginator;
       this.dataList.forEach((item) => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-            this.components.push(item);
+            this.components.data.push(item);
+            this.components.paginator = this.paginator;
             break;
           }
         }

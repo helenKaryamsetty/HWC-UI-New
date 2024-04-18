@@ -26,6 +26,7 @@ import {
   DoCheck,
   OnChanges,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -48,6 +49,8 @@ import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { Subscription } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-findings',
@@ -78,6 +81,16 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   current_language_set: any;
   enableIsHistory = false;
   enableProvisionalDiag = false;
+  displayedColumns: any = [
+    'chiefComplaintsDetails',
+    'duration',
+    'unitOfDuration',
+    'description',
+  ];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  dataSource = new MatTableDataSource<any>();
+
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
@@ -93,7 +106,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   ngOnInit() {
     this.assignSelectedLanguage();
     this.visitCategory = localStorage.getItem('visitCategory');
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.getDoctorMasterData();
     this.getBeneficiaryDetails();
     this.nurseService.clearNCDScreeningProvision();
@@ -107,12 +119,41 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
+  getComplaints(): AbstractControl[] | null {
+    const complaintsControl = this.generalFindingsForm.get('complaints');
+    return complaintsControl instanceof FormArray
+      ? complaintsControl.controls
+      : null;
+  }
+
+  getClinicalObservationsList(): AbstractControl[] | null {
+    const clinicalObservationsData = this.generalFindingsForm.get(
+      'clinicalObservationsList',
+    );
+    return clinicalObservationsData instanceof FormArray
+      ? clinicalObservationsData.controls
+      : null;
+  }
+
+  getSignificantFindingsList(): AbstractControl[] | null {
+    const significantFindingsData = this.generalFindingsForm.get(
+      'significantFindingsList',
+    );
+    return significantFindingsData instanceof FormArray
+      ? significantFindingsData.controls
+      : null;
+  }
+
   findingSubscription!: Subscription;
   getFindingDetails() {
     this.findingSubscription =
       this.doctorService.populateCaserecordResponse$.subscribe((res) => {
         if (res && res.statusCode === 200 && res.data && res.data.findings) {
           const findings = res.data.findings;
+          this.dataSource.data = [];
+          this.dataSource.data = findings.complaints.slice();
+          this.dataSource.paginator = this.paginator;
           this.patchCapturedClinicalObservations(
             res.data.findings.clinicalObservationsList,
           );
@@ -190,7 +231,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
 
-          if (this.caseRecordMode === 'view') {
+          if (String(this.caseRecordMode) === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');
@@ -397,7 +438,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
       this.nurseService.setNCDScreeningProvision(true);
     else this.nurseService.setNCDScreeningProvision(false);
   }
-  validateDuration(formGroup: FormGroup, event?: Event) {
+  validateDuration(formGroup: AbstractControl<any, any>, event?: Event) {
     let duration = null;
     let durationUnit = null;
     let flag = true;
@@ -426,37 +467,36 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     return complaint && complaint.chiefComplaint;
   }
 
-  suggestChiefComplaintList(complaintForm: FormGroup, i: any) {
+  suggestChiefComplaintList(complaintForm: AbstractControl<any, any>, i: any) {
     const complaint = complaintForm.value.chiefComplaint;
-    if (
-      complaint !== undefined &&
-      complaint !== null &&
-      typeof complaint === 'string'
-    ) {
-      this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
-        i
-      ].filter(
-        (compl: any) =>
-          compl.chiefComplaint
-            .toLowerCase()
-            .indexOf(complaint.toLowerCase().trim()) >= 0,
-      );
-    } else if (
-      complaint !== undefined &&
-      complaint !== null &&
-      typeof complaint === 'object' &&
-      complaint &&
-      complaint.chiefComplaint !== undefined &&
-      complaint.chiefComplaint !== null
-    ) {
-      this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
-        i
-      ].filter(
-        (compl: any) =>
-          compl.chiefComplaint
-            .toLowerCase()
-            .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
-      );
+    if (typeof complaint === 'string') {
+      if (
+        this.chiefComplaintTemporarayList !== undefined &&
+        this.chiefComplaintTemporarayList !== null
+      ) {
+        this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
+          i
+        ].filter(
+          (compl: any) =>
+            compl.chiefComplaint
+              .toLowerCase()
+              .indexOf(complaint.toLowerCase().trim()) >= 0,
+        );
+      }
+    } else if (typeof complaint === 'object' && complaint) {
+      if (
+        this.chiefComplaintTemporarayList !== undefined &&
+        this.chiefComplaintTemporarayList !== null
+      ) {
+        this.suggestedChiefComplaintList[i] = this.chiefComplaintTemporarayList[
+          i
+        ].filter(
+          (compl: any) =>
+            compl.chiefComplaint
+              .toLowerCase()
+              .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
+        );
+      }
     }
 
     if (this.suggestedChiefComplaintList[i].length === 0) complaintForm.reset();
@@ -551,7 +591,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
       this.confirmationService.alert(this.current_language_set.maxObservations);
     }
   }
-  removeFindingsFromList(index: any, findingsList: FormGroup) {
+  removeFindingsFromList(index: any, findingsList: AbstractControl<any, any>) {
     const findingsArray = this.generalFindingsForm.controls[
       'significantFindingsList'
     ] as FormArray;
@@ -567,7 +607,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
               findingsArray.removeAt(index);
             } else {
               findingsList.reset();
-              findingsList.controls['significantFindingsProvided'].enable();
+              // findingsList.controls['significantFindingsProvided'].enable();
             }
             this.generalFindingsForm.markAsDirty();
             this.resetFindingsCheckbox(
@@ -582,7 +622,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
         findingsArray.removeAt(index);
       } else {
         findingsList.reset();
-        findingsList.controls['significantFindingsProvided'].enable();
+        // findingsList.controls['significantFindingsProvided'].enable();
       }
       this.resetFindingsCheckbox(
         this.generalFindingsForm.controls['significantFindingsList'].value.at(0)

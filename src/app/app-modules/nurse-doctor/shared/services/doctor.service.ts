@@ -89,7 +89,7 @@ export class DoctorService {
   populateHistoryResponse = new BehaviorSubject<any>(this.historyResponse);
   populateHistoryResponse$ = this.populateHistoryResponse.asObservable();
 
-  caserecordResponse = [];
+  caserecordResponse: any = [];
   populateCaserecordResponse = new BehaviorSubject<any>(
     this.caserecordResponse,
   );

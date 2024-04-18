@@ -36,7 +36,7 @@
 >
   <div class="col-sm-12 step-btn m-b-10">
     <button
-      md-raised-button
+      mat-raised-button
       color="primary"
       class="pull-right"
       (click)="loadMMUInvestigation()"
@@ -48,45 +48,53 @@
 
 <div class="row" [formGroup]="generalDoctorInvestigationForm">
   <div class="col-xs-12 col-sm-6" style="margin-top: 7px">
-    <md-select
-      class="input-full-width"
-      multiple
-      placeholder="
-    {{ current_language_set?.labTechnicianData?.testName }} "
-      name="labTest"
-      formControlName="labTest"
-      (change)="checkTestName($event)"
-    >
-      <md-option
-        *ngFor="let nonRadiology of nonRadiologyMaster"
-        [value]="nonRadiology"
-        [disabled]="canDisable(nonRadiology)"
+    <mat-form-field style="width: 100%">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.labTechnicianData?.testName
+      }}</mat-label>
+      <mat-select
+        class="input-full-width"
+        multiple
+        name="labTest"
+        formControlName="labTest"
+        (selectionChange)="checkTestName($event)"
       >
-        {{ nonRadiology.procedureName }}
-      </md-option>
-    </md-select>
+        <mat-option
+          *ngFor="let nonRadiology of nonRadiologyMaster"
+          [value]="nonRadiology"
+          [disabled]="canDisable(nonRadiology)"
+        >
+          {{ nonRadiology.procedureName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div class="col-xs-12 col-sm-6" style="margin-top: 7px">
-    <md-select
-      class="input-full-width"
-      multiple
-      placeholder="{{
+    <mat-form-field style="width: 100%">
+      <mat-label class="mat-label-text">{{
         current_language_set?.labTechnicianData?.radiologyimaging
-      }} "
-      name="radiologyTest"
-      formControlName="radiologyTest"
-    >
-      <md-option
-        *ngFor="let radiology of radiologyMaster"
-        [value]="radiology"
-        [disabled]="canDisable(radiology)"
+      }}</mat-label>
+      <mat-select
+        class="input-full-width"
+        multiple
+        name="radiologyTest"
+        formControlName="radiologyTest"
       >
-        {{ radiology.procedureName }}
-      </md-option>
-    </md-select>
+        <mat-option
+          *ngFor="let radiology of radiologyMaster"
+          [value]="radiology"
+          [disabled]="canDisable(radiology)"
+        >
+          {{ radiology.procedureName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div class="col-xs-12 m-t-20">
-    <md-form-field class="input-full-width">
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.Investigationdetails?.externalinvestigations
+      }}</mat-label>
       <textarea
         mdInput
         allowText="textAreaValidator"
@@ -94,12 +102,9 @@
         mdTextareaAutosize
         name="externalInvestigation"
         formControlName="externalInvestigations"
-        placeholder="{{
-          current_language_set?.Investigationdetails?.externalinvestigations
-        }} "
         maxlength="300"
       >
       </textarea>
-    </md-form-field>
+    </mat-form-field>
   </div>
 </div>

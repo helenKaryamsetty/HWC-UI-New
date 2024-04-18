@@ -100,9 +100,9 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   ngOnChanges() {
     const specialistFlagString = localStorage.getItem('specialistFlag');
 
-    if (this.mode === 'view' && !this.enableFileSelection) {
+    if (String(this.mode) === 'view' && !this.enableFileSelection) {
       this.disableFileSelection = true;
-    } else if (this.mode === 'view' && this.enableFileSelection) {
+    } else if (String(this.mode) === 'view' && this.enableFileSelection) {
       this.enableForNCDScreening = true;
     } else if (
       specialistFlagString !== null &&
@@ -114,7 +114,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     }
 
     if (
-      this.mode === 'view' &&
+      String(this.mode) === 'view' &&
       this.doctorService.fileIDs !== null &&
       this.doctorService.fileIDs !== undefined &&
       this.doctorService.fileIDs.length > 0 &&

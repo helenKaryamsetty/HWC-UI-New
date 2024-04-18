@@ -36,19 +36,19 @@
           </h5>
         </th>
         <div class="btn-group">
-          <button md-raised-button disabled *ngIf="diabetesConfirmed">
+          <button mat-raised-button disabled *ngIf="diabetesConfirmed">
             {{ currentLanguageSet?.diabetesMellitus }}:
           </button>
-          <button md-raised-button disabled *ngIf="hypertensionConfirmed">
+          <button mat-raised-button disabled *ngIf="hypertensionConfirmed">
             {{ currentLanguageSet?.hypertension }}:
           </button>
-          <button md-raised-button disabled *ngIf="breastCancerConfirmed">
+          <button mat-raised-button disabled *ngIf="breastCancerConfirmed">
             {{ currentLanguageSet?.breastCancer }}:
           </button>
-          <button md-raised-button disabled *ngIf="oralCancerConfirmed">
+          <button mat-raised-button disabled *ngIf="oralCancerConfirmed">
             {{ currentLanguageSet?.oralCancer }}:
           </button>
-          <button md-raised-button disabled *ngIf="cervicalCancerConfirmed">
+          <button mat-raised-button disabled *ngIf="cervicalCancerConfirmed">
             {{ currentLanguageSet?.cervicalCancer }}:
           </button>
         </div>
@@ -70,14 +70,14 @@
           "
         >
           <button
-            md-raised-button
+            mat-raised-button
             disabled
             *ngIf="diabetesConfirmed === false && diabetesSuspected === true"
           >
             {{ currentLanguageSet?.diabetesMellitus }}:
           </button>
           <button
-            md-raised-button
+            mat-raised-button
             disabled
             *ngIf="
               hypertensionConfirmed === false && hypertensionSuspected === true
@@ -86,21 +86,21 @@
             {{ currentLanguageSet?.hypertension }}:
           </button>
           <button
-            md-raised-button
+            mat-raised-button
             disabled
             *ngIf="breastCancerConfirmed === false && breastSuspected === true"
           >
             {{ currentLanguageSet?.breastCancer }}:
           </button>
           <button
-            md-raised-button
+            mat-raised-button
             disabled
             *ngIf="oralCancerConfirmed === false && oralSuspected === true"
           >
             {{ currentLanguageSet?.oralCancer }}:
           </button>
           <button
-            md-raised-button
+            mat-raised-button
             disabled
             *ngIf="
               cervicalCancerConfirmed === false && cervicalSuspected === true

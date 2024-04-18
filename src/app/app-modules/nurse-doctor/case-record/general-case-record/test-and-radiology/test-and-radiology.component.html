@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab label="{{ current_language_set?.Reports?.labtestreports }}">
     <div *ngIf="labResults?.length > 0" class="m-t-20">
-      <mat-input-container id="filterbox" class="pull-right">
+      <mat-form-field id="filterbox" class="pull-right">
         <input
           autocomplete="off"
           matInput
@@ -10,7 +10,7 @@
           (keyup)="filterProcedures(filterTerm.value)"
         />
         <mat-icon matSuffix>search</mat-icon>
-      </mat-input-container>
+      </mat-form-field>
     </div>
 
     <div class="clearfix"></div>
@@ -118,20 +118,15 @@
               </div>
             </td>
             <td colspan="7">
-              <pagination
+              <pagination-controls
                 class="pull-right"
-                [boundaryLinks]="true"
                 (pageChanged)="currentLabPageChanged($event)"
                 *ngIf="filteredLabResults.length"
-                [totalItems]="filteredLabResults.length"
-                [itemsPerPage]="currentLabRowsPerPage"
-                [maxSize]="currentLabRowsPerPage"
-                [rotate]="rotate"
                 previousText="&lsaquo;"
                 nextText="&rsaquo;"
                 firstText="&laquo;"
                 lastText="&raquo;"
-              ></pagination>
+              ></pagination-controls>
             </td>
           </tr>
         </tfoot>
@@ -192,7 +187,7 @@
         <div class="clearfix"></div>
         <div
           class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
-          *ngIf="fetosenseView?.length > 0"
+          *ngIf="fetosenseView && fetosenseView.length > 0"
         >
           <h4>{{ fetosenseTestName }}</h4>
         </div>
@@ -203,7 +198,7 @@
           class="table table-responsive table-bordered"
           aria-describedby="fetosenseViewTbl"
         >
-          <tbody *ngIf="fetosenseView?.length > 0">
+          <tbody *ngIf="fetosenseView && fetosenseView.length > 0">
             <tr *ngFor="let fetosenseViewToShow of fetosenseView">
               <th style="width: 20%" id="name">
                 {{ fetosenseViewToShow.name }}
@@ -233,7 +228,7 @@
   <mat-tab label="{{ current_language_set?.Reports?.radiologyreports }}">
     <div class="m-t-20 overflow">
       <table
-        class="table table-responsive table-bordered"
+        class="table table-responsive-report table-bordered"
         aria-describedby="radiologyResultTbl"
       >
         <tr>
@@ -369,7 +364,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
-          <mat-input-container id="filterbox" class="pull-right">
+          <mat-form-field id="filterbox" class="pull-right">
             <input
               autocomplete="off"
               matInput
@@ -380,7 +375,7 @@
               (keyup)="filterArchivedProcedures(filterTerm.value)"
             />
             <mat-icon matSuffix>search</mat-icon>
-          </mat-input-container>
+          </mat-form-field>
         </div>
       </div>
 
@@ -499,20 +494,15 @@
                 </div>
               </td>
               <td colspan="7">
-                <pagination
+                <pagination-controls
                   class="pull-right"
-                  [boundaryLinks]="true"
                   (pageChanged)="previousLabPageChanged($event)"
                   *ngIf="filteredArchivedLabResults.length"
-                  [totalItems]="filteredArchivedLabResults.length"
-                  [itemsPerPage]="previousLabRowsPerPage"
-                  [maxSize]="previousLabRowsPerPage"
-                  [rotate]="rotate"
                   previousText="&lsaquo;"
                   nextText="&rsaquo;"
                   firstText="&laquo;"
                   lastText="&raquo;"
-                ></pagination>
+                ></pagination-controls>
               </td>
             </tr>
           </tfoot>

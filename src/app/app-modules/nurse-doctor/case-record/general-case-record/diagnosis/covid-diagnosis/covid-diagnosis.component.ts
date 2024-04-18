@@ -98,7 +98,7 @@ export class CovidDiagnosisComponent
   }
 
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       this.getDiagnosisDetails();
     }
   }

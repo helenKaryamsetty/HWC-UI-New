@@ -27,7 +27,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { DoctorService } from '../../../shared/services';
@@ -50,7 +50,6 @@ export class TreatmentsOnSideEffectsComponent
   sideEffectsTretmentSubscription!: Subscription;
 
   constructor(
-    private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
   ) {}
@@ -64,7 +63,7 @@ export class TreatmentsOnSideEffectsComponent
   }
 
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       this.getSideEffectDetails();
     }
   }

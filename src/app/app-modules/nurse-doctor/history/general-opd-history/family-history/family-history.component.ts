@@ -139,7 +139,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
           this.addFamilyDisease();
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
 

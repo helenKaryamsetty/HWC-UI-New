@@ -214,7 +214,7 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   getCbacDetails() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const reqObj = {
         visitID: localStorage.getItem('visitID'),
         beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),

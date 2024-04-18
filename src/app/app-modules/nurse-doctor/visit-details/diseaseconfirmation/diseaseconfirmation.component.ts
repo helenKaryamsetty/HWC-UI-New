@@ -114,7 +114,7 @@ export class DiseaseconfirmationComponent
       this.diseaseFormsArray.removeAt(0);
     }
 
-    // if (this.mode === 'view') {
+    // if (String(this.mode) === 'view') {
     //   let visitID = localStorage.getItem('visitID');
     //   let benRegID = localStorage.getItem('beneficiaryRegID');
     //   if (visitID !== null && benRegID !== null) {
@@ -151,7 +151,7 @@ export class DiseaseconfirmationComponent
 
   ngOnChanges() {
     //this.nurseService.mmuVisitData=false;
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       if (visitID !== null && benRegID !== null) {

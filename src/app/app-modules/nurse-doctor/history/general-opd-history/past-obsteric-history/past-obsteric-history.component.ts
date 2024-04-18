@@ -176,7 +176,7 @@ export class PastObstericHistoryComponent
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
 

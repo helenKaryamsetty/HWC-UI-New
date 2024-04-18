@@ -521,7 +521,7 @@ export class QuickConsultComponent
           this.loadVitalsFromNurse();
 
           const specialistFlagString = localStorage.getItem('specialist_flag');
-          if (this.quickConsultMode === 'view') {
+          if (String(this.quickConsultMode) === 'view') {
             const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             const visitID = localStorage.getItem('visitID');
             const visitCategory = localStorage.getItem('visitCategory');

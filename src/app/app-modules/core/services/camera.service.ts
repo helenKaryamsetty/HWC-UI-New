@@ -38,7 +38,7 @@ export class CameraService {
     dialogRef.componentInstance.capture = false;
     dialogRef.componentInstance.imageCode = false;
     dialogRef.componentInstance.annotate = image;
-    dialogRef.componentInstance.currentLanguageSet = currentLanguage;
+    dialogRef.componentInstance.current_language_set = currentLanguage;
     dialogRef.componentInstance.availablePoints = points;
     return dialogRef.afterClosed();
   }

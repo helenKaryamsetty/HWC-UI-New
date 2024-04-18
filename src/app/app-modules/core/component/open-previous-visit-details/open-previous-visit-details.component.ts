@@ -39,10 +39,6 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
   previousHistoryActivePage = 1;
   filteredHistory: any = [];
 
-  displayedColumns: string[] = ['rbsTestResult', 'rbsTestRemarks'];
-  dataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,

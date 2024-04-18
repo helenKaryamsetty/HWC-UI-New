@@ -19,17 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../shared/services/doctor.service';
 
 @Component({

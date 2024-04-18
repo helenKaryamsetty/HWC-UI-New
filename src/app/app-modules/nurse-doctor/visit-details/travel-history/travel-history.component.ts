@@ -601,7 +601,7 @@ export class TravelHistoryComponent
           this.districtsFromDom = response.data;
         }
       });
-    // if(this.mode === 'view'){
+    // if(String(this.mode) === 'view'){
     //   if(this.districtsFromDom.some(value => value.))
     // }
     // this.districtsFromDom = ["Hyderabad", "Kochi"];

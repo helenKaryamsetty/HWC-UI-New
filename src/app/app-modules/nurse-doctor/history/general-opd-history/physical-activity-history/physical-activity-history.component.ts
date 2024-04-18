@@ -91,7 +91,7 @@ export class PhysicalActivityHistoryComponent
 
   // }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       // let visitID = localStorage.getItem('visitID');
       // let benRegID = localStorage.getItem('beneficiaryRegID')
       // this.getGeneralHistory(benRegID, visitID);
@@ -111,7 +111,7 @@ export class PhysicalActivityHistoryComponent
           this.physicalActivityQuestions = this.masterData.physicalActivity;
           console.log('masterData', this.masterData);
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             const visitCategory = localStorage.getItem('visitCategory');

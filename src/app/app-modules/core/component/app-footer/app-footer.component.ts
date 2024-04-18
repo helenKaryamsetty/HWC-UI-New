@@ -21,7 +21,6 @@
  */
 import { Component, OnInit, DoCheck, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-//import { MatSnackBar, MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { SpecialistLoginComponent } from './../specialist-login/specialist-login.component';
 import { SetLanguageComponent } from '../set-language.component';
 import { HttpServiceService } from '../../services/http-service.service';

@@ -28,7 +28,13 @@ import {
   ViewEncapsulation,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, NgForm } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  NgForm,
+  AbstractControl,
+} from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
@@ -142,7 +148,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
   ngOnInit() {
     this.assignSelectedLanguage();
     this.visitCategory = localStorage.getItem('visitCategory');
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.createdBy = localStorage.getItem('userName');
 
     if (localStorage.getItem('referredVisitCode')) {
@@ -173,6 +178,14 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
+  getPrescribedDrugs(): AbstractControl[] | null {
+    const prescribedDrugsControl =
+      this.drugPrescriptionForm.get('prescribedDrugs');
+    return prescribedDrugsControl instanceof FormArray
+      ? prescribedDrugsControl.controls
+      : null;
+  }
+
   makeDurationMaster() {
     let i = 1;
     while (i <= 29) {
@@ -181,12 +194,12 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  displayFn(option: any): string | undefined {
+  displayFn(option: any) {
     return option
-      ? `${option.itemName} ${option.strength ? option.strength : ''}${
+      ? `${option.itemName} ${option.strength}${
           option.unitOfMeasurement ? option.unitOfMeasurement : ''
         }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`
-      : undefined;
+      : '';
   }
 
   getFormValueChanged() {
@@ -272,9 +285,7 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     } else if (this.tempDrugName && !this.currentPrescription.drugID) {
       this.tempDrugName = null;
     } else {
-      // let formName = this.currentPrescription.formName;
-      // this.clearCurrentDetails();
-      // this.currentPrescription.formName = formName;
+      this.clearCurrentDetails();
       this.getFormDetails();
     }
   }
@@ -350,26 +361,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   clearCurrentDetails() {
-    // this.currentPrescription = {
-    //   id: null,
-    //   drugID: null,
-    //   drugName: null,
-    //   drugStrength: null,
-    //   drugUnit: null,
-    //   quantity: null,
-    //   formID: null,
-    //   qtyPrescribed: null,
-    //   formName: null,
-    //   route: null,
-    //   dose: null,
-    //   frequency: null,
-    //   duration: null,
-    //   unit: null,
-    //   instructions: null,
-    //   isEDL: false,
-    //   sctCode: null,
-    //   sctTerm: null,
-    // };
     this.tempDrugName = null;
     this.currentPrescription.dose = '';
     this.currentPrescription.frequency = '';
@@ -378,7 +369,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     this.currentPrescription.qtyPrescribed = '';
     this.currentPrescription.route = '';
     this.currentPrescription.instructions = '';
-
     this.prescriptionForm.form.markAsUntouched();
     this.isStockAvalable = '';
   }
@@ -400,30 +390,7 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
 
   submitForUpload() {
     this.addMedicine();
-    // this.tempform = null;
-    // this.tempDrugName = null
-    // this.clearCurrentDetails();
     this.clearCurrentaddDetails();
-
-    // this.currentPrescription = {
-    //   id: null,
-    //   drugID: null,
-    //   drugName: null,
-    //   drugStrength: null,
-    //   drugUnit: null,
-    //   quantity: null,
-    //   formID: null,
-    //   route: null,
-    //   formName: null,
-    //   dose: null,
-    //   frequency: null,
-    //   duration: null,
-    //   unit: null,
-    //   instructions: null,
-    // }
-    // this.tempform = null;
-    // this.tempDrugName = null;
-    // this.prescriptionForm.form.markAsUntouched();
   }
 
   addMedicine() {
@@ -432,11 +399,10 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     );
     medicine.insert(
       0,
-      this.generalUtils.initMedicineWithData(
-        Object.assign({}, this.currentPrescription, {
-          createdBy: this.createdBy,
-        }),
-      ),
+      this.generalUtils.initMedicineWithData({
+        ...this.currentPrescription,
+        createdBy: this.createdBy,
+      }),
     );
     console.log(medicine.value, 'frrr');
   }
@@ -450,15 +416,9 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     const prescribedDrugs = <FormArray>(
       this.drugPrescriptionForm.controls['prescribedDrugs']
     );
-
-    // this.tempform = {
-    //   itemFormID: prescribedDrugs.controls[i].value.formID,
-    //   itemFormName: prescribedDrugs.controls[i].value.formName,
-    // };
     this.currentPrescription.formName =
       prescribedDrugs.controls[i].value.formName;
     this.getFormDetails();
-    // this.selectMedicineObject(event);
     this.tempDrugName = prescribedDrugs.controls[i].value.drugName;
     this.currentPrescription.id = prescribedDrugs.controls[i].value.id;
     this.currentPrescription.drugName =
@@ -481,7 +441,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
       ) {
         return drug;
       }
-      // return drug.itemName.toLowerCase().equals(this.tempDrugName.itemName.toLowerCase());
     });
     this.setMedicineObject(itemMedicine[0]);
     this.currentPrescription.dose = prescribedDrugs.controls[i].value.dose;
@@ -502,24 +461,35 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
   setMedicineObject(option: any) {
-    this.currentPrescription['id'] = option.id;
-    this.currentPrescription['drugName'] = option.itemName;
-    this.currentPrescription['drugID'] = option.itemID;
-    this.currentPrescription['quantity'] = option.quantityInHand;
-    this.currentPrescription['sctCode'] = option.sctCode;
-    this.currentPrescription['sctTerm'] = option.sctTerm;
-    this.currentPrescription['drugStrength'] = option.strength;
-    this.currentPrescription['drugUnit'] = option.unitOfMeasurement;
-    this.currentPrescription['isEDL'] = option.isEDL;
-    const typeOfDrug = option.isEDL
-      ? ''
-      : this.current_language_set.nonEDLMedicine;
+    if (
+      option?.id &&
+      option?.itemName &&
+      option?.itemID &&
+      option?.quantityInHand &&
+      option?.sctCode &&
+      option?.strength &&
+      option?.unitOfMeasurement &&
+      option?.isEDL
+    ) {
+      this.currentPrescription['id'] = option.id;
+      this.currentPrescription['drugName'] = option.itemName;
+      this.currentPrescription['drugID'] = option.itemID;
+      this.currentPrescription['quantity'] = option.quantityInHand;
+      this.currentPrescription['sctCode'] = option.sctCode;
+      this.currentPrescription['sctTerm'] = option.sctTerm;
+      this.currentPrescription['drugStrength'] = option.strength;
+      this.currentPrescription['drugUnit'] = option.unitOfMeasurement;
+      this.currentPrescription['isEDL'] = option.isEDL;
+    }
+
+    option.isEDL ? '' : this.current_language_set.nonEDLMedicine;
     if (option.quantityInHand === 0) {
       this.isStockAvalable = 'warn';
     } else {
       this.isStockAvalable = 'primary';
     }
   }
+
   deleteMedicine(i: any, id?: null) {
     this.confirmationService
       .confirm('warn', this.current_language_set.alerts.info.confirmDelete)
@@ -626,7 +596,7 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
           this.edlMaster = masterData.NonEdlMaster;
           this.counsellingProvidedList = masterData.counsellingProvided;
 
-          if (this.caseRecordMode === 'view') {
+          if (String(this.caseRecordMode) === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');

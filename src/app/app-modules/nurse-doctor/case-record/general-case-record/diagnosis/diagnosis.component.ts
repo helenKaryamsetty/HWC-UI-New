@@ -19,20 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  MasterdataService,
-  NurseService,
-  DoctorService,
-} from '../../../shared/services';
+import { Component, OnInit, Input, DoCheck } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
@@ -52,17 +40,10 @@ export class DiagnosisComponent implements OnInit, DoCheck {
   caseRecordMode!: string;
   current_language_set: any;
 
-  constructor(
-    private fb: FormBuilder,
-    public httpServiceService: HttpServiceService,
-    private nurseService: NurseService,
-    private doctorService: DoctorService,
-    private masterdataService: MasterdataService,
-  ) {}
+  constructor(public httpServiceService: HttpServiceService) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
   }
 
   ngDoCheck() {

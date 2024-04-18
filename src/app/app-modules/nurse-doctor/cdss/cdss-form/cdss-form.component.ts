@@ -107,7 +107,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     }
   }
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       2;
       this.getChiefComplaintSymptoms();
       const visitID = localStorage.getItem('visitID');

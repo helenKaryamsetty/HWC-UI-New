@@ -20,7 +20,6 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Injectable } from '@angular/core';
-//import { MatDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import { TextareaDialogComponent } from './textarea-dialog.component';
 

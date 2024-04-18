@@ -12,9 +12,7 @@
     <ng-container formArrayName="provisionalDiagnosisList">
       <div
         *ngFor="
-          let diagnosis of generalDiagnosisForm.controls[
-            'provisionalDiagnosisList'
-          ]['controls'];
+          let diagnosis of getProvisionalDiagnosisList();
           let i = index;
           let isLast = last
         "
@@ -32,20 +30,19 @@
                 maxlength="100"
                 minlength="3"
                 [previousSelected]="
-                  generalDiagnosisForm?.value?.provisionalDiagnosisList
+                  generalDiagnosisForm.value.provisionalDiagnosisList
                 "
               />
               <mat-icon
                 class="search-btn cursorPointer"
                 *ngIf="
-                  !diagnosis.controls['viewProvisionalDiagnosisProvided']
-                    .disabled
+                  !diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled
                 "
                 matSuffix
                 appDiagnosisSearch
                 [diagnosisListForm]="diagnosis"
                 [previousSelected]="
-                  generalDiagnosisForm?.value?.provisionalDiagnosisList
+                  generalDiagnosisForm.value.provisionalDiagnosisList
                 "
                 >search</mat-icon
               >
@@ -55,19 +52,16 @@
             <button
               mat-mini-fab
               type="button"
-              class="pull-left"
+              class="mat_warn_circle"
               color="warn"
               *ngIf="
-                diagnosis.controls['viewProvisionalDiagnosisProvided']
-                  .disabled ||
+                diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled ||
                 i !== 0 ||
                 (i === 0 &&
-                  generalDiagnosisForm.controls['provisionalDiagnosisList']
-                    .controls[i].controls.viewProvisionalDiagnosisProvided
-                    .value !== null &&
-                  generalDiagnosisForm.controls['provisionalDiagnosisList']
-                    .controls[i].controls.viewProvisionalDiagnosisProvided
-                    .value !== '')
+                  generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                    .viewProvisionalDiagnosisProvided !== null &&
+                  generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                    .viewProvisionalDiagnosisProvided !== '')
               "
               (click)="removeDiagnosisFromList(i, diagnosis)"
             >
@@ -76,7 +70,8 @@
             <button
               mat-mini-fab
               type="button"
-              class="pull-right button-overall-disabled"
+              style="margin-right: 3px"
+              class="mat_blue_circle"
               color="primary"
               *ngIf="isLast"
               [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"

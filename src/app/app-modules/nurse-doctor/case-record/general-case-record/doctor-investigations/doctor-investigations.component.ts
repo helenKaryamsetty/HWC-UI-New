@@ -20,8 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {
   MasterdataService,
   DoctorService,
@@ -93,7 +92,6 @@ export class DoctorInvestigationsComponent
   rbsTestDoneMMU = false;
   RBSTestScoreInVitals!: number;
   constructor(
-    private fb: FormBuilder,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
@@ -113,7 +111,6 @@ export class DoctorInvestigationsComponent
     this.idrsScoreService.clearHypertensionSelected();
     this.nurseService.clearRbsInVitals();
     this.nurseService.clearRbsSelectedInInvestigation();
-    // this.idrsScoreService.diabetesSelectedFlag$.subscribe(response => this.diabetesSelected = response);
     this.hyperSuspectedSubscription =
       this.idrsScoreService.hypertensionSelectedFlag$.subscribe((response) => {
         this.hypertensionSelected = response;
@@ -172,20 +169,15 @@ export class DoctorInvestigationsComponent
     this.rbsTestResultSubscription =
       this.nurseService.rbsTestResultCurrent$.subscribe((response) => {
         if (response !== undefined && response !== null) {
-          // this.RBSTestScore = response;
           this.RBSTestScoreInVitals = response;
           this.RBSTestDoneInVitals = true;
           this.checkRBSScore();
           this.rbsTestResultCurrent = response;
         } else {
-          // this.RBSTestScore = response;
           this.RBSTestScoreInVitals = response;
           this.RBSTestDoneInVitals = false;
           this.rbsTestResultCurrent = null;
           this.checkRBSScore();
-          // if (this.rbsSelectedUnderInvestigation !== true) {
-          //   this.RBSTestDoneInVitals = false;
-          // }
         }
       });
   }
@@ -336,7 +328,7 @@ export class DoctorInvestigationsComponent
               this.idrsScoreService.haemoglobinPresentInMaster();
             }
           });
-          if (this.caseRecordMode === 'view') {
+          if (String(this.caseRecordMode) === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');

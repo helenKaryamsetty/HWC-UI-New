@@ -36,7 +36,7 @@ import { QuickConsultUtils } from '../../nurse-doctor/shared/utility';
 })
 export class DiagnosisSearchDirective {
   @Input()
-  addedDiagnosis: any;
+  previousSelected: any;
 
   @Input()
   diagnosisListForm!: AbstractControl<any, any>;
@@ -66,7 +66,7 @@ export class DiagnosisSearchDirective {
         //panelClass: 'fit-screen',
         data: {
           searchTerm: searchTerm,
-          addedDiagnosis: this.addedDiagnosis,
+          addedDiagnosis: this.previousSelected,
           diagonasisType: 'Provisional Diagnosis',
         },
       });

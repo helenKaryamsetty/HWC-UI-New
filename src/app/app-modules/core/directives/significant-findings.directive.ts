@@ -20,7 +20,12 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Directive, HostListener, Input, ElementRef } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility';
 import { MatDialog } from '@angular/material/dialog';
 import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
@@ -29,10 +34,10 @@ import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosi
 })
 export class SignificantFindingsDirective {
   @Input()
-  addedDiagnosis: any;
+  previousSelected: any;
 
   @Input()
-  findingsList!: FormGroup;
+  findingsList!: AbstractControl<any, any>;
 
   @HostListener('keyup.enter') onKeyDown() {
     this.openDialog();
@@ -57,7 +62,7 @@ export class SignificantFindingsDirective {
         // panelClass: 'fit-screen',
         data: {
           searchTerm: searchTerm,
-          addedDiagnosis: this.addedDiagnosis,
+          addedDiagnosis: this.previousSelected,
           diagonasisType: 'ClinicalFindings',
         },
       });

@@ -30,16 +30,10 @@ import {
 import {
   FormBuilder,
   FormGroup,
-  FormControl,
   FormArray,
-  NgForm,
   AbstractControl,
 } from '@angular/forms';
-import {
-  MasterdataService,
-  NurseService,
-  DoctorService,
-} from '../../../../shared/services';
+import { DoctorService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -71,9 +65,7 @@ export class GeneralOpdDiagnosisComponent
   constructor(
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
-    private nurseService: NurseService,
     private doctorService: DoctorService,
-    private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
   ) {}
 
@@ -99,12 +91,21 @@ export class GeneralOpdDiagnosisComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
+  getProvisionalDiagnosisList(): AbstractControl[] | null {
+    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    );
+    return provisionalDiagnosisListControl instanceof FormArray
+      ? provisionalDiagnosisListControl.controls
+      : null;
+  }
+
   get specialistDaignosis() {
     return this.generalDiagnosisForm.get('instruction');
   }
 
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
       const visitID = localStorage.getItem('visitID');
       const visitCategory = localStorage.getItem('visitCategory');

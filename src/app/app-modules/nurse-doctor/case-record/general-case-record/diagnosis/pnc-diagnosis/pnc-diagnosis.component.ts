@@ -28,7 +28,13 @@ import {
   OnChanges,
 } from '@angular/core';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  AbstractControl,
+} from '@angular/forms';
 import { DoctorService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { ConfirmationService } from './../../../../../core/services/confirmation.service';
@@ -75,7 +81,6 @@ export class PncDiagnosisComponent
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
@@ -104,7 +109,7 @@ export class PncDiagnosisComponent
   }
 
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
       const visitID = localStorage.getItem('visitID');
       const visitCategory = localStorage.getItem('visitCategory');
@@ -134,6 +139,24 @@ export class PncDiagnosisComponent
         );
       }
     }
+  }
+
+  getProvisionalDiagnosisList(): AbstractControl[] | null {
+    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    );
+    return provisionalDiagnosisListControl instanceof FormArray
+      ? provisionalDiagnosisListControl.controls
+      : null;
+  }
+
+  getConfirmatoryDiagnosisList(): AbstractControl[] | null {
+    const confirmatoryDiagnosisListControl = this.generalDiagnosisForm.get(
+      'confirmatoryDiagnosisList',
+    );
+    return confirmatoryDiagnosisListControl instanceof FormArray
+      ? confirmatoryDiagnosisListControl.controls
+      : null;
   }
 
   beneficiaryDetailsSubscription: any;

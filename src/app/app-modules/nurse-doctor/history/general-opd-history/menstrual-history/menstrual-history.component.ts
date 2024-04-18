@@ -101,7 +101,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.checkVisitType();
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
 

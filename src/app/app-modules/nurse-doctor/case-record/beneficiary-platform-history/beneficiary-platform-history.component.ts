@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
 import { DoctorService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
@@ -29,6 +28,8 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { environment } from 'src/environments/environment';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-beneficiary-platform-history',
@@ -40,21 +41,91 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   higherHealthFacility = 'Higher Health Facility';
   previousHWCHistoryRowsPerPage = 5;
   previousHWCHistoryActivePage = 1;
-  historyOfHWC: any = [];
   filteredHWCHistory: any = [];
   hideHWCFetch = false;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  dataSource = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) TmPaginator: MatPaginator | null = null;
+  historyOfTM = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) paginator104: MatPaginator | null = null;
+  historyOf104 = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) MctsPaginator: MatPaginator | null = null;
+  historyOfMCTS = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) HWCPaginator: MatPaginator | null = null;
+  historyOfHWC = new MatTableDataSource<any>();
+
+  displayedColumns = [
+    'visitnommu',
+    'date',
+    'visitreasonmmu',
+    'visitcategorymmu',
+    'visitcodemmu',
+    'previewmmu',
+    'printpreviewmmu',
+  ];
+
+  displayedTMColumns = [
+    'visitnommu',
+    'date',
+    'visitreasonmmu',
+    'visitcategorymmu',
+    'visitDetails',
+    'visitcodemmu',
+    'medicationmmu',
+    'previewmmu',
+    'printpreviewmmu',
+  ];
+
+  displayedMCTSColumns = [
+    'calltypemcts',
+    'calldatetimemcts',
+    'dataupdatemcts',
+    'callstatusmcts',
+    'callgrouptypemcts',
+    'remarks',
+    'actions',
+  ];
+
+  displayed104Columns = [
+    'id',
+    'name104',
+    'age104',
+    'ChiefComplaint104',
+    'symptoms',
+    'provisionalSelected104',
+    'recommendedaction104',
+    'actionByHao',
+    'actionByMo',
+    'actionByCoPd',
+    'date',
+  ];
+
+  displayedHWColumns = [
+    'visitnommu',
+    'date',
+    'visitreasonmmu',
+    'visitcategorymmu',
+    'visitDetails',
+    'medicationmmu',
+    'previewmmu',
+    'printpreviewmmu',
+  ];
+
   constructor(
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
-    private router: Router,
     private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
     this.getServiceOnState();
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
   }
 
   ngDoCheck() {
@@ -156,7 +227,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   getEachVisitData() {
-    this.historyOfHWC.forEach((item: any, i: any) => {
+    this.historyOfHWC.data.forEach((item: any, i: any) => {
       if (item.visitCode) {
         const reqObj = {
           VisitCategory: item.VisitCategory,
@@ -166,7 +237,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         };
         this.doctorService.getTMCasesheetData(reqObj).subscribe((res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            this.historyOfHWC[i]['benPreviousData'] = res.data;
+            this.historyOfHWC.data[i]['benPreviousData'] = res.data;
             //this.previousVisitData.push({ 'benPreviousData': res.data});
             this.filteredHWCHistory = res.data;
             this.previousHWCHistoryPageChanged({
@@ -211,7 +282,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  previousMMUHistoryPagedList = [];
+  previousMMUHistoryPagedList: any = [];
   previousMMUHistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -267,7 +338,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   hideMCTSFetch = false;
   previousMCTSHistoryRowsPerPage = 5;
   previousMCTSHistoryActivePage = 1;
-  historyOfMCTS: any = [];
+  // historyOfMCTS: any = [];
   filteredMCTSHistory: any = [];
   getMCTSHistory() {
     this.doctorService.getMCTSHistory().subscribe(
@@ -307,7 +378,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       this.filteredMCTSHistory = this.historyOfMCTS;
     } else {
       this.filteredMCTSHistory = [];
-      this.historyOfMCTS.forEach((item: any) => {
+      this.historyOfMCTS.data.forEach((item: any) => {
         const value: string = '' + item.mctsOutboundCall.displayOBCallType;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredMCTSHistory.push(item);
@@ -322,7 +393,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  previousMCTSHistoryPagedList = [];
+  previousMCTSHistoryPagedList: any = [];
   previousMCTSHistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -337,7 +408,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   hide104Fetch = false;
   previous104HistoryRowsPerPage = 5;
   previous104HistoryActivePage = 1;
-  historyOf104: any = [];
+  // historyOf104: any = [];
   filtered104History: any = [];
   get104History() {
     this.doctorService.get104History().subscribe(
@@ -377,7 +448,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       this.filtered104History = this.historyOf104;
     } else {
       this.filtered104History = [];
-      this.historyOf104.forEach((item: any) => {
+      this.historyOf104.data.forEach((item: any) => {
         const value: string = '' + item.diseaseSummary;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filtered104History.push(item);
@@ -392,7 +463,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  previous104HistoryPagedList = [];
+  previous104HistoryPagedList: any = [];
   previous104HistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -434,7 +505,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
   previousTMHistoryRowsPerPage = 5;
   previousTMHistoryActivePage = 1;
-  historyOfTM: any = [];
+  // historyOfTM: any = [];
   filteredTMHistory: any = [];
   hideTMFetch = false;
 
@@ -476,7 +547,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       this.filteredTMHistory = this.historyOfTM;
     } else {
       this.filteredTMHistory = [];
-      this.historyOfTM.forEach((item: any) => {
+      this.historyOfTM.data.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredTMHistory.push(item);
@@ -496,7 +567,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       this.filteredHWCHistory = this.historyOfHWC;
     } else {
       this.filteredHWCHistory = [];
-      this.historyOfHWC.forEach((item: any) => {
+      this.historyOfHWC.data.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredHWCHistory.push(item);
@@ -511,7 +582,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     });
   }
 
-  previousTMHistoryPagedList = [];
+  previousTMHistoryPagedList: any = [];
   previousTMHistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
@@ -552,12 +623,12 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       },
     );
   }
-  previousHWCHistoryPagedList = [];
+  previousHWCHistoryPagedList: any = [];
   previousHWCHistoryPageChanged(event: any): void {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
-    this.previousHWCHistoryPagedList = this.historyOfHWC.slice(
+    this.previousHWCHistoryPagedList = this.historyOfHWC.data.slice(
       startItem,
       endItem,
     );

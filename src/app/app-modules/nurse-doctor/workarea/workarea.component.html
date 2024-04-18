@@ -663,7 +663,7 @@
               </div>
             </div>
           </mat-step>
-          <!-- <mat-step
+          <mat-step
             *ngIf="showCaseRecord"
             label="{{ current_language_set?.common?.caseRecord }}"
           >
@@ -677,12 +677,8 @@
               [pregnancyStatus]="pregnancyStatus"
               [findings]="findings"
               [currentVitals]="currentVitals"
-              [patientCaseRecordForm]="
-                patientMedicalForm.controls.patientCaseRecordForm
-              "
-              [provideCounselling]="
-                patientMedicalForm.controls.provideCounselling
-              "
+              [patientCaseRecordForm]="patientCaseRecordForm"
+              [provideCounselling]="provideCounsellingForm"
             ></app-case-record>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
@@ -691,6 +687,8 @@
                   color="primary"
                   *ngIf="showExamination || showHistory"
                   matStepperNext
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.next }}
@@ -700,6 +698,8 @@
                   color="primary"
                   *ngIf="!showHistory"
                   matStepperNext
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.next }}
@@ -708,15 +708,17 @@
                   mat-raised-button
                   color="primary"
                   matStepperPrevious
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.back }}
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
-          <!-- <mat-step
+          <mat-step
             *ngIf="showRefer"
             label="{{ current_language_set?.Refeails?.refer }}"
           >
@@ -726,7 +728,7 @@
             <app-refer
               [referMode]="referMode"
               [visitCategory]="visitCategory"
-              [patientReferForm]="patientMedicalForm.controls.patientReferForm"
+              [patientReferForm]="patientReferForm"
             ></app-refer>
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
@@ -734,7 +736,8 @@
                   *ngIf="isDoctorSave"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="submitDoctorDiagnosisForm()"
                   type="submit"
@@ -745,7 +748,8 @@
                   *ngIf="isDoctorUpdate"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="updateDoctorDiagnosisForm()"
                   type="submit"
@@ -757,13 +761,15 @@
                   mat-raised-button
                   color="primary"
                   matStepperPrevious
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.back }}
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <!-- <mat-step
             *ngIf="showFollowUpImmunization"

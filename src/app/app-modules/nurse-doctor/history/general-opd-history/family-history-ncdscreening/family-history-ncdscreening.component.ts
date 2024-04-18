@@ -126,7 +126,7 @@ export class FamilyHistoryNcdscreeningComponent
 
           this.addFamilyDisease();
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
 

@@ -16,7 +16,7 @@
       <h5>{{ current_language_set?.previousvisit?.Previousvisitdetails }}</h5>
     </mat-expansion-panel-header>
     <app-previous-visit-details
-      [currentVitals]="currentVitals"
+      [vitals]="currentVitals"
     ></app-previous-visit-details>
   </mat-expansion-panel>
 
@@ -26,7 +26,7 @@
     </mat-expansion-panel-header>
     <app-findings
       [caseRecordMode]="caseRecordMode"
-      [generalFindingsForm]="generalCaseRecordForm.controls.generalFindingsForm"
+      [generalFindingsForm]="generalFindingsForm"
     ></app-findings>
   </mat-expansion-panel>
 
@@ -36,9 +36,7 @@
     </mat-expansion-panel-header>
     <app-diagnosis
       [caseRecordMode]="caseRecordMode"
-      [generalDiagnosisForm]="
-        generalCaseRecordForm.controls.generalDiagnosisForm
-      "
+      [generalDiagnosisForm]="generalDiagnosisForm"
       [visitCategory]="visitCategory"
     ></app-diagnosis>
   </mat-expansion-panel>
@@ -54,9 +52,7 @@
     </mat-expansion-panel-header>
     <app-treatments-on-side-effects
       [caseRecordMode]="caseRecordMode"
-      [treatmentsOnSideEffectsForm]="
-        generalCaseRecordForm.controls.treatmentsOnSideEffectsForm
-      "
+      [treatmentsOnSideEffectsForm]="treatmentsOnSideEffectsFormData"
     ></app-treatments-on-side-effects>
   </mat-expansion-panel>
 
@@ -70,10 +66,8 @@
     </mat-expansion-panel-header>
     <app-doctor-investigations
       [caseRecordMode]="caseRecordMode"
-      [visitCategory]="visitCategory"
-      [generalDoctorInvestigationForm]="
-        generalCaseRecordForm.controls.generalDoctorInvestigationForm
-      "
+      [visit]="visitCategory"
+      [generalDoctorInvestigationForm]="generalDoctorInvestigationForm"
     ></app-doctor-investigations>
   </mat-expansion-panel>
 
@@ -83,10 +77,8 @@
     </mat-expansion-panel-header>
     <app-prescription
       [caseRecordMode]="caseRecordMode"
-      [drugPrescriptionForm]="
-        generalCaseRecordForm.controls.drugPrescriptionForm
-      "
-      [provideCounselling]="provideCounselling"
+      [drugPrescriptionForm]="drugPrescriptionForm"
+      [prescriptionCounsellingForm]="provideCounselling"
     ></app-prescription>
   </mat-expansion-panel>
 

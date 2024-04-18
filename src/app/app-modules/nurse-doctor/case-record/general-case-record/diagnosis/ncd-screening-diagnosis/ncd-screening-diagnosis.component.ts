@@ -149,6 +149,15 @@ export class NcdScreeningDiagnosisComponent
     });
   }
 
+  getProvisionalDiagnosisList(): AbstractControl[] | null {
+    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    );
+    return provisionalDiagnosisListControl instanceof FormArray
+      ? provisionalDiagnosisListControl.controls
+      : null;
+  }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }

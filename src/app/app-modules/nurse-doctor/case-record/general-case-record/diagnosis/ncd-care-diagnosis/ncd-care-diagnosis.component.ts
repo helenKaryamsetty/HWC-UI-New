@@ -101,6 +101,15 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
+  getProvisionalDiagnosisList(): AbstractControl[] | null {
+    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    );
+    return provisionalDiagnosisListControl instanceof FormArray
+      ? provisionalDiagnosisListControl.controls
+      : null;
+  }
+
   getDoctorMasterData() {
     this.masterdataService.doctorMasterData$.subscribe((masterData) => {
       if (masterData) {
@@ -132,7 +141,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         // if (this.caseRecordMode === "view") {
         //   this.getDiagnosisDetails();
         // }
-        if (this.caseRecordMode === 'view') {
+        if (String(this.caseRecordMode) === 'view') {
           const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
           const visitID = localStorage.getItem('visitID');
           const visitCategory = localStorage.getItem('visitCategory');

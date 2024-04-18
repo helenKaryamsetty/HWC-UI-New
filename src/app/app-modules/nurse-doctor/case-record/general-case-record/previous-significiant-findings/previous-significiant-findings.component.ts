@@ -19,10 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { DoctorService, MasterdataService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-previous-significiant-findings',
@@ -38,12 +46,15 @@ export class PreviousSignificiantFindingsComponent
   ) {}
   rowsPerPage = 5;
   activePage = 1;
-  pagedList = [];
+  pagedList: any = [];
   rotate = true;
   current_language_set: any;
+  displayedColumns: any = ['sno', 'significantfindings', 'captureddate'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  dataSource = new MatTableDataSource<any>();
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.current_language_set = response);
     this.getPreviousSignificiantFindings();
   }
 
@@ -72,8 +83,8 @@ export class PreviousSignificiantFindingsComponent
     console.log('list', this.pagedList);
   }
 
-  previousSignificiantFindingsList = [];
-  filteredPreviousSignificiantFindingsList = [];
+  previousSignificiantFindingsList: any = [];
+  filteredPreviousSignificiantFindingsList: any = [];
   previousSignificantFindingsSubs: any;
   getPreviousSignificiantFindings() {
     const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -90,11 +101,10 @@ export class PreviousSignificiantFindingsComponent
             this.previousSignificiantFindingsList = data.data.findings;
             this.filteredPreviousSignificiantFindingsList =
               this.previousSignificiantFindingsList;
+            this.dataSource.data = [];
+            this.dataSource.data = this.previousSignificiantFindingsList;
+            this.dataSource.paginator = this.paginator;
           }
-          this.pageChanged({
-            page: this.activePage,
-            itemsPerPage: this.rowsPerPage,
-          });
         }
       });
   }
@@ -105,7 +115,9 @@ export class PreviousSignificiantFindingsComponent
         this.previousSignificiantFindingsList;
     else {
       this.filteredPreviousSignificiantFindingsList = [];
-      this.previousSignificiantFindingsList.forEach((item) => {
+      this.dataSource.data = [];
+      this.dataSource.paginator = this.paginator;
+      this.previousSignificiantFindingsList.forEach((item: any) => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
@@ -115,10 +127,5 @@ export class PreviousSignificiantFindingsComponent
         }
       });
     }
-    this.activePage = 1;
-    this.pageChanged({
-      page: 1,
-      itemsPerPage: this.rowsPerPage,
-    });
   }
 }

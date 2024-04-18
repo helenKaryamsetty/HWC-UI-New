@@ -136,7 +136,7 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
   }
 
   ngOnChanges() {
-    if (this.mode === 'view') {
+    if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.disableVisit = true;

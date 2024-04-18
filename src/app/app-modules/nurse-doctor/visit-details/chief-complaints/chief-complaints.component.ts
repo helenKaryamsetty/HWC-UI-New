@@ -146,7 +146,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
@@ -172,7 +172,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
 
-          if (this.mode === 'view') {
+          if (String(this.mode) === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);

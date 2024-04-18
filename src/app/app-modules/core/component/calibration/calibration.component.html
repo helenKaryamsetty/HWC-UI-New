@@ -1,48 +1,85 @@
 <div class="title">
   <h4>{{ current_language_set?.coreComponents?.selectCallibrationStrip }}</h4>
-  <button mat-icon-button class="pull-right exit width-20px" (click)="close()">
-    <!-- tooltip="{{current_language_set?.coreComponents?.close}}" -->
-    <mat-icon>close</mat-icon>
-  </button>
+  <mat-icon
+    mat-icon-button
+    matTooltip="{{ current_language_set?.common?.close }}"
+    class="pull-right exit width-20px"
+    (click)="close()"
+    >close</mat-icon
+  >
 </div>
 <div class="container-fluid">
   <mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field style="width: 300px">
+      <mat-label class="mat-label-text">{{
+        current_language_set?.coreComponents?.inTableSearchStripCode
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
-        placeholder="{{
-          current_language_set?.coreComponents?.inTableSearchStripCode
-        }}"
         #filterTerm
         (keyup)="filterPreviousData(filterTerm.value)"
       />
-      <mat-icon>search</mat-icon>
+      <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        <!-- sno Column -->
+      <table
+        mat-table
+        class="table table-striped"
+        [dataSource]="components"
+        aria-describedby="CallibrationStripTbl"
+      >
         <ng-container matColumnDef="sno">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.term }}
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ current_language_set?.coreComponents?.sno }}
           </th>
-          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="goToLink(element)"
+            class="element-row"
+          >
+            {{ element.sno }}
+          </td>
         </ng-container>
-
-        <!-- stripCode Column -->
-        <ng-container matColumnDef="stripCode">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.term }}
+        <ng-container matColumnDef="SCode">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ current_language_set?.coreComponents?.stripCode }}
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.stripCode }}</td>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="goToLink(element)"
+            class="element-row"
+          >
+            {{ element?.stripCode }}
+          </td>
         </ng-container>
-
-        <!-- expiryDate Column -->
-        <ng-container matColumnDef="expiryDate">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.term }}
+        <ng-container matColumnDef="ExpiryDate">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ current_language_set?.coreComponents?.expiryDate }}
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="goToLink(element)"
+            class="element-row"
+          >
             {{
               element.expiryDate !== undefined && element.expiryDate !== null
                 ? (element.expiryDate | date: "dd-MM-yyyy")
@@ -50,61 +87,23 @@
             }}
           </td>
         </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 15]"
-        showFirstLastButtons
-      ></mat-paginator>
-      <!-- <table class="table table-striped" [md2Data]="components" #md2="md2DataTable" aria-describedby="CallibrationStripTbl">
-        <thead>
-          <tr>
-            <th id="sno">{{current_language_set?.coreComponents?.sno}}</th>
-            <th id="SCode">{{current_language_set?.coreComponents?.stripCode}}</th>
-            <th id="ExpiryDate">{{current_language_set?.coreComponents?.expiryDate}}</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="components.length === 0" >
-            <td colspan="5" class="text-center" style="text-align: center;">{{message}}</td>
-          </tr>
-          <tr *ngFor="let item of md2.data;let i=index;" (click)="goToLink(item)" class="element-row" >
-            <td data-title="SNo">{{i+1}} </td>
-            <td data-title="Strip Code">{{ item?.stripCode}} </td>
-            <td data-title="Expiry Date">{{(item.expiryDate !== undefined && item.expiryDate !== null) ? (item.expiryDate| date:'dd-MM-yyyy'):'NA'}}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="6" class="text-right">
-             
-              <div *ngIf="components.length !== 0" class="pull-left m-t-40">{{current_language_set?.coreComponents?.totalPages}}: {{pageCount}}</div>
-              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-                <li [ngClass]="{disabled:pager.currentPage <= 0}">
-                  <a (click)="checkPager(pager,0)"><
-                    </a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage <= 0}">
-                  <a (click)="setPage(pager.currentPage - 1)"><<
-                    </a>
-                </li>
-                <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                  <a (click)="setPage(page)">{{page + 1}}</a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage >= pager.totalPages - 1}">
-                  <a (click)="setPage(pager.currentPage + 1)">></a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage >= pager.totalPages - 1}">
-                  <a (click)="checkPager(pager, pager.totalPages - 1)">>></a>
-                </li>
-              </ul>
-            </td>
-          </tr>
-        </tfoot>
-      </table> -->
     </div>
+    <div
+      class="pull-center"
+      style="margin-top: 5px; text-align: center"
+      [hidden]="components.data.length > 0"
+    >
+      <strong>{{ current_language_set?.common?.noRecordsFound }}</strong>
+    </div>
+    <mat-paginator
+      [hidden]="components.data.length === 0"
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="5"
+      showFirstLastButtons
+    >
+    </mat-paginator>
   </mat-dialog-content>
 </div>
