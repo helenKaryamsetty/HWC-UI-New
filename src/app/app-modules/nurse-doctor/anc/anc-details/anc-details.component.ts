@@ -33,6 +33,7 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { NurseService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-nurse-anc-details',
@@ -57,7 +58,6 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    //this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.getBenificiaryDetails();
     this.today = new Date();
     this.dob = new Date();
@@ -114,27 +114,25 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  // pregnancyMonths: any;
-  // calculatePeriodOfPregnancy(lastMP: any) {
-  //   if (lastMP !== null) {
-  //     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  //     this.pregnancyMonths = Math.round(
-  //       Math.abs(
-  //         Math.round(
-  //           Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
-  //         ),
-  //       ) / 30,
-  //     );
-  //     if (this.pregnancyMonths === 0) this.pregnancyMonths = 1;
-  //     this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
-  //   } else {
-  //     this.pregnancyMonths = null;
-  //     this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
-  //   }
-  // }
-
-  calculatePeriodOfPregnancy(lmpDate: any) {
-    this.patientANCDetailsForm.patchValue({ duration: null });
+  pregnancyMonths: any;
+  calculatePeriodOfPregnancy(lastMP: any) {
+    if (lastMP !== null) {
+      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+      this.pregnancyMonths = Math.round(
+        Math.abs(
+          Math.round(
+            Math.abs(
+              (this.today.getTime() - lastMP.toDate().getTime()) / oneDay,
+            ),
+          ),
+        ) / 30,
+      );
+      if (this.pregnancyMonths === 0) this.pregnancyMonths = 1;
+      this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
+    } else {
+      this.pregnancyMonths = null;
+      this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
+    }
   }
 
   calculateGestationalAge(lastMP: any) {
@@ -144,7 +142,9 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
       gestationalAge = Math.round(
         Math.abs(
           Math.round(
-            Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
+            Math.abs(
+              (this.today.getTime() - lastMP.toDate().getTime()) / oneDay,
+            ),
           ),
         ) / 7,
       );
@@ -163,8 +163,10 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   calculateEDD(lastMP: any) {
     if (lastMP !== null) {
-      const edd = new Date(lastMP);
-      edd.setDate(lastMP.getDate() + 280);
+      // const edd = new Date(lastMP);
+      // edd.setDate(lastMP.add(280, 'd'));
+      const edd = moment(lastMP.add(280, 'd'));
+      console.log('DATE EDDDDDD', edd);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });
     } else {
       this.patientANCDetailsForm.patchValue({ expDelDt: null });

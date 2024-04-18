@@ -15,7 +15,7 @@
           this.currentLanguageSet?.DurationData?.previousDetails
         }}"
         id="previousAllergyHistory"
-        class="pull-right"
+        class="mat_icon_blue"
         color="primary"
         (click)="getPreviousAllergyHistory()"
       >
@@ -39,7 +39,7 @@
           this.currentLanguageSet?.DurationData?.previousDetails
         }}"
         id="previousAlcoholHistory"
-        class="pull-right"
+        class="mat_icon_blue"
         color="primary"
         (click)="getPreviousAlcoholHistory()"
       >
@@ -61,7 +61,7 @@
         mat-icon-button
         matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousTobaccoHistory"
-        class="pull-right"
+        class="mat_icon_blue"
         color="primary"
         (click)="getPreviousTobaccoHistory()"
       >
@@ -367,6 +367,8 @@
             <button
               mat-mini-fab
               color="warn"
+              class="mat_warn_circle"
+              style="margin-right: 3px"
               *ngIf="i !== 0 || (i === 0 && tobacco.touched)"
               (click)="removeTobacco(i, tobacco)"
             >
@@ -376,6 +378,7 @@
               mat-mini-fab
               color="primary"
               *ngIf="isLast"
+              class="mat_blue_circle"
               [disabled]="checkTobaccoValidity(tobacco)"
               (click)="addTobacco()"
               class="button-overall-disabled"
@@ -561,6 +564,8 @@
             <button
               mat-mini-fab
               color="warn"
+              class="mat_warn_circle"
+              style="margin-right: 3px"
               *ngIf="i !== 0 || (i === 0 && alcohol.touched)"
               (click)="removeAlcohol(i, alcohol)"
             >
@@ -569,6 +574,7 @@
             <button
               mat-mini-fab
               color="primary"
+              class="mat_blue_circle"
               *ngIf="isLast"
               [disabled]="checkAlcoholValidity(alcohol)"
               (click)="addAlcohol()"
@@ -733,6 +739,8 @@
             <button
               mat-mini-fab
               color="warn"
+              class="mat_warn_circle"
+              style="margin-right: 3px"
               *ngIf="i !== 0 || (i === 0 && allergy.touched)"
               (click)="removeAllergy(i, allergy)"
             >
@@ -741,6 +749,7 @@
             <button
               mat-mini-fab
               color="primary"
+              class="mat_blue_circle"
               *ngIf="
                 isLast &&
                 generalPersonalHistoryForm.get('allergicList')?.value?.length <

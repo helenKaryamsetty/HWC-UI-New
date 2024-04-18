@@ -1,7 +1,7 @@
 <!-- {{ otherVaccinesForm.value | json }} -->
 <div class="row m-t-10" [formGroup]="otherVaccinesForm">
   <div class="col-xs-12" formArrayName="otherVaccines">
-    <div class="row text-right">
+    <div class="col-12" style="text-align: end">
       <p class="font-history-label m-t-10">
         {{
           currentLanguageSet?.historyData?.Othervaccineshistory
@@ -15,7 +15,7 @@
           this.currentLanguageSet?.DurationData?.previousDetails
         }}"
         id="previousANCOtherVaccines"
-        class="pull-right"
+        class="mat_icon_blue"
         color="primary"
         (click)="getPreviousOtherVaccineDetails()"
       >
@@ -169,6 +169,8 @@
           <button
             mat-mini-fab
             color="warn"
+            class="mat_warn_circle"
+            style="margin-right: 5px"
             id="removeOtherVaccine"
             *ngIf="i !== 0 || (i === 0 && vaccine.touched)"
             (click)="removeOtherVaccine(i, vaccine)"
@@ -178,6 +180,7 @@
           <button
             mat-mini-fab
             color="primary"
+            class="mat_blue_circle"
             *ngIf="isLast"
             [disabled]="checkValidity(vaccine)"
             id="addOtherVaccine"

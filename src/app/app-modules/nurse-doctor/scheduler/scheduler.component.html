@@ -1,6 +1,11 @@
-<!-- <div class="title">
+<div class="title">
   <h4>{{ currentLanguageSet?.common?.scheduler }}</h4>
-    <mat-icon class="md-24 pull-right exit" [matDialogClose]="null" mat-icon-button>close</mat-icon>
+  <mat-icon
+    class="md-24 pull-right exit"
+    [matDialogClose]="null"
+    mat-icon-button
+    >close</mat-icon
+  >
 </div>
 <div class="container-fluid" *ngIf="scheduledData !== null">
   <table
@@ -23,7 +28,7 @@
         {{ scheduledData?.schedulerForm?.allocationDate | date: "dd/MM/yyyy" }}
       </td>
     </tr>
- 
+
     <tr>
       <th id="specialization">
         {{ currentLanguageSet?.common?.specialization }}:
@@ -36,7 +41,7 @@
       </th>
       <td>{{ scheduledData?.schedulerForm?.specialistDetails?.userName }}</td>
     </tr>
- 
+
     <tr>
       <th id="fromTime">{{ currentLanguageSet?.common?.fromTime }}:</th>
       <td>{{ scheduledData?.tmSlot?.fromTime }}</td>
@@ -90,7 +95,10 @@
         </mat-radio-group>
       </div>
       <div class="col-xs-12 box">
-        <mat-form-field class="fieldAlignment fontStyle">
+        <mat-form-field
+          class="fieldAlignment fontStyle"
+          style="margin-top: 10px"
+        >
           <mat-label class="mat-label-text" class="fontStyle"
             >{{ currentLanguageSet?.common?.allocationDate }}
           </mat-label>
@@ -112,13 +120,13 @@
           <mat-datepicker #schedulerDatePicker></mat-datepicker>
         </mat-form-field>
       </div>
-      <div class="col-xs-12 box">
+      <div class="col-xs-12 box" style="margin-top: 23px">
         <mat-label>{{ currentLanguageSet?.common?.specialization }}</mat-label>
         <mat-select
           class="input-full-width"
           name="specialization"
           formControlName="specialization"
-          (change)="getSpecialist()"
+          (selectionChange)="getSpecialist()"
           required
         >
           <mat-option
@@ -130,27 +138,29 @@
         </mat-select>
       </div>
       <div class="col-xs-12 box">
-        <mat-label>{{
-          currentLanguageSet?.common?.specialistDetails
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
-          name="specialistDetails"
-          formControlName="specialistDetails"
-          required
-          (change)="getAvailableSlot(specialistDetails)"
-        >
-          <mat-option
-            *ngFor="let specialistDetails of masterSpecialistDetails"
-            [value]="specialistDetails"
+        <mat-form-field style="width: 100%">
+          <mat-label>{{
+            currentLanguageSet?.common?.specialistDetails
+          }}</mat-label>
+          <mat-select
+            class="input-full-width"
+            name="specialistDetails"
+            formControlName="specialistDetails"
+            required
+            (selectionChange)="getAvailableSlot(specialistDetails)"
           >
-            {{ specialistDetails.userName }}
-          </mat-option>
-        </mat-select>
+            <mat-option
+              *ngFor="let specialistDetails of masterSpecialistDetails"
+              [value]="specialistDetails"
+            >
+              {{ specialistDetails.userName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </form>
- 
+
   <div class="row slots-container m-t-10 m-b-10">
     <div class="col-xs-12" *ngIf="availableSlotList?.length > 0">
       <mat-chip-listbox #chipList [selectable]="true">
@@ -166,19 +176,20 @@
         >
       </mat-chip-listbox>
     </div>
- 
+
     <div class="col-xs-12" *ngIf="availableSlotList?.length === 0">
       <p class="text-center">
         {{ currentLanguageSet?.common?.slotNotAvailable }}
       </p>
     </div>
   </div>
- 
+
   <div class="row m-t-10 m-b-20">
     <div class="col-xs-12" *ngIf="selectedSlot && selectedSlot !== null">
       <button
         mat-raised-button
-        class="pull-right btn-green"
+        class="mat_green"
+        style="float: right"
         color="primary"
         id="slot"
         (click)="saveScheduledSlot()"
@@ -187,4 +198,4 @@
       </button>
     </div>
   </div>
-</div> -->
+</div>

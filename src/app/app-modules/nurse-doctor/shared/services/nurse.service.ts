@@ -763,7 +763,7 @@ export class NurseService {
       JSON.stringify(patientChiefComplaintsForm),
     );
     for (const complaint of patientChiefComplaintsFormValue) {
-      if (complaint.chiefComplaint !== null) {
+      if (complaint.chiefComplaint) {
         complaint.chiefComplaintID = complaint.chiefComplaint.chiefComplaintID;
         complaint.chiefComplaint = complaint.chiefComplaint.chiefComplaint;
       }

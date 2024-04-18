@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <button
     mat-mini-fab
-    class="example-fab"
+    style="margin-left: 10px; position: absolute"
+    class="mat_blue_circle"
     color="primary"
     (click)="sideNavModeChange(sidenav)"
   >
@@ -9,7 +10,8 @@
   </button>
 
   <button
-    class="previousIcon"
+    style="margin-left: 55px; position: absolute"
+    class="mat_blue_circle"
     (click)="openBenPreviousisitDetails()"
     matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
   >
