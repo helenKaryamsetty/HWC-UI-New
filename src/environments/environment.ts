@@ -66,9 +66,9 @@ const MMU_API = `${mmuIP}/mmuapi-v0.1/`;
 const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v1.0`;
+const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
 
-const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
+const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
 const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
 
@@ -396,11 +396,11 @@ export const environment = {
   //file upload
   saveFile: `${COMMON_API}kmfilemanager/addFile`,
   viewFileData: `${TM_API}common/getKMFile`,
-  ioturl: `${biologicalScreeningDeviceAPI}`,
-  deviceStatusurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/connection_status`,
-  deviceDisconnectUrl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/disconnect`,
-  deviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/service_discovery`,
-  connectdeviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub_connection`,
+  ioturl: '' + IOT_API,
+  deviceStatusurl: `${IOT_API}api/v1/bluetooth/hub/connection_status`,
+  deviceBluetoothurl: `${IOT_API}api/v1/bluetooth/service_discovery`,
+  deviceDisconnectUrl: `${IOT_API}api/v1/bluetooth/hub/disconnect`,
+  connectdeviceBluetoothurl: `${IOT_API}api/v1/bluetooth/hub_connection`,
 
   startWeighturl: '/api/v1/physical_tests/weight',
   startTempurl: '/api/v1/physical_tests/temperature',
@@ -424,7 +424,7 @@ export const environment = {
   otpGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/generateOTP`,
   healthIdGenerationUrl: `${FHIR_API}healthID/verifyOTPAndGenerateHealthID`,
   healthIdGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/createHealthIDWithUID`,
-  verifyOTPUrl: `${FHIR_API}/healthIDWithUID/verifyOTP`,
+  verifyOTPUrl: `${FHIR_API}healthIDWithUID/verifyOTP`,
   checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
   verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
   gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
@@ -445,7 +445,7 @@ export const environment = {
   /*Get Patient CBAC details*/
   getBenCBACDetails: `${COMMON_API}doortodoorapp/getSuspectedData_HRP_TB_NCD`,
 
-  updateAmritIDInMongo: `${FHIR_API}/patient/data/patient/updateAmritIdMongo`,
+  updateAmritIDInMongo: `${FHIR_API}patient/data/patient/updateAmritIdMongo`,
 
   /*Get patient higher health facility previous clinical records */
   higherHealthFacilityPreviousVisitDeatilsUrl: `${FHIR_API}higher/health/facility/get/clinical/data`,
@@ -545,5 +545,5 @@ export const environment = {
   getnurse104referredworklisturls: `${TM_API}uptsu/getWorklistByVanID`,
   getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
   getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
-  getAdminCdssStatus: `${ADMIN_API}/uptsu/getCdssData`,
+  getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,
 };

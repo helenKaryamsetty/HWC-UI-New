@@ -121,21 +121,25 @@
         </mat-form-field>
       </div>
       <div class="col-xs-12 box" style="margin-top: 23px">
-        <mat-label>{{ currentLanguageSet?.common?.specialization }}</mat-label>
-        <mat-select
-          class="input-full-width"
-          name="specialization"
-          formControlName="specialization"
-          (selectionChange)="getSpecialist()"
-          required
-        >
-          <mat-option
-            *ngFor="let specialization of masterSpecialization"
-            [value]="specialization"
+        <mat-form-field style="width: 100%">
+          <mat-label>{{
+            currentLanguageSet?.common?.specialization
+          }}</mat-label>
+          <mat-select
+            class="input-full-width"
+            name="specialization"
+            formControlName="specialization"
+            (selectionChange)="getSpecialist()"
+            required
           >
-            {{ specialization.specialization }}
-          </mat-option>
-        </mat-select>
+            <mat-option
+              *ngFor="let specialization of masterSpecialization"
+              [value]="specialization"
+            >
+              {{ specialization.specialization }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="col-xs-12 box">
         <mat-form-field style="width: 100%">
