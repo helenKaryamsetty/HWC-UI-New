@@ -9,11 +9,20 @@ export interface SpinnerState {
   providedIn: 'root',
 })
 export class SpinnerService {
+  private loading = false;
   spinnerSubject = new Subject<SpinnerState>();
   spinnerState = this.spinnerSubject.asObservable();
   temp: any = [];
 
   constructor() {}
+
+  setLoading(loading: boolean) {
+    this.loading = loading;
+  }
+
+  getLoading(): boolean {
+    return this.loading;
+  }
 
   show() {
     this.temp.push(true);

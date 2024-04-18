@@ -55,6 +55,7 @@
                   mat-raised-button
                   color="primary"
                   matStepperNext
+                  class="mat_blue"
                   type="button"
                   (click)="checkMandatory()"
                 >
@@ -68,7 +69,7 @@
                     visitCategory !== undefined
                   "
                   mat-raised-button
-                  class="btn-green"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="openScheduler()"
@@ -84,7 +85,7 @@
                     visitCategory !== undefined
                   "
                   mat-raised-button
-                  class="btn-green"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="openEsanjeevaniPortal()"
@@ -95,7 +96,7 @@
                 <button
                   *ngIf="isSpecialist"
                   mat-raised-button
-                  class="btn-green"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="startTC()"
@@ -119,6 +120,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperNext
                   type="button"
                 >
@@ -127,6 +129,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -135,7 +138,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   *ngIf="ancMode"
                   [disabled]="
                     !patientMedicalForm.controls['patientANCForm'].dirty
@@ -162,6 +165,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperNext
                   type="button"
                 >
@@ -170,6 +174,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -178,7 +183,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   *ngIf="pncMode"
                   [disabled]="
                     !patientMedicalForm.controls['patientPNCForm'].dirty
@@ -210,6 +215,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperNext
                   type="button"
                 >
@@ -218,6 +224,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -226,7 +233,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   *ngIf="historyMode"
                   (click)="updatePatientHistory()"
                   [disabled]="
@@ -259,6 +266,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperNext
                   type="button"
                 >
@@ -266,6 +274,7 @@
                 </button>
                 <button
                   mat-raised-button
+                  class="mat_blue"
                   color="primary"
                   matStepperPrevious
                   type="button"
@@ -275,7 +284,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   *ngIf="immunizationHistoryMode"
                   (click)="updateBirthImmunizationHistoryForm()"
                   [disabled]="disablebImmunizationHistoryUpdateButton"
@@ -304,7 +313,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
                   type="button"
                   *ngIf="
                     !showExamination &&
@@ -331,6 +340,7 @@
                     showChildAndAdolescent
                   "
                   matStepperNext
+                  class="mat_blue"
                   type="button"
                 >
                   {{ current_language_set?.common?.next }}
@@ -338,6 +348,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -346,7 +357,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   *ngIf="vitalsMode"
                   (click)="updatePatientVitals()"
                   [disabled]="
@@ -439,7 +450,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
                   type="button"
                   *ngIf="!immunizationServiceMode"
                   [disabled]="disableSubmitButton"
@@ -453,6 +464,7 @@
                   *ngIf="showCaseRecord"
                   matStepperNext
                   type="button"
+                  class="mat_blue"
                 >
                   {{ current_language_set?.common?.next }}
                 </button>
@@ -461,12 +473,13 @@
                   color="primary"
                   matStepperPrevious
                   type="button"
+                  class="mat_blue"
                 >
                   {{ current_language_set?.common?.back }}
                 </button>
                 <button
                   mat-raised-button
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   color="primary"
                   *ngIf="immunizationServiceMode"
                   (click)="updateImmunizationServiceForm()"
@@ -496,7 +509,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
                   type="button"
                   *ngIf="!showRefer"
                   [disabled]="disableSubmitButton"
@@ -507,6 +520,7 @@
                 <button
                   *ngIf="showCaseRecord"
                   mat-raised-button
+                  class="mat_blue"
                   color="primary"
                   matStepperNext
                   type="button"
@@ -516,6 +530,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -524,7 +539,7 @@
                 <button
                   *ngIf="familyPlanningMode"
                   mat-raised-button
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="updateFamilyPlanningData()"
@@ -558,7 +573,7 @@
                   *ngIf="!ncdScreeningMode"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
                   [disabled]="disableSubmitButton"
                   (click)="submitPatientMedicalDetailsForm(patientMedicalForm)"
                   type="button"
@@ -569,6 +584,7 @@
                   *ngIf="showCaseRecord"
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperNext
                   type="button"
                 >
@@ -577,6 +593,7 @@
                 <button
                   mat-raised-button
                   color="primary"
+                  class="mat_blue"
                   matStepperPrevious
                   type="button"
                 >
@@ -585,7 +602,7 @@
                 <button
                   *ngIf="ncdScreeningMode && showIDRSScreen"
                   mat-raised-button
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="updatePatientNcdScreening()"
@@ -596,7 +613,7 @@
                 <button
                   *ngIf="ncdScreeningMode && !showIDRSScreen"
                   mat-raised-button
-                  class="btn-green button-update-disabled"
+                  class="mat_green"
                   color="primary"
                   type="button"
                   (click)="updateNurseNcdScreeningData()"

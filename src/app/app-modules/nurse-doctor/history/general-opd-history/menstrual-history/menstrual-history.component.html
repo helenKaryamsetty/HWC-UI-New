@@ -20,22 +20,24 @@
 </div>
 <div class="row m-t-10" [formGroup]="menstrualHistoryForm">
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-select
-      class="select-full-width"
-      name="menstrualCycleStatus"
-      formControlName="menstrualCycleStatus"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
         currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
           ?.menstrualCycleStatus
-      }}"
-      (change)="checkMenstrualCycleStatus()"
-    >
-      <mat-option
-        *ngFor="let status of masterData?.menstrualCycleStatus"
-        [value]="status"
-        >{{ status.name }}</mat-option
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="menstrualCycleStatus"
+        formControlName="menstrualCycleStatus"
+        (change)="checkMenstrualCycleStatus()"
       >
-    </mat-select>
+        <mat-option
+          *ngFor="let status of masterData?.menstrualCycleStatus"
+          [value]="status"
+          >{{ status.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <ng-template [ngIf]="menstrualCycleStatus?.name === 'Active'">
@@ -56,41 +58,45 @@
     </div>
 
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-select
-        class="select-full-width"
-        name="cycleLength"
-        formControlName="cycleLength"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
           currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.menstrual
             ?.lengthofMenstrualCycle
-        }}"
-      >
-        <mat-option
-          *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
-          [value]="cycleLength"
-          >{{ cycleLength.menstrualCycleRange }}</mat-option
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          name="cycleLength"
+          formControlName="cycleLength"
         >
-      </mat-select>
+          <mat-option
+            *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
+            [value]="cycleLength"
+            >{{ cycleLength.menstrualCycleRange }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-select
-        class="select-full-width"
-        name="bloodFlowDuration"
-        formControlName="bloodFlowDuration"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
           currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.menstrual
             ?.menstrualBloodFlowDuration
-        }}"
-      >
-        <mat-option
-          *ngFor="
-            let cycleDuration of masterData?.menstrualCycleBloodFlowDuration
-          "
-          [value]="cycleDuration"
-          >{{ cycleDuration.menstrualCycleRange }}</mat-option
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          name="bloodFlowDuration"
+          formControlName="bloodFlowDuration"
         >
-      </mat-select>
+          <mat-option
+            *ngFor="
+              let cycleDuration of masterData?.menstrualCycleBloodFlowDuration
+            "
+            [value]="cycleDuration"
+            >{{ cycleDuration.menstrualCycleRange }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
   </ng-template>
 
@@ -101,30 +107,32 @@
     "
   >
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-select
-        multiple
-        class="select-full-width"
-        name="problemName"
-        formControlName="menstrualProblemList"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
           currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.menstrual
             ?.menstrualProblems
-        }}"
-        (change)="resetOtherMenstrualProblems()"
-      >
-        <mat-option
-          [disabled]="
-            disableNoneMenstrualProblem !== null &&
-            ((problem?.problemName === 'None' &&
-              disableNoneMenstrualProblem === false) ||
-              (problem?.problemName !== 'None' &&
-                disableNoneMenstrualProblem === true))
-          "
-          *ngFor="let problem of masterData?.menstrualProblem"
-          [value]="problem"
-          >{{ problem.problemName }}</mat-option
+        }}</mat-label>
+        <mat-select
+          multiple
+          class="select-full-width"
+          name="problemName"
+          formControlName="menstrualProblemList"
+          (change)="resetOtherMenstrualProblems()"
         >
-      </mat-select>
+          <mat-option
+            [disabled]="
+              disableNoneMenstrualProblem !== null &&
+              ((problem?.problemName === 'None' &&
+                disableNoneMenstrualProblem === false) ||
+                (problem?.problemName !== 'None' &&
+                  disableNoneMenstrualProblem === true))
+            "
+            *ngFor="let problem of masterData?.menstrualProblem"
+            [value]="problem"
+            >{{ problem.problemName }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
     </div>
   </ng-template>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">

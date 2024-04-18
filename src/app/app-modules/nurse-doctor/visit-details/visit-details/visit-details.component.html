@@ -28,11 +28,13 @@
   </ng-container>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" *ngIf="mode === 'view'">
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.Reports?.visitcode
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
         defaultNull
-        placeholder="{{ currentLanguageSet?.Reports?.visitcode }}"
         name="visitCode"
         formControlName="visitCode"
       />
@@ -41,12 +43,12 @@
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
+      }}</mat-label>
       <mat-select
         matInput
         class="input-full-width"
-        placeholder="{{
-          currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
-        }}"
         name="visitReason"
         formControlName="visitReason"
         (selectionChange)="
@@ -69,12 +71,12 @@
     *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value"
   >
     <mat-form-field class="input-full-width mat_form_field_width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
+      }}</mat-label>
       <mat-select
         matInput
         class="input-full-width"
-        placeholder="{{
-          currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
-        }}"
         name="visitCategory"
         formControlName="visitCategory"
         (selectionChange)="
@@ -100,12 +102,12 @@
     *ngIf="visitCategory === 'General OPD'"
   >
     <mat-form-field class="mat_form_field_width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.subVisitCategory
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
-        placeholder="{{
-          currentLanguageSet?.nurseData?.visitDetailsForm?.subVisitCategory
-        }}"
         name="subVisitCategory"
         formControlName="subVisitCategory"
       >
@@ -131,12 +133,12 @@
     "
   >
     <mat-form-field class="mat_form_field_width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
-        placeholder="{{
-          currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
-        }}"
         id="pregnancyStatus"
         name="pregnancyStatus"
         formControlName="pregnancyStatus"
@@ -164,14 +166,14 @@
     "
   >
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
         defaultNull
         allowText="number"
-        placeholder="{{
-          currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
-        }}"
         maxlength="12"
         name="rCHID"
         formControlName="rCHID"
@@ -189,12 +191,14 @@
     "
   >
     <mat-form-field class="mat_form_field_width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.followUpFpMethod
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
         name="followUpForFpMethod"
         formControlName="followUpForFpMethod"
-        placeholder="{{ currentLanguageSet?.followUpFpMethod }}"
         (selectionChange)="
           checkForOtherFpMethodOption(
             patientVisitDetailsForm.controls['followUpForFpMethod'].value
@@ -225,11 +229,13 @@
     *ngIf="enableOtherFpTextField && attendant === 'nurse'"
   >
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.other
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
         defaultNull
-        placeholder="{{ currentLanguageSet?.other }}"
         maxlength="100"
         allowText="alphaspace"
         name="otherFollowUpForFpMethod"
@@ -247,12 +253,14 @@
     "
   >
     <mat-form-field class="mat_form_field_width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.sideEffect
+      }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
         name="sideEffects"
         formControlName="sideEffects"
-        placeholder="{{ currentLanguageSet?.sideEffect }}"
         multiple
         (selectionChange)="
           checkForOtherSideEffectsOption(
@@ -274,11 +282,13 @@
     *ngIf="enableOtherSideEffectTextField && attendant === 'nurse'"
   >
     <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.other
+      }}</mat-label>
       <input
         autocomplete="off"
         matInput
         defaultNull
-        placeholder="{{ currentLanguageSet?.other }}"
         maxlength="100"
         allowText="alphaspace"
         name="otherSideEffects"

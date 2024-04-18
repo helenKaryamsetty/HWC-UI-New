@@ -5,25 +5,27 @@
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="enableTTStatus_1_2 || enableTTStatus_1_2_b"
     >
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.tt1Status
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_1Status"
-        formControlName="tT_1Status"
-        (change)="checkTT_1Status(tT_1Status)"
-      >
-        <mat-option
-          *ngFor="let immunizationStatus_1 of selectImmunizationStatus"
-          [value]="immunizationStatus_1"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.tt1Status
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="tT_1Status"
+          formControlName="tT_1Status"
+          (change)="checkTT_1Status(tT_1Status)"
         >
-          {{ immunizationStatus_1 }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let immunizationStatus_1 of selectImmunizationStatus"
+            [value]="immunizationStatus_1"
+          >
+            {{ immunizationStatus_1 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      class="col-xs-12 col-sm-6 col-md-4 col-lg-4"
       *ngIf="tT_1Status === 'Received'"
     >
       <mat-form-field class="fieldAlignment fontStyle">
@@ -89,22 +91,24 @@
         tT_1Status === 'Received'
       "
     >
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.tt2Status
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_2Status"
-        formControlName="tT_2Status"
-        (change)="checkTT_2Status(tT_2Status)"
-      >
-        <mat-option
-          *ngFor="let immunizationStatus_2 of selectImmunizationStatus"
-          [value]="immunizationStatus_2"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.tt2Status
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="tT_2Status"
+          formControlName="tT_2Status"
+          (change)="checkTT_2Status(tT_2Status)"
         >
-          {{ immunizationStatus_2 }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let immunizationStatus_2 of selectImmunizationStatus"
+            [value]="immunizationStatus_2"
+          >
+            {{ immunizationStatus_2 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
@@ -181,22 +185,24 @@
           (enableTTStatus_1_2 && tT_1Status === 'NA'))
       "
     >
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.ttBoosterStatus
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_3Status"
-        formControlName="tT_3Status"
-        (change)="checkTT_3Status(tT_3Status)"
-      >
-        <mat-option
-          *ngFor="let immunizationStatus_3 of selectImmunizationStatus"
-          [value]="immunizationStatus_3"
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.ttBoosterStatus
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="tT_3Status"
+          formControlName="tT_3Status"
+          (change)="checkTT_3Status(tT_3Status)"
         >
-          {{ immunizationStatus_3 }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let immunizationStatus_3 of selectImmunizationStatus"
+            [value]="immunizationStatus_3"
+          >
+            {{ immunizationStatus_3 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"

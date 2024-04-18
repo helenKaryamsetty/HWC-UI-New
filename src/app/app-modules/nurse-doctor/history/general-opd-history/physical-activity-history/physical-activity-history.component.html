@@ -34,23 +34,25 @@
     </mat-radio-group>
   </div>
   <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
-    <mat-select
-      style="width: 100%"
-      name="physicalActivitQuestions"
-      formControlName="activityType"
-      placeholder="{{
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
         currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
           ?.physcialActivityQuestions
-      }}"
-      (change)="calculateIDRSScore($event, physicalActivityHistory)"
-      [required]="age >= 30"
-    >
-      <mat-option
-        *ngFor="let questions of physicalActivityQuestions"
-        [value]="questions.activityType"
+      }}</mat-label>
+      <mat-select
+        style="width: 100%"
+        name="physicalActivitQuestions"
+        formControlName="activityType"
+        (change)="calculateIDRSScore($event, physicalActivityHistory)"
+        [required]="age >= 30"
       >
-        {{ questions.activityType }}</mat-option
-      >
-    </mat-select>
+        <mat-option
+          *ngFor="let questions of physicalActivityQuestions"
+          [value]="questions.activityType"
+        >
+          {{ questions.activityType }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
   </div>
 </ng-container>

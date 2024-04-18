@@ -42,25 +42,27 @@
       <ng-container [formGroupName]="i">
         <div *ngIf="!familyDisease.value.deleted" class="multi-row-select">
           <div class="col-xs-12 col-sm-6 col-md-3 box">
-            <mat-select
-              class="select-full-width"
-              name="diseaseType"
-              formControlName="diseaseType"
-              placeholder="{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.familyHistoryDataANC_OPD_NCD_PNC?.diseaseType
-              }}"
-              (selectionChange)="
-                filterFamilyDiseaseList($event.value, i, familyDisease)
-              "
-            >
-              <mat-option
-                *ngFor="let disease of diseaseSelectList[i]"
-                [value]="disease"
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                name="diseaseType"
+                formControlName="diseaseType"
+                (selectionChange)="
+                  filterFamilyDiseaseList($event.value, i, familyDisease)
+                "
               >
-                {{ disease.diseaseType }}
-              </mat-option>
-            </mat-select>
+                <mat-option
+                  *ngFor="let disease of diseaseSelectList[i]"
+                  [value]="disease"
+                >
+                  {{ disease.diseaseType }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
 
           <div
@@ -68,14 +70,14 @@
             *ngIf="familyDisease.value.diseaseType?.diseaseType === 'Other'"
           >
             <mat-form-field class="input-full-width">
+              <mat-label class="mat-label-text">{{
+                currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
+                  ?.others
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
-                    ?.others
-                }}"
                 maxlength="50"
                 allowText="alphaspace"
                 name="otherDiseaseType"
@@ -86,13 +88,13 @@
 
           <div class="col-xs-12 col-sm-6 col-md-3 box" [hidden]="true">
             <mat-form-field class="input-full-width">
+              <mat-label class="mat-label-text">{{
+                currentLanguageSet?.historyData?.opd_NCD_PNCHistory
+                  ?.otherVaccine?.sctCode
+              }}</mat-label>
               <input
                 maxlength="100"
                 matInput
-                placeholder="{{
-                  currentLanguageSet?.historyData?.opd_NCD_PNCHistory
-                    ?.otherVaccine?.sctCode
-                }}"
                 [style.width]="'100%'"
                 formControlName="snomedCode"
                 readonly
@@ -100,29 +102,35 @@
             </mat-form-field>
           </div>
 
-          <div class="col-xs-12 col-sm-6 col-md-3 box">
-            <mat-select
-              class="select-full-width"
-              multiple
-              name="familyMembers"
-              formControlName="familyMembers"
-              placeholder="{{
+          <div
+            class="col-xs-12 col-sm-6 col-md-3 box"
+            *ngIf="
+              (familyDisease?.value?.diseaseType !== null &&
+                familyDisease?.value?.diseaseType !== '') ||
+              familyDisease.value.diseaseType?.diseaseType === 'None' ||
+              familyDisease.value.diseaseType?.diseaseType === 'Nil'
+            "
+          >
+            <mat-form-field [style.width]="'100%'">
+              <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.familyHistoryDataANC_OPD_NCD_PNC?.familyMember
-              }}"
-              [disabled]="
-                !familyDisease.value.diseaseType ||
-                familyDisease.value.diseaseType?.diseaseType === 'None'
-              "
-              (change)="filterFamilyMembers($event, familyDisease)"
-            >
-              <mat-option
-                *ngFor="let member of familyMemeberMasterData"
-                [value]="member.benRelationshipType"
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                multiple
+                name="familyMembers"
+                formControlName="familyMembers"
+                (change)="filterFamilyMembers($event, familyDisease)"
               >
-                {{ member.benRelationshipType }}
-              </mat-option>
-            </mat-select>
+                <mat-option
+                  *ngFor="let member of familyMemeberMasterData"
+                  [value]="member.benRelationshipType"
+                >
+                  {{ member.benRelationshipType }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
 
           <div class="col-sm-6 col-md-3 box action-btn-container pull-right">
@@ -177,15 +185,15 @@
 
         <div class="col-xs-12 col-sm-6 col-md-3 box" *ngIf="isGeneticDisorder">
           <mat-form-field class="input-full-width">
+            <mat-label class="mat-label-text">{{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.familyHistoryDataANC_OPD_NCD_PNC?.geneticDisorders
+            }}</mat-label>
             <input
               autocomplete="off"
               matInput
               allowText="inputFieldValidator"
               defaultNull
-              placeholder="{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.familyHistoryDataANC_OPD_NCD_PNC?.geneticDisorders
-              }}"
               maxlength="50"
               name="geneticDisorder"
               formControlName="geneticDisorder"

@@ -63,19 +63,21 @@
                   </td>
                   <td>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                      <mat-select
-                        [style.width]="'100%'"
-                        name="cbacAge"
-                        class="answer"
-                        formControlName="cbacAge"
-                        (selectionChange)="calculateAgeScore()"
-                      >
-                        <mat-option
-                          *ngFor="let cbacAgeValues of cbacAgeOptions"
-                          [value]="cbacAgeValues.option"
-                          >{{ cbacAgeValues.option }}
-                        </mat-option>
-                      </mat-select>
+                      <mat-form-field [style.width]="'100%'">
+                        <mat-select
+                          [style.width]="'100%'"
+                          name="cbacAge"
+                          class="answer"
+                          formControlName="cbacAge"
+                          (selectionChange)="calculateAgeScore()"
+                        >
+                          <mat-option
+                            *ngFor="let cbacAgeValues of cbacAgeOptions"
+                            [value]="cbacAgeValues.option"
+                            >{{ cbacAgeValues.option }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </td>
                 </tr>
@@ -89,21 +91,23 @@
                   </td>
                   <td>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                      <mat-select
-                        [style.width]="'100%'"
-                        name="cbacConsumeGutka"
-                        class="answer"
-                        formControlName="cbacConsumeGutka"
-                        (selectionChange)="calculatecbacConsumeGutka()"
-                      >
-                        <mat-option
-                          *ngFor="
-                            let cbacConsumeGutkaValues of cbacConsumeGutkaOptions
-                          "
-                          [value]="cbacConsumeGutkaValues.option"
-                          >{{ cbacConsumeGutkaValues.option }}
-                        </mat-option>
-                      </mat-select>
+                      <mat-form-field [style.width]="'100%'">
+                        <mat-select
+                          [style.width]="'100%'"
+                          name="cbacConsumeGutka"
+                          class="answer"
+                          formControlName="cbacConsumeGutka"
+                          (selectionChange)="calculatecbacConsumeGutka()"
+                        >
+                          <mat-option
+                            *ngFor="
+                              let cbacConsumeGutkaValues of cbacConsumeGutkaOptions
+                            "
+                            [value]="cbacConsumeGutkaValues.option"
+                            >{{ cbacConsumeGutkaValues.option }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </td>
                 </tr>
@@ -143,21 +147,23 @@
                   </td>
                   <td *ngIf="beneficiaryGender === 'male'">
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                      <mat-select
-                        [style.width]="'100%'"
-                        name="cbacWaistMale"
-                        class="answer"
-                        formControlName="cbacWaistMale"
-                        (selectionChange)="calculatecbacWaistMaleScore()"
-                      >
-                        <mat-option
-                          *ngFor="
-                            let cbacWaistMaleValues of cbacWaistMaleOptions
-                          "
-                          [value]="cbacWaistMaleValues.option"
-                          >{{ cbacWaistMaleValues.option }}
-                        </mat-option>
-                      </mat-select>
+                      <mat-form-field [style.width]="'100%'">
+                        <mat-select
+                          [style.width]="'100%'"
+                          name="cbacWaistMale"
+                          class="answer"
+                          formControlName="cbacWaistMale"
+                          (selectionChange)="calculatecbacWaistMaleScore()"
+                        >
+                          <mat-option
+                            *ngFor="
+                              let cbacWaistMaleValues of cbacWaistMaleOptions
+                            "
+                            [value]="cbacWaistMaleValues.option"
+                            >{{ cbacWaistMaleValues.option }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </td>
 
@@ -168,21 +174,23 @@
                     "
                   >
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                      <mat-select
-                        [style.width]="'100%'"
-                        name="cbacWaistFemale"
-                        class="answer"
-                        formControlName="cbacWaistFemale"
-                        (selectionChange)="calculatecbacWaistFemaleScore()"
-                      >
-                        <mat-option
-                          *ngFor="
-                            let cbacWaistFemaleValues of cbacWaistFemaleOptions
-                          "
-                          [value]="cbacWaistFemaleValues.option"
-                          >{{ cbacWaistFemaleValues.option }}
-                        </mat-option>
-                      </mat-select>
+                      <mat-form-field [style.width]="'100%'">
+                        <mat-select
+                          [style.width]="'100%'"
+                          name="cbacWaistFemale"
+                          class="answer"
+                          formControlName="cbacWaistFemale"
+                          (selectionChange)="calculatecbacWaistFemaleScore()"
+                        >
+                          <mat-option
+                            *ngFor="
+                              let cbacWaistFemaleValues of cbacWaistFemaleOptions
+                            "
+                            [value]="cbacWaistFemaleValues.option"
+                            >{{ cbacWaistFemaleValues.option }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </td>
                 </tr>
@@ -196,21 +204,23 @@
                   </td>
                   <td>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                      <mat-select
-                        [style.width]="'100%'"
-                        name="cbacPhysicalActivity"
-                        class="answer"
-                        formControlName="cbacPhysicalActivity"
-                        (selectionChange)="calculateCbacPhysicalActivity()"
-                      >
-                        <mat-option
-                          *ngFor="
-                            let cbacPhysicalActivityValues of cbacPhysicalActivityOptions
-                          "
-                          [value]="cbacPhysicalActivityValues.option"
-                          >{{ cbacPhysicalActivityValues.option }}
-                        </mat-option>
-                      </mat-select>
+                      <mat-form-field [style.width]="'100%'">
+                        <mat-select
+                          [style.width]="'100%'"
+                          name="cbacPhysicalActivity"
+                          class="answer"
+                          formControlName="cbacPhysicalActivity"
+                          (selectionChange)="calculateCbacPhysicalActivity()"
+                        >
+                          <mat-option
+                            *ngFor="
+                              let cbacPhysicalActivityValues of cbacPhysicalActivityOptions
+                            "
+                            [value]="cbacPhysicalActivityValues.option"
+                            >{{ cbacPhysicalActivityValues.option }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </td>
                 </tr>

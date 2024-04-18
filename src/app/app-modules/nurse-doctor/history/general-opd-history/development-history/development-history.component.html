@@ -22,23 +22,27 @@
   <div>
     <div class="row" style="margin-left: 0px">
       <div class="col-xs-12 col-sm-6 col-md-6 box">
-        <mat-select
-          multiple
-          class="select-full-width"
-          name="grossMotorMilestone"
-          formControlName="grossMotorMilestones"
-          placeholder="{{
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
               ?.grossMotorMilestone
-          }}"
-          (change)="resetGrossMotorMilestoneAttaintedStatus()"
-        >
-          <mat-option
-            *ngFor="let grossMotorMilestone of masterData?.grossMotorMilestones"
-            [value]="grossMotorMilestone.gMMilestone"
-            >{{ grossMotorMilestone.gMMilestone }}</mat-option
+          }}</mat-label>
+          <mat-select
+            multiple
+            class="select-full-width"
+            name="grossMotorMilestone"
+            formControlName="grossMotorMilestones"
+            (change)="resetGrossMotorMilestoneAttaintedStatus()"
           >
-        </mat-select>
+            <mat-option
+              *ngFor="
+                let grossMotorMilestone of masterData?.grossMotorMilestones
+              "
+              [value]="grossMotorMilestone.gMMilestone"
+              >{{ grossMotorMilestone.gMMilestone }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <div
@@ -68,25 +72,27 @@
     </div>
     <div class="row" style="margin-left: 0px">
       <div class="col-xs-12 col-sm-6 col-md-6 box">
-        <mat-select
-          multiple
-          class="select-full-width"
-          name="fineMotorMilestone"
-          formControlName="fineMotorMilestones"
-          placeholder="{{
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
               ?.fineMotorMilestone
-          }}"
-          (change)="resetfineMotorMilestonesAttaintedStatus()"
-        >
-          <mat-option value="Changes object from one to another hand"
-            >Changes object from one to another hand</mat-option
+          }}</mat-label>
+          <mat-select
+            multiple
+            class="select-full-width"
+            name="fineMotorMilestone"
+            formControlName="fineMotorMilestones"
+            (change)="resetfineMotorMilestonesAttaintedStatus()"
           >
-          <mat-option value="Holding object with Palm"
-            >Holding object with Palm</mat-option
-          >
-          <mat-option value="Pincer's Grasp">Pincer's Grasp</mat-option>
-        </mat-select>
+            <mat-option value="Changes object from one to another hand"
+              >Changes object from one to another hand</mat-option
+            >
+            <mat-option value="Holding object with Palm"
+              >Holding object with Palm</mat-option
+            >
+            <mat-option value="Pincer's Grasp">Pincer's Grasp</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div
         class="col-xs-12 col-sm-6 col-md-6 box"
@@ -115,21 +121,23 @@
     </div>
     <div class="row" style="margin-left: 0px">
       <div class="col-xs-12 col-sm-6 col-md-6 box">
-        <mat-select
-          multiple
-          class="select-full-width"
-          name="socialMilestone"
-          formControlName="socialMilestones"
-          placeholder="{{
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
               ?.socialMilestone
-          }}"
-          (change)="resetsocialMilestonesAttaintedStatus()"
-        >
-          <mat-option value="Social smile">Social smile</mat-option>
-          <mat-option value="Cooing">Cooing</mat-option>
-          <mat-option value="Stranger Anxiety">Stranger Anxiety</mat-option>
-        </mat-select>
+          }}</mat-label>
+          <mat-select
+            multiple
+            class="select-full-width"
+            name="socialMilestone"
+            formControlName="socialMilestones"
+            (change)="resetsocialMilestonesAttaintedStatus()"
+          >
+            <mat-option value="Social smile">Social smile</mat-option>
+            <mat-option value="Cooing">Cooing</mat-option>
+            <mat-option value="Stranger Anxiety">Stranger Anxiety</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div
         class="col-xs-12 col-sm-6 col-md-6 box"
@@ -156,21 +164,23 @@
     </div>
     <div class="row" style="margin-left: 0px">
       <div class="col-xs-12 col-sm-6 col-md-6 box">
-        <mat-select
-          multiple
-          class="select-full-width"
-          name="languageMilestone"
-          formControlName="languageMilestones"
-          placeholder="{{
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
               ?.languageMilestone
-          }}"
-          (change)="resetlanguageMilestonesAttaintedStatus()"
-        >
-          <mat-option value="Monosyllables">Monosyllables</mat-option>
-          <mat-option value="Bi syllables">Bi syllables</mat-option>
-          <mat-option value="Words">Words</mat-option>
-        </mat-select>
+          }}</mat-label>
+          <mat-select
+            multiple
+            class="select-full-width"
+            name="languageMilestone"
+            formControlName="languageMilestones"
+            (change)="resetlanguageMilestonesAttaintedStatus()"
+          >
+            <mat-option value="Monosyllables">Monosyllables</mat-option>
+            <mat-option value="Bi syllables">Bi syllables</mat-option>
+            <mat-option value="Words">Words</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div
         class="col-xs-12 col-sm-6 col-md-6 box"
@@ -197,22 +207,24 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 box">
-      <mat-select
-        multiple
-        class="select-full-width"
-        name="developmentalProblems"
-        formControlName="developmentProblems"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
           currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
             ?.developmentalProblems
-        }}"
-      >
-        <mat-option value="Nil">Nil</mat-option>
-        <mat-option value="Cerebral Palsy">Cerebral Palsy</mat-option>
-        <mat-option value="ADHD">ADHD</mat-option>
-        <mat-option value="Autism">Autism</mat-option>
-        <mat-option value="Learning Disorders">Learning Disorders</mat-option>
-      </mat-select>
+        }}</mat-label>
+        <mat-select
+          multiple
+          class="select-full-width"
+          name="developmentalProblems"
+          formControlName="developmentProblems"
+        >
+          <mat-option value="Nil">Nil</mat-option>
+          <mat-option value="Cerebral Palsy">Cerebral Palsy</mat-option>
+          <mat-option value="ADHD">ADHD</mat-option>
+          <mat-option value="Autism">Autism</mat-option>
+          <mat-option value="Learning Disorders">Learning Disorders</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 </div>

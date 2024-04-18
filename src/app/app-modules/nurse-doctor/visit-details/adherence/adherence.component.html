@@ -28,6 +28,9 @@
       *ngIf="toDrugs !== null && !toDrugs"
     >
       <mat-form-field class="input-full-width" class="textarea-full-width">
+        <mat-label class="mat-label-text">{{
+          currentLanguageSet?.nurseData?.adherenceDetails?.reason
+        }}</mat-label>
         <textarea
           matInput
           allowText="textAreaValidator"
@@ -36,9 +39,6 @@
           name="drugReason"
           formControlName="drugReason"
           maxlength="300"
-          placeholder="{{
-            currentLanguageSet?.nurseData?.adherenceDetails?.reason
-          }}"
         ></textarea>
       </mat-form-field>
     </div>
@@ -72,6 +72,9 @@
       *ngIf="toReferral !== null && !toReferral"
     >
       <mat-form-field class="input-full-width" class="textarea-full-width">
+        <mat-label class="mat-label-text">{{
+          currentLanguageSet?.nurseData?.adherenceDetails?.reason
+        }}</mat-label>
         <textarea
           matInput
           allowText="textAreaValidator"
@@ -80,9 +83,6 @@
           name="referralReason"
           maxlength="300"
           formControlName="referralReason"
-          placeholder="{{
-            currentLanguageSet?.nurseData?.adherenceDetails?.reason
-          }}"
         ></textarea>
       </mat-form-field>
     </div>
@@ -90,21 +90,23 @@
 
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-      <mat-select
-        class="input-full-width"
-        name="progress"
-        formControlName="progress"
-        placeholder="{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label class="mat-label-text">{{
           currentLanguageSet?.nurseData?.adherenceDetails?.progress
-        }}"
-      >
-        <mat-option
-          *ngFor="let progress of adherenceProgressData"
-          [value]="progress"
+        }}</mat-label>
+        <mat-select
+          class="input-full-width"
+          name="progress"
+          formControlName="progress"
         >
-          {{ progress }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let progress of adherenceProgressData"
+            [value]="progress"
+          >
+            {{ progress }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 </div>

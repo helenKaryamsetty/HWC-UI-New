@@ -76,6 +76,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   ncdTemperature = false;
   // enableLungAssessment: boolean = false;
   enableProvisionalDiag = false;
+  chiefComplaint: any;
+  duration: any;
 
   constructor(
     private fb: FormBuilder,
@@ -117,6 +119,15 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     return chiefComplaintsControl instanceof FormArray
       ? chiefComplaintsControl.controls
       : null;
+  }
+
+  onInputDuration(complaintForm: AbstractControl) {
+    if (this.duration) {
+      complaintForm.get('unitOfDuration')?.enable();
+    } else {
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+    }
   }
 
   assignSelectedLanguage() {
@@ -533,6 +544,10 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             .toLowerCase()
             .indexOf(complaint.toLowerCase().trim()) >= 0,
       );
+      if (this.chiefComplaint) {
+        complaintForm.get('duration')?.enable();
+        complaintForm.get('description')?.enable();
+      }
     } else if (
       complaint !== undefined &&
       complaint !== null &&
@@ -549,9 +564,34 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             .toLowerCase()
             .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
       );
+      if (this.chiefComplaint) {
+        complaintForm.get('duration')?.enable();
+        complaintForm.get('description')?.enable();
+      }
+    } else {
+      complaintForm.get('duration')?.disable();
+      complaintForm.get('duration')?.reset();
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+      complaintForm.get('description')?.disable();
+      complaintForm.get('description')?.reset();
     }
 
     if (this.suggestedChiefComplaintList[i].length === 0) complaintForm.reset();
+  }
+
+  reEnterChiefComplaint(complaintForm: AbstractControl) {
+    if (this.chiefComplaint) {
+      complaintForm.get('duration')?.enable();
+      complaintForm.get('description')?.enable();
+    } else {
+      complaintForm.get('duration')?.disable();
+      complaintForm.get('duration')?.reset();
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+      complaintForm.get('description')?.disable();
+      complaintForm.get('description')?.reset();
+    }
   }
 
   sortChiefComplaintList(complaintList: any) {

@@ -143,7 +143,7 @@ export const environment = {
   visitDetailMasterDataUrl: `${TM_API}master/get/visitReasonAndCategories`,
   nurseMasterDataUrl: `${TM_API}master/nurse/masterData/`,
   doctorMasterDataUrl: `${TM_API}master/doctor/masterData/`,
-  snomedCTRecordURL: `${TM_API}/snomed/getSnomedCTRecord`,
+  snomedCTRecordURL: `${TM_API}snomed/getSnomedCTRecord`,
   /**
    * Lab Data Urls
    */
@@ -200,8 +200,8 @@ export const environment = {
   getNCDScreeningDetails: `${TM_API}NCD/get/nurseData`,
   updateNCDScreeningDetails: `${TM_API}NCD/update/nurseData`,
   updateNCDScreeningHistoryDetailsUrl: `${TM_API}NCD/update/historyScreen`,
-  getCbacDetailsUrl: `${TM_API}/NCD/getCbacDetails`,
-  getNcdScreeningDetailsForCbac: `${TM_API}/NCD/get/ncd/screening/data`,
+  getCbacDetailsUrl: `${TM_API}NCD/getCbacDetails`,
+  getNcdScreeningDetailsForCbac: `${TM_API}NCD/get/ncd/screening/data`,
   updateNCDScreeningDetailsUrl: `${TM_API}NCD/update/ncd/screening/data`,
 
   /**
@@ -234,8 +234,8 @@ export const environment = {
   updateANCExaminationDetailsUrl: `${TM_API}ANC/update/examinationScreen`,
 
   /**ANC foetalMonitor API URLs */
-  savefetosenseTestDetailsUrl: `${TM_API}/foetalMonitor/sendMotherTestDetailsToFoetalMonitor`,
-  getPrescribedFetosenseTests: `${TM_API}/foetalMonitor/fetch/foetalMonitorDetails/`,
+  savefetosenseTestDetailsUrl: `${TM_API}foetalMonitor/sendMotherTestDetailsToFoetalMonitor`,
+  getPrescribedFetosenseTests: `${TM_API}foetalMonitor/fetch/foetalMonitorDetails/`,
   getESanjeevaniDetailsUrl: `${COMMON_API}esanjeevani/getESanjeevaniUrl/`,
 
   previousVisitDataUrl: `${TM_API}common/getBenSymptomaticQuestionnaireDetails`,
@@ -246,8 +246,8 @@ export const environment = {
   saveNurseGeneralOPDDetails: `${TM_API}generalOPD/save/nurseData`,
 
   updateGeneralOPDHistoryDetailsUrl: `${TM_API}generalOPD/update/historyScreen`,
-  updateGeneralOPDVitalsDetailsUrl: `${TM_API}/generalOPD/update/vitalScreen`,
-  updateGeneralOPDExaminationDetailsUrl: `${TM_API}/generalOPD/update/examinationScreen`,
+  updateGeneralOPDVitalsDetailsUrl: `${TM_API}generalOPD/update/vitalScreen`,
+  updateGeneralOPDExaminationDetailsUrl: `${TM_API}generalOPD/update/examinationScreen`,
 
   saveDoctorGeneralOPDDetails: `${TM_API}generalOPD/save/doctorData`,
 
@@ -313,7 +313,7 @@ export const environment = {
   getPNCDoctorDetails: `${TM_API}PNC/getBenCaseRecordFromDoctorPNC`,
 
   updateCancerScreeningDoctorDetails: `${TM_API}CS-cancerScreening/update/doctorData`,
-  updateNCDScreeningDoctorDetails: `${TM_API}/NCD/update/doctorData`,
+  updateNCDScreeningDoctorDetails: `${TM_API}NCD/update/doctorData`,
   updateGeneralOPDQuickConsultDoctorDetails: `${TM_API}genOPD-QC-quickConsult/update/doctorData`,
   updateANCDoctorDetails: `${TM_API}ANC/update/doctorData`,
   updateGeneralOPDDoctorDetails: `${TM_API}generalOPD/update/doctorData`,
@@ -359,10 +359,10 @@ export const environment = {
   getNcdScreeningVisitCountUrl: `${TM_API}NCD/getNcdScreeningVisitCount/`,
   getVanDetailsForMasterDownloadUrl: `${TM_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
-  getMasterSpecializationUrl: `${SCHEDULER_API}/specialist/masterspecialization`,
-  getSpecialistUrl: `${SCHEDULER_API}/specialist/getSpecialist`,
-  getAvailableSlotUrl: `${SCHEDULER_API}/schedule/getavailableSlot`,
-  getSwymedMailUrl: `${SCHEDULER_API}/van/getvan`,
+  getMasterSpecializationUrl: `${SCHEDULER_API}specialist/masterspecialization`,
+  getSpecialistUrl: `${SCHEDULER_API}specialist/getSpecialist`,
+  getAvailableSlotUrl: `${SCHEDULER_API}schedule/getavailableSlot`,
+  getSwymedMailUrl: `${SCHEDULER_API}van/getvan`,
 
   updateBeneficiaryArrivalStatusUrl: `${TM_API}tc/update/benArrivalStatus`,
   cancelBeneficiaryTCRequestUrl: `${TM_API}tc/cancel/benTCRequest`,
@@ -380,7 +380,7 @@ export const environment = {
   licenseUrl: `${COMMON_API}license.html`,
   apiVersionUrl: `${TM_API}version`,
   snomedCTRecordListURL1: `${COMMON_API}snomed/getSnomedCTRecordList`,
-  getCalibrationStrips: `${ADMIN_API}/fetchCalibrationStrips`,
+  getCalibrationStrips: `${ADMIN_API}fetchCalibrationStrips`,
   updateNCDScreeningIDRSDetailsUrl: `${TM_API}NCD/update/idrsScreen`,
   getNCDScreeningIDRSDetails: `${TM_API}NCD/getBenIdrsDetailsFrmNurse`,
   saveDoctorNCDScreeningDetails: `${TM_API}NCD/save/doctorData`,
@@ -456,11 +456,11 @@ export const environment = {
   previousCovidVaccinationUrl: `${COMMON_API}covid/getCovidVaccinationDetails`,
 
   /* Screening Masters API */
-  getOralCavityFindings: `${COMMON_API}/getOralCavityData`,
-  getMouthOpeningUrl: `${COMMON_API}/getMouthOpeningData`,
-  getPalpationOralCavityUrl: `${COMMON_API}/getPalpationOfOralCavity`,
-  getTemporomandibularUrl: `${COMMON_API}/getTemperomandibularJoinData`,
-  getCervicalLymphNodeUrl: `${COMMON_API}/getCervicalLymph`,
+  getOralCavityFindings: `${COMMON_API}getOralCavityData`,
+  getMouthOpeningUrl: `${COMMON_API}getMouthOpeningData`,
+  getPalpationOralCavityUrl: `${COMMON_API}getPalpationOfOralCavity`,
+  getTemporomandibularUrl: `${COMMON_API}getTemperomandibularJoinData`,
+  getCervicalLymphNodeUrl: `${COMMON_API}getCervicalLymph`,
   /*Family Tagging Urls */
   relationShipUrl: `${TM_API}registrar/registrarMasterData`,
   saveFamilyTaggingUrl: `${IDENTITY_API}/family/addTag`,
@@ -470,10 +470,10 @@ export const environment = {
   createFamilyUrl: `${IDENTITY_API}/family/createFamily`,
   getFamilyMemberUrl: `${IDENTITY_API}/family/getFamilyDetails`,
   /*Hypertension Screening Url */
-  bloodPressureStatusUrl: `${TM_API}/screeningOutcome/hypertension`,
+  bloodPressureStatusUrl: `${TM_API}screeningOutcome/hypertension`,
 
   /* Diabetes screening outcome Url */
-  diabetesStatusUrl: `${TM_API}/screeningOutcome/diabetes`,
+  diabetesStatusUrl: `${TM_API}screeningOutcome/diabetes`,
 
   confirmedDiseaseUrl: `${TM_API}NCD/get/ncd/screening/data`,
 
@@ -485,9 +485,9 @@ export const environment = {
   getFamilyPlanningVisitDetails: `${TM_API}family-planning/getBenVisitDetails-Nurse-FamilyPlanning`,
   saveNurseFamilyPlanningDetails: `${TM_API}family-planning/save-family-planning-nurse-data`,
   getFamilyPlanningVitalDetailsUrl: `${TM_API}family-planning/getBenVitalDetailsFrmNurseFamilyPlanning`,
-  updateFamilyPlanningVitalsDetailsUrl: `${TM_API}/family-planning/update/vitalScreen`,
-  updateFamilyPlanningScreenDetailsUrl: `${TM_API}/family-planning/update/FamilyPlanningScreen`,
-  getFamilyPlanningDetailsUrl: `${TM_API}/family-planning/getBenFPDetailsFrmNurseFamilyPlanning`,
+  updateFamilyPlanningVitalsDetailsUrl: `${TM_API}family-planning/update/vitalScreen`,
+  updateFamilyPlanningScreenDetailsUrl: `${TM_API}family-planning/update/FamilyPlanningScreen`,
+  getFamilyPlanningDetailsUrl: `${TM_API}family-planning/getBenFPDetailsFrmNurseFamilyPlanning`,
   saveDoctorFamilyPlanningDetails: `${TM_API}family-planning/save-family-planning-doctor-data`,
   getFamilyPlanningDoctorDetails: `${TM_API}family-planning/getBenCaseRecordFromDoctor`,
   updateFamilyPlanningDoctorDetails: `${TM_API}family-planning/update/doctorData`,
@@ -495,31 +495,31 @@ export const environment = {
   /* Neonatal And Infant Services Urls*/
   saveNurseNeonatalAndInfantDetails: `${TM_API}neonatal-infant-services/save/nurseData`,
   getBirthImmunizationHistoryDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
-  updateBirthImmunizationHistoryDetailsUrl: `${TM_API}/neonatal-infantServices/update/BirthAndImmunizationHistoryScreen`,
+  updateBirthImmunizationHistoryDetailsUrl: `${TM_API}neonatal-infantServices/update/BirthAndImmunizationHistoryScreen`,
   getNeonatalVitalsDetailsUrl: `${TM_API}neonatal-infant-services/getBenVitalDetailsFrmNurse`,
-  updateNeonatalVitalsDetailsUrl: `${TM_API}/neonatal-infantServices/update/vitalScreen`,
+  updateNeonatalVitalsDetailsUrl: `${TM_API}neonatal-infantServices/update/vitalScreen`,
   getPreviousBirthImmunizationDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
   saveDoctorNeonatalAndInfantService: `${TM_API}neonatal-infant-services/save-neo-natal-doctor-data`,
-  updateNeonatalAndInfantService: `${TM_API}/neonatal-infantServices/update/doctorData`,
+  updateNeonatalAndInfantService: `${TM_API}neonatal-infantServices/update/doctorData`,
   getNeonatalAndInfantDetails: `${TM_API}neonatal-infant-services/getBenCaseRecordFromDoctor`,
   vaccineListUrl: `${TM_API}master/common/masterData/getVaccine/`,
   fetchNeonatalImmunizationService: `${TM_API}neonatal-infant-services/getBenImmunizationServiceDetails`,
   updateNeonatalImmunizationService: `${TM_API}neonatal-infantServices/update/ImmunizationServicesScreen`,
-  getNeonatalVisitDetails: `${TM_API}/neonatal-infant-services/getBenVisitDetailsFrmNurseNNI`,
+  getNeonatalVisitDetails: `${TM_API}neonatal-infant-services/getBenVisitDetailsFrmNurseNNI`,
 
   /* Child And Adolescent Urls */
-  saveNurseChildAndAdloescentDetails: `${TM_API}/child-adolescent-care/save/nurseData`,
-  getChildAndAdolescentVisitDetails: `${TM_API}/child-adolescent-care/getBenVisitDetailsFrmNurseCAC`,
-  getChildAndAdolescentVitalsDetailsUrl: `${TM_API}/child-adolescent-care/getBenVitalDetailsFrmNurse`,
-  getPreviousBirthImmunizationDataForChildAndAdolascentUrl: `${TM_API}/child-adolescent-care/getBenHistoryDetails`,
-  updateChildAndAdolescentVitalsDetailsUrl: `${TM_API}/child-adolescent-care/update/vitalScreen`,
-  getChildAndAdolescentDetails: `${TM_API}/child-adolescent-care/getBenCaseRecordFromDoctor`,
-  saveDoctorChildAndAdolescentService: `${TM_API}/child-adolescent-care/save/doctorData`,
-  updateChildAndAdolescentServiceDoctor: `${TM_API}/child-adolescent-care/update/doctorData`,
-  updateChildAndAdolescentService: `${TM_API}/child-adolescent-care/update/ImmunizationServicesScreen`,
-  fetchChildAndAdolescentService: `${TM_API}/child-adolescent-care/getBenImmunizationServiceDetails`,
-  updateBirthAndImmunizationHistoryDataUrl: `${TM_API}/child-adolescent-care/update/BirthAndImmunizationHistoryScreen`,
-  getBirthImmunizationHistoryDataUrl: `${TM_API}/child-adolescent-care/getBenHistoryDetails`,
+  saveNurseChildAndAdloescentDetails: `${TM_API}child-adolescent-care/save/nurseData`,
+  getChildAndAdolescentVisitDetails: `${TM_API}child-adolescent-care/getBenVisitDetailsFrmNurseCAC`,
+  getChildAndAdolescentVitalsDetailsUrl: `${TM_API}child-adolescent-care/getBenVitalDetailsFrmNurse`,
+  getPreviousBirthImmunizationDataForChildAndAdolascentUrl: `${TM_API}child-adolescent-care/getBenHistoryDetails`,
+  updateChildAndAdolescentVitalsDetailsUrl: `${TM_API}child-adolescent-care/update/vitalScreen`,
+  getChildAndAdolescentDetails: `${TM_API}child-adolescent-care/getBenCaseRecordFromDoctor`,
+  saveDoctorChildAndAdolescentService: `${TM_API}child-adolescent-care/save/doctorData`,
+  updateChildAndAdolescentServiceDoctor: `${TM_API}child-adolescent-care/update/doctorData`,
+  updateChildAndAdolescentService: `${TM_API}child-adolescent-care/update/ImmunizationServicesScreen`,
+  fetchChildAndAdolescentService: `${TM_API}child-adolescent-care/getBenImmunizationServiceDetails`,
+  updateBirthAndImmunizationHistoryDataUrl: `${TM_API}child-adolescent-care/update/BirthAndImmunizationHistoryScreen`,
+  getBirthImmunizationHistoryDataUrl: `${TM_API}child-adolescent-care/getBenHistoryDetails`,
 
   /* SWAASA Urls*/
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,

@@ -114,29 +114,34 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  pregnancyMonths: any;
-  calculatePeriodOfPregnancy(lastMP: any) {
-    if (lastMP !== null) {
-      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-      this.pregnancyMonths = Math.round(
-        Math.abs(
-          Math.round(
-            Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
-          ),
-        ) / 30,
-      );
-      if (this.pregnancyMonths === 0) this.pregnancyMonths = 1;
-      this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
-    } else {
-      this.pregnancyMonths = null;
-      this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
-    }
+  // pregnancyMonths: any;
+  // calculatePeriodOfPregnancy(lastMP: any) {
+  //   if (lastMP !== null) {
+  //     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  //     this.pregnancyMonths = Math.round(
+  //       Math.abs(
+  //         Math.round(
+  //           Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
+  //         ),
+  //       ) / 30,
+  //     );
+  //     if (this.pregnancyMonths === 0) this.pregnancyMonths = 1;
+  //     this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
+  //   } else {
+  //     this.pregnancyMonths = null;
+  //     this.patientANCDetailsForm.patchValue({ duration: this.pregnancyMonths });
+  //   }
+  // }
+
+  calculatePeriodOfPregnancy(lmpDate: any) {
+    this.patientANCDetailsForm.patchValue({ duration: null });
   }
-  gestationalAge: any;
+
   calculateGestationalAge(lastMP: any) {
+    let gestationalAge: any;
     if (lastMP !== null) {
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-      this.gestationalAge = Math.round(
+      gestationalAge = Math.round(
         Math.abs(
           Math.round(
             Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
@@ -144,15 +149,15 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
         ) / 7,
       );
       this.patientANCDetailsForm.patchValue({
-        gestationalAgeOrPeriodofAmenorrhea_POA: this.gestationalAge,
+        gestationalAgeOrPeriodofAmenorrhea_POA: gestationalAge,
       });
-      this.calculateTrimester(this.gestationalAge);
+      this.calculateTrimester(gestationalAge);
     } else {
-      this.gestationalAge = null;
+      gestationalAge = null;
       this.patientANCDetailsForm.patchValue({
-        gestationalAgeOrPeriodofAmenorrhea_POA: this.gestationalAge,
+        gestationalAgeOrPeriodofAmenorrhea_POA: gestationalAge,
       });
-      this.calculateTrimester(this.gestationalAge);
+      this.calculateTrimester(gestationalAge);
     }
   }
 
