@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
@@ -213,15 +213,39 @@ export class RegistrarService {
   }
 
   getVillageList(blockId: any) {
-    return this.http.get(`${environment.getVillageListUrl}${blockId}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.get(
+      `${environment.getVillageListUrl}${blockId}`,
+      httpOptions,
+    );
   }
 
   getSubDistrictList(districtId: any) {
-    return this.http.get(`${environment.getSubDistrictListUrl}${districtId}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.get(
+      `${environment.getSubDistrictListUrl}${districtId}`,
+      httpOptions,
+    );
   }
 
   getDistrictList(stateId: any) {
-    return this.http.get(`${environment.getDistrictListUrl}${stateId}`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.get(
+      `${environment.getDistrictListUrl}${stateId}`,
+      httpOptions,
+    );
   }
 
   generateOTP(mobileNo: any, mode: any) {

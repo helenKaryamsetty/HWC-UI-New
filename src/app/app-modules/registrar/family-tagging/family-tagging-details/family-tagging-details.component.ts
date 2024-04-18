@@ -292,14 +292,14 @@ export class FamilyTaggingDetailsComponent
     const matDialogRef: MatDialogRef<SearchFamilyComponent> = this.dialog.open(
       SearchFamilyComponent,
       {
+        width: '60%',
+        disableClose: true,
         data: {
           benSurname: this.benFamilyName,
           benDistrictId: this.benDistrictId,
           benBlockId: this.benBlockId,
           benVillageId: this.benVillageId,
         },
-        width: '60%',
-        disableClose: true,
       },
     );
     matDialogRef.afterClosed().subscribe((result: any) => {
