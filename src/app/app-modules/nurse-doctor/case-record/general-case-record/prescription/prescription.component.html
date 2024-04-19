@@ -110,7 +110,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-2 box">
+    <div class="col-md-3 box">
       <mat-form-field>
         <mat-label>{{ current_language_set?.Prescription?.dosage }}</mat-label>
         <mat-select
@@ -130,7 +130,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4 box">
+    <div class="col-md-3 box">
       <mat-form-field>
         <mat-label>{{
           current_language_set?.Prescription?.frequency
@@ -194,7 +194,7 @@
     </div>
 
     <div
-      class="col-md-2 box"
+      class="col-md-3 box"
       *ngIf="
         currentPrescription.formID &&
         currentPrescription.formID !== '1' &&
@@ -225,10 +225,10 @@
     <div
       class="box"
       [ngClass]="{
-        'col-md-4':
+        'col-md-3':
           !currentPrescription.formID ||
           (currentPrescription.formID && currentPrescription.formID <= '2'),
-        'col-md-3':
+        'col-md-2':
           currentPrescription.formID && currentPrescription.formID > '2'
       }"
     >
@@ -274,7 +274,7 @@
         </textarea>
       </mat-form-field>
     </div>
-    <div class="col-md-2 box centered-button">
+    <div class="col-md-2 box centered-button" style="margin-top: 15px">
       <button
         id="add-button"
         [disabled]="prescriptionForm.invalid"
@@ -445,7 +445,7 @@
     "
   >
     <div class="form-group">
-      <mat-form-field>
+      <mat-form-field style="width: 100%">
         <mat-label>{{ current_language_set?.counsellingProvided }}</mat-label>
         <mat-select
           multiple

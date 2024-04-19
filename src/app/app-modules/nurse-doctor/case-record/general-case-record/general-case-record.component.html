@@ -11,16 +11,16 @@
     <app-previous-significiant-findings></app-previous-significiant-findings>
   </mat-expansion-panel>
 
-  <!-- <mat-expansion-panel>
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       <h5>{{ current_language_set?.previousvisit?.Previousvisitdetails }}</h5>
     </mat-expansion-panel-header>
     <app-previous-visit-details
       [vitals]="currentVitals"
     ></app-previous-visit-details>
-  </mat-expansion-panel> -->
+  </mat-expansion-panel>
 
-  <!-- <mat-expansion-panel>
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       <h5>{{ current_language_set?.Find?.findings }}</h5>
     </mat-expansion-panel-header>
@@ -28,7 +28,7 @@
       [caseRecordMode]="caseRecordMode"
       [generalFindingsForm]="generalFindingsForm"
     ></app-findings>
-  </mat-expansion-panel> -->
+  </mat-expansion-panel>
 
   <mat-expansion-panel>
     <mat-expansion-panel-header>
@@ -41,7 +41,7 @@
     ></app-diagnosis>
   </mat-expansion-panel>
 
-  <!-- <mat-expansion-panel
+  <mat-expansion-panel
     *ngIf="
       visitReason === 'Follow Up' &&
       visitCategory === 'FP & Contraceptive Services'
@@ -54,9 +54,9 @@
       [caseRecordMode]="caseRecordMode"
       [treatmentsOnSideEffectsForm]="treatmentsOnSideEffectsFormData"
     ></app-treatments-on-side-effects>
-  </mat-expansion-panel> -->
+  </mat-expansion-panel>
 
-  <!-- <mat-expansion-panel>
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       <h5>
         {{
@@ -69,7 +69,7 @@
       [visit]="visitCategory"
       [generalDoctorInvestigationForm]="generalDoctorInvestigationForm"
     ></app-doctor-investigations>
-  </mat-expansion-panel> -->
+  </mat-expansion-panel>
 
   <mat-expansion-panel>
     <mat-expansion-panel-header>
@@ -82,10 +82,10 @@
     ></app-prescription>
   </mat-expansion-panel>
 
-  <!-- <mat-expansion-panel>
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       <h5>{{ current_language_set?.common?.report }}</h5>
     </mat-expansion-panel-header>
     <app-test-and-radiology></app-test-and-radiology>
-  </mat-expansion-panel> -->
+  </mat-expansion-panel>
 </mat-accordion>
