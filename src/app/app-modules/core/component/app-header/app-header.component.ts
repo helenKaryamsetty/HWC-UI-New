@@ -260,6 +260,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     this.auth.logout().subscribe((res) => {
       this.router.navigate(['/login']).then((result) => {
         if (result) {
+          this.changeLanguage('English');
           localStorage.clear();
           sessionStorage.clear();
         }

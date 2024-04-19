@@ -58,6 +58,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   benDetails: any;
   healthIDArray: any = [];
   healthIDValue = '';
+  languageComponent!: SetLanguageComponent;
   displayedColumns: any = [
     'sno',
     'beneficiaryID',
@@ -95,9 +96,9 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     this.assignSelectedLanguage();
   }
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.current_language_set = getLanguageJson.currentLanguageObject;
+    this.languageComponent = new SetLanguageComponent(this.httpServiceService);
+    this.languageComponent.setLanguage();
+    this.current_language_set = this.languageComponent.currentLanguageObject;
   }
 
   removeBeneficiaryDataForVisit() {
@@ -297,26 +298,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         );
       },
     );
-    // setTimeout(() => this.redirectToDispenseScreen(beneficiary), 500);
-    this.confirmationService
-      .confirm(
-        `info`,
-        this.current_language_set.alerts.info.confirmtoProceedFurther,
-      )
-      .subscribe((result) => {
-        if (result) {
-          this.inventoryService.moveToInventory(
-            beneficiary.beneficiaryID,
-            beneficiary.visitCode,
-            beneficiary.benFlowID,
-            sessionStorage.getItem('setLanguage') !== undefined
-              ? sessionStorage.getItem('setLanguage')
-              : 'English',
-            beneficiary.beneficiaryRegID,
-            this.healthIDValue,
-          );
-        }
-      });
+    setTimeout(() => this.redirectToDispenseScreen(beneficiary), 500);
   }
   redirectToDispenseScreen(beneficiary: any) {
     this.confirmationService
@@ -330,10 +312,10 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
             beneficiary.beneficiaryID,
             beneficiary.visitCode,
             beneficiary.benFlowID,
-            beneficiary.beneficiaryRegID,
             sessionStorage.getItem('setLanguage') !== undefined
               ? sessionStorage.getItem('setLanguage')
               : 'English',
+            beneficiary.beneficiaryRegID,
             this.healthIDValue,
           );
         }
