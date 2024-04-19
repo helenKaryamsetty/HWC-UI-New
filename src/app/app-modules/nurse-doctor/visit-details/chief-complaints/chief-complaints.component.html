@@ -164,79 +164,99 @@
       </div>
     </div>
   </div>
+</div>
 
-  <div class="row m-t-10" *ngIf="benChiefComplaints">
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered"
-        aria-describedby="benChiefComplaintsTbl"
-      >
-        <thead>
-          <tr>
-            <!-- <th id="SCTID">{{currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID}}</th> -->
-            <th id="">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.chiefComplaints
-              }}
-            </th>
-            <th id="duration">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}
-            </th>
-            <th id="unitOfDuration">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.unitOfDuration
-              }}
-            </th>
-            <th id="description">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.description
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="benChiefComplaints.length >= 1">
-          <tr *ngFor="let complaint of benChiefComplaints">
-            <ng-template [ngIf]="complaint.chiefComplaint">
-              <!-- <td>{{ complaint.conceptID }}</td> -->
-              <td>{{ complaint.chiefComplaint }}</td>
-              <td>{{ complaint.duration }}</td>
-              <td>
-                {{
-                  complaint.unitOfDuration === "Hours"
-                    ? "Hour(s)"
-                    : complaint.unitOfDuration === "Days"
-                      ? "Day(s)"
-                      : complaint.unitOfDuration === "Weeks"
-                        ? "Week(s)"
-                        : complaint.unitOfDuration === "Months"
-                          ? "Month(s)"
-                          : complaint.unitOfDuration === "Years"
-                            ? "Year(s)"
-                            : complaint.unitOfDuration
-                }}
-              </td>
-              <td>{{ complaint.description }}</td>
-            </ng-template>
-          </tr>
-        </tbody>
-        <tbody *ngIf="benChiefComplaints.length === 0">
-          <tr>
-            <td colspan="5" class="text-center">
-              <p>
-                {{
-                  currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                    ?.noCheifComplaint
-                }}
-              </p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="row m-t-10" *ngIf="benChiefComplaints">
+  <div class="col-xs-12">
+    <table
+      class="table table-bordered"
+      mat-table
+      [dataSource]="dataSource"
+      aria-describedby="benChiefComplaintsTbl"
+    >
+      <ng-container matColumnDef="chiefComplaint">
+        <th
+          mat-header-cell
+          style="border-bottom: none"
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          {{
+            currentLanguageSet?.nurseData?.chiefComplaintsDetails
+              ?.chiefComplaints
+          }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.chiefComplaint }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="duration">
+        <th
+          mat-header-cell
+          style="border-bottom: none"
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          {{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element?.duration }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="unitOfDuration">
+        <th
+          mat-header-cell
+          style="border-bottom: none"
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          {{
+            currentLanguageSet?.nurseData?.chiefComplaintsDetails
+              ?.unitOfDuration
+          }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{
+            element.unitOfDuration === "Hours"
+              ? "Hour(s)"
+              : element.unitOfDuration === "Days"
+                ? "Day(s)"
+                : element.unitOfDuration === "Weeks"
+                  ? "Week(s)"
+                  : element.unitOfDuration === "Months"
+                    ? "Month(s)"
+                    : element.unitOfDuration === "Years"
+                      ? "Year(s)"
+                      : element.unitOfDuration
+          }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th
+          mat-header-cell
+          style="border-bottom: none"
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          {{
+            currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
+          }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.description }}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div
+      class="pull-center"
+      style="margin-top: 5px; text-align: center"
+      *ngIf="dataSource.data.length === 0"
+    >
+      <strong>{{
+        currentLanguageSet?.nurseData?.chiefComplaintsDetails?.noCheifComplaint
+      }}</strong>
     </div>
   </div>
 </div>

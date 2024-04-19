@@ -45,6 +45,7 @@ import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { Observable } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-patient-chief-complaints',
@@ -78,6 +79,13 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   enableProvisionalDiag = false;
   chiefComplaint: any;
   duration: any;
+  dataSource = new MatTableDataSource<any>();
+  displayedColumns: any = [
+    'chiefComplaint',
+    'duration',
+    'unitOfDuration',
+    'description',
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -244,6 +252,11 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
           const visitComplaintDetail = value.data;
           if (visitComplaintDetail)
             this.benChiefComplaints = visitComplaintDetail.BenChiefComplaints;
+          this.dataSource.data = [];
+          this.dataSource.data = visitComplaintDetail.BenChiefComplaints;
+          console.log('@@@@@@@@@@@@@@@@@@@@@@@', this.benChiefComplaints);
+          console.log('@@@@@@@@@@@@@@@@@@@@@@@', this.dataSource);
+
           this.ncdTemperature = false;
           // this.enableLungAssessment = false;
           this.enableProvisionalDiag = false;
