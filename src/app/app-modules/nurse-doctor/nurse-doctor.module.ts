@@ -166,6 +166,15 @@ import { ReferComponent } from './refer/refer.component';
 import { LabService } from '../lab/shared/services';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
 import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
+import { PncCaseSheetComponent } from './case-sheet/general-case-sheet/pnc-case-sheet/pnc-case-sheet.component';
+import { DoctorDiagnosisCaseSheetComponent } from './case-sheet/general-case-sheet/doctor-diagnosis-case-sheet/doctor-diagnosis-case-sheet.component';
+import { HistoryCaseSheetComponent } from './case-sheet/general-case-sheet/history-case-sheet/history-case-sheet.component';
+import { VisitDeatilsCaseSheetComponent } from './case-sheet/general-case-sheet/visit-details-case-sheet/visit-details-case-sheet.component';
+import { FamilyPlanningCaseSheetComponent } from './case-sheet/general-case-sheet/family-planning-case-sheet/family-planning-case-sheet.component';
+import { NeonatalAndInfantServiceCaseSheetComponent } from './case-sheet/general-case-sheet/neonatal-and-infant-service-case-sheet/neonatal-and-infant-service-case-sheet.component';
+import { ScreeningCaseSheetComponent } from './case-sheet/general-case-sheet/screening-case-sheet/screening-case-sheet.component';
+import { PrintPageSelectComponent } from './print-page-select/print-page-select.component';
+import { GeneralCaseSheetComponent } from './case-sheet/general-case-sheet/general-case-sheet.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -201,7 +210,7 @@ export const MY_FORMATS = {
   declarations: [
     NurseWorklistComponent,
     PatientVisitDetailsComponent,
-    // PrintPageSelectComponent,
+    PrintPageSelectComponent,
     // QuickConsultComponent,
     ObstetricExaminationComponent,
     GenitoUrinarySystemComponent,
@@ -234,7 +243,6 @@ export const MY_FORMATS = {
     AncImmunizationComponent,
     ObstetricFormulaComponent,
     VisitDetailsComponent,
-    // VisitCategoryComponent,
     ChiefComplaintsComponent,
     AdherenceComponent,
     TravelHistoryComponent,
@@ -251,9 +259,8 @@ export const MY_FORMATS = {
     WorkareaComponent,
     GeneralCaseRecordComponent,
     GeneralReferComponent,
-    // GeneralCaseSheetComponent,
+    GeneralCaseSheetComponent,
     ReferComponent,
-    // PrintPageSelectComponent,
     PreviousVisitDetailsComponent,
     FindingsComponent,
     DiagnosisComponent,
@@ -269,11 +276,11 @@ export const MY_FORMATS = {
     PncDiagnosisComponent,
     PreviousSignificiantFindingsComponent,
     ViewTestReportComponent,
-    // HistoryCaseSheetComponent,
+    HistoryCaseSheetComponent,
     ExaminationCaseSheetComponent,
     AncCaseSheetComponent,
-    // PncCaseSheetComponent,
-    // DoctorDiagnosisCaseSheetComponent,
+    PncCaseSheetComponent,
+    DoctorDiagnosisCaseSheetComponent,
     BeneficiaryMctsCallHistoryComponent,
     BeneficiaryPlatformHistoryComponent,
     TcSpecialistWorklistComponent,
@@ -300,15 +307,15 @@ export const MY_FORMATS = {
     HypertensionScreeningComponent,
     BreastCancerScreeningComponent,
     CervicalCancerScreeningComponent,
-    // ScreeningCaseSheetComponent,
+    ScreeningCaseSheetComponent,
     GeneralOralExaminationComponent,
     FamilyPlanningComponent,
     DispensationDetailsComponent,
     FamilyPlanningAndReproductiveComponent,
     IecAndCounsellingComponent,
     TreatmentsOnSideEffectsComponent,
-    // FamilyPlanningCaseSheetComponent,
-    // VisitDeatilsCaseSheetComponent,
+    FamilyPlanningCaseSheetComponent,
+    VisitDeatilsCaseSheetComponent,
     // NeonatalPatientVitalsComponent,
     NeonatalImmunizationServiceComponent,
     NeonatalPatientVitalsComponent,
@@ -317,7 +324,7 @@ export const MY_FORMATS = {
     InfantBirthDetailsComponent,
     FormImmunizationHistoryComponent,
     // FollowUpForImmunizationComponent,
-    // NeonatalAndInfantServiceCaseSheetComponent,
+    NeonatalAndInfantServiceCaseSheetComponent,
     ChildAndAdolescentOralVitaminACaseSheetComponent,
     ChildhoodOralVitaminComponent,
     ImmunizationServiceComponent,

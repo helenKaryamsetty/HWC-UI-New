@@ -967,7 +967,10 @@
               <!-- <td>{{ vaccine.sctCode }}</td>
               <td>{{ vaccine.sctTerm }}</td> -->
               <td>
-                <md-checkbox [checked]="vaccine.status" disabled></md-checkbox>
+                <mat-checkbox
+                  [checked]="vaccine.status"
+                  disabled
+                ></mat-checkbox>
               </td>
             </tr>
           </ng-container>

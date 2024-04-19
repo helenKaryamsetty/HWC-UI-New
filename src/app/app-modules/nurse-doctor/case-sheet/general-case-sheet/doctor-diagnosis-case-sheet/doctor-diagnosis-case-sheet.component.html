@@ -204,7 +204,7 @@
         visitCategory?.toLowerCase() === 'ncd care') &&
       printPagePreviewSelect?.caseSheetVisitDetails
     "
-    [data]="casesheetData"
+    [caseSheetData]="casesheetData"
     [visitCategory]="visitCategory"
   ></app-visit-details-case-sheet>
 
@@ -408,7 +408,7 @@
             *ngIf="beneficiaryDetails && beneficiaryDetails.ben_age_val >= 18"
           >
             <th style="text-decoration: underline">
-              <em>{{ currentLanguageSet?.lungAssessment }}:</em>
+              <em>{{ current_language_set?.lungAssessment }}:</em>
             </th>
           </tr>
           <tr
@@ -616,7 +616,7 @@
       !enableIDRSForm &&
       printPagePreviewSelect?.caseSheetNCDScreeningDetails
     "
-    [data]="casesheetData"
+    [caseSheetData]="casesheetData"
   ></app-screening-case-sheet>
 
   <!-- Chief complaints and description -->

@@ -39,6 +39,7 @@ const IP104 = 'http://183.82.107.186:8080';
 const mmuIP = 'http://183.82.107.186:8080';
 const schedulerIP = 'http://183.82.107.186:8080';
 const adminIP = 'http://183.82.107.186:8080';
+const inventoryUI_IP = 'http://183.82.107.186:8080';
 
 const FHIRIP = 'http://183.82.107.186:8080';
 const SERVER_IP = '10.208.122.39';
@@ -88,11 +89,17 @@ export const environment = {
 
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: 'http://localhost:5000/#/redirin?',
+  INVENTORY_URL: 'http://localhost:4400/#/redirin?',
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
   TELEMEDICINE_URL: 'http://localhost:4300/#/?',
+
+  // INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-ui-next/#/redirin?',
+  // fallbackUrl: '/pharmacist/redirfallback',
+  // redirInUrl: '/pharmacist/redirin',
+  // TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-ui-next/#/?',
+
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
