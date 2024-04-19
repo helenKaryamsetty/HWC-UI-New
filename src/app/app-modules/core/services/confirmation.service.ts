@@ -65,7 +65,11 @@ export class ConfirmationService {
     return dialogRef.afterClosed();
   }
 
-  public alert(message: string, status = 'info', btnOkText = 'OK'): void {
+  public alert(
+    message: string,
+    status = 'info',
+    btnOkText = 'OK',
+  ): MatDialogRef<CommonDialogComponent> {
     const config = {
       width: '420px',
     };
@@ -78,7 +82,8 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = true;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
+
+    return dialogRef;
   }
 
   public remarks(

@@ -89,16 +89,16 @@ export const environment = {
 
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: 'http://localhost:4400/#/redirin?',
-  fallbackUrl: `/pharmacist/redirfallback`,
-  redirInUrl: `/pharmacist/redirin`,
+  // INVENTORY_URL: 'http://localhost:4400/#/redirin?',
+  // fallbackUrl: `/pharmacist/redirfallback`,
+  // redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: 'http://localhost:4300/#/?',
+  // TELEMEDICINE_URL: 'http://localhost:4300/#/?',
 
-  // INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-ui-next/#/redirin?',
-  // fallbackUrl: '/pharmacist/redirfallback',
-  // redirInUrl: '/pharmacist/redirin',
-  // TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-ui-next/#/?',
+  INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-ui-next/#/redirin?',
+  fallbackUrl: '/pharmacist/redirfallback',
+  redirInUrl: '/pharmacist/redirin',
+  TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-ui-next/#/?',
 
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,

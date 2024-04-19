@@ -32,8 +32,7 @@ import { SetLanguageComponent } from '../../core/component/set-language.componen
 })
 export class RedirInComponent implements OnInit, DoCheck {
   current_language_set: any;
-  lang: any;
-  language_file_path: any = './assets/';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -43,7 +42,7 @@ export class RedirInComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    sessionStorage.removeItem('setLanguage');
+    // sessionStorage.removeItem('setLanguage');
     this.getresponse();
   }
 
@@ -57,70 +56,22 @@ export class RedirInComponent implements OnInit, DoCheck {
   }
 
   getresponse() {
-    let resolve: any;
-    let language: any;
+    let resolve;
+    let language;
     this.route.queryParams.subscribe((params) => {
       resolve =
         params['resolve'] === 'undefined' ? undefined : params['resolve'];
       language =
         params['currentLanguage'] === 'undefined'
-          ? undefined
+          ? 'English'
           : params['currentLanguage'];
     });
-    sessionStorage.setItem('setLanguage', language);
-    this.lang = sessionStorage.getItem('setLanguage');
-
-    if (this.lang !== undefined) {
-      this.httpServiceService
-
-        .getLanguage(this.language_file_path + this.lang + '.json')
-
-        .subscribe(
-          (response: any) => {
-            if (response) {
-              this.current_language_set = response[this.lang];
-              console.log('resolve', resolve);
-
-              if (resolve) {
-                this.confirmationService.alert(
-                  this.current_language_set.itemDispensed,
-                  'info',
-                );
-              }
-
-              this.router.navigate(['/pharmacist/pharmacist-worklist']);
-            } else {
-              console.log(
-                this.current_language_set.alerts.info.comingUpWithThisLang +
-                  ' ' +
-                  this.lang,
-              );
-            }
-          },
-
-          (error) => {
-            console.log(
-              this.current_language_set.alerts.info.comingUpWithThisLang +
-                ' ' +
-                this.lang,
-            );
-          },
-        );
-    } else {
-      this.httpServiceService.currentLangugae$.subscribe((response) => {
-        this.current_language_set = response;
-        console.log('resolve', resolve);
-
-        if (resolve) {
-          this.confirmationService.alert(
-            this.current_language_set.itemDispensed,
-            'info',
-          );
-        }
-
-        this.router.navigate(['/pharmacist/pharmacist-worklist']);
-      });
+    console.log('resolve', resolve);
+    if (language !== undefined) sessionStorage.setItem('setLanguage', language);
+    if (resolve) {
+      this.confirmationService.alert('Items Dispensed', 'info');
     }
+    this.router.navigate(['/pharmacist/pharmacist-worklist']);
   }
   routeToDesignation(designation: any) {
     switch (designation) {

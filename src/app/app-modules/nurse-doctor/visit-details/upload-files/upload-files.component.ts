@@ -36,6 +36,8 @@ import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { LabService } from 'src/app/app-modules/lab/shared/services';
+import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 
 @Component({
   selector: 'app-patient-upload-files',
@@ -78,7 +80,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   constructor(
     private nurseService: NurseService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    //private labService: LabService,
+    private labService: LabService,
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
@@ -254,31 +256,31 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     return this.patientFileUploadDetailsForm.controls['fileIDs'].value;
   }
   saveUploadDetails(fileObj: any) {
-    // this.labService.saveFile(fileObj).subscribe(
-    //   (res: any) => {
-    //     if (res.statusCode === 200) {
-    //       this.disableViewFiles = false;
-    //       res.data.forEach((file: any) => {
-    //         this.savedFileData.push(file);
-    //         this.fileIDs.push(file.kmFileManagerID);
-    //       });
-    //       this.fileObj.map((file: any) => {
-    //         file.isUploaded = true;
-    //       });
-    //       this.savedFileData.map((file: any) => {
-    //         file.isUploaded = true;
-    //       });
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.confirmationService.alert(err.errorMessage, 'err');
-    //   },
-    // );
-    // console.log('fileIDs', this.fileIDs);
-    // this.patientFileUploadDetailsForm.patchValue({
-    //   fileIDs: this.fileIDs,
-    // });
-    // this.nurseService.fileData = null;
+    this.labService.saveFile(fileObj).subscribe(
+      (res: any) => {
+        if (res.statusCode === 200) {
+          this.disableViewFiles = false;
+          res.data.forEach((file: any) => {
+            this.savedFileData.push(file);
+            this.fileIDs.push(file.kmFileManagerID);
+          });
+          this.fileObj.map((file: any) => {
+            file.isUploaded = true;
+          });
+          this.savedFileData.map((file: any) => {
+            file.isUploaded = true;
+          });
+        }
+      },
+      (err: any) => {
+        this.confirmationService.alert(err.errorMessage, 'err');
+      },
+    );
+    console.log('fileIDs', this.fileIDs);
+    this.patientFileUploadDetailsForm.patchValue({
+      fileIDs: this.fileIDs,
+    });
+    this.nurseService.fileData = null;
   }
   checkForDuplicateUpload() {
     if (this.fileObj !== undefined) {
@@ -324,37 +326,37 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     }
   }
   viewNurseSelectedFiles() {
-    // console.log('this.doc', this.doctorService.fileIDs);
-    // const file_Ids = this.doctorService.fileIDs;
-    // const ViewTestReport = this.dialog.open(
-    //   ViewRadiologyUploadedFilesComponent,
-    //   {
-    //     width: '40%',
-    //     data: {
-    //       filesDetails: file_Ids,
-    //       panelClass: 'dialog-width',
-    //       disableClose: false,
-    //     },
-    //   },
-    // );
-    // ViewTestReport.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     const fileID = {
-    //       fileID: result,
-    //     };
-    //     this.labService.viewFileContent(fileID).subscribe(
-    //       (res: any) => {
-    //         if (res.data.statusCode === 200) {
-    //           const fileContent = res.data.data.response;
-    //           location.href = fileContent;
-    //         }
-    //       },
-    //       (err: any) => {
-    //         this.confirmationService.alert(err.errorMessage, 'err');
-    //       },
-    //     );
-    //   }
-    // });
+    console.log('this.doc', this.doctorService.fileIDs);
+    const file_Ids = this.doctorService.fileIDs;
+    const ViewTestReport = this.dialog.open(
+      ViewRadiologyUploadedFilesComponent,
+      {
+        width: '40%',
+        data: {
+          filesDetails: file_Ids,
+          panelClass: 'dialog-width',
+          disableClose: false,
+        },
+      },
+    );
+    ViewTestReport.afterClosed().subscribe((result) => {
+      if (result) {
+        const fileID = {
+          fileID: result,
+        };
+        this.labService.viewFileContent(fileID).subscribe(
+          (res: any) => {
+            if (res.data.statusCode === 200) {
+              const fileContent = res.data.data.response;
+              location.href = fileContent;
+            }
+          },
+          (err: any) => {
+            this.confirmationService.alert(err.errorMessage, 'err');
+          },
+        );
+      }
+    });
   }
   triggerLog(event: any) {
     console.log(event.clientX);

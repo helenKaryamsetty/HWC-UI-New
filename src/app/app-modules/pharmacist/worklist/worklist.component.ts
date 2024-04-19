@@ -297,7 +297,26 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         );
       },
     );
-    setTimeout(() => this.redirectToDispenseScreen(beneficiary), 500);
+    // setTimeout(() => this.redirectToDispenseScreen(beneficiary), 500);
+    this.confirmationService
+      .confirm(
+        `info`,
+        this.current_language_set.alerts.info.confirmtoProceedFurther,
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.inventoryService.moveToInventory(
+            beneficiary.beneficiaryID,
+            beneficiary.visitCode,
+            beneficiary.benFlowID,
+            sessionStorage.getItem('setLanguage') !== undefined
+              ? sessionStorage.getItem('setLanguage')
+              : 'English',
+            beneficiary.beneficiaryRegID,
+            this.healthIDValue,
+          );
+        }
+      });
   }
   redirectToDispenseScreen(beneficiary: any) {
     this.confirmationService
@@ -312,7 +331,9 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
             beneficiary.visitCode,
             beneficiary.benFlowID,
             beneficiary.beneficiaryRegID,
-            sessionStorage.getItem('setLanguage'),
+            sessionStorage.getItem('setLanguage') !== undefined
+              ? sessionStorage.getItem('setLanguage')
+              : 'English',
             this.healthIDValue,
           );
         }
