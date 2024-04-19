@@ -99,7 +99,7 @@ export class PatientVisitDetailsComponent
     this.attendant = this.route.snapshot.params['attendant'];
     this.cbacData = this.beneficiaryDetailsService.cbacData;
     this.idrsCbac = environment.IdrsOrCbac;
-    if (this.mode !== undefined && this.mode !== 'view') {
+    if (String(this.mode) !== undefined && String(this.mode) !== 'view') {
       this.patientVisitDetailsForm.controls['IdrsOrCbac'].setValue('CBAC');
       this.enableHistoryScreenOnIdrs('CBAC');
     }

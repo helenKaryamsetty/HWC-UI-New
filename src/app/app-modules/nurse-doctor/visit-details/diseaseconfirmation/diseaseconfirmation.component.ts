@@ -128,7 +128,7 @@ export class DiseaseconfirmationComponent
     // }
     // else
     // {
-    if (this.mode !== 'view') {
+    if (String(this.mode) !== 'view') {
       if (this.idrsOrCbac === 'cbac') this.getpatientDiseasesata();
       else if (this.idrsOrCbac === 'idrs')
         this.getPatientRevisitSuspectedDieseaData();

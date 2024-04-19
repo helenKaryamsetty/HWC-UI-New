@@ -117,7 +117,7 @@ export class GeneralPersonalHistoryComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    if (this.mode !== 'view' && this.mode !== 'update') {
+    if (String(this.mode) !== 'view' && String(this.mode) !== 'update') {
       this.getMasterData();
     }
     this.getBeneficiaryDetails();
@@ -134,7 +134,7 @@ export class GeneralPersonalHistoryComponent
           this.getMasterData();
         }
       });
-    if (this.mode !== 'view' && this.mode !== 'update') {
+    if (String(this.mode) !== 'view' && String(this.mode) !== 'update') {
       this.ncdScreeningService.enablingIdrs$.subscribe((response) => {
         if (response === true) {
           this.generalPersonalHistoryForm.reset();

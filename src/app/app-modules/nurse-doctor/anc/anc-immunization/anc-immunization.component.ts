@@ -82,8 +82,8 @@ export class AncImmunizationComponent
 
     const specialistFlagString = localStorage.getItem('specialistFlag');
     if (
-      this.mode !== 'view' &&
-      this.mode !== 'update' &&
+      String(this.mode) !== 'view' &&
+      String(this.mode) !== 'update' &&
       specialistFlagString !== null &&
       parseInt(specialistFlagString) !== 100
     ) {
