@@ -33,6 +33,7 @@ import { DoctorTmWorklistWrapperComponent } from './doctor-tm-worklist-wrapper/d
 import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
 import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
+import { GeneralCaseRecordComponent } from './case-record/general-case-record/general-case-record.component';
 
 const routes: Routes = [
   {
@@ -88,10 +89,10 @@ const routes: Routes = [
     path: 'print/:serviceType/:printablePage',
     component: CaseSheetComponent,
   },
-  // {
-  //   path: 'generalcaserec',
-  //   component: GeneralCaseRecordComponent,
-  // },
+  {
+    path: 'generalcaserec',
+    component: GeneralCaseRecordComponent,
+  },
 ];
 
 @NgModule({

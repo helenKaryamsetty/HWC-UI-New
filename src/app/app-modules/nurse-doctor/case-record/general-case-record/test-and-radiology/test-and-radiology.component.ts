@@ -119,19 +119,19 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             ],
           };
         }
-      }
 
-      if (
-        localStorage.getItem('referredVisitCode') === 'undefined' ||
-        localStorage.getItem('referredVisitCode') === null
-      ) {
-        this.getTestResults(this.visitCategory);
-      } else {
-        this.getMMUTestResults(
-          this.beneficiaryRegID,
-          this.visitID,
-          this.visitCategory,
-        );
+        if (
+          localStorage.getItem('referredVisitCode') === 'undefined' ||
+          localStorage.getItem('referredVisitCode') === null
+        ) {
+          this.getTestResults(this.visitCategory);
+        } else {
+          this.getMMUTestResults(
+            this.beneficiaryRegID,
+            this.visitID,
+            this.visitCategory,
+          );
+        }
       }
     });
 

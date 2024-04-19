@@ -281,7 +281,7 @@
                 "
                 >search</mat-icon
               >
-              <mat-error>
+              <!-- <mat-error>
                 <span
                   *ngIf="
                     generalFindingsForm.value.observations.controls[
@@ -290,7 +290,7 @@
                   "
                   >Enter min 3 characters and search</span
                 >
-              </mat-error>
+              </mat-error> -->
             </mat-form-field>
           </div>
 
@@ -302,9 +302,6 @@
               class="mat_warn_circle"
               color="warn"
               *ngIf="
-                generalFindingsForm.value.observations.controls[
-                  'clinicalObservationsProvided'
-                ].disabled ||
                 i !== 0 ||
                 (i === 0 &&
                   generalFindingsForm.get('clinicalObservationsList')?.value
@@ -379,7 +376,7 @@
                 "
                 >search</mat-icon
               >
-              <mat-error>
+              <!-- <mat-error>
                 <span
                   *ngIf="
                     generalFindingsForm.value.findings.controls[
@@ -388,7 +385,7 @@
                   "
                   >Enter min 3 characters and search</span
                 >
-              </mat-error>
+              </mat-error> -->
             </mat-form-field>
           </div>
 
@@ -400,9 +397,6 @@
               style="margin-right: 3px"
               class="mat_warn_circle"
               *ngIf="
-                generalFindingsForm.value.findings.controls[
-                  'significantFindingsProvided'
-                ].disabled ||
                 i !== 0 ||
                 (i === 0 &&
                   generalFindingsForm.get('significantFindingsList')?.value

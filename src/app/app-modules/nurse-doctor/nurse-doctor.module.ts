@@ -163,6 +163,9 @@ import { TreatmentsOnSideEffectsComponent } from './case-record/general-case-rec
 import { NgxPaginationModule } from 'ngx-pagination';
 import { GeneralReferComponent } from './refer/general-refer/general-refer.component';
 import { ReferComponent } from './refer/refer.component';
+import { LabService } from '../lab/shared/services';
+import { RegistrarService } from '../registrar/shared/services/registrar.service';
+import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -337,7 +340,9 @@ export const MY_FORMATS = {
     MasterdataService,
     NcdScreeningService,
     IdrsscoreService,
-    // WorkareaCanActivate, LabService,RegistrarService,
+    LabService,
+    RegistrarService,
+    WorkareaCanActivate,
     TestInVitalsService, //FamilyTaggingService, NcdScreeningService,
     CDSSService,
     {

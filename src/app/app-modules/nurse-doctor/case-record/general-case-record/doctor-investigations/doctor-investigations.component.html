@@ -1,6 +1,6 @@
 <!-- {{ generalDoctorInvestigationForm.value | json}} -->
 <div *ngIf="visit === 'NCD screening'">
-  <p
+  <mat-label
     *ngIf="
       diabetesSelected > 0 &&
       RBSTestDoneInVitals === false &&
@@ -10,21 +10,21 @@
     style="color: red"
   >
     * {{ current_language_set?.pleaseSelectRBSTest }}
-  </p>
+  </mat-label>
   <br />
-  <p
+  <mat-label
     *ngIf="
       VisualAcuityMandatory && !VisualAcuityTestDone && !VisualAcuityTestDoneMMU
     "
     style="color: red"
   >
     * {{ current_language_set?.pleaseSelectVisualAcuityTest }}
-  </p>
+  </mat-label>
 </div>
 <div *ngIf="visit === 'ANC'">
-  <p *ngIf="!hemoglobbinSelected" style="color: red">
+  <mat-label *ngIf="!hemoglobbinSelected" style="color: red">
     * {{ current_language_set?.pleaseSelectHaemoglobinTest }}
-  </p>
+  </mat-label>
 </div>
 <div
   class="row"
@@ -96,7 +96,7 @@
         current_language_set?.Investigationdetails?.externalinvestigations
       }}</mat-label>
       <textarea
-        mdInput
+        matInput
         allowText="textAreaValidator"
         defaultNull
         mdTextareaAutosize
