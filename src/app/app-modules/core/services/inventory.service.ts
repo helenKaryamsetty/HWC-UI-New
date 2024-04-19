@@ -43,14 +43,11 @@ export class InventoryService {
   getParentAPI() {
     return environment.parentAPI;
   }
-  getAuthKey(): string | null {
+  getAuthKey() {
     if (sessionStorage.getItem('isAuthenticated')) {
       return sessionStorage.getItem('key');
-    }
-    return null; // or return undefined; depending on your use case
+    } else return undefined; // or return undefined; depending on your use case
   }
-
-  getFlowID() {}
 
   getFacilityID() {
     if (sessionStorage.getItem('facilityID')) {
