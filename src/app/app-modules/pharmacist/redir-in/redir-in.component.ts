@@ -34,6 +34,7 @@ export class RedirInComponent implements OnInit, DoCheck {
   current_language_set: any;
   lang: any;
   language_file_path: any = './assets/';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -43,7 +44,7 @@ export class RedirInComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    sessionStorage.removeItem('setLanguage');
+    // sessionStorage.removeItem('setLanguage');
     this.getresponse();
   }
 
@@ -64,13 +65,13 @@ export class RedirInComponent implements OnInit, DoCheck {
         params['resolve'] === 'undefined' ? undefined : params['resolve'];
       language =
         params['currentLanguage'] === 'undefined'
-          ? undefined
+          ? 'English'
           : params['currentLanguage'];
     });
     sessionStorage.setItem('setLanguage', language);
     this.lang = sessionStorage.getItem('setLanguage');
 
-    if (this.lang !== undefined) {
+    if (this.lang != undefined) {
       this.httpServiceService
 
         .getLanguage(this.language_file_path + this.lang + '.json')
@@ -87,7 +88,6 @@ export class RedirInComponent implements OnInit, DoCheck {
                   'info',
                 );
               }
-
               this.router.navigate(['/pharmacist/pharmacist-worklist']);
             } else {
               console.log(
@@ -97,7 +97,6 @@ export class RedirInComponent implements OnInit, DoCheck {
               );
             }
           },
-
           (error) => {
             console.log(
               this.current_language_set.alerts.info.comingUpWithThisLang +
@@ -110,14 +109,12 @@ export class RedirInComponent implements OnInit, DoCheck {
       this.httpServiceService.currentLangugae$.subscribe((response) => {
         this.current_language_set = response;
         console.log('resolve', resolve);
-
         if (resolve) {
           this.confirmationService.alert(
             this.current_language_set.itemDispensed,
             'info',
           );
         }
-
         this.router.navigate(['/pharmacist/pharmacist-worklist']);
       });
     }

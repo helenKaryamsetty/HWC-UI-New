@@ -101,11 +101,14 @@ const routes: Routes = [
         (module) => module.PharmacistModule,
       ),
   },
-  // {
-  //   path: 'datasync',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: './app-modules/data-sync/dataSync.module#DataSYNCModule'
-  //},
+  {
+    path: 'datasync',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./app-modules/data-sync/dataSync.module').then(
+        (module) => module.DataSYNCModule,
+      ),
+  },
 ];
 
 @NgModule({

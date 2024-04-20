@@ -91,40 +91,40 @@ export class HttpInterceptorService implements HttpInterceptor {
           sessionStorage.getItem('authenticationToken') &&
           sessionStorage.getItem('isAuthenticated')
         ) {
-          // this.confirmationService
-          //   .alert(
-          //     'Your session is about to Expire. Do you need more time ? ',
-          //     'sessionTimeOut'
-          //   )
-          //   .afterClosed()
-          //   .subscribe((result: any) => {
-          //     if (result.action === 'continue') {
-          //       this.http.post(environment.extendSessionUrl, {}).subscribe(
-          //         (res: any) => {},
-          //         (err: any) => {}
-          //       );
-          //     } else if (result.action === 'timeout') {
-          //       clearTimeout(this.timerRef);
-          //       sessionStorage.clear();
-          //       localStorage.clear();
-          //       this.confirmationService.alert(
-          //         this.currentLanguageSet.sessionExpired,
-          //         'error'
-          //       );
-          //       this.router.navigate(['/login']);
-          //     } else if (result.action === 'cancel') {
-          //       setTimeout(() => {
-          //         clearTimeout(this.timerRef);
-          //         sessionStorage.clear();
-          //         localStorage.clear();
-          //         this.confirmationService.alert(
-          //           this.currentLanguageSet.sessionExpired,
-          //           'error'
-          //         );
-          //         this.router.navigate(['/login']);
-          //       }, result.remainingTime * 1000);
-          //     }
-          //   });
+          this.confirmationService
+            .alert(
+              'Your session is about to Expire. Do you need more time ? ',
+              'sessionTimeOut',
+            )
+            .afterClosed()
+            .subscribe((result: any) => {
+              if (result.action === 'continue') {
+                this.http.post(environment.extendSessionUrl, {}).subscribe(
+                  (res: any) => {},
+                  (err: any) => {},
+                );
+              } else if (result.action === 'timeout') {
+                clearTimeout(this.timerRef);
+                sessionStorage.clear();
+                localStorage.clear();
+                this.confirmationService.alert(
+                  this.currentLanguageSet.sessionExpired,
+                  'error',
+                );
+                this.router.navigate(['/login']);
+              } else if (result.action === 'cancel') {
+                setTimeout(() => {
+                  clearTimeout(this.timerRef);
+                  sessionStorage.clear();
+                  localStorage.clear();
+                  this.confirmationService.alert(
+                    this.currentLanguageSet.sessionExpired,
+                    'error',
+                  );
+                  this.router.navigate(['/login']);
+                }, result.remainingTime * 1000);
+              }
+            });
         }
       },
       27 * 60 * 1000,
