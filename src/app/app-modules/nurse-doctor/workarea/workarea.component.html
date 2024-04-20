@@ -771,7 +771,7 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step
+          <mat-step
             *ngIf="showFollowUpImmunization"
             label="Follow Up for Immunization"
           >
@@ -782,7 +782,7 @@
               [followUpImmunizationMode]="followUpImmunizationMode"
               [visitCategory]="visitCategory"
               [patientFollowUpImmunizationForm]="
-                patientMedicalForm.controls.patientFollowUpImmunizationForm
+                patientFollowUpImmunizationForm
               "
             ></app-follow-up-for-immunization>
             <div class="row m-t-20">
@@ -820,7 +820,7 @@
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
 
           <!-- <mat-step *ngIf="showQuickConsult">
             <ng-template matStepLabel>{{

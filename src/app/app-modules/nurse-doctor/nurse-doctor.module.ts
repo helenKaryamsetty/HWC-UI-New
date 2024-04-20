@@ -175,6 +175,7 @@ import { NeonatalAndInfantServiceCaseSheetComponent } from './case-sheet/general
 import { ScreeningCaseSheetComponent } from './case-sheet/general-case-sheet/screening-case-sheet/screening-case-sheet.component';
 import { PrintPageSelectComponent } from './print-page-select/print-page-select.component';
 import { GeneralCaseSheetComponent } from './case-sheet/general-case-sheet/general-case-sheet.component';
+import { FollowUpForImmunizationComponent } from './follow-up-for-immunization/follow-up-for-immunization.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -323,7 +324,7 @@ export const MY_FORMATS = {
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
     FormImmunizationHistoryComponent,
-    // FollowUpForImmunizationComponent,
+    FollowUpForImmunizationComponent,
     NeonatalAndInfantServiceCaseSheetComponent,
     ChildAndAdolescentOralVitaminACaseSheetComponent,
     ChildhoodOralVitaminComponent,

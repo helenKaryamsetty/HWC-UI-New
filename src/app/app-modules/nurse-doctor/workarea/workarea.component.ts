@@ -198,6 +198,7 @@ export class WorkareaComponent
   patientCaseRecordForm!: FormGroup;
   patientReferForm!: FormGroup;
   provideCounsellingForm!: FormGroup;
+  patientFollowUpImmunizationForm!: FormGroup;
 
   constructor(
     private router: Router,
@@ -1184,6 +1185,10 @@ export class WorkareaComponent
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
         );
 
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientFollowUpImmunizationForm',
+        ) as FormGroup;
+
         this.getCurrentVitals();
 
         this.showHistory = false;
@@ -1210,6 +1215,10 @@ export class WorkareaComponent
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
           );
+          this.patientBirthImmunizationHistoryForm =
+            this.patientMedicalForm.get(
+              'patientFollowUpImmunizationForm',
+            ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -1259,6 +1268,9 @@ export class WorkareaComponent
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
         );
+        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+          'patientFollowUpImmunizationForm',
+        ) as FormGroup;
 
         this.getCurrentVitals();
 
@@ -1286,6 +1298,10 @@ export class WorkareaComponent
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
           );
+          this.patientBirthImmunizationHistoryForm =
+            this.patientMedicalForm.get(
+              'patientFollowUpImmunizationForm',
+            ) as FormGroup;
 
           this.patchGeneralFinding();
 
