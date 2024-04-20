@@ -86,7 +86,7 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
       const benRegID = localStorage.getItem('beneficiaryRegID');
     }
 
-    if (this.mode === 'update') {
+    if (String(this.mode) === 'update') {
       this.updatePatientPNC(this.patientPNCForm);
     }
   }

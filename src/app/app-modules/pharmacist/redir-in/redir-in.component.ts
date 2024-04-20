@@ -71,7 +71,7 @@ export class RedirInComponent implements OnInit, DoCheck {
     sessionStorage.setItem('setLanguage', language);
     this.lang = sessionStorage.getItem('setLanguage');
 
-    if (this.lang != undefined) {
+    if (this.lang !== undefined) {
       this.httpServiceService
 
         .getLanguage(this.language_file_path + this.lang + '.json')

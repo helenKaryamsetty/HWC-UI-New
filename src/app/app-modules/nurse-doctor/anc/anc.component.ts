@@ -115,7 +115,7 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.patchDataToFields(benRegID, visitID);
     }
-    if (this.mode === 'update') {
+    if (String(this.mode) === 'update') {
       this.updatePatientANC(this.patientANCForm);
     }
   }

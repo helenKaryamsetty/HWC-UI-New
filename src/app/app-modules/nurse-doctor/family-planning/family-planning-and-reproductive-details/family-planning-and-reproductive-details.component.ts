@@ -275,7 +275,7 @@ export class FamilyPlanningAndReproductiveComponent
     }
     this.checktotalChildrenBorn();
     String(this.familyPlanningMode) === 'view' ||
-    this.familyPlanningMode === 'update'
+    String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
   }

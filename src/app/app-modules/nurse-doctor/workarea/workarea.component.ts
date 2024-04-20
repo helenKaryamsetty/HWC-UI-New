@@ -1185,7 +1185,7 @@ export class WorkareaComponent
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
         );
 
-        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+        this.patientFollowUpImmunizationForm = this.patientMedicalForm.get(
           'patientFollowUpImmunizationForm',
         ) as FormGroup;
 
@@ -1215,10 +1215,9 @@ export class WorkareaComponent
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
           );
-          this.patientBirthImmunizationHistoryForm =
-            this.patientMedicalForm.get(
-              'patientFollowUpImmunizationForm',
-            ) as FormGroup;
+          this.patientFollowUpImmunizationForm = this.patientMedicalForm.get(
+            'patientFollowUpImmunizationForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
@@ -1268,7 +1267,7 @@ export class WorkareaComponent
           'patientFollowUpImmunizationForm',
           new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
         );
-        this.patientBirthImmunizationHistoryForm = this.patientMedicalForm.get(
+        this.patientFollowUpImmunizationForm = this.patientMedicalForm.get(
           'patientFollowUpImmunizationForm',
         ) as FormGroup;
 
@@ -1298,10 +1297,9 @@ export class WorkareaComponent
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
           );
-          this.patientBirthImmunizationHistoryForm =
-            this.patientMedicalForm.get(
-              'patientFollowUpImmunizationForm',
-            ) as FormGroup;
+          this.patientFollowUpImmunizationForm = this.patientMedicalForm.get(
+            'patientFollowUpImmunizationForm',
+          ) as FormGroup;
 
           this.patchGeneralFinding();
 
