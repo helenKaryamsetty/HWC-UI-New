@@ -277,8 +277,8 @@ export class NeonatalPatientVitalsComponent
         if (vitalsData) {
           const temp = Object.assign(
             {},
-            vitalsData.benAnthropometryDetail,
-            vitalsData.benPhysicalVitalDetail,
+            vitalsData.data.benAnthropometryDetail,
+            vitalsData.data.benPhysicalVitalDetail,
           );
           this.neonatalVitalsForm.patchValue(temp);
         }

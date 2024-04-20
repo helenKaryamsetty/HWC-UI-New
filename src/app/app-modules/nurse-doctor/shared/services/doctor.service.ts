@@ -1005,7 +1005,7 @@ export class DoctorService {
       }
 
       if (
-        visitCategory?.toLocaleLowerCase() ===
+        visitCategory?.toLowerCase() ===
         'neonatal and infant health care services'
       ) {
         this.getVisitComplaint = this.http.post(
@@ -1015,7 +1015,7 @@ export class DoctorService {
       }
 
       if (
-        visitCategory?.toLocaleLowerCase() ===
+        visitCategory?.toLowerCase() ===
         'childhood & adolescent healthcare services'
       ) {
         this.getVisitComplaint = this.http.post(
@@ -1125,13 +1125,19 @@ export class DoctorService {
       );
     }
 
-    if (visitCategory === 'neonatal and infant health care services') {
+    if (
+      visitCategory?.toLowerCase() ===
+      'neonatal and infant health care services'
+    ) {
       return this.http.post(
         environment.getNeonatalVitalsDetailsUrl,
         otherDetails,
       );
     }
-    if (visitCategory === 'childhood & adolescent healthcare services') {
+    if (
+      visitCategory?.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    ) {
       return this.http.post(
         environment.getChildAndAdolescentVitalsDetailsUrl,
         otherDetails,
