@@ -34,6 +34,7 @@ import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-wo
 import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
 import { GeneralCaseRecordComponent } from './case-record/general-case-record/general-case-record.component';
+import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
 
 const routes: Routes = [
   {
@@ -81,6 +82,12 @@ const routes: Routes = [
       {
         path: 'attendant/:attendant/104referredpatient/:beneficiaryRegID',
         component: Referred104WorkareaComponent,
+        canDeactivate: [CanDeactivateGuardService],
+      },
+      {
+        path: 'attendant/:attendant/patient/:beneficiaryRegID',
+        component: WorkareaComponent,
+        canActivate: [WorkareaCanActivate],
         canDeactivate: [CanDeactivateGuardService],
       },
     ],
