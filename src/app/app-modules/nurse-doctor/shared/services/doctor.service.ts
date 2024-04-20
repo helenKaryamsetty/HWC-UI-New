@@ -955,7 +955,6 @@ export class DoctorService {
       benVisitID: visitID,
       visitCode: localStorage.getItem('visitCode'),
     });
-    console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44', visitCategory);
 
     if (!this.getVisitComplaint) {
       if (visitCategory === 'General OPD (QC)') {
@@ -1019,7 +1018,6 @@ export class DoctorService {
         visitCategory?.toLocaleLowerCase() ===
         'childhood & adolescent healthcare services'
       ) {
-        console.log('$$$$$$$$$$$$$$Inside Visit Category$$$$$$$$$$$$$$$$44');
         this.getVisitComplaint = this.http.post(
           environment.getChildAndAdolescentVisitDetails,
           otherDetails,
