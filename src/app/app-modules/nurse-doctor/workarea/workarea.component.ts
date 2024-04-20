@@ -1205,12 +1205,18 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createGeneralCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounselling',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),
@@ -1287,12 +1293,18 @@ export class WorkareaComponent
             'patientCaseRecordForm',
             new GeneralUtils(this.fb).createGeneralCaseRecord(),
           );
+          this.patientCaseRecordForm = this.patientMedicalForm.get(
+            'patientCaseRecordForm',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'provideCounselling',
             new GeneralUtils(
               this.fb,
             ).createPrescriptionForCounsellingPrvodied(),
           );
+          this.provideCounsellingForm = this.patientMedicalForm.get(
+            'provideCounselling',
+          ) as FormGroup;
           this.patientMedicalForm.addControl(
             'patientFollowUpImmunizationForm',
             new GeneralUtils(this.fb).createFollowUpForNextImmunization(),

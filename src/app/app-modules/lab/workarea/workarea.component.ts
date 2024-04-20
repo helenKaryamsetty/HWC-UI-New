@@ -124,7 +124,6 @@ export class WorkareaComponent
   }
 
   labTechnicianData(): any {
-    console.log('labTechnicianData', this.technicianForm.get('labForm'));
     return (this.technicianForm.get('labForm') as FormArray).controls;
   }
 

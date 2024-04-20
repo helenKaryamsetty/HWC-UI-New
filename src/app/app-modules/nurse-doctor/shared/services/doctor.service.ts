@@ -955,6 +955,7 @@ export class DoctorService {
       benVisitID: visitID,
       visitCode: localStorage.getItem('visitCode'),
     });
+    console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44', visitCategory);
 
     if (!this.getVisitComplaint) {
       if (visitCategory === 'General OPD (QC)') {
@@ -1004,14 +1005,21 @@ export class DoctorService {
         );
       }
 
-      if (visitCategory === 'neonatal and infant health care services') {
+      if (
+        visitCategory?.toLocaleLowerCase() ===
+        'neonatal and infant health care services'
+      ) {
         this.getVisitComplaint = this.http.post(
           environment.getNeonatalVisitDetails,
           otherDetails,
         );
       }
 
-      if (visitCategory === 'childhood & adolescent healthcare services') {
+      if (
+        visitCategory?.toLocaleLowerCase() ===
+        'childhood & adolescent healthcare services'
+      ) {
+        console.log('$$$$$$$$$$$$$$Inside Visit Category$$$$$$$$$$$$$$$$44');
         this.getVisitComplaint = this.http.post(
           environment.getChildAndAdolescentVisitDetails,
           otherDetails,
