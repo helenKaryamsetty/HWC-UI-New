@@ -17,64 +17,6 @@
   </div>
   <mat-dialog-content>
     <div class="table-responsive">
-      <!-- <table mat-table aria-describedby="Allergen" class="table table-striped" 
-      [md2Data]="components" #md2="md2DataTable" [dataSource]="dataSource">
-        <thead>
-          <tr>
-            <th id="conceptID">{{currentLanguageSet?.common?.ConceptID}}</th>
-            <th id="Term">{{currentLanguageSet?.common?.term}}</th>
-    
-            <th id="empty"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="components.length === 0">
-            <td colspan="5" class="text-center" style="text-align: center;">{{message}}</td>
-          </tr>
-          <tr *ngFor="let item of md2.data">
-            <td data-title="Concept ID">{{ item?.conceptID}} </td>
-            <td data-title="Term">{{ item?.term}} </td>
-      
-            <td class="text-center">
-              <mat-radio-group name="componentValue"  (change)="selectComponentName(item?.conceptID,item?.term)">
-                <mat-radio-button [checked]="item?.term === selectedItem" color="primary" value="Yes">
-                </mat-radio-button>
-               
-              </mat-radio-group>
-              
-             
-            </td>
-          </tr>
-        </tbody>  
-        <tfoot>
-          <tr>
-            <td colspan="6" class="text-right">
-             
-              <div *ngIf="components.length !== 0" class="pull-left m-t-40">{{currentLanguageSet?.common?.totalPages}}: {{pageCount}}</div>
-              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-                <li [ngClass]="{disabled:pager.currentPage <= 0}">
-                  <a (click)="checkPager(pager,0)"><
-                    </a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage <= 0}">
-                  <a (click)="setPage(pager.currentPage - 1)"><<
-                    </a>
-                </li>
-                <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                  <a (click)="setPage(page)">{{page + 1}}</a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage >= pager.totalPages - 1}">
-                  <a (click)="setPage(pager.currentPage + 1)">></a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage >= pager.totalPages - 1}">
-                  <a (click)="checkPager(pager, pager.totalPages - 1)">>></a>
-                </li>
-              </ul>
-            </td>
-          </tr>
-        </tfoot>
-      </table> -->
-
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- ConceptID Column -->
         <ng-container matColumnDef="ConceptID">

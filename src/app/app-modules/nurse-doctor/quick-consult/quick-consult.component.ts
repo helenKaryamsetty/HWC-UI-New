@@ -52,6 +52,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 interface prescribe {
   id: string;
@@ -162,6 +163,10 @@ export class QuickConsultComponent
   rbsSelectedInInvestigationSubscription!: Subscription;
   rbsTestResultSubscription!: Subscription;
   rbsTestResultCurrent: any;
+
+  displayedColumns: any = ['chiefcomplaint', 'ConceptID', 'description'];
+
+  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -293,11 +298,16 @@ export class QuickConsultComponent
     }
   }
 
-  displayFn(option: any): string | undefined {
-    return option
-      ? `${option.itemName} ${option.strength ? option.strength : ''}${option.unitOfMeasurement ? option.unitOfMeasurement : ''}${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`
-      : undefined;
+  displayFn(option: any): string {
+    if (option) {
+      return `${option.itemName} ${option.strength}${
+        option.unitOfMeasurement ? option.unitOfMeasurement : ''
+      }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`;
+    } else {
+      return '';
+    }
   }
+
   getFormValueChanged() {
     this.clearCurrentDetails();
     this.getFormDetails();
@@ -633,8 +643,8 @@ export class QuickConsultComponent
     if (response) {
       const complaintDetails = response.findings;
       if (complaintDetails && complaintDetails.complaints) {
-        this.benChiefComplaints = complaintDetails.complaints;
-        this.benChiefComplaints.forEach((chiefComplaint: any) => {
+        this.dataSource.data = complaintDetails.complaints;
+        this.dataSource.data.forEach((chiefComplaint) => {
           this.filterInitialComplaints(chiefComplaint);
         });
       }
@@ -882,7 +892,7 @@ export class QuickConsultComponent
       );
     }
   }
-  rbsResultChange() {
+  rbsResultChange(): boolean {
     if (
       this.patientQuickConsultForm.controls['rbsTestResult'].value &&
       this.patientQuickConsultForm.controls['rbsTestResult'].value !== null
@@ -890,7 +900,6 @@ export class QuickConsultComponent
       this.nurseService.setRbsInCurrentVitals(
         this.patientQuickConsultForm.controls['rbsTestResult'].value,
       );
-      //this.patientVitalsForm.controls['rbsTestResult'].disable();
     } else {
       this.nurseService.setRbsInCurrentVitals(null);
     }
@@ -901,10 +910,37 @@ export class QuickConsultComponent
     ) {
       this.patientQuickConsultForm.controls['rbsTestResult'].disable();
       this.patientQuickConsultForm.controls['rbsTestRemarks'].disable();
+      return true; // enable the controls
     } else {
       this.patientQuickConsultForm.controls['rbsTestResult'].enable();
       this.patientQuickConsultForm.controls['rbsTestRemarks'].enable();
+      return false; // enable the controls
     }
+  }
+
+  getChiefComplaintList(): AbstractControl[] | null {
+    const chiefComplaintListControl =
+      this.patientQuickConsultForm.get('chiefComplaintList');
+    return chiefComplaintListControl instanceof FormArray
+      ? chiefComplaintListControl.controls
+      : null;
+  }
+
+  getPrescribedDrugs(): AbstractControl[] | null {
+    const prescribedDrugsControl =
+      this.drugPrescriptionForm.get('prescribedDrugs');
+    return prescribedDrugsControl instanceof FormArray
+      ? prescribedDrugsControl.controls
+      : null;
+  }
+
+  getProvisionalDiagnosisList(): AbstractControl[] | null {
+    const provisionalDiagnosisListControl = this.patientQuickConsultForm.get(
+      'provisionalDiagnosisList',
+    );
+    return provisionalDiagnosisListControl instanceof FormArray
+      ? provisionalDiagnosisListControl.controls
+      : null;
   }
 
   get bMI() {

@@ -19,18 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
+import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
   selector: 'app-referred-104-workarea',
   templateUrl: './referred-104-workarea.component.html',
   styleUrls: ['./referred-104-workarea.component.css'],
 })
-export class Referred104WorkareaComponent {
+export class Referred104WorkareaComponent implements OnInit, DoCheck {
   @ViewChild('sidenav')
   sidenav: any;
+  currentLanguageSet: any;
 
-  constructor() {}
+  constructor(public httpServiceService: HttpServiceService) {}
+
+  ngOnInit() {
+    this.assignSelectedLanguage();
+  }
+
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+  }
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
 
   sideNavModeChange(sidenav: any) {
     const deviceHeight = window.screen.height;

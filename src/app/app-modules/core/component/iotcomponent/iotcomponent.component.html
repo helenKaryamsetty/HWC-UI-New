@@ -1,7 +1,11 @@
 <div class="row title" [ngClass]="{ warn: errorMsg !== undefined }">
   <h4>{{ currentLanguageSet?.common?.bluetoothDevice }}</h4>
-  <button class="pull-right exit" (click)="stop()" mat-icon-button>
-    <!-- tooltip="{{currentLanguageSet?.stopTest}}" -->
+  <button
+    class="pull-right exit"
+    (click)="stop()"
+    matTooltip="{{ currentLanguageSet?.stopTest }}"
+    mat-icon-button
+  >
     <mat-icon>close</mat-icon>
   </button>
 </div>
@@ -34,6 +38,7 @@
       </p>
       <div class="row" *ngIf="msgCalibration && startedCalibration">
         <button
+          matTooltip="{{ currentLanguageSet?.common?.startTest }}"
           mat-button
           type="button"
           class="pull-left exit button-overall-disabled"
@@ -47,8 +52,8 @@
         >
           {{ currentLanguageSet?.coreComponents?.start }}
         </button>
-        <!-- tooltip="{{currentLanguageSet?.common?.startTest}}" -->
         <button
+          matTooltip="{{ currentLanguageSet?.stopTest }}"
           mat-button
           type="button"
           class="pull-right exit button-overall-disabled"
@@ -63,7 +68,6 @@
         >
           {{ currentLanguageSet?.abort }}
         </button>
-        <!-- tooltip="{{currentLanguageSet?.stopTest}}" -->
       </div>
     </div>
   </mat-dialog-content>

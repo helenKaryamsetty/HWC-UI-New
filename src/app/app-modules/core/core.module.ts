@@ -82,6 +82,7 @@ import { RegistrarService } from '../registrar/shared/services/registrar.service
 import { SetLanguageComponent } from './component/set-language.component';
 import { ClinicalObservationsDirective } from './directives/clinical-observations.directive';
 import { SignificantFindingsDirective } from './directives/significant-findings.directive';
+import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 
 @NgModule({
   imports: [
@@ -109,6 +110,7 @@ import { SignificantFindingsDirective } from './directives/significant-findings.
     PreviousImmunizationServiceDetailsComponent,
     MmuRbsDetailsComponent,
     SpecialistLoginComponent,
+    ViewRadiologyUploadedFilesComponent,
     DiagnosisSearchComponent,
     MyEmailDirective,
     MyMobileNumberDirective,

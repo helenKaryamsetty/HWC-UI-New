@@ -38,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MaterialModule } from '../core/material.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { MaterialModule } from '../core/material.module';
     MatChipsModule,
     MatDatepickerModule,
     MatTooltipModule,
+    MatIconModule,
   ],
   declarations: [
     WorkareaComponent,

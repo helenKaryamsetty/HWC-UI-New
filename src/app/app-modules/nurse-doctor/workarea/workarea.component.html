@@ -17,11 +17,6 @@
   >
     <mat-icon class="iconStyle"> description</mat-icon>
   </button>
-  <!-- <div class="overlay" *ngIf="showProgressBar">
-    <div class="overlay-content">
-      <mat-spinner></mat-spinner>
-    </div>
-  </div> -->
 
   <mat-sidenav-container class="example-sidenav-fab-container">
     <mat-sidenav #sidenav mode="side" opened="true">
@@ -791,7 +786,8 @@
                   *ngIf="isDoctorSave"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="submitDoctorDiagnosisForm()"
                   type="submit"
@@ -802,7 +798,8 @@
                   *ngIf="isDoctorUpdate"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="updateDoctorDiagnosisForm()"
                   type="submit"
@@ -814,6 +811,8 @@
                   mat-raised-button
                   color="primary"
                   matStepperPrevious
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.back }}
@@ -822,16 +821,14 @@
             </div>
           </mat-step>
 
-          <!-- <mat-step *ngIf="showQuickConsult">
+          <mat-step *ngIf="showQuickConsult">
             <ng-template matStepLabel>{{
               current_language_set?.historyData?.QuickConsultDetails
                 ?.quickconsult
             }}</ng-template>
             <app-doctor-quick-consult
               [quickConsultMode]="quickConsultMode"
-              [patientQuickConsultForm]="
-                patientMedicalForm.controls.patientQuickConsultForm
-              "
+              [patientQuickConsultForm]="patientQuickConsultForm"
             ></app-doctor-quick-consult>
 
             <div class="row m-t-20">
@@ -840,9 +837,10 @@
                   *ngIf="isDoctorSave"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
-                  (click)="submitDoctorDiagnosisForm(patientMedicalForm)"
+                  (click)="submitDoctorDiagnosisForm()"
                   type="button"
                 >
                   {{ doctorSaveAndTCSave }}
@@ -851,7 +849,8 @@
                   *ngIf="isDoctorUpdate"
                   mat-raised-button
                   color="primary"
-                  class="btn-green"
+                  class="mat_green"
+                  style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="updateQuickConsultDiagnosisForm()"
                   type="button "
@@ -863,13 +862,15 @@
                   mat-raised-button
                   color="primary"
                   matStepperPrevious
+                  class="mat_blue"
+                  style="margin-top: 10px"
                   type="button"
                 >
                   {{ current_language_set?.common?.back }}
                 </button>
               </div>
             </div>
-          </mat-step> -->
+          </mat-step>
         </mat-horizontal-stepper>
       </form>
     </div>

@@ -176,6 +176,9 @@ import { ScreeningCaseSheetComponent } from './case-sheet/general-case-sheet/scr
 import { PrintPageSelectComponent } from './print-page-select/print-page-select.component';
 import { GeneralCaseSheetComponent } from './case-sheet/general-case-sheet/general-case-sheet.component';
 import { FollowUpForImmunizationComponent } from './follow-up-for-immunization/follow-up-for-immunization.component';
+import { QuickConsultComponent } from './quick-consult/quick-consult.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FamilyTaggingService } from '../registrar/shared/services/familytagging.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -212,7 +215,7 @@ export const MY_FORMATS = {
     NurseWorklistComponent,
     PatientVisitDetailsComponent,
     PrintPageSelectComponent,
-    // QuickConsultComponent,
+    QuickConsultComponent,
     ObstetricExaminationComponent,
     GenitoUrinarySystemComponent,
     CentralNervousSystemComponent,
@@ -256,7 +259,7 @@ export const MY_FORMATS = {
     VitalsComponent,
     CaseRecordComponent,
     PncComponent,
-    // DashboardComponent,
+    DashboardComponent,
     WorkareaComponent,
     GeneralCaseRecordComponent,
     GeneralReferComponent,
@@ -317,10 +320,8 @@ export const MY_FORMATS = {
     TreatmentsOnSideEffectsComponent,
     FamilyPlanningCaseSheetComponent,
     VisitDeatilsCaseSheetComponent,
-    // NeonatalPatientVitalsComponent,
     NeonatalImmunizationServiceComponent,
     NeonatalPatientVitalsComponent,
-    // NeonatalImmunizationServiceComponent,
     BirthImmunizationHistoryComponent,
     InfantBirthDetailsComponent,
     FormImmunizationHistoryComponent,
@@ -351,7 +352,8 @@ export const MY_FORMATS = {
     LabService,
     RegistrarService,
     WorkareaCanActivate,
-    TestInVitalsService, //FamilyTaggingService, NcdScreeningService,
+    TestInVitalsService,
+    FamilyTaggingService,
     CDSSService,
     {
       provide: DateAdapter,
