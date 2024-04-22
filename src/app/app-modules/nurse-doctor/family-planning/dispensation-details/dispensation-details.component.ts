@@ -357,6 +357,7 @@ export class DispensationDetailsComponent
       this.dispensationDetailsForm.patchValue(dispensationDetails);
       this.patchIUCDFields();
       this.populateDoseFieldForAntara();
+      this.disableQuantityPrescribed();
       this.otherContrasepiveType();
       this.resettypeOfContraceptivePrescribed(
         familyPlanningDispensationData.typeOfContraceptivePrescribed,
@@ -408,6 +409,7 @@ export class DispensationDetailsComponent
           this.dispensationDetailsForm.patchValue(dispensationDetails);
           this.patchIUCDFields();
           this.populateDoseFieldForAntara();
+          this.disableQuantityPrescribed();
           this.otherContrasepiveType();
           this.resettypeOfContraceptivePrescribed(
             familyPlanningDispensationData.typeOfContraceptivePrescribed,

@@ -693,11 +693,15 @@ export class TravelHistoryComponent
   //   return this.patientCovidForm.controls["international"].value;
   // }
   onChange(travel: string, isChecked: any) {
+    let isCheckedEvent = false;
     const travelFormArray = <FormArray>(
       this.patientCovidForm.controls['travelList']
     );
-    const isCheckedEvent = isChecked?.target?.checked;
-
+    if (typeof isChecked === 'object') {
+      isCheckedEvent = isChecked?.target?.checked;
+    } else if (typeof isChecked === 'boolean') {
+      isCheckedEvent = isChecked;
+    }
     if (isCheckedEvent) {
       travelFormArray.push(new FormControl(travel));
       if (travel === 'Domestic') {
