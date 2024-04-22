@@ -29,8 +29,8 @@ import { CDSSService } from '../../shared/services/cdss-service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-// import { LocalDataSource } from 'ng2-smart-table/lib/lib/data-source/local/local.data-source';
-import { LocalDataSource } from 'ng2-smart-table';
+import { LocalDataSource } from 'angular2-smart-table';
+// import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'app-cdss-form-result-popup',

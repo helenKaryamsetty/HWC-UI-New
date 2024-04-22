@@ -62,7 +62,6 @@ export class CovidDiagnosisComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
@@ -108,15 +107,11 @@ export class CovidDiagnosisComponent
     this.diagnosisSubscription =
       this.doctorService.populateCaserecordResponse$.subscribe((res) => {
         if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
-          console.log('caserecord', res.data.diagnosis);
-
           this.patchDiagnosisDetails(res.data.diagnosis);
         }
       });
   }
   patchDiagnosisDetails(diagnosis: any) {
-    console.log('diagnosis', diagnosis.doctorDiagnonsis);
-
     this.generalDiagnosisForm.patchValue({
       doctorDiagnosis: diagnosis.doctorDiagnonsis,
     });

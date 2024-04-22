@@ -28,7 +28,7 @@
         class="select-full-width"
         name="menstrualCycleStatus"
         formControlName="menstrualCycleStatus"
-        (change)="checkMenstrualCycleStatus()"
+        (selectionChange)="checkMenstrualCycleStatus()"
       >
         <mat-option
           *ngFor="let status of masterData?.menstrualCycleStatus"
@@ -116,7 +116,7 @@
           class="select-full-width"
           name="problemName"
           formControlName="menstrualProblemList"
-          (change)="resetOtherMenstrualProblems()"
+          (selectionChange)="resetOtherMenstrualProblems()"
         >
           <mat-option
             [disabled]="

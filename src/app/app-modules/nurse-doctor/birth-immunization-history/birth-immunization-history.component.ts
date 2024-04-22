@@ -171,7 +171,7 @@ export class BirthImmunizationHistoryComponent
     this.doctorService.birthAndImmunizationDetailsFromNurse = null;
     this.doctorService
       .getPreviousBirthImmunizationHistoryDetails(visitCategory)
-      ?.subscribe((res: any) => {
+      .subscribe((res: any) => {
         if (
           res.statusCode === 200 &&
           res.data !== null &&
@@ -190,7 +190,7 @@ export class BirthImmunizationHistoryComponent
   ) {
     this.doctorService
       .updateBirthAndImmunizationHistory(medicalForm, visitCategory)
-      ?.subscribe(
+      .subscribe(
         (response: any) => {
           if (response.statusCode === 200 && response.data !== null) {
             this.confirmationService.alert(response.data.response, 'success');

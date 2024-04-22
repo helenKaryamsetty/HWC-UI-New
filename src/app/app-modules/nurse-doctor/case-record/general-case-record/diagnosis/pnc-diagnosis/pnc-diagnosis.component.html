@@ -56,8 +56,7 @@
                   class="mat_warn_circle"
                   style="margin-right: 5px"
                   *ngIf="
-                    diagnosis.get('viewProvisionalDiagnosisProvided')
-                      ?.disabled ||
+                    diagnosis.get('provisionalDiagnosisList')?.disabled ||
                     i !== 0 ||
                     (i === 0 &&
                       generalDiagnosisForm.get('provisionalDiagnosisList')

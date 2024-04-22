@@ -257,48 +257,6 @@ export class PncDiagnosisComponent
       });
   }
 
-  // MMUdiagnosisSubscription:any;
-  // getMMUDiagnosisDetails(beneficiaryRegID, visitID, visitCategory) {
-  //   this.diagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory,localStorage.getItem("visitCode"))
-  //     .subscribe(res => {
-  //       if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
-  //         this.generalDiagnosisForm.patchValue(res.data.diagnosis)
-  //         let diagnosisRes;
-  //         if(res.data.diagnosis.provisionalDiagnosisList)
-  //         {
-  //         diagnosisRes = res.data.diagnosis.provisionalDiagnosisList;
-  //         }
-  //         else{
-  //           diagnosisRes=[];
-  //         }
-
-  //         this.MMUdiagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, localStorage.getItem("referredVisitID"), visitCategory,localStorage.getItem("referredVisitCode"))
-  //         .subscribe(response => {
-
-  //           if (response && response.statusCode === 200 && response.data && response.data.diagnosis) {
-  //             let diagnosisResponse;
-  //             if(response.data.diagnosis.provisionalDiagnosisList)
-  //             {
-  //           diagnosisResponse = response.data.diagnosis.provisionalDiagnosisList;
-  //             }
-  //             else{
-  //               diagnosisResponse=[];
-  //             }
-
-  //             for(let i=0,j=diagnosisRes.length;i<diagnosisResponse.length;i++,j++)
-  //             {
-  //               diagnosisRes[j]=diagnosisResponse[i];
-  //             }
-
-  //             this.patchDiagnosisDetails(diagnosisRes);
-  //           }
-
-  //         })
-
-  //       }
-  //     })
-  // }
-
   patchDiagnosisDetails(diagnosis: any) {
     if (diagnosis.dateOfDeath)
       diagnosis.dateOfDeath = new Date(diagnosis.dateOfDeath);

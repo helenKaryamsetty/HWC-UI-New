@@ -71,7 +71,6 @@ export class GeneralOpdDiagnosisComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['instruction'].enable();
@@ -179,59 +178,15 @@ export class GeneralOpdDiagnosisComponent
       });
   }
 
-  // MMUdiagnosisSubscription:any;
-  // getMMUDiagnosisDetails(beneficiaryRegID, visitID, visitCategory) {
-  //   this.diagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory,localStorage.getItem("visitCode"))
-  //     .subscribe(res => {
-  //       if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
-  //         this.generalDiagnosisForm.patchValue(res.data.diagnosis)
-  //         let diagnosisRes;
-  //         if(res.data.diagnosis.provisionalDiagnosisList)
-  //         {
-  //         diagnosisRes = res.data.diagnosis.provisionalDiagnosisList;
-  //         }
-  //         else{
-  //           diagnosisRes=[];
-  //         }
-  //         this.MMUdiagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, localStorage.getItem("referredVisitID"), visitCategory,localStorage.getItem("referredVisitCode"))
-  //         .subscribe(response => {
-
-  //           if (response && response.statusCode === 200 && response.data && response.data.diagnosis) {
-  //             let diagnosisResponse;
-  //             if(response.data.diagnosis.provisionalDiagnosisList)
-  //             {
-  //           diagnosisResponse = response.data.diagnosis.provisionalDiagnosisList;
-  //             }
-  //             else{
-  //               diagnosisResponse=[];
-  //             }
-
-  //             for(let i=0,j=diagnosisRes.length;i<diagnosisResponse.length;i++,j++)
-  //             {
-  //               diagnosisRes[j]=diagnosisResponse[i];
-  //             }
-
-  //             this.patchDiagnosisDetails(diagnosisRes);
-  //           }
-
-  //         })
-
-  //       }
-  //     })
-  // }
-
   patchDiagnosisDetails(provisionalDiagnosis: any) {
     const savedDiagnosisData = provisionalDiagnosis;
     const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
-    console.log('from diagnosis' + provisionalDiagnosis[0].term);
     if (
       provisionalDiagnosis[0].term !== '' &&
       provisionalDiagnosis[0].conceptID !== ''
     ) {
-      console.log('from diagnosis second' + provisionalDiagnosis[0].term);
-
       for (let i = 0; i < savedDiagnosisData.length; i++) {
         diagnosisArrayList.at(i).patchValue({
           viewProvisionalDiagnosisProvided: savedDiagnosisData[i].term,

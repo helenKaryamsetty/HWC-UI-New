@@ -163,10 +163,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   calculateEDD(lastMP: any) {
     if (lastMP !== null) {
-      // const edd = new Date(lastMP);
-      // edd.setDate(lastMP.add(280, 'd'));
       const edd = moment(lastMP.add(280, 'd'));
-      console.log('DATE EDDDDDD', edd);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });
     } else {
       this.patientANCDetailsForm.patchValue({ expDelDt: null });

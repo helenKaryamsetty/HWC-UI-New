@@ -19,7 +19,7 @@
           </h4>
         </header>
         <ng-container formArrayName="chiefComplaintList">
-          <div class="row m-t-10" *ngIf="benChiefComplaints.length >= 1">
+          <div class="row m-t-10" *ngIf="dataSource.data.length >= 1">
             <div class="col-xs-12">
               <table
                 class="table table-bordered"
@@ -190,7 +190,6 @@
                   mat-mini-fab
                   color="primary"
                   [id]="'addBtn' + i"
-                  class="button-overall-disabled"
                   [disabled]="checkComplaintFormValidity(chiefComplaint)"
                   (click)="addChiefComplaint()"
                 >
@@ -557,7 +556,7 @@
                   multiple
                   name="test"
                   formControlName="test"
-                  (change)="checkTestName($event)"
+                  (selectionChange)="checkTestName($event)"
                 >
                   <mat-option
                     *ngFor="let nonRadiology of nonRadiologyMaster"
@@ -663,12 +662,16 @@
                           >
                         </mat-form-field>
                       </div>
-                      <div class="col-xs-12 col-sm-3 m-t-15 m-b-10">
+                      <div
+                        class="col-xs-12 col-sm-3 col-md-3 m-t-10"
+                        style="margin-left: 15px"
+                      >
                         <button
                           mat-mini-fab
                           type="button"
                           class="pull-left"
                           color="warn"
+                          class="mat_warn_circle"
                           *ngIf="
                             diagnosis.get('provisionalDiagnosisList')
                               ?.disabled ||
@@ -690,7 +693,8 @@
                         <button
                           mat-mini-fab
                           type="button"
-                          class="pull-right button-overall-disabled"
+                          class="mat_blue_circle"
+                          style="margin-left: 5px"
                           color="primary"
                           *ngIf="isLast"
                           [disabled]="
@@ -782,7 +786,7 @@
                       class="input-full-width"
                       name="form"
                       [(ngModel)]="tempform"
-                      (change)="getFormValueChanged()"
+                      (selectionChange)="getFormValueChanged()"
                       required
                     >
                       <mat-option
@@ -1002,9 +1006,11 @@
                   <button
                     id="add-button"
                     class="button-overall-disabled"
+                    style="margin-bottom: 20px"
                     [disabled]="prescriptionForm.invalid"
                     mat-raised-button
                     color="primary"
+                    class="mat_blue"
                     type="button"
                     (click)="submitForUpload()"
                   >
@@ -1136,6 +1142,8 @@
                               id="deleteMedicine"
                               (click)="deleteMedicine(j, drug.value.id)"
                               color="warn"
+                              class="mat_warn_circle"
+                              style="margin-bottom: 20px"
                             >
                               <span class="material-icons">close</span>
                             </button>

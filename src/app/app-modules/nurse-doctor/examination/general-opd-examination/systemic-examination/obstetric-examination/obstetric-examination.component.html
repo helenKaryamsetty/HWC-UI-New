@@ -90,7 +90,7 @@
     <mat-radio-group
       name="fetalHeartSounds"
       formControlName="fetalHeartSounds"
-      (change)="resetFetalHeartRate($event)"
+      (selectionChange)="resetFetalHeartRate($event)"
     >
       <mat-radio-button color="primary" class="radio-btn" value="Audible">{{
         current_language_set?.common?.audible
@@ -213,7 +213,7 @@
     <mat-radio-group
       name="malPresentation"
       formControlName="malPresentation"
-      (change)="checkForHRP()"
+      (selectionChange)="checkForHRP()"
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"
@@ -233,7 +233,7 @@
     <mat-radio-group
       name="lowLyingPlacenta"
       formControlName="lowLyingPlacenta"
-      (change)="checkForHRP()"
+      (selectionChange)="checkForHRP()"
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"
@@ -253,7 +253,7 @@
     <mat-radio-group
       name="vertebralDeformity"
       formControlName="vertebralDeformity"
-      (change)="checkForHRP()"
+      (selectionChange)="checkForHRP()"
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"

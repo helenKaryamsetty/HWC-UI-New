@@ -65,7 +65,6 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.hrpService.setBloodGroup(null);
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
 
     this.getNurseMasterData();
   }
@@ -82,8 +81,6 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
   ngOnChanges(simpleChanges: SimpleChanges) {
     if (simpleChanges['gravidaStatus'] && this.gravidaStatus) {
       this.obstetricFormulaForm.patchValue({ gravida_G: 1 });
-      // this.obstetricFormulaForm.patchValue({ pretermDeliveries_P: null });
-      // this.obstetricFormulaForm.patchValue({ termDeliveries_T: null });
       this.obstetricFormulaForm.patchValue({ para: null });
       this.obstetricFormulaForm.patchValue({ livebirths_L: null });
       this.obstetricFormulaForm.patchValue({ abortions_A: null });
@@ -138,13 +135,7 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
 
   calculateGravida(formControlName?: string) {
     let gravidaValue = 1;
-    // if (this.termDeliveries_T)
-    //   gravidaValue = gravidaValue + (+this.termDeliveries_T);
-    // if (this.pretermDeliveries_P)
-    //   gravidaValue = gravidaValue + (+this.pretermDeliveries_P);
     if (this.abortions_A) gravidaValue = gravidaValue + +this.abortions_A;
-    // if (this.stillBirth)
-    //   gravidaValue = gravidaValue + (+this.stillBirth);
     if (this.para) gravidaValue = gravidaValue + +this.para;
 
     if (
@@ -174,7 +165,6 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
       this.confirmationService.alert(
         this.current_language_set.alerts.info.recheckValue,
       );
-      // this.obstetricFormulaForm.controls['livebirths_L'].reset();
     }
   }
 
@@ -183,7 +173,6 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
       this.confirmationService.alert(
         this.current_language_set.alerts.info.valueRange,
       );
-      // this.obstetricFormulaForm.controls['abortions_A'].reset();
     }
   }
 
@@ -191,17 +180,9 @@ export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
     return this.obstetricFormulaForm.controls['gravida_G'].value;
   }
 
-  // get termDeliveries_T() {
-  //   return this.obstetricFormulaForm.controls['termDeliveries_T'].value;
-  // }
-
   get para() {
     return this.obstetricFormulaForm.controls['para'].value;
   }
-
-  // get pretermDeliveries_P() {
-  //   return this.obstetricFormulaForm.controls['pretermDeliveries_P'].value;
-  // }
 
   get abortions_A() {
     return this.obstetricFormulaForm.controls['abortions_A'].value;

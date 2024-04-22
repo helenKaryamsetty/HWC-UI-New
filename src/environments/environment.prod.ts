@@ -61,7 +61,7 @@ export const environment = {
 
   TELEMEDICINE_URL: `${schedulerUI_IP}/schedulerui-v1.0/#/?`,
   fallbackMMUUrl: `/logout-tm`,
-  redirInMMUUrl: `/common/tcspecialist-worklist`,
+  redirInMMUUrl: `/nurse-doctor/tcspecialist-worklist`,
 
   getSessionExistsURL: `${COMMON_API_OPEN}user/getLoginResponse`,
   extendSessionUrl: `${TM_API}common/extend/redisSession`,

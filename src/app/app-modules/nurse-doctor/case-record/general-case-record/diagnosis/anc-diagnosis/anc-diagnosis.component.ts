@@ -80,9 +80,6 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   ngOnInit() {
     this.today = new Date();
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(
-    //   response => (this.current_language_set = response)
-    // );
     this.beneficiaryDetailsService.resetHRPPositive();
 
     this.fetchHRPPositive();
@@ -204,7 +201,6 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     diagnosis.complicationOfCurrentPregnancyList = tempComplicationList.slice();
-    console.log('diagnosisCheck', diagnosis);
 
     this.resetOtherPregnancyComplication(tempComplicationList, diagnosis);
     this.generalDiagnosisForm.patchValue(diagnosis);
@@ -252,10 +248,6 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       this.disableNonePregnancyComplication = false;
       this.showAllPregComplication = true;
     }
-    console.log(
-      'checkNull.otherCurrPregComplication',
-      checkNull.otherCurrPregComplication,
-    );
 
     if (checkNull === 0) {
       if (!flag) {
@@ -265,11 +257,6 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       }
     } else {
       if (flag) {
-        console.log(
-          'checkNull.otherCurrPregComplication',
-          checkNull.otherCurrPregComplication,
-        );
-
         this.generalDiagnosisForm.patchValue({
           otherCurrPregComplication: checkNull.otherCurrPregComplication,
         });

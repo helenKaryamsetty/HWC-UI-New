@@ -138,13 +138,11 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           history.data.MenstrualHistory
         ) {
           const temp = history.data.MenstrualHistory;
-          console.log('history.data.MenstrualHistory', temp);
 
           temp.menstrualCycleStatus =
             this.masterData.menstrualCycleStatus.filter((item: any) => {
               return item.name === temp.menstrualCycleStatus;
             })[0];
-          // this.menstrualHistoryForm.controls['menstrualCycleStatus'].setValue(status[0]);
           temp.cycleLength = this.masterData.menstrualCycleLengths.filter(
             (item: any) => {
               return item.menstrualCycleRange === temp.cycleLength;
@@ -239,8 +237,6 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     return this.menstrualHistoryForm.controls['lMPDate'].value;
   }
   checkMenstrualCycleStatus() {
-    console.log('here in to check');
-
     if (this.visitCategory === 'ANC') {
       this.menstrualHistoryForm.patchValue({
         menstrualCycleStatusID: null,

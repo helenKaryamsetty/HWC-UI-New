@@ -287,7 +287,6 @@ export class QuickConsultComponent
     this.drugPrescriptionForm = <FormGroup>(
       this.patientQuickConsultForm.controls['prescription']
     );
-    console.log(this.drugPrescriptionForm, 'prescription form');
   }
 
   makeDurationMaster() {
@@ -324,7 +323,6 @@ export class QuickConsultComponent
     this.filteredDrugMaster = [];
     drugMasterCopy.forEach((element: any) => {
       if (this.currentPrescription.formID === element.itemFormID) {
-        // element["isEDL"] = true;
         this.filteredDrugMaster.push(element);
       }
     });
@@ -348,8 +346,6 @@ export class QuickConsultComponent
   }
 
   filterMedicine(medicine: any) {
-    console.log('here');
-
     if (medicine) {
       this.subFilteredDrugMaster = this.filteredDrugMaster.filter(
         (drug: any) => {
@@ -399,7 +395,6 @@ export class QuickConsultComponent
 
   selectMedicineObject(event: any) {
     const option = event.source.value;
-    console.log('here', event);
     if (event.isUserInput) {
       if (this.checkNotIssued(option.itemID)) {
         this.currentPrescription['id'] = option.id;
@@ -479,24 +474,6 @@ export class QuickConsultComponent
     this.addMedicine();
     this.tempform = null;
     this.clearCurrentDetails();
-    // this.currentPrescription = {
-    //   id: null,
-    //   drugID: null,
-    //   drugName: null,
-    //   drugStrength: null,
-    //   drugUnit: null,
-    //   quantity: null,
-    //   formID: null,
-    //   formName: null,
-    //   dose: null,
-    //   frequency: null,
-    //   duration: null,
-    //   unit: null,
-    //   instructions: null,
-    // }
-    // this.tempform = null;
-    // this.tempDrugName = null;
-    // this.prescriptionForm.form.markAsUntouched();
   }
 
   masterDataSubscription: any;
@@ -572,7 +549,6 @@ export class QuickConsultComponent
     this.diagnosisSubscription = this.doctorService
       .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
       .subscribe((res: any) => {
-        console.log('qc data', res);
         if (res && res.statusCode === 200 && res.data) {
           this.patchDiagnosisDetails(res.data);
           this.doctorService.setCapturedCaserecordDeatilsByDoctor(res);
@@ -595,33 +571,11 @@ export class QuickConsultComponent
         visitCode,
       )
       .subscribe((res: any) => {
-        console.log('qc data', res);
         if (res && res.statusCode === 200 && res.data) {
           this.patchDiagnosisDetails(res.data);
         }
       });
   }
-
-  // MMUdiagnosisSubscription:any;
-  //   getMMUDiagnosisDetails(beneficiaryRegID, visitID, visitCategory) {
-  //     this.diagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory,localStorage.getItem("visitCode"))
-  //       .subscribe(res => {
-  //         // console.log('qc data', res);
-  //         if (res && res.statusCode === 200 && res.data) {
-
-  //           this.MMUdiagnosisSubscription = this.doctorService.getMMUCaseRecordAndReferDetails(beneficiaryRegID, localStorage.getItem("referredVisitID"), visitCategory,localStorage.getItem("referredVisitCode"))
-  //           .subscribe(response => {
-  //             if (response && response.statusCode === 200 && response.data) {
-
-  //               this.diagnosisResponse = response.data;
-
-  //               this.patchMMUDiagnosisDetails(res.data);
-  //             }
-  //           })
-
-  //         }
-  //       })
-  //   }
 
   filterInitialComplaints(element: any) {
     const arr = this.chiefComplaintMaster.filter((item: any) => {
@@ -639,7 +593,6 @@ export class QuickConsultComponent
   }
 
   patchDiagnosisDetails(response: any) {
-    console.log(response);
     if (response) {
       const complaintDetails = response.findings;
       if (complaintDetails && complaintDetails.complaints) {
@@ -726,7 +679,6 @@ export class QuickConsultComponent
   }
 
   patchMMUDiagnosisDetails(response: any) {
-    console.log(response);
     if (response) {
       const complaintDetails = response.findings;
       if (complaintDetails && complaintDetails.complaints) {
@@ -816,7 +768,6 @@ export class QuickConsultComponent
             this.addDiagnosis();
         }
       }
-      // this.patchMMUPrescriptionDetails(response.prescription);
       this.patchPrescriptionDetails(response.prescription);
     }
   }
@@ -830,43 +781,45 @@ export class QuickConsultComponent
       })
       .subscribe((res) => {
         if (
-          res.benAnthropometryDetail !== null &&
-          res.benPhysicalVitalDetail !== null
+          res.data.benAnthropometryDetail !== null &&
+          res.data.benPhysicalVitalDetail !== null
         ) {
           this.patientQuickConsultForm.patchValue({
-            height_cm: res.benAnthropometryDetail.height_cm,
-            weight_Kg: res.benAnthropometryDetail.weight_Kg,
-            bMI: res.benAnthropometryDetail.bMI,
-            temperature: res.benPhysicalVitalDetail.temperature,
+            height_cm: res.data.benAnthropometryDetail.height_cm,
+            weight_Kg: res.data.benAnthropometryDetail.weight_Kg,
+            bMI: res.data.benAnthropometryDetail.bMI,
+            temperature: res.data.benPhysicalVitalDetail.temperature,
             systolicBP_1stReading:
-              res.benPhysicalVitalDetail.systolicBP_1stReading,
+              res.data.benPhysicalVitalDetail.systolicBP_1stReading,
             diastolicBP_1stReading:
-              res.benPhysicalVitalDetail.diastolicBP_1stReading,
-            pulseRate: res.benPhysicalVitalDetail.pulseRate,
-            respiratoryRate: res.benPhysicalVitalDetail.respiratoryRate,
+              res.data.benPhysicalVitalDetail.diastolicBP_1stReading,
+            pulseRate: res.data.benPhysicalVitalDetail.pulseRate,
+            respiratoryRate: res.data.benPhysicalVitalDetail.respiratoryRate,
             bloodGlucose_Fasting:
-              res.benPhysicalVitalDetail.bloodGlucose_Fasting,
-            bloodGlucose_Random: res.benPhysicalVitalDetail.bloodGlucose_Random,
-            bloodGlucose_2hr_PP: res.benPhysicalVitalDetail.bloodGlucose_2hr_PP,
-            sPO2: res.benPhysicalVitalDetail.sPO2,
-            rbsTestResult: res.benPhysicalVitalDetail.rbsTestResult,
-            rbsTestRemarks: res.benPhysicalVitalDetail.rbsTestRemarks,
+              res.data.benPhysicalVitalDetail.bloodGlucose_Fasting,
+            bloodGlucose_Random:
+              res.data.benPhysicalVitalDetail.bloodGlucose_Random,
+            bloodGlucose_2hr_PP:
+              res.data.benPhysicalVitalDetail.bloodGlucose_2hr_PP,
+            sPO2: res.data.benPhysicalVitalDetail.sPO2,
+            rbsTestResult: res.data.benPhysicalVitalDetail.rbsTestResult,
+            rbsTestRemarks: res.data.benPhysicalVitalDetail.rbsTestRemarks,
           });
           this.nurseService.rbsTestResultFromDoctorFetch = null;
           if (
-            res.benPhysicalVitalDetail.rbsTestResult !== undefined &&
-            res.benPhysicalVitalDetail.rbsTestResult !== null &&
+            res.data.benPhysicalVitalDetail.rbsTestResult !== undefined &&
+            res.data.benPhysicalVitalDetail.rbsTestResult !== null &&
             !this.nurseService.mmuVisitData
           ) {
             this.nurseService.rbsTestResultFromDoctorFetch =
-              res.benPhysicalVitalDetail.rbsTestResult;
+              res.data.benPhysicalVitalDetail.rbsTestResult;
             this.rbsResultChange();
           }
 
           //Sending RBS Test Result to patch in Lab Reports
-          if (res.benPhysicalVitalDetail) {
+          if (res.data.benPhysicalVitalDetail) {
             this.testInVitalsService.setVitalsRBSValueInReports(
-              res.benPhysicalVitalDetail,
+              res.data.benPhysicalVitalDetail,
             );
           }
         }
@@ -1037,7 +990,6 @@ export class QuickConsultComponent
   }
 
   patchPrescriptionDetails(prescription: any) {
-    console.log(prescription, 'herrrrrrr');
     const medicine: FormArray = <FormArray>(
       this.drugPrescriptionForm.controls['prescribedDrugs']
     );
@@ -1045,21 +997,6 @@ export class QuickConsultComponent
       medicine.insert(0, this.utils.initMedicineWithData(element, element.id));
     });
   }
-
-  // patchMMUPrescriptionDetails(prescription) {
-  //   let prescriptionData=prescription;
-  //   let prescriptionResp=this.diagnosisResponse.prescription;
-  //   for(let i=0,j=prescriptionData.length;i<prescriptionResp.length;i++,j++)
-  //   {
-  //     prescriptionData[j]=prescriptionResp[i];
-  //   }
-
-  //   const medicine: FormArray = <FormArray>this.drugPrescriptionForm.controls['prescribedDrugs'];
-  //   prescriptionData.forEach(element => {
-  //     medicine.insert(0, this.utils.initMedicineWithData(element, element.id));
-  //   });
-
-  // }
 
   getSnomedCTRecord(chiefComplaint: any, i: any) {
     this.masterdataService
@@ -1189,7 +1126,6 @@ export class QuickConsultComponent
     }
   }
   checkTestName(event: any) {
-    console.log('testName', event);
     const item = event.value;
     this.nurseService.setRbsSelectedInInvestigation(false);
     item.forEach((element: any) => {
@@ -1285,16 +1221,10 @@ export class QuickConsultComponent
       if (this.suggestedChiefComplaintList[i].length === 0)
         complaintForm.reset();
     } else {
-      // if(complaintFormArray.controls.length>1 && i==0)
-      // {
-      //       this.deleteChiefComplaintRow(i,complaintForm)
-      // }
-      // else{
       complaintFormArray.controls[i].patchValue({
         conceptID: null,
         description: null,
       });
-      // }
     }
   }
 

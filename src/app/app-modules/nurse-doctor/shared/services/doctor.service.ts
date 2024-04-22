@@ -22,7 +22,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -3332,7 +3332,10 @@ export class DoctorService {
     });
   }
 
-  updateBirthAndImmunizationHistory(medicalForm: any, visitCategory: any) {
+  updateBirthAndImmunizationHistory(
+    medicalForm: any,
+    visitCategory: any,
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
@@ -3378,9 +3381,7 @@ export class DoctorService {
         environment.updateBirthImmunizationHistoryDetailsUrl,
         birthAndImmunizationHistoryDetails,
       );
-    }
-
-    if (
+    } else if (
       visitCategory.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
@@ -3388,6 +3389,11 @@ export class DoctorService {
         environment.updateBirthAndImmunizationHistoryDataUrl,
         birthAndImmunizationHistoryDetails,
       );
+    } else {
+      // Return an observable that emits no value and completes
+      return new Observable((observer) => {
+        observer.complete();
+      });
     }
   }
 
@@ -3478,7 +3484,9 @@ export class DoctorService {
     });
   }
 
-  getPreviousBirthImmunizationHistoryDetails(visitCategory: any) {
+  getPreviousBirthImmunizationHistoryDetails(
+    visitCategory: any,
+  ): Observable<any> {
     // let visitCategory = localStorage.getItem("visitCategory");
     if (
       visitCategory.toLowerCase() === 'neonatal and infant health care services'
@@ -3501,6 +3509,10 @@ export class DoctorService {
         },
       );
     }
+    // Return an observable that emits no value and completes
+    return new Observable((observer) => {
+      observer.complete();
+    });
   }
 
   postDoctorFamilyPlanningetails(
@@ -3780,7 +3792,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
-  ) {
+  ): Observable<any> {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;

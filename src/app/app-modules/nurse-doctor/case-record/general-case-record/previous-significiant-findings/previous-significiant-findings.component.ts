@@ -26,7 +26,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { DoctorService, MasterdataService } from '../../../shared/services';
+import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -104,16 +104,21 @@ export class PreviousSignificiantFindingsComponent
             this.dataSource.data = [];
             this.dataSource.data = this.previousSignificiantFindingsList;
             this.dataSource.paginator = this.paginator;
+            this.dataSource.data.forEach((item: any, i: number) => {
+              item.sno = i + 1;
+            });
           }
         }
       });
   }
 
   filterPreviousSignificiantFindingsList(searchTerm?: string) {
-    if (!searchTerm)
+    if (!searchTerm) {
       this.filteredPreviousSignificiantFindingsList =
         this.previousSignificiantFindingsList;
-    else {
+      this.dataSource.data = this.previousSignificiantFindingsList;
+      this.dataSource.paginator = this.paginator;
+    } else {
       this.filteredPreviousSignificiantFindingsList = [];
       this.dataSource.data = [];
       this.dataSource.paginator = this.paginator;
@@ -122,6 +127,8 @@ export class PreviousSignificiantFindingsComponent
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
             this.filteredPreviousSignificiantFindingsList.push(item);
+            this.dataSource.data.push(item);
+            this.dataSource.paginator = this.paginator;
             break;
           }
         }

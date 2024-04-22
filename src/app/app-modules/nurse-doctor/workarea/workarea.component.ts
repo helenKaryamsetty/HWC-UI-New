@@ -446,9 +446,6 @@ export class WorkareaComponent
         if (this.specialistFlag === '1') {
           this.doctorSaveAndTCSave = this.current_language_set.common.submit;
           this.isDoctorSave = true;
-          console.log(
-            'here for submit' + this.current_language_set.common.submit,
-          );
         } else if (this.specialistFlag === '3') {
           this.doctorUpdateAndTCSubmit =
             this.current_language_set.common.update;
@@ -546,7 +543,6 @@ export class WorkareaComponent
         'visitCategory'
       ].valueChanges.subscribe((categoryValue) => {
         if (categoryValue) {
-          console.log(categoryValue, 'categoryValue');
           this.schedulerData = null;
           this.schedulerFormData = null;
 
@@ -1336,8 +1332,6 @@ export class WorkareaComponent
     }
   }
   addControlsToNCDScreeningForm() {
-    console.log(this.patientMedicalForm);
-
     this.patientMedicalForm.addControl(
       'patientVitalsForm',
       new GeneralUtils(this.fb).createGeneralVitalDetailsForm(),
@@ -1479,7 +1473,6 @@ export class WorkareaComponent
         investigationForm,
         temp,
       );
-    console.log('testsPrescribed', this.testsPrescribed);
   }
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
@@ -1517,7 +1510,6 @@ export class WorkareaComponent
     }
   }
   submitNCDScreeningDiagnosisForm() {
-    console.log('patientMedicalForm', this.patientMedicalForm);
     if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
       const temp = {
         beneficiaryRegID: this.beneficiaryRegID,
@@ -1578,8 +1570,6 @@ export class WorkareaComponent
     }
   }
   submitFamilyPlanningDiagnosis() {
-    console.log('patientMedicalForm', this.patientMedicalForm);
-
     if (this.checkNurseRequirements(this.patientMedicalForm)) {
       const temp = {
         beneficiaryRegID: this.beneficiaryRegID,
@@ -1862,7 +1852,7 @@ export class WorkareaComponent
           );
       }
     } else if (
-      visitCategory?.trim().toLowerCase() ===
+      visitCategory?.toLowerCase() ===
       'neonatal and infant health care services'
     ) {
       if (this.checkNurseRequirements(this.patientMedicalForm)) {
@@ -1920,7 +1910,7 @@ export class WorkareaComponent
           );
       }
     } else if (
-      visitCategory?.trim().toLowerCase() ===
+      visitCategory?.toLowerCase() ===
       'childhood & adolescent healthcare services'
     ) {
       if (this.checkNurseRequirements(this.patientMedicalForm)) {

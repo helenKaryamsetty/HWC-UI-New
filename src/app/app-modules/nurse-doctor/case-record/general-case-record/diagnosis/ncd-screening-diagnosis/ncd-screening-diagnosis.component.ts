@@ -113,7 +113,6 @@ export class NcdScreeningDiagnosisComponent
     this.oralScreeningStatus();
     this.breastScreeningStatus();
     this.cervicalScreeningStatus();
-    // enableDiseaseConfirmForm$ - is for radio selection whether idrs or CBAC (NCD Screening)
     this.confirmDiseasesSubscription =
       this.ncdScreeningService.enableDiseaseConfirmForm$.subscribe(
         (response: any) => {
@@ -322,13 +321,10 @@ export class NcdScreeningDiagnosisComponent
     const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
-    console.log('from diagnosis' + provisionalDiagnosis[0].term);
     if (
       provisionalDiagnosis[0].term !== '' &&
       provisionalDiagnosis[0].conceptID !== ''
     ) {
-      console.log('from diagnosis second' + provisionalDiagnosis[0].term);
-
       for (let i = 0; i < savedDiagnosisData.length; i++) {
         diagnosisArrayList.at(i).patchValue({
           viewProvisionalDiagnosisProvided: savedDiagnosisData[i].term,
@@ -399,7 +395,6 @@ export class NcdScreeningDiagnosisComponent
   updateIfDiseaseConfirmed() {
     this.idrsScoreService.visitDiseases$.subscribe((response) => {
       this.confirmed = response;
-      console.log(' this.confirmed', this.confirmed);
     });
     if (this.confirmed !== null && this.confirmed.length > 0) {
       this.confirmed.forEach((checkForDiabetesAndHyper: any) => {
@@ -464,7 +459,6 @@ export class NcdScreeningDiagnosisComponent
 
   addHyperTensionToConfirmDisease(hyperConfirmation: any) {
     this.idrsScoreService.finalDiagnosisHypertensionConfirm(hyperConfirmation);
-    // this.idrsScoreService.setHypertensionSelected();
   }
   diabetesScreeningStatus() {
     this.diabetesScreeningStatusSubscription =

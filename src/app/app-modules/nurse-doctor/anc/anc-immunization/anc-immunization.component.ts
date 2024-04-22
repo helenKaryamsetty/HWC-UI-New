@@ -65,7 +65,6 @@ export class AncImmunizationComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     this.getBenificiaryDetails();
   }
   ngDoCheck() {
@@ -134,7 +133,6 @@ export class AncImmunizationComponent
     this.today = new Date();
     this.dob = new Date();
     this.dob.setFullYear(this.today.getFullYear() - this.beneficiaryAge);
-    console.log('this.dob', this.dob, 'this.today', this.today);
   }
 
   checkedTT_1Status = false;

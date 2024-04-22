@@ -101,7 +101,7 @@ export const environment = {
   TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-ui-next/#/?',
 
   fallbackMMUUrl: `/logout-tm`,
-  redirInMMUUrl: `/common/tcspecialist-worklist`,
+  redirInMMUUrl: `/nurse-doctor/tcspecialist-worklist`,
 
   getSessionExistsURL: `${COMMON_API_OPEN}user/getLoginResponse`,
   extendSessionUrl: `${TM_API}common/extend/redisSession`,

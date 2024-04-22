@@ -199,9 +199,6 @@ export class WorkareaComponent
    * labtests loading out of response
    */
   loadlabTests(labtests: any) {
-    // this.beneficiaryDetailsService.beneficiaryDetails$
-    //   .subscribe((res) => console.log(res, 'bendict'));
-
     if (labtests.length) {
       this.labForm = this.fb.array([this.utils.createLabProcedureForm()]);
       labtests.forEach((test: any, i: any) => {
@@ -909,7 +906,10 @@ export class WorkareaComponent
             techForm['providerServiceMapID'] =
               localStorage.getItem('providerServiceID');
 
-            if (localStorage.getItem('specialist_flag') === 'null') {
+            if (
+              localStorage.getItem('specialist_flag') === 'null' ||
+              localStorage.getItem('specialist_flag') === ''
+            ) {
               techForm['specialist_flag'] = null;
             } else {
               techForm['specialist_flag'] =
