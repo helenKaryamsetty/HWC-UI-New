@@ -226,13 +226,15 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
         symptom: searchSymptom,
       };
+      console.log('reqObj in getQuestions', reqObj);
       this.cdssService.getCdssQuestions(reqObj).subscribe((res: any) => {
         if (
           res.statusCode === 200 &&
           res.data !== null &&
-          res.data.Msg !== 'No Question Found' &&
-          res.data !== 'No Question Found'
+          res.data?.Questions.length
         ) {
+          // res.data.Msg !== 'No Question Found' &&
+          //   res.data !== 'No Question Found'
           this.openDialog(searchSymptom);
         } else {
           this.confirmationService.alert(
@@ -317,7 +319,13 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           this.psd.length,
           '/100',
         );
-        this.cdssForm.controls['selectedDiagnosis'].patchValue(this.psd);
+        console.log('this.psd', this.psd);
+        console.log('this.recommendedActionPc', this.recommendedActionPc);
+        console.log(
+          'this.cdssForm***********************8888888888888888888',
+          this.cdssForm,
+        );
+        this.cdssForm?.controls['selectedDiagnosis'].patchValue(this.psd);
         this.cdssForm.controls['recommendedActionPc'].patchValue(
           this.recommendedActionPc,
         );
@@ -326,6 +334,10 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
         );
         this.cdssForm.controls['selectedProvisionalDiagnosisID'].patchValue(
           this.selectedProvisionalDiagnosisID,
+        );
+        console.log(
+          'this.cdssForm***********************99999999999999999',
+          this.cdssForm,
         );
       } else {
         this.cdssForm.reset();

@@ -244,6 +244,10 @@ export class PatientVisitDetailsComponent
           this.templateVisitCategories =
             this.templateNurseMasterData.visitCategories;
           this.templateFilterVisitCategories = this.templateVisitCategories;
+          console.log(
+            'this.templateFilterVisitCategories in 247',
+            this.templateFilterVisitCategories,
+          );
         }
       });
     //this.templateVisitReasons ="Pandemic";

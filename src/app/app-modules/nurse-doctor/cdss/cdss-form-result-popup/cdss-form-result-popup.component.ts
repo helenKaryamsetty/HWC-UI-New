@@ -30,6 +30,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 // import { LocalDataSource } from 'ng2-smart-table/lib/lib/data-source/local/local.data-source';
+import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'app-cdss-form-result-popup',
@@ -39,6 +40,15 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-lan
 export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   searchSymptom: any;
+  displayedColumns: string[] = [
+    'save',
+    'disease',
+    'count',
+    'information',
+    'dosDont',
+    'selfcare',
+    'action',
+  ];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     // private saved_data: dataService,
@@ -46,12 +56,12 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
     public dialog: MatDialog,
     public HttpServices: HttpServiceService,
     private alertMessage: ConfirmationService,
-    public dialogReff: MatDialogRef<CdssFormResultPopupComponent>,
+    public dialogRef: MatDialogRef<CdssFormResultPopupComponent>,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    console.log(this.data);
+    console.log('under ngOninit', this.data);
     this.getQuestions();
   }
 
@@ -120,9 +130,10 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
     const questionSelected: any = {};
     questionSelected['complaintId'] = this.questions.id;
     questionSelected['selected'] = id;
-    this.cdssService
-      .getCdssAnswers(questionSelected)
-      .subscribe((any) => this.assignresult(any));
+    this.cdssService.getCdssAnswers(questionSelected).subscribe((any) => {
+      console.log('any +++++++++++++++++++++++++', any);
+      this.assignresult(any);
+    });
   }
 
   assignresult(val: any) {
@@ -190,9 +201,9 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   }
 
   getresult() {
-    // this.formattedResult = new LocalDataSource(
-    //   JSON.parse(JSON.stringify(this.result)),
-    // );
+    this.formattedResult = new LocalDataSource(
+      JSON.parse(JSON.stringify(this.result)),
+    );
     for (let index = 0; index < this.formattedResult.data.length; index++) {
       const selected = this.formattedResult.data[index].selected;
       let per = '';
@@ -313,11 +324,9 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   }
 
   successHandeler(questions: any) {
-    console.log('Get Questions:' + JSON.stringify(questions));
     this.questions = questions.data;
   }
   handleAnswers(answers: any) {
-    console.log('answers', answers);
     this.answers = answers;
   }
   changePage(val: any) {
@@ -337,13 +346,13 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
       .confirm('info', this.currentLanguageSet.areYouSureWantToClose)
       .subscribe((response) => {
         if (response) {
-          this.dialogReff.close();
+          this.dialogRef.close();
         }
       });
   }
 
   saveData(diseasess: any) {
-    this.dialogReff.close(diseasess);
+    this.dialogRef.close(diseasess);
   }
 }
 

@@ -162,6 +162,9 @@ export class GeneralPatientVitalsComponent
   }
 
   ngOnInit() {
+    // this.patientVitalsForm = this.fb.group({
+    //   bMI: [''] // Initializing with an empty string
+    // });
     this.hrpService.setHeightFromVitals(null);
     this.hrpService.setHemoglobinValue(null);
     this.nurseService.clearEnableLAssessment();
@@ -652,6 +655,8 @@ export class GeneralPatientVitalsComponent
     ) {
       this.BMI = (this.weight_Kg / (this.height_cm * this.height_cm)) * 10000;
       this.BMI = +this.BMI.toFixed(1);
+      console.log('this.BMI in 659', this.BMI);
+
       if (this.BMI !== null && this.BMI !== undefined) {
         this.calculateBMIStatusBasedOnAge();
       }

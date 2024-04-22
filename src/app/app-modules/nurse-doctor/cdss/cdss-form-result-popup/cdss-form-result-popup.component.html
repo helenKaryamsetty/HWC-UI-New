@@ -25,7 +25,7 @@
 <mat-dialog-content *ngIf="page1" class="captialize">
   <div class="col-xs-12 col-sm-12" id="Questions">
     <div *ngIf="questions !== null">
-      <ul
+      <!-- <ul
         class="list-unstyled list-inline"
         *ngFor="let c of questions.Questions; let i = index"
       >
@@ -36,9 +36,19 @@
             value="{{ i }}"
           ></mat-radio-button>
           <span
-            >{{ c.question }}
+            >{{ c.question  }}
             <sup *ngIf="c.isEmergency" style="color: red">[Emergency]</sup>
           </span>
+        </li>
+      </ul> -->
+      <ul class="list-unstyled list-inline">
+        <li *ngFor="let c of questions.Questions; let i = index">
+          <mat-radio-group (change)="getNextSet(c.isEmergency, $event.value)">
+            <mat-radio-button [value]="i">
+              <span>{{ c.question }}</span>
+              <sup *ngIf="c.isEmergency" style="color: red">[Emergency]</sup>
+            </mat-radio-button>
+          </mat-radio-group>
         </li>
       </ul>
     </div>
@@ -148,10 +158,106 @@
               </td>
             </tr>
           </tbody>
-        </table> 
-      
-      table.reset();
-      --></div>
+        </table>  -->
+
+        <!-- table.reset(); -->
+
+        <table mat-table [dataSource]="formattedResult1">
+          <!-- ID Column -->
+          <ng-container matColumnDef="save">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.coreComponents?.save }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let in = index"
+              [formGroup]="in"
+            >
+              <mat-checkbox
+                color="primary"
+                class="m-l-10"
+                name="{{ element.Disease }}"
+                (click)="
+                  getDiseaseName(
+                    element.Disease,
+                    in,
+                    element.Action[0],
+                    element.Symptoms,
+                    element.selected
+                  )
+                "
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="disease">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.disease }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.Disease }}</td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.count }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.percentage }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="information">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.information }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ul class="list-unstyled">
+                <li *ngFor="let do of element.Information">{{ do }}</li>
+              </ul>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="dosDont">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.dosDont }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ul class="list-unstyled">
+                <li *ngFor="let do of element.DoDonts">{{ do }}</li>
+              </ul>
+            </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="selfcare">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.selfcare }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ul class="list-unstyled">
+                <li *ngFor="let do of element.SelfCare">{{ do }}</li>
+              </ul>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ currentLanguageSet?.action }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ul class="list-unstyled">
+                <li *ngFor="let do of element.Action">{{ do }}</li>
+              </ul>
+            </td>
+          </ng-container>
+
+          <!-- Define columns -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
     </div>
   </form>
 </mat-dialog-content>
