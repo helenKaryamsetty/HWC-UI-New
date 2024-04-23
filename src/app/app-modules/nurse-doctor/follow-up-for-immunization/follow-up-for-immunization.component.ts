@@ -192,7 +192,7 @@ export class FollowUpForImmunizationComponent
             }
           }
 
-          if (this.followUpImmunizationMode === 'view') {
+          if (String(this.followUpImmunizationMode) === 'view') {
             this.getFollowUpImmunization();
           }
         } else {

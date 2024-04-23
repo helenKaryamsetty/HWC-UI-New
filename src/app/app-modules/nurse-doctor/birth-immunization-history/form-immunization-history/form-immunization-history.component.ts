@@ -119,13 +119,9 @@ export class FormImmunizationHistoryComponent
 
   nurseMasterDataSubscription: any;
   getMasterData() {
-    // this.masterData = vaccinesDatas;
-    // this.getBeneficiaryDetails();
-    // this.filterImmunizationMasterList(vaccinesDatas.childVaccinations);
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.childVaccinations) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.getBeneficiaryDetails();
           this.vaccineReceivedList =
@@ -344,11 +340,6 @@ export class FormImmunizationHistoryComponent
                   formArray.patchValue(vaccineValues.id);
                 }
               }
-              // (<FormArray>(
-              //   immunizationListValues.controls[indexValue]
-              // )).controls['vaccinationReceivedAtID'].patchValue(
-              //   vaccineValues.id,
-              // );
             },
           );
           this.enableReceivedAt(indexValue);
@@ -397,11 +388,6 @@ export class FormImmunizationHistoryComponent
                       formArray.patchValue(vaccineValues.id);
                     }
                   }
-                  // (<FormArray>(
-                  //   immunizationListValues.controls[indexValue]
-                  // )).controls['vaccinationReceivedAtID'].patchValue(
-                  //   vaccineValues.id,
-                  // );
                 },
               );
               this.enableReceivedAt(indexValue);
@@ -434,23 +420,14 @@ export class FormImmunizationHistoryComponent
     const immunizationList = <FormArray>(
       this.neonatalImmunizationHistoryForm.controls['immunizationList']
     );
-
     const receivedAtId = immunizationList
       .at(index)
       .get('vaccinationReceivedAtID') as FormControl;
-
-    // (<FormArray>immunizationList.controls[index]).controls[
-    //   'vaccinationReceivedAtID'
-    // ].value;
-
     this.vaccineReceivedList.filter((item: any) => {
-      if (item.id === receivedAtId) {
-        // (<FormArray>immunizationList.controls[index]).controls[
-        //   'vaccinationReceivedAt'
-        // ].patchValue(item.name);
+      if (item.id === receivedAtId.value) {
         const formArray = immunizationList
           .at(index)
-          .get('vaccinationReceivedAtID') as FormControl;
+          .get('vaccinationReceivedAt') as FormControl;
         if (formArray) {
           formArray.patchValue(item.name);
         }
