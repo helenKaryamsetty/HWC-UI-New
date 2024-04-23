@@ -120,12 +120,11 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.patientDiseaseForm = this.patientVisitForm.get(
       'patientDiseaseForm',
     ) as FormGroup;
-    this.presentChiefComplaintDb = this.patientVisitForm.get(
+    const cdssForm = this.patientVisitForm.get('cdssForm') as FormGroup;
+    this.presentChiefComplaintDb = cdssForm.get(
       'presentChiefComplaintDb',
     ) as FormGroup;
-    this.diseaseSummaryDb = this.patientVisitForm.get(
-      'diseaseSummaryDb',
-    ) as FormGroup;
+    this.diseaseSummaryDb = cdssForm.get('diseaseSummaryDb') as FormGroup;
 
     this.ncdScreeningService.clearDiseaseConfirmationScreenFlag();
     this.isCdss = localStorage.getItem('isCdss');

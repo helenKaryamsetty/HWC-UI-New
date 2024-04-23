@@ -131,7 +131,6 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
     questionSelected['complaintId'] = this.questions.id;
     questionSelected['selected'] = id;
     this.cdssService.getCdssAnswers(questionSelected).subscribe((any) => {
-      console.log('any +++++++++++++++++++++++++', any);
       this.assignresult(any);
     });
   }
@@ -146,7 +145,7 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   }
 
   getAnswers() {
-    console.log(this.questionid);
+    console.log('this.questions*******************', this.questions);
     this.sizeQuestion = [];
     this.questions.Questions.forEach((element: any) => {
       console.log(element);

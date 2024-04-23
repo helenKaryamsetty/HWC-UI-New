@@ -326,13 +326,13 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           this.cdssForm,
         );
         this.cdssForm?.controls['selectedDiagnosis'].patchValue(this.psd);
-        this.cdssForm.controls['recommendedActionPc'].patchValue(
+        this.cdssForm?.controls['recommendedActionPc'].patchValue(
           this.recommendedActionPc,
         );
-        this.cdssForm.controls['presentChiefComplaintID'].patchValue(
+        this.cdssForm?.controls['presentChiefComplaintID'].patchValue(
           this.presentChiefComplaintID,
         );
-        this.cdssForm.controls['selectedProvisionalDiagnosisID'].patchValue(
+        this.cdssForm?.controls['selectedProvisionalDiagnosisID'].patchValue(
           this.selectedProvisionalDiagnosisID,
         );
         console.log(

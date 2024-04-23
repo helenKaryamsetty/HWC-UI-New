@@ -42,7 +42,7 @@
         </li>
       </ul> -->
       <ul class="list-unstyled list-inline">
-        <li *ngFor="let c of questions.Questions; let i = index">
+        <li *ngFor="let c of questions?.Questions; let i = index">
           <mat-radio-group (change)="getNextSet(c.isEmergency, $event.value)">
             <mat-radio-button [value]="i">
               <span>{{ c.question }}</span>
