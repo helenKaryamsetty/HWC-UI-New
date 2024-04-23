@@ -38,13 +38,13 @@
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="input-full-width">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
       }}</mat-label>
       <mat-select
         matInput
-        class="input-full-width"
+        [style.width]="'100%'"
         name="visitReason"
         formControlName="visitReason"
         (selectionChange)="
@@ -66,13 +66,13 @@
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value"
   >
-    <mat-form-field class="input-full-width mat_form_field_width">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
       }}</mat-label>
       <mat-select
         matInput
-        class="input-full-width"
+        [style.width]="'100%'"
         name="visitCategory"
         formControlName="visitCategory"
         (selectionChange)="
@@ -97,13 +97,13 @@
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="visitCategory === 'General OPD'"
   >
-    <mat-form-field class="mat_form_field_width">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.subVisitCategory
       }}</mat-label>
       <mat-select
-        class="input-full-width"
         matInput
+        [style.width]="'100%'"
         name="subVisitCategory"
         formControlName="subVisitCategory"
       >
@@ -133,7 +133,6 @@
         currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
       }}</mat-label>
       <mat-select
-        class="input-full-width"
         matInput
         [style.width]="'100%'"
         id="pregnancyStatus"
@@ -187,12 +186,11 @@
       attendant === 'nurse'
     "
   >
-    <mat-form-field class="mat_form_field_width" [style.width]="'100%'">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.followUpFpMethod
       }}</mat-label>
       <mat-select
-        class="input-full-width"
         matInput
         [style.width]="'100%'"
         name="followUpForFpMethod"
@@ -256,7 +254,6 @@
       }}</mat-label>
       <mat-select
         [style.width]="'100%'"
-        class="input-full-width"
         matInput
         name="sideEffects"
         formControlName="sideEffects"
