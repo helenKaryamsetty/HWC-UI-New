@@ -293,8 +293,8 @@ export class RegisterOtherDetailsComponent
       const matDialogRef: MatDialogRef<ConsentFormComponent> = this.dialog.open(
         ConsentFormComponent,
         {
-          width: '80%',
-          height: '82%',
+          width: '50%',
+          height: '300px',
           disableClose: true,
         },
       );

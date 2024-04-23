@@ -6,6 +6,18 @@
     overflow: auto;
 }
 
+.logoAlign {
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+.forgotPassword{
+    float: right;
+    margin-right: 90px;
+    margin-top: 20px;
+}
+
 .matCardSonar {
     width: 400px;
     margin-left: 10px;
@@ -13,16 +25,17 @@
     border-radius: 5px;
     margin-top: 50px;
 }
-  
+
 .formIcons {
     padding-top: 30px;
     color: gray;
 }
-  
+
 form {
+    margin-top: 10px;
     font-size: 17px;
 }
-  
+
 button {
     font-size: 15px;
 }
@@ -30,33 +43,33 @@ button {
 button.submit {
     background: #336CFB;
 }
-  
+
 .forgotBtn {
     margin: 10px;
 }
-  
-  
+
+
 mat-card-title {
     text-align: center;
     font-size: 25px;
 }
-  
+
 .full-width {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-  
-.text-input-fullwidth
-{
-    width: 100%;
+
+.text-input-fullwidth {
+    width: 80%;
 }
+
 .errorStyle {
     position: absolute;
     font-size: 12px;
     transition: all .7s;
     color: #F44336;
 }
-  
+
 .loader-overlay {
     bottom: 0;
     left: 0;
@@ -64,39 +77,39 @@ mat-card-title {
     right: 0;
     top: 0;
 }
-  
+
 .googleBtn {
     background-color: #F44336;
     color: white;
 }
-  
+
 .fbBtn {
     background-color: #336CFB;
     color: white;
 }
-  
-  
+
+
 /*for smaller screens*/
 @media (min-width: 10px) {
     mat-card {
-      top: 30px;
+        top: 30px;
     }
-  }
-  
-  
+}
+
+
 /*for Medium screens*/
 @media (min-width: 480px) {
     mat-card {
-      top: 0px;
+        top: 0px;
     }
 }
 
 /*for large screens*/
 @media (min-width: 768px) {
     mat-card {
-      top: 0px;
+        top: 0px;
     }
-  }
+}
 
 .btn-center {
     text-align: center;
@@ -104,13 +117,18 @@ mat-card-title {
 }
 
 .full-width-login {
-    width: 100%;
+    width: 75%;
+    margin-left: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 20px;
     color: white;
     border: none;
     height: 35px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .justify-content-between {
@@ -120,8 +138,11 @@ mat-card-title {
 /* .input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
     box-shadow: 0 0 0 20px #e1eaff inset !important;
 } */
-input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #e1eaff  inset !important;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #e1eaff inset !important;
     border: unset;
 }
 
