@@ -128,13 +128,14 @@
       visitCategory !== 'Neonatal and Infant Health Care Services'
     "
   >
-    <mat-form-field class="mat_form_field_width">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
       }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
+        [style.width]="'100%'"
         id="pregnancyStatus"
         name="pregnancyStatus"
         formControlName="pregnancyStatus"
@@ -186,13 +187,14 @@
       attendant === 'nurse'
     "
   >
-    <mat-form-field class="mat_form_field_width">
+    <mat-form-field class="mat_form_field_width" [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.followUpFpMethod
       }}</mat-label>
       <mat-select
         class="input-full-width"
         matInput
+        [style.width]="'100%'"
         name="followUpForFpMethod"
         formControlName="followUpForFpMethod"
         (selectionChange)="
@@ -248,11 +250,12 @@
       attendant === 'nurse'
     "
   >
-    <mat-form-field class="mat_form_field_width">
+    <mat-form-field [style.width]="'100%'">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.sideEffect
       }}</mat-label>
       <mat-select
+        [style.width]="'100%'"
         class="input-full-width"
         matInput
         name="sideEffects"

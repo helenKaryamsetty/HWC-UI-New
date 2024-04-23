@@ -69,26 +69,23 @@
         </mat-form-field>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-        <div class="select-container">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.ro?.otherInfo?.community
-            }}</mat-label>
-            <mat-select
-              class="p-t-12"
-              [style.width]="'100%'"
-              formControlName="community"
-              [required]="isCommunityRequired"
-              (selectionChange)="onCommunityChanged()"
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
+            currentLanguageSet?.ro?.otherInfo?.community
+          }}</mat-label>
+          <mat-select
+            [style.width]="'100%'"
+            formControlName="community"
+            [required]="isCommunityRequired"
+            (selectionChange)="onCommunityChanged()"
+          >
+            <mat-option
+              *ngFor="let community of masterData?.communityMaster"
+              [value]="community.communityID"
+              >{{ community.communityType }}</mat-option
             >
-              <mat-option
-                *ngFor="let community of masterData?.communityMaster"
-                [value]="community.communityID"
-                >{{ community.communityType }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="clearfix"></div>
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -149,44 +146,39 @@
       </div>
       <div class="clearfix"></div>
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-        <div class="select-container">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.ro?.otherInfo?.religion
-            }}</mat-label>
-            <mat-select
-              class="p-t-12"
-              [style.width]="'100%'"
-              formControlName="religion"
-              (selectionChange)="getReligionName()"
-            >
-              <mat-option
-                *ngFor="let religion of masterData?.religionMaster"
-                [value]="religion.religionID"
-                >{{ religion.religionType | titlecase }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
+            currentLanguageSet?.ro?.otherInfo?.religion
+          }}</mat-label>
+          <mat-select
+            [style.width]="'100%'"
+            formControlName="religion"
+            (selectionChange)="getReligionName()"
+          >
+            <mat-option
+              *ngFor="let religion of masterData?.religionMaster"
+              [value]="religion.religionID"
+              >{{ religion.religionType | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div
         *ngIf="otherDetailsForm.value.religion === '7'"
         class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
       >
-        <div class="select-container">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.ro?.otherInfo?.otherReligion
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              allowText="alphaspace"
-              formControlName="religionOther"
-              maxlength="50"
-            />
-          </mat-form-field>
-        </div>
+        <mat-form-field [style.width]="'100%'">
+          <mat-label class="mat-label-text">{{
+            currentLanguageSet?.ro?.otherInfo?.otherReligion
+          }}</mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            allowText="alphaspace"
+            formControlName="religionOther"
+            maxlength="50"
+          />
+        </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -224,17 +216,16 @@
         </div>
       </div> -->
 
-      <span class="clearfix"></span>
+      <div class="clearfix"></div>
       <!-- NEW ID DETAILS for BENEFICIARY -->
       <div class="row">
         <section
-          class="col-xs-12 col-sm-12 col-md-12 col-lg-5 mtop20"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
           formArrayName="govID"
-          style="margin-left: 2%"
         >
           <!-- Gov IDs-->
           <div
-            class="col-xs-10 col-sm-10"
+            class="col-xs-12 col-sm-6"
             *ngFor="
               let id of getGovIDControls();
               let i = index;
@@ -243,7 +234,7 @@
             class="row"
           >
             <ng-container [formGroupName]="i">
-              <mat-form-field [style.width]="'40%'" style="line-height: unset">
+              <mat-form-field [style.width]="'100%'">
                 <mat-label class="mat-label-text">{{
                   currentLanguageSet?.ro?.otherInfo?.govtIDType
                 }}</mat-label>
@@ -251,7 +242,6 @@
                   (selectionChange)="filtergovIDs(id.value.type, i)"
                   formControlName="type"
                   [required]="isGidRequired"
-                  style="line-height: unset"
                 >
                   <mat-option
                     *ngFor="let govIDType of govIDMaster[i]?.govIdEntityMaster"
@@ -260,12 +250,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field
-                id="govtID"
-                [style.width]="'40%'"
-                style="line-height: unset; margin-left: 15px"
-                class="mleft15"
-              >
+              <mat-form-field id="govtID" [style.width]="'100%'">
                 <mat-label class="mat-label-text">{{
                   currentLanguageSet?.ro?.otherInfo?.govtIDNumber
                 }}</mat-label>
@@ -361,9 +346,8 @@
         </section>
 
         <section
-          class="col-xs-12 col-sm-12 col-md-12 col-lg-5 mtop20"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
           formArrayName="otherGovID"
-          style="margin-left: 2%"
         >
           <!-- Other Gov IDs-->
           <section
@@ -373,18 +357,17 @@
               let isLast = last
             "
             class="row"
+            [style.width]="'115%'"
           >
             <ng-container [formGroupName]="i">
-              <mat-form-field>
+              <mat-form-field [style.width]="'150%'">
                 <mat-label>
                   {{ currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType }}
                 </mat-label>
                 <mat-select
-                  class="p-t-12"
-                  [style.width]="'100%'"
+                  [style.width]="'150%'"
                   formControlName="type"
                   (selectionChange)="filterOtherGovIDs(id.value.type, i)"
-                  style="line-height: unset"
                 >
                   <mat-option
                     *ngFor="
@@ -397,12 +380,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field
-                id="govtID"
-                [style.width]="'45%'"
-                style="line-height: unset"
-                class="mleft15"
-              >
+              <mat-form-field id="govtID" [style.width]="'120%'">
                 <mat-label class="mat-label-text">
                   {{
                     currentLanguageSet?.ro?.otherInfo?.govtHealthProgramIDNumber

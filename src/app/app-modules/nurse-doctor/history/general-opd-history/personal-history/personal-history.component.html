@@ -267,13 +267,13 @@
           </div>
 
           <div
-            class="col-xs-12 col-sm-6 col-md-2 box"
+            class="col-xs-8 col-sm-4 col-md-2 box"
             *ngIf="
               tobacco?.value?.tobaccoUseType !== null &&
               tobacco?.value?.tobaccoUseType !== ''
             "
           >
-            <mat-form-field class="input-full-width">
+            <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.number
@@ -291,7 +291,7 @@
           </div>
 
           <div
-            class="col-xs-12 col-sm-6 col-md-2 box"
+            class="col-xs-8 col-sm-4 col-md-2 box"
             *ngIf="
               tobacco?.value?.number !== null && tobacco?.value?.number !== ''
             "
@@ -315,12 +315,12 @@
           </div>
 
           <div
-            class="col-xs-12 col-sm-6 col-md-2 box"
+            class="col-xs-8 col-sm-4 col-md-2 box"
             *ngIf="
               tobacco?.value?.number !== null && tobacco?.value?.number !== ''
             "
           >
-            <mat-form-field class="input-full-width">
+            <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
               }}</mat-label>
@@ -337,7 +337,7 @@
           </div>
 
           <div
-            class="col-xs-10 col-sm-4 col-md-3 box"
+            class="col-xs-8 col-sm-4 col-md-3 box"
             *ngIf="
               tobacco?.value?.duration !== null &&
               tobacco?.value?.duration !== ''
