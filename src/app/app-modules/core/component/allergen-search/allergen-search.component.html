@@ -1,13 +1,12 @@
 <div class="title">
   <h4>{{ currentLanguageSet?.allergenSearch?.allergenName }}</h4>
-  <button
+  <mat-icon
     mat-icon-button
     matDialogClose
     matTooltip="{{ currentLanguageSet?.common?.close }}"
     class="pull-right exit width-20px"
+    >close</mat-icon
   >
-    <mat-icon>close</mat-icon>
-  </button>
 </div>
 <div class="container-fluid">
   <div class="overlay" *ngIf="showProgressBar">

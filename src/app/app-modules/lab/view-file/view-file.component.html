@@ -1,14 +1,13 @@
 <div class="title">
   <h4>{{ currentLanguageSet?.coreComponents?.files }}</h4>
-  <button
+  <mat-icon
     mat-icon-button
     matDialogClose
     matTooltip="{{ currentLanguageSet?.common?.close }}"
     (click)="closeDialog()"
     class="pull-right exit width-20px"
+    >close</mat-icon
   >
-    <mat-icon>close</mat-icon>
-  </button>
 </div>
 <div class="container-fluid" *ngIf="fileObj && fileObj.length > 0">
   <mat-chip

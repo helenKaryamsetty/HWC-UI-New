@@ -1,7 +1,10 @@
 <div class="speclogin">
-  <button class="pull-right exit" mat-icon-button (click)="closeSnackBar(true)">
-    <mat-icon>close</mat-icon>
-  </button>
+  <mat-icon
+    class="pull-right exit"
+    mat-icon-button
+    (click)="closeSnackBar(true)"
+    >close</mat-icon
+  >
   <form [formGroup]="specialistTMLoginForm">
     <mat-form-field class="input-full-width">
       <input
