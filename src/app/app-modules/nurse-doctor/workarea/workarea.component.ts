@@ -4559,8 +4559,8 @@ export class WorkareaComponent
     patientANCDetailsForm.valueChanges.subscribe((value) => {
       if (value.lmpDate) {
         // const temp = value.lmpDate;
-        menstrualHistoryForm.patchValue({ lMPDate: moment(value.lmpDate) });
-        this.nurseService.setLMPForFetosenseTest(moment(value.lmpDate));
+        menstrualHistoryForm.patchValue({ lMPDate: value.lmpDate });
+        this.nurseService.setLMPForFetosenseTest(value.lmpDate);
       }
     });
   }

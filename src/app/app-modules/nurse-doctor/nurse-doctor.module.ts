@@ -89,17 +89,6 @@ import { TcSpecialistFutureWorklistComponent } from './tc-specialist-future-work
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
 import { OncologistWorklistComponent } from './oncologist-worklist/oncologist-worklist.component';
 import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist-worklist.component';
-import {
-  MatNativeDateModule,
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS,
-} from '@angular/material/core';
-import {
-  MomentDateModule,
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { CdssFormComponent } from './cdss/cdss-form/cdss-form.component';
 import { CdssFormResultPopupComponent } from './cdss/cdss-form-result-popup/cdss-form-result-popup.component';
 import { CDSSService } from './shared/services/cdss-service';
@@ -180,18 +169,6 @@ import { QuickConsultComponent } from './quick-consult/quick-consult.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FamilyTaggingService } from '../registrar/shared/services/familytagging.service';
 
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MM/YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
-    monthYearA11yLabel: 'MM/YYYY',
-  },
-};
-
 @NgModule({
   imports: [
     CommonModule,
@@ -207,8 +184,6 @@ export const MY_FORMATS = {
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    MatNativeDateModule,
-    MomentDateModule,
     NgxPaginationModule,
   ],
   declarations: [
@@ -355,12 +330,6 @@ export const MY_FORMATS = {
     TestInVitalsService,
     FamilyTaggingService,
     CDSSService,
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
 export class NurseDoctorModule {}

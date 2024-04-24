@@ -95,13 +95,12 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
     checkdate.setMonth(today.getMonth() - 10);
 
-    if (lmpDate.toDate() > checkdate && lmpDate.toDate() < today) {
-      const lmpDateObj = lmpDate.toDate();
+    if (lmpDate > checkdate && lmpDate < today) {
       this.patientANCDetailsForm.patchValue({ duration: null });
       this.calculateEDD(lmpDate);
       this.calculateGestationalAge(lmpDate);
       this.calculatePeriodOfPregnancy(lmpDate);
-      this.nurseService.setLMPForFetosenseTest(lmpDateObj);
+      this.nurseService.setLMPForFetosenseTest(lmpDate);
     } else {
       lmpDate = null;
       this.patientANCDetailsForm.patchValue({ lmpDate: lmpDate });
@@ -122,9 +121,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
       this.pregnancyMonths = Math.round(
         Math.abs(
           Math.round(
-            Math.abs(
-              (this.today.getTime() - lastMP.toDate().getTime()) / oneDay,
-            ),
+            Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
           ),
         ) / 30,
       );
@@ -143,9 +140,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
       gestationalAge = Math.round(
         Math.abs(
           Math.round(
-            Math.abs(
-              (this.today.getTime() - lastMP.toDate().getTime()) / oneDay,
-            ),
+            Math.abs((this.today.getTime() - lastMP.getTime()) / oneDay),
           ),
         ) / 7,
       );
@@ -164,7 +159,8 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   calculateEDD(lastMP: any) {
     if (lastMP !== null) {
-      const edd = moment(lastMP.add(280, 'd'));
+      const edd = new Date(lastMP);
+      edd.setDate(lastMP.getDate() + 280);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });
     } else {
       this.patientANCDetailsForm.patchValue({ expDelDt: null });
