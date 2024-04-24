@@ -354,6 +354,12 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
               referAndRevistData.otherReferralReason,
             );
           }
+          // this.referForm.patchValue({
+          //   refrredToAdditionalServiceList: referAndRevistData.refrredToAdditionalServiceList,
+          // });
+          // this.referForm.patchValue({
+          //   referralReason: referAndRevistData.referralReason,
+          // });
           const referRevisitDetails = Object.assign({}, referAndRevistData, {
             revisitDate: new Date(referAndRevistData.revisitDate),
           });
@@ -401,7 +407,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   public higherhealthcarecenter(selected: any): void {
-    if (selected !== null && selected.institutionName) {
+    if (selected?.institutionName) {
       this.selectValue = 1;
       this.healthCareReferred = true;
     } // should display the selected option.

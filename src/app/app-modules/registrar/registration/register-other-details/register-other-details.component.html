@@ -280,7 +280,7 @@
                 />
               </mat-form-field>
               <button
-                md-mini-fab
+                mat-mini-fab
                 *ngIf="
                   otherDetailsForm.get('govID')?.value.length > 1 ||
                   otherDetailsForm.controls['govID']?.value[i].type
@@ -298,13 +298,14 @@
               <span *ngIf="i < govLength - 1">
                 <button
                   mat-mini-fab
+                  style="margin-left: 3px"
                   color="primary"
+                  class="mat_blue_circle"
                   *ngIf="isLast"
                   [disabled]="
                     !otherDetailsForm.controls['govID'].value[i].idValue
                   "
                   (click)="addID(1, i)"
-                  class="button-overall-disabled"
                 >
                   <mat-icon
                     class="md-18"
@@ -405,6 +406,7 @@
                 style="text-align: center"
                 mat-mini-fab
                 color="warn"
+                class="mat_warn_circle"
                 *ngIf="
                   otherDetailsForm.get('otherGovID')?.value[i]?.idValue
                     ?.length > 1 ||
@@ -429,7 +431,6 @@
                     !otherDetailsForm.controls['otherGovID'].value[i].idValue
                   "
                   (click)="addID(0, i)"
-                  class="button-overall-disabled"
                 >
                   <mat-icon
                     class="md-18"

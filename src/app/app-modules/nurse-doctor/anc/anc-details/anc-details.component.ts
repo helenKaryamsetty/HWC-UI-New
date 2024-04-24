@@ -95,12 +95,13 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
     checkdate.setMonth(today.getMonth() - 10);
 
-    if (lmpDate > checkdate && lmpDate < today) {
+    if (lmpDate.toDate() > checkdate && lmpDate.toDate() < today) {
+      const lmpDateObj = lmpDate.toDate();
       this.patientANCDetailsForm.patchValue({ duration: null });
       this.calculateEDD(lmpDate);
       this.calculateGestationalAge(lmpDate);
       this.calculatePeriodOfPregnancy(lmpDate);
-      this.nurseService.setLMPForFetosenseTest(lmpDate);
+      this.nurseService.setLMPForFetosenseTest(lmpDateObj);
     } else {
       lmpDate = null;
       this.patientANCDetailsForm.patchValue({ lmpDate: lmpDate });

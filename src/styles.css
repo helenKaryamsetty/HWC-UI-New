@@ -594,3 +594,7 @@ input:-webkit-autofill:active {
 .mat-label-text {
   color: rgba(0, 0, 0, 0.6);
 }
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  overflow: hidden !important;
+}

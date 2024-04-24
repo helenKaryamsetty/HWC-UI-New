@@ -1,7 +1,7 @@
 <div class="row m-t-20">
   <div class="col-sm-12">
     <div *ngIf="dataSource.data.length > 0" class="pull-right">
-      <mat-form-field id="filterbox" class="m-t-20-">
+      <mat-form-field id="filterbox" class="m-t-20">
         <input
           autocomplete="off"
           matInput
@@ -16,6 +16,7 @@
     <section class="table-responsive" style="margin-top: 4rem">
       <table
         mat-table
+        class="table table-bordered"
         [dataSource]="dataSource"
         aria-describedby="significantFindings"
       >

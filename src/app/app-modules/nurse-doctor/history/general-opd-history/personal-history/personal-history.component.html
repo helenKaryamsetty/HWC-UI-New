@@ -380,7 +380,6 @@
               class="mat_blue_circle"
               [disabled]="checkTobaccoValidity(tobacco)"
               (click)="addTobacco()"
-              class="button-overall-disabled"
             >
               <mat-icon class="md-18">add</mat-icon>
             </button>
@@ -577,7 +576,6 @@
               *ngIf="isLast"
               [disabled]="checkAlcoholValidity(alcohol)"
               (click)="addAlcohol()"
-              class="button-overall-disabled"
             >
               <mat-icon class="md-18">add</mat-icon>
             </button>
@@ -755,7 +753,6 @@
                   allergyMasterData.length
               "
               [disabled]="checkAllergyValidity(allergy)"
-              class="button-overall-disabled"
               (click)="addAllergy()"
             >
               <mat-icon class="md-18">add</mat-icon>

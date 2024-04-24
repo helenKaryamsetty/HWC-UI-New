@@ -1,13 +1,12 @@
 <section id="searchDialog" class="container-fluid box">
   <div class="title">
     <h4>{{ currentLanguageSet?.beneficaryConsent }}</h4>
-    <button
+    <mat-icon
       mat-icon-button
       class="pull-right close-btn"
       (click)="closeConsent('1')"
+      >close</mat-icon
     >
-      <mat-icon>close</mat-icon>
-    </button>
   </div>
   <mat-dialog-content>
     <section>

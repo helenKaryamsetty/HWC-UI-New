@@ -63,6 +63,7 @@ import { SetLanguageComponent } from '../../core/component/set-language.componen
 import { SpecialistLoginComponent } from '../../core/component/specialist-login/specialist-login.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-workarea',
@@ -4557,9 +4558,9 @@ export class WorkareaComponent
 
     patientANCDetailsForm.valueChanges.subscribe((value) => {
       if (value.lmpDate) {
-        const temp = new Date(value.lmpDate);
-        menstrualHistoryForm.patchValue({ lMPDate: temp });
-        this.nurseService.setLMPForFetosenseTest(temp);
+        // const temp = value.lmpDate;
+        menstrualHistoryForm.patchValue({ lMPDate: moment(value.lmpDate) });
+        this.nurseService.setLMPForFetosenseTest(moment(value.lmpDate));
       }
     });
   }
