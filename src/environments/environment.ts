@@ -24,21 +24,21 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-// const commonIP = 'https://amritwprdev.piramalswasthya.org';
-// const identityIP = 'https://amritwprdev.piramalswasthya.org';
-// const tmIP = 'https://amritwprdev.piramalswasthya.org';
-// const IP104 = 'https://amritwprdev.piramalswasthya.org';
-// const mmuIP = 'https://amritwprdev.piramalswasthya.org';
-// const schedulerIP = 'https://amritwprdev.piramalswasthya.org';
-// const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const commonIP = 'https://amritwprdev.piramalswasthya.org';
+const identityIP = 'https://amritwprdev.piramalswasthya.org';
+const tmIP = 'https://amritwprdev.piramalswasthya.org';
+const IP104 = 'https://amritwprdev.piramalswasthya.org';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
 
-const commonIP = 'http://183.82.107.186:8080';
-const identityIP = 'http://183.82.107.186:8080';
-const tmIP = 'http://183.82.107.186:8080';
-const IP104 = 'http://183.82.107.186:8080';
-const mmuIP = 'http://183.82.107.186:8080';
-const schedulerIP = 'http://183.82.107.186:8080';
-const adminIP = 'http://183.82.107.186:8080';
+// const commonIP = 'http://183.82.107.186:8080';
+// const identityIP = 'http://183.82.107.186:8080';
+// const tmIP = 'http://183.82.107.186:8080';
+// const IP104 = 'http://183.82.107.186:8080';
+// const mmuIP = 'http://183.82.107.186:8080';
+// const schedulerIP = 'http://183.82.107.186:8080';
+// const adminIP = 'http://183.82.107.186:8080';
 const inventoryUI_IP = 'http://183.82.107.186:8080';
 
 const FHIRIP = 'http://183.82.107.186:8080';
@@ -53,13 +53,13 @@ const SWYMED_IP = '14.143.13.109';
 // const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
-const COMMON_API = `${commonIP}/commonapi-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}/commonapi-v0.1/`;
+const COMMON_API = `${commonIP}/commonapi-v0.1/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 // const COMMON_API_OPEN = `http://localhost:8080/`;
 // const COMMON_API = `http://localhost:8080/`;
 // const TM_API = `${tmIP}/hwc-facility-service-v0.1/`;
-const TM_API = `${tmIP}/hwc-facility-service/`;
+const TM_API = `${tmIP}/hwc-facility-service-v0.1/`;
 
 const API104 = `${IP104}/104api-v1.0/`;
 // const TM_API = `http://localhost:8082/`;
