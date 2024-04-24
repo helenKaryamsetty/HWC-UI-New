@@ -116,7 +116,9 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
 
                 this.dataSource.data = res.data.sctMaster;
                 this.dataSource.paginator = this.paginator;
-
+                this.dataSource.data.forEach((item: any, i: number) => {
+                  item.ConceptID = i + 1;
+                });
                 if (pageNo === 0) {
                   this.pageCount = res.data.pageCount;
                 }

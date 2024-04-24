@@ -373,127 +373,6 @@
                 </td>
               </ng-container>
 
-              <ng-container matColumnDef="visitDetails">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
-                  {{ current_language_set?.previousvisit?.visitDetails }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  "
-                >
-                  <ng-container *ngIf="element.benPreviousData">
-                    <tr>
-                      <ng-container *ngIf="element.benPreviousData.nurseData">
-                        <td>
-                          <ng-container
-                            *ngIf="
-                              element.benPreviousData.nurseData.vitals
-                                ?.benAnthropometryDetail &&
-                              element.benPreviousData.nurseData.vitals
-                                .benPhysicalVitalDetail
-                            "
-                          >
-                            <tr>
-                              <th
-                                mat-header-cell
-                                style="border-bottom: none"
-                                *matHeaderCellDef
-                                mat-sort-header
-                              >
-                                Height :
-                              </th>
-                              <td mat-cell *matCellDef="let element">
-                                {{
-                                  element.benPreviousData?.nurseData?.vitals
-                                    ?.benAnthropometryDetail?.height_cm || "NA"
-                                }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th
-                                mat-header-cell
-                                style="border-bottom: none"
-                                *matHeaderCellDef
-                                mat-sort-header
-                              >
-                                Weight :
-                              </th>
-                              <td mat-cell *matCellDef="let element">
-                                {{
-                                  element.benPreviousData?.nurseData?.vitals
-                                    ?.benAnthropometryDetail?.weight_Kg || "NA"
-                                }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th
-                                mat-header-cell
-                                style="border-bottom: none"
-                                *matHeaderCellDef
-                                mat-sort-header
-                              >
-                                SBP :
-                              </th>
-                              <td mat-cell *matCellDef="let element">
-                                {{
-                                  element.benPreviousData?.nurseData?.vitals
-                                    ?.benPhysicalVitalDetail
-                                    ?.averageSystolicBP || "NA"
-                                }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th
-                                mat-header-cell
-                                style="border-bottom: none"
-                                *matHeaderCellDef
-                                mat-sort-header
-                              >
-                                DBP :
-                              </th>
-                              <td mat-cell *matCellDef="let element">
-                                {{
-                                  element.benPreviousData?.nurseData?.vitals
-                                    ?.benPhysicalVitalDetail
-                                    ?.averageDiastolicBP || "NA"
-                                }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th
-                                mat-header-cell
-                                style="border-bottom: none"
-                                *matHeaderCellDef
-                                mat-sort-header
-                              >
-                                RBS :
-                              </th>
-                              <td mat-cell *matCellDef="let element">
-                                {{
-                                  element.benPreviousData?.nurseData?.vitals
-                                    ?.benPhysicalVitalDetail?.rbsTestResult ||
-                                    "NA"
-                                }}
-                              </td>
-                            </tr>
-                          </ng-container>
-                        </td>
-                      </ng-container>
-                    </tr>
-                  </ng-container>
-                </td>
-              </ng-container>
-
               <ng-container matColumnDef="visitcodemmu">
                 <th
                   mat-header-cell
@@ -514,51 +393,6 @@
                   "
                 >
                   {{ element?.visitCode }}
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="medicationmmu">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
-                  {{ current_language_set?.previousvisit?.medicationmmu }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  style="
-                    max-width: 150px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  "
-                >
-                  <ng-container *ngIf="element.benPreviousData">
-                    <tr>
-                      <ng-container *ngIf="element.benPreviousData.doctorData">
-                        <td>
-                          <ng-container
-                            *ngFor="
-                              let medicationmmu of element.benPreviousData
-                                ?.doctorData?.prescription
-                            "
-                          >
-                            <tr *ngIf="medicationmmu.drugName !== null">
-                              {{
-                                medicationmmu.drugName
-                              }}
-                              {{
-                                medicationmmu.drugStrength
-                              }},
-                            </tr>
-                            <tr *ngIf="medicationmmu.drugName === null"></tr>
-                          </ng-container>
-                        </td>
-                      </ng-container>
-                    </tr>
-                  </ng-container>
                 </td>
               </ng-container>
 
@@ -1170,7 +1004,7 @@
                 </td>
               </ng-container>
 
-              <ng-container matColumnDef="visitDetails">
+              <ng-container matColumnDef="visitdetailsmmu">
                 <th
                   mat-header-cell
                   style="border-bottom: none"
@@ -1403,7 +1237,7 @@
             <div
               class="pull-center"
               style="margin-top: 5px; text-align: center"
-              *ngIf="historyOfHWC.data.length === 0"
+              *ngIf="historyOfHWC.data?.length === 0"
             >
               <strong>{{
                 current_language_set?.common?.noRecordsFound

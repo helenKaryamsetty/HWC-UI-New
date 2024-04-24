@@ -36,6 +36,7 @@ md2-pagination {
 
 .close-btn {
     color: white !important;
+    cursor: pointer;
 }
 
 .title {
