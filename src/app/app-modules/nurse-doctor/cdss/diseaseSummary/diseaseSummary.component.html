@@ -35,33 +35,38 @@
           }}
         </mat-label>
         <input
-          autocomplete="off"
+          [matAutocomplete]="auto"
+          #inp="matAutocompleteTrigger"
+          (focus)="inputFocused(inp)"
           type="text"
           matInput
           name="diseaseSummary"
           formControlName="diseaseSummary"
-          (keyup)="
+          (input)="
             showDiseaseSummary(
               DiseaseSummaryForm.controls['diseaseSummary'].value
             )
           "
-          [matAutocomplete]="auto"
+          (keyup.enter)="
+            showDiseaseSummary(
+              DiseaseSummaryForm.controls['diseaseSummary'].value
+            )
+          "
         />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          autoActiveFirstOption
+          (optionSelected)="
+            showDiseaseSummary(
+              DiseaseSummaryForm.controls['diseaseSummary'].value
+            )
+          "
+        >
+          <mat-option *ngFor="let compl of diseaseNames" [value]="compl">
+            {{ compl }}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
-
-      <mat-autocomplete
-        #auto="matAutocomplete"
-        autoActiveFirstOption
-        (optionSelected)="
-          showDiseaseSummary(
-            DiseaseSummaryForm.controls['diseaseSummary'].value
-          )
-        "
-      >
-        <mat-option *ngFor="let compl of diseaseNames" [value]="compl">
-          {{ compl }}
-        </mat-option>
-      </mat-autocomplete>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-4 m-t-7" *ngIf="viewMode">
       <mat-form-field [style.width]="'100%'">

@@ -9,6 +9,8 @@
         </mat-label>
         <input
           matInput
+          #inp="matAutocompleteTrigger"
+          (focus)="inputFocused(inp)"
           [matAutocomplete]="auto"
           formControlName="presentChiefComplaint"
           (input)="
@@ -60,7 +62,6 @@
         <textarea
           matInput
           textAreaValidator
-          placeholder="{{ currentLanguageSet?.provisionalSelectedDiagnosis }}"
           rows="2"
           name="psd"
           minlength="4"

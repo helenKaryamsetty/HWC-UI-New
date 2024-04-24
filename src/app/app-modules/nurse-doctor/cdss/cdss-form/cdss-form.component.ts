@@ -19,7 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -34,6 +41,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { VisitDetailUtils } from '../../shared/utility';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-cdss-form',
@@ -41,6 +49,8 @@ import { VisitDetailUtils } from '../../shared/utility';
   styleUrls: ['./cdss-form.component.css'],
 })
 export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
+  @ViewChild(MatAutocompleteTrigger)
+  autocompleteTrigger!: MatAutocompleteTrigger;
   currentLanguageSet: any;
   chiefComplaints: any = [];
   filteredOptions!: Observable<string[]>;
@@ -66,6 +76,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   presentChiefComplaintID: any;
   presentChiefComplaintView: any;
   formUtility: any;
+  disablePopUP = false;
 
   constructor(
     private httpServiceService: HttpServiceService,
@@ -235,6 +246,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
         ) {
           // res.data.Msg !== 'No Question Found' &&
           //   res.data !== 'No Question Found'
+          // this.autocompleteTrigger.closePanel();
           this.openDialog(searchSymptom);
         } else {
           this.confirmationService.alert(
@@ -252,6 +264,11 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     }
   }
 
+  inputFocused(trg: MatAutocompleteTrigger) {
+    setTimeout(() => {
+      trg.closePanel();
+    });
+  }
   resetForm() {
     this.cdssForm.reset();
   }
@@ -319,16 +336,11 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           this.psd.length,
           '/100',
         );
-        console.log('this.psd', this.psd);
-        console.log('this.recommendedActionPc', this.recommendedActionPc);
-        console.log(
-          'this.cdssForm***********************8888888888888888888',
-          this.cdssForm,
-        );
         this.cdssForm?.controls['selectedDiagnosis'].patchValue(this.psd);
         this.cdssForm?.controls['recommendedActionPc'].patchValue(
           this.recommendedActionPc,
         );
+
         this.cdssForm?.controls['presentChiefComplaintID'].patchValue(
           this.presentChiefComplaintID,
         );

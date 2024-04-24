@@ -12,6 +12,7 @@ import { ViewDiseaseSummaryDetailsComponent } from '../viewDiseaseSummaryDetails
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-disease-summary-form',
@@ -64,6 +65,12 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
     // .startWith(null)
     // .map((val) => (val ? this.filter(val) : this.chiefComplaints.slice()));
     this.getDiseaseNames();
+  }
+
+  inputFocused(trg: MatAutocompleteTrigger) {
+    setTimeout(() => {
+      trg.closePanel();
+    });
   }
 
   filter(val: string): string[] {
