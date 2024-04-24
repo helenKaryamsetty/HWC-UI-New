@@ -74,9 +74,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     'date',
     'visitreasonmmu',
     'visitcategorymmu',
-    'visitDetails',
     'visitcodemmu',
-    'medicationmmu',
     'previewmmu',
     'printpreviewmmu',
   ];
@@ -110,7 +108,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     'date',
     'visitreasonmmu',
     'visitcategorymmu',
-    'visitDetails',
+    'visitdetailsmmu',
     'medicationmmu',
     'previewmmu',
     'printpreviewmmu',
@@ -206,6 +204,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           console.log('dataget', JSON.stringify(data, null, 4));
           this.historyOfMMU = data.data;
           this.filteredMMUHistory = data.data;
+          this.dataSource.data = data.data;
+          this.dataSource.paginator = this.paginator;
           this.previousMMUHistoryPageChanged({
             page: this.previousMMUHistoryActivePage,
             itemsPerPage: this.previousMMUHistoryRowsPerPage,
@@ -351,8 +351,9 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           const services = this.serviceOnState;
           this.serviceOnState = [];
           this.serviceOnState = this.checkServiceLoader(services, 6);
-          this.historyOfMCTS = data.data;
           this.filteredMCTSHistory = data.data;
+          this.historyOfMCTS.data = data.data;
+          this.historyOfMCTS.paginator = this.paginator;
           this.previousMCTSHistoryPageChanged({
             page: this.previousMCTSHistoryActivePage,
             itemsPerPage: this.previousMCTSHistoryRowsPerPage,
@@ -421,8 +422,9 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           this.serviceOnState = [];
           this.serviceOnState = this.checkServiceLoader(services, 3);
           console.log('dataget', data);
-          this.historyOf104 = data.data;
           this.filtered104History = data.data;
+          this.historyOf104.data = data.data;
+          this.historyOf104.paginator = this.paginator;
           this.previous104HistoryPageChanged({
             page: this.previous104HistoryActivePage,
             itemsPerPage: this.previous104HistoryRowsPerPage,
@@ -505,7 +507,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
   previousTMHistoryRowsPerPage = 5;
   previousTMHistoryActivePage = 1;
-  // historyOfTM: any = [];
   filteredTMHistory: any = [];
   hideTMFetch = false;
 
@@ -520,8 +521,9 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           this.serviceOnState = [];
           this.serviceOnState = this.checkServiceLoader(services, 4);
           console.log('dataget', JSON.stringify(data, null, 4));
-          this.historyOfTM = data.data;
           this.filteredTMHistory = data.data;
+          this.historyOfTM.data = data.data;
+          this.historyOfTM.paginator = this.paginator;
           this.previousTMHistoryPageChanged({
             page: this.previousTMHistoryActivePage,
             itemsPerPage: this.previousTMHistoryRowsPerPage,
@@ -544,13 +546,15 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
 
   filterTMHistory(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredTMHistory = this.historyOfTM;
+      this.filteredTMHistory = this.historyOfTM.data;
     } else {
       this.filteredTMHistory = [];
       this.historyOfTM.data.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredTMHistory.push(item);
+          this.historyOfTM.data.push(item);
+          this.historyOfTM.paginator = this.TmPaginator;
         }
       });
     }
@@ -564,13 +568,15 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
 
   filterHWCHistory(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredHWCHistory = this.historyOfHWC;
+      this.filteredHWCHistory = this.historyOfHWC.data;
     } else {
       this.filteredHWCHistory = [];
       this.historyOfHWC.data.forEach((item: any) => {
         const value: string = '' + item.VisitCategory;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredHWCHistory.push(item);
+          this.historyOfHWC.data.push(item);
+          this.historyOfHWC.paginator = this.TmPaginator;
         }
       });
     }
@@ -605,7 +611,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           this.serviceOnState = [];
           this.serviceOnState = this.checkServiceLoader(services, 9);
           console.log('dataget', JSON.stringify(data, null, 4));
-          this.historyOfHWC = data.data;
+          this.historyOfHWC.data = data.data;
+          this.historyOfHWC.paginator = this.paginator;
           this.getEachVisitData();
           // this.filteredHWCHistory = data.data;
         } else {

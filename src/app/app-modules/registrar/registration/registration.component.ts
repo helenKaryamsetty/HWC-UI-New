@@ -2012,9 +2012,9 @@ export class RegistrationComponent
   // }
 
   generateAbhaCard() {
-    const dialogRef = this.dialog.open(GenerateAbhaComponentComponent, {
-      height: '250px',
-      width: '420px',
+    this.dialog.open(GenerateAbhaComponentComponent, {
+      height: '270px',
+      width: '470px',
       disableClose: true,
     });
   }

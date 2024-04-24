@@ -212,9 +212,18 @@ table {
 }
 
 button[disabled].full-width-login-schedule {
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: auto;
+  height: 35px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  max-width: 110px;
+  opacity: 0.5;
+}
+
+button.full-width-login-schedule {
+  width: auto !important;
   height: 35px;
   border-radius: 16px;
   font-size: 15px;
@@ -225,8 +234,43 @@ button[disabled].full-width-login-schedule {
 }
 
 button[disabled].full-width-login-voice-chat {
-  width: 100%;
+  width: 30%;
   margin-top: 10px;
+  height: 35px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  max-width: 110px;
+  opacity: 0.5;
+}
+
+button.full-width-login-voice-chat {
+  width: 30%;
+  margin-top: 10px;
+  height: 35px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  max-width: 110px;
+  opacity: 0.5;
+}
+
+button[disabled].full-width-login-cancel {
+  width: auto !important;
+  margin-bottom: 10px;
+  height: 35px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  max-width: 110px;
+  opacity: 0.5;
+}
+
+button.full-width-login-cancel {
+  width: auto !important;
   margin-bottom: 10px;
   height: 35px;
   border-radius: 16px;

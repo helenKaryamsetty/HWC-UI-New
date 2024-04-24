@@ -1,18 +1,20 @@
 <div class="title info">
   <h4>Generate ABHA CARD</h4>
-  <button
-    class="pull-right close-btn"
+  <mat-icon
+    class="pull-right close-btn md-24"
     matDialogClose
     (click)="closeDialog()"
     mat-icon-button
+    >close</mat-icon
   >
-    <mat-icon class="md-24">close</mat-icon>
-  </button>
 </div>
 <br />
 <div class="col-xs-12 col-sm-12" [formGroup]="abhaGenerateForm">
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-b-10">
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-b-10"
+      style="margin-left: 15px"
+    >
       <label class="control-label" for="modeofAbhaHealthID"
         >Abha Generation Mode*</label
       >
@@ -28,7 +30,6 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-t-10">
       <mat-form-field [style.width]="'100%'">
-        <!-- <label class="control-label">Enter Aadhar Number*</label>    -->
         <mat-label>Enter Aadhar Number</mat-label>
         <input
           defaultNull
@@ -53,14 +54,14 @@
             {{currentLanguageSet?.aBHANumber}} - xxxxxxxxxxxxxx, xx-xxxx-xxxx-xxxx  
           </p> -->
       </div>
-      <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-        style="margin-left: 15px"
-      >
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <button
           (click)="generateABHACard()"
           [disabled]="!abhaGenerateForm.valid"
-          class="pull-right font-regular f-s-18 m-t-8 full-width-search background-overall button-overall-disabled"
+          mat-raised-button
+          color="primary"
+          class="pull-right font-regular f-s-18 m-t-8 full-width-search mat_blue"
+          style="margin: 0px 15px 10px 0px"
         >
           Generate
         </button>

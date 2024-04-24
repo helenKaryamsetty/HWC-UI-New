@@ -35,6 +35,7 @@ import { RadiologistWorklistComponent } from './radiologist-worklist/radiologist
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper/tc-specialist-worklist-wrapper.component';
 import { GeneralCaseRecordComponent } from './case-record/general-case-record/general-case-record.component';
 import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
+import { OralCancerScreeningComponent } from './screening/oral-cancer-screening/oral-cancer-screening.component';
 
 const routes: Routes = [
   {
@@ -52,16 +53,12 @@ const routes: Routes = [
       },
       {
         path: 'doctor-worklist',
-        component: DoctorWorklistComponent,
-      },
-      {
-        path: 'doctor-worklist',
         component: DoctorTmWorklistWrapperComponent,
       },
-      // {
-      //   path: 'oralscreening',
-      //   component: OralCancerScreeningComponent,
-      // },
+      {
+        path: 'oralscreening',
+        component: OralCancerScreeningComponent,
+      },
       {
         path: 'radiologist-worklist',
         component: RadiologistWorklistComponent,
