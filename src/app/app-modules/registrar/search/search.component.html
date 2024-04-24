@@ -1,6 +1,6 @@
-<section class="row" style="margin-top: 0.5%">
-  <section class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+<section class="row">
+  <section class="col-lg-8 col-md-8 col-sm-12 col-xs-12 d-flex flex-row">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
       <mat-form-field>
         <mat-select
           input
@@ -8,7 +8,7 @@
           name="searchCategory"
           (selectionChange)="clearSearchTerm()"
           [(value)]="searchCategory"
-          style="width: 100%; margin-bottom: 10px"
+          style="width: 100%; margin-bottom: -50px"
         >
           <mat-option
             *ngFor="let catergory of searchCategories"
@@ -19,25 +19,24 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="container searchBox col-lg-8 col-md-8 col-sm-12 col-xs-12">
-      <div class="row">
-        <div class="col-lg-11 col-sm-11 col-md-11 col-xs-11" style="padding: 0">
+    <div>
+      <div
+        class="d-flex justify-content-start col-lg-12 col-md-12 col-sm-12 col-xs-12"
+      >
+        <div>
           <input
             autocomplete="off"
             id="searchbox"
             searchPattern
             maxlength="32"
-            placeholder="{{ currentLanguageSet?.ro?.benIDOrPhNo }} ..."
-            class="search_textbox input-md"
+            placeholder="{{ currentLanguageSet?.ro?.benIDOrPhNo }}"
+            class="search_textbox"
             [(ngModel)]="quicksearchTerm"
             (keyup.enter)="validateSearchTerm(quicksearchTerm, searchCategory)"
-            style="width: 95%"
+            style="width: 215%; margin-top: 15px; margin-left: 20px"
           />
         </div>
-        <div
-          class="col-lg-1 col-sm-1 col-md-1 col-xs-1"
-          style="padding-left: 0"
-        >
+        <div>
           <button
             class="search_button pull-right"
             (click)="validateSearchTerm(quicksearchTerm, searchCategory)"
@@ -49,7 +48,7 @@
       </div>
     </div>
   </section>
-  <!-- <section class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
+  <section class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
     <section class="row search-button-container">
       <button
         mat-raised-button
@@ -109,7 +108,7 @@
         </div>
       </div>
     </section>
-  </section> -->
+  </section>
 </section>
 
 <div class="row spacer"></div>
