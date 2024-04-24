@@ -25,13 +25,6 @@
         <section class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <section class="row search-button-container">
             <button
-              class="btn pull-right full-width-login background-overall"
-              (click)="backToRegistration()"
-            >
-              <!-- {{ currentLanguageSet?.backToRegistration }} -->
-              BACK TO REGISTRATION
-            </button>
-            <button
               mat-raised-button
               class="btn btn-default full-width-login background-overall pull-right adv-button"
               (click)="openSearchFamily()"
@@ -40,6 +33,15 @@
               <!-- {{ currentLanguageSet?.searchFamily }} -->
               SEARCH FAMILY
             </button>
+
+            <button
+              class="btn pull-right full-width-logins background-overall"
+              (click)="backToRegistration()"
+            >
+              <!-- {{ currentLanguageSet?.backToRegistration }} -->
+              BACK TO REGISTRATION
+            </button>
+
             <button
               mat-raised-button
               class="btn btn-default full-width-login background-overall button-overall-disabled cu-btn-default pull-right adv-button"

@@ -193,7 +193,18 @@ table {
     font-weight: bold;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    max-width: 180px;
+    max-width: 160px;
+}
+.full-width-logins{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 35px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  max-width: 220px;
 }
 .content {
     padding: 20px 55px;
