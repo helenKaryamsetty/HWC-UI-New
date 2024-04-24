@@ -21,7 +21,7 @@
                 {{ currentLanguageSet?.district }}
               </mat-label>
               <mat-select
-                class="p-t-12"
+                [style.width]="'100%'"
                 required
                 (selectionChange)="onDistrictChange()"
                 name="districtID"
@@ -44,8 +44,8 @@
                 {{ currentLanguageSet?.block }}
               </mat-label>
               <mat-select
-                class="p-t-12"
                 required
+                [style.width]="'100%'"
                 (selectionChange)="onBlockChange()"
                 placeholder=""
                 name="blockID"
@@ -63,12 +63,11 @@
 
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
-            <mat-form-field>
+            <mat-form-field [style.width]="'100%'">
               <mat-label>
                 {{ currentLanguageSet?.village }}
               </mat-label>
               <mat-select
-                class="p-t-12"
                 required
                 [style.width]="'100%'"
                 (selectionChange)="onVillageChange()"
