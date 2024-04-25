@@ -444,7 +444,11 @@ export class GeneralPersonalHistoryComponent
     console.log('tobacco Lists', this.tobaccoSelectList);
   }
 
-  filterTobaccoList(event: any, i: any, tobaccoForm?: FormGroup) {
+  filterTobaccoList(
+    event: any,
+    i: any,
+    tobaccoForm?: AbstractControl<any, any>,
+  ) {
     const tobacco: any = event.value;
     const previousValue = this.previousSelectedTobaccoList[i];
 
@@ -467,6 +471,22 @@ export class GeneralPersonalHistoryComponent
     });
 
     this.previousSelectedTobaccoList[i] = tobacco;
+
+    // to disable the fields
+    //To disable the fields
+    if (tobaccoForm?.value?.tobaccoUseType) {
+      tobaccoForm?.get('number')?.enable();
+      tobaccoForm?.get('number')?.reset();
+    } else {
+      tobaccoForm?.get('number')?.disable();
+      tobaccoForm?.get('number')?.reset();
+      tobaccoForm?.get('perDay')?.disable();
+      tobaccoForm?.get('perDay')?.reset();
+      tobaccoForm?.get('duration')?.disable();
+      tobaccoForm?.get('duration')?.reset();
+      tobaccoForm?.get('durationUnit')?.disable();
+      tobaccoForm?.get('durationUnit')?.reset();
+    }
   }
 
   removeTobacco(i: any, tobaccoForm?: AbstractControl<any, any>) {
@@ -480,6 +500,11 @@ export class GeneralPersonalHistoryComponent
           this.generalPersonalHistoryForm.markAsDirty();
           if (tobaccoList.length === 1 && !!tobaccoForm) {
             tobaccoForm.reset();
+            tobaccoForm?.get('number')?.disable();
+            tobaccoForm?.get('perDay')?.disable();
+            tobaccoForm?.get('duration')?.disable();
+            tobaccoForm?.get('durationUnit')?.disable();
+            tobaccoForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedTobaccoList[i];
 
@@ -523,7 +548,11 @@ export class GeneralPersonalHistoryComponent
     return alcoholControl instanceof FormArray ? alcoholControl.controls : null;
   }
 
-  filterAlcoholList(event: any, i: any, alcoholForm?: FormGroup) {
+  filterAlcoholList(
+    event: any,
+    i: any,
+    alcoholForm?: AbstractControl<any, any>,
+  ) {
     const alcohol: any = event.value;
 
     const previousValue = this.previousSelectedAlcoholList[i];
@@ -548,6 +577,21 @@ export class GeneralPersonalHistoryComponent
     });
 
     this.previousSelectedAlcoholList[i] = alcohol;
+
+    //To disable the fields
+    if (alcoholForm?.value?.typeOfAlcohol) {
+      alcoholForm?.get('alcoholIntakeFrequency')?.enable();
+      alcoholForm?.get('alcoholIntakeFrequency')?.reset();
+    } else {
+      alcoholForm?.get('alcoholIntakeFrequency')?.disable();
+      alcoholForm?.get('alcoholIntakeFrequency')?.reset();
+      alcoholForm?.get('avgAlcoholConsumption')?.disable();
+      alcoholForm?.get('avgAlcoholConsumption')?.reset();
+      alcoholForm?.get('duration')?.disable();
+      alcoholForm?.get('duration')?.reset();
+      alcoholForm?.get('durationUnit')?.disable();
+      alcoholForm?.get('durationUnit')?.reset();
+    }
   }
 
   removeAlcohol(i: any, alcoholForm?: AbstractControl<any, any>) {
@@ -561,6 +605,11 @@ export class GeneralPersonalHistoryComponent
           this.generalPersonalHistoryForm.markAsDirty();
           if (alcoholList.length === 1 && !!alcoholForm) {
             alcoholForm.reset();
+            alcoholForm?.get('alcoholIntakeFrequency')?.disable();
+            alcoholForm?.get('avgAlcoholConsumption')?.disable();
+            alcoholForm?.get('duration')?.disable();
+            alcoholForm?.get('durationUnit')?.disable();
+            alcoholForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedAlcoholList[i];
 
@@ -607,7 +656,11 @@ export class GeneralPersonalHistoryComponent
     }
   }
 
-  filterAlleryList(event: any, i: any) {
+  filterAlleryList(
+    event: any,
+    i: any,
+    allergyForm?: AbstractControl<any, any>,
+  ) {
     const allergy: any = event.value;
     const previousValue = this.previousSelectedAlleryList[i];
     if (previousValue) {
@@ -623,6 +676,16 @@ export class GeneralPersonalHistoryComponent
       if (index !== -1 && t !== i) item = item.splice(index, 1);
     });
     this.previousSelectedAlleryList[i] = allergy;
+    // to disable the fields
+    if (allergyForm?.value?.allergyType) {
+      allergyForm?.get('snomedTerm')?.enable();
+      allergyForm?.get('snomedTerm')?.reset();
+    } else {
+      allergyForm?.get('snomedTerm')?.disable();
+      allergyForm?.get('snomedTerm')?.reset();
+      allergyForm?.get('typeOfAllergicReactions')?.disable();
+      allergyForm?.get('typeOfAllergicReactions')?.reset();
+    }
   }
 
   removeAllergy(i: any, allergyForm?: AbstractControl<any, any>) {
@@ -637,6 +700,9 @@ export class GeneralPersonalHistoryComponent
           if (allergicList.length === 1 && !!allergyForm) {
             allergyForm.reset();
             this.selectedSnomedTerm = null;
+            allergyForm?.get('snomedTerm')?.disable();
+            allergyForm?.get('typeOfAllergicReactions')?.disable();
+            allergyForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedAlleryList[i];
             this.allerySelectList.map((item: any, t: any) => {
@@ -659,12 +725,12 @@ export class GeneralPersonalHistoryComponent
       tobaccoUseTypeID: null,
       tobaccoUseType: null,
       otherTobaccoUseType: null,
-      number: null,
+      number: { value: null, disabled: true },
       numberperDay: null,
       numberperWeek: null,
-      perDay: null,
-      duration: null,
-      durationUnit: null,
+      perDay: { value: null, disabled: true },
+      duration: { value: null, disabled: true },
+      durationUnit: { value: null, disabled: true },
     });
   }
 
@@ -673,10 +739,10 @@ export class GeneralPersonalHistoryComponent
       alcoholTypeID: null,
       typeOfAlcohol: null,
       otherAlcoholType: null,
-      alcoholIntakeFrequency: null,
-      avgAlcoholConsumption: null,
-      duration: null,
-      durationUnit: null,
+      alcoholIntakeFrequency: { value: null, disabled: true },
+      avgAlcoholConsumption: { value: null, disabled: true },
+      duration: { value: null, disabled: true },
+      durationUnit: { value: null, disabled: true },
     });
   }
 
@@ -684,9 +750,9 @@ export class GeneralPersonalHistoryComponent
     return this.fb.group({
       allergyType: null,
       allergyName: null,
-      snomedTerm: null,
+      snomedTerm: { value: null, disabled: true },
       snomedCode: null,
-      typeOfAllergicReactions: null,
+      typeOfAllergicReactions: { value: null, disabled: true },
       otherAllergicReaction: null,
       enableOtherAllergy: false,
     });
@@ -877,6 +943,14 @@ export class GeneralPersonalHistoryComponent
       );
       formGroup.patchValue({ duration: null, durationUnit: null });
     }
+    // to diable the fields
+    if (duration && !durationUnit) {
+      formGroup?.get('durationUnit')?.enable();
+      formGroup?.get('durationUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('durationUnit')?.disable();
+      formGroup?.get('durationUnit')?.reset();
+    }
   }
   checkTobaccoStatus() {
     const tobaccoList = <FormArray>(
@@ -890,7 +964,9 @@ export class GeneralPersonalHistoryComponent
     const alcoholList = <FormArray>(
       this.generalPersonalHistoryForm.controls['alcoholList']
     );
-    if (alcoholList.length > 0) {
+    console.log('########################3', alcoholList);
+
+    if (alcoholList.length < 0) {
       alcoholList.reset();
     }
   }
@@ -980,6 +1056,14 @@ export class GeneralPersonalHistoryComponent
     // let searchTerm = <FormArray>this.generalPersonalHistoryForm.controls['snomedTerm'];allergicList
     // let searchTerm = this.generalPersonalHistoryForm.controls['snomedTerm'];
     console.log('searchTerm', this.generalPersonalHistoryForm);
+    // to enable the fields
+    if (allergyForm?.value?.snomedTerm) {
+      allergyForm?.get('typeOfAllergicReactions')?.enable();
+      allergyForm?.get('typeOfAllergicReactions')?.reset();
+    } else {
+      allergyForm?.get('typeOfAllergicReactions')?.disable();
+      allergyForm?.get('typeOfAllergicReactions')?.reset();
+    }
     if (searchTerm.length > 2) {
       const dialogRef = this.dialog.open(AllergenSearchComponent, {
         data: { searchTerm: searchTerm },
@@ -1077,5 +1161,44 @@ export class GeneralPersonalHistoryComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+  enableFields(tobaccoForm?: AbstractControl<any, any>) {
+    if (tobaccoForm?.value?.number) {
+      tobaccoForm?.get('perDay')?.enable();
+      tobaccoForm?.get('perDay')?.reset();
+      tobaccoForm?.get('duration')?.enable();
+      tobaccoForm?.get('duration')?.reset();
+    } else {
+      tobaccoForm?.get('perDay')?.disable();
+      tobaccoForm?.get('perDay')?.reset();
+      tobaccoForm?.get('duration')?.disable();
+      tobaccoForm?.get('duration')?.reset();
+      tobaccoForm?.get('durationUnit')?.disable();
+      tobaccoForm?.get('durationUnit')?.reset();
+    }
+  }
+  onChangeAlcIntakFreq(alcoholForm?: AbstractControl<any, any>) {
+    if (alcoholForm?.value?.alcoholIntakeFrequency) {
+      alcoholForm?.get('avgAlcoholConsumption')?.enable();
+      alcoholForm?.get('avgAlcoholConsumption')?.reset();
+    } else {
+      alcoholForm?.get('avgAlcoholConsumption')?.disable();
+      alcoholForm?.get('avgAlcoholConsumption')?.reset();
+      alcoholForm?.get('duration')?.disable();
+      alcoholForm?.get('duration')?.reset();
+      alcoholForm?.get('durationUnit')?.disable();
+      alcoholForm?.get('durationUnit')?.reset();
+    }
+  }
+  onChangeAvgAlcoholConsumption(alcoholForm?: AbstractControl<any, any>) {
+    if (alcoholForm?.value?.avgAlcoholConsumption) {
+      alcoholForm?.get('duration')?.enable();
+      alcoholForm?.get('duration')?.reset();
+    } else {
+      alcoholForm?.get('duration')?.disable();
+      alcoholForm?.get('duration')?.reset();
+      alcoholForm?.get('durationUnit')?.disable();
+      alcoholForm?.get('durationUnit')?.reset();
+    }
   }
 }

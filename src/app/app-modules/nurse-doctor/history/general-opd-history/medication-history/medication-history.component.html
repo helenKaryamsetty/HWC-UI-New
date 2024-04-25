@@ -44,18 +44,13 @@
               defaultNull
               maxlength="50"
               formControlName="currentMedication"
+              (input)="enableDuration(medicationHistory)"
               name="currentMedication"
             />
           </mat-form-field>
         </div>
 
-        <div
-          class="col-xs-12 col-sm-6 col-md-3"
-          *ngIf="
-            medicationHistory?.value?.currentMedication !== null &&
-            medicationHistory?.value?.currentMedication !== ''
-          "
-        >
+        <div class="col-xs-12 col-sm-6 col-md-3">
           <mat-form-field class="input-full-width">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
@@ -73,13 +68,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-xs-12 col-sm-6 col-md-3"
-          *ngIf="
-            medicationHistory.value.timePeriodAgo !== null &&
-            medicationHistory.value.timePeriodAgo !== ''
-          "
-        >
+        <div class="col-xs-12 col-sm-6 col-md-3">
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.DurationData?.durationUnit

@@ -96,26 +96,8 @@ export class PastHistoryComponent
     this.getBeneficiaryDetails();
     this.illnessHRP = [];
     this.hrpService.setPastIllness(this.illnessHRP);
-    // if(parseInt(sessionStorage.getItem("specialistFlag")) === 100)
-    // {
-    //   this.getMMUMasterData();
-    // }
-    // else
-    // {
     this.getMasterData();
-    // }
   }
-  // patchHistory()
-  // {
-  //   if(parseInt(sessionStorage.getItem("specialistFlag")) === 100 && this.filteredIllnessMasterData)
-  //   {
-  //   //   this.addPastIllness();
-  //   // this.addPastSurgery();
-  //      let visitID = localStorage.getItem('visitID');
-  //     let benRegID = localStorage.getItem('beneficiaryRegID')
-  //     this.getGeneralHistory(benRegID, visitID);
-  //   }
-  // }
   ngOnChanges() {
     if (parseInt(sessionStorage.getItem('specialistFlag') || '{}') === 100) {
       //  let visitID = localStorage.getItem('visitID');
@@ -392,10 +374,13 @@ export class PastHistoryComponent
           const pastIllnessList = <FormArray>(
             this.pastHistoryForm.controls['pastIllness']
           );
-
           if (pastIllnessList.length === 1 && !!pastIllnessForm) {
             pastIllnessForm.reset();
             this.pastHistoryForm.markAsDirty();
+            // to disable the fields when no past illness
+            pastIllnessForm?.get('timePeriodAgo')?.disable();
+            pastIllnessForm?.get('timePeriodUnit')?.disable();
+            this.pastHistoryForm.markAsUntouched();
             this.illnessHRP = [];
             this.hrpService.setPastIllness(this.illnessHRP);
           } else {
@@ -491,8 +476,16 @@ export class PastHistoryComponent
           item = item.splice(index, 1);
         }
       });
-
       this.previousSelectedIllnessTypeList[i] = illness;
+      if (illness.illnessType !== 'Nil') {
+        pastIllnessForm?.get('timePeriodAgo')?.enable();
+        pastIllnessForm?.get('timePeriodAgo')?.reset();
+      } else {
+        pastIllnessForm?.get('timePeriodAgo')?.disable();
+        pastIllnessForm?.get('timePeriodAgo')?.reset();
+        pastIllnessForm?.get('timePeriodUnit')?.disable();
+        pastIllnessForm?.get('timePeriodUnit')?.reset();
+      }
     }
     if (
       illness !== undefined &&
@@ -551,6 +544,10 @@ export class PastHistoryComponent
           this.pastHistoryForm.markAsDirty();
           if (pastSurgeryList.length === 1 && !!pastSurgeryForm) {
             pastSurgeryForm.reset();
+            // to disable the fields when no past illness
+            pastSurgeryForm?.get('timePeriodAgo')?.disable();
+            pastSurgeryForm?.get('timePeriodUnit')?.disable();
+            pastSurgeryForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedSurgeryTypeList[i];
             if (removedValue) {
@@ -635,6 +632,16 @@ export class PastHistoryComponent
       });
 
       this.previousSelectedSurgeryTypeList[i] = surgery;
+      //To disable the fields
+      if (surgery.surgeryType !== 'Nil') {
+        pastSurgeryForm?.get('timePeriodAgo')?.enable();
+        pastSurgeryForm?.get('timePeriodAgo')?.reset();
+      } else {
+        pastSurgeryForm?.get('timePeriodAgo')?.disable();
+        pastSurgeryForm?.get('timePeriodAgo')?.reset();
+        pastSurgeryForm?.get('timePeriodUnit')?.disable();
+        pastSurgeryForm?.get('timePeriodUnit')?.reset();
+      }
     }
   }
 
@@ -643,8 +650,8 @@ export class PastHistoryComponent
       illnessTypeID: null,
       illnessType: null,
       otherIllnessType: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
     });
   }
 
@@ -653,8 +660,8 @@ export class PastHistoryComponent
       surgeryID: null,
       surgeryType: null,
       otherSurgeryType: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
     });
   }
 
@@ -721,6 +728,14 @@ export class PastHistoryComponent
         this.currentLanguageSet.alerts.info.durationGreaterThanAge,
       );
       formGroup.patchValue({ timePeriodAgo: null, timePeriodUnit: null });
+    }
+
+    if (duration && !durationUnit) {
+      formGroup?.get('timePeriodUnit')?.enable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('timePeriodUnit')?.disable();
+      formGroup?.get('timePeriodUnit')?.reset();
     }
   }
 

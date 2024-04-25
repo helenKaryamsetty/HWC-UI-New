@@ -288,7 +288,14 @@ export class ComorbidityConcurrentConditionsComponent
             this.hrpService.setcomorbidityConcurrentConditions(
               this.comorbidConditionHrp,
             );
-            // comorbidityConcurrentConditionsForm.reset();
+            comorbidityConcurrentConditionsForm
+              ?.get('timePeriodAgo')
+              ?.disable();
+            comorbidityConcurrentConditionsForm
+              ?.get('timePeriodUnit')
+              ?.disable();
+            comorbidityConcurrentConditionsForm?.get('isForHistory')?.disable();
+            comorbidityConcurrentConditionsForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedComorbidity[i];
 
@@ -387,6 +394,22 @@ export class ComorbidityConcurrentConditionsComponent
         this.comorbidConditionHrp,
       );
     }
+    //To disable the fields
+    if (
+      comorbidityConcurrentConditions.comorbidCondition !== 'Nil' &&
+      comorbidityConcurrentConditions.comorbidCondition !== 'None'
+    ) {
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.enable();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.enable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.reset();
+    } else {
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.disable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.reset();
+      comorbidityConcurrentConditionsForm?.get('timePeriodUnit')?.disable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodUnit')?.reset();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.disable();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.reset();
+    }
   }
 
   removeComorbidityExecptNone() {
@@ -456,9 +479,9 @@ export class ComorbidityConcurrentConditionsComponent
     return this.fb.group({
       comorbidConditions: null,
       otherComorbidCondition: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
-      isForHistory: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
+      isForHistory: { value: null, disabled: true },
     });
   }
 
@@ -484,6 +507,14 @@ export class ComorbidityConcurrentConditionsComponent
         this.currentLanguageSet.alerts.info.durationGreaterThanAge,
       );
       formGroup.patchValue({ timePeriodAgo: null, timePeriodUnit: null });
+    }
+    //to disable
+    if (duration && !durationUnit) {
+      formGroup?.get('timePeriodUnit')?.enable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('timePeriodUnit')?.disable();
+      formGroup?.get('timePeriodUnit')?.reset();
     }
   }
 
