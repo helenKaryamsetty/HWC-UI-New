@@ -555,7 +555,7 @@
     </mat-card-header>
     <mat-card-content formArrayName="allergicList">
       <div
-        class="row multi-row-select"
+        class="col-12 row multi-row-select"
         *ngFor="
           let allergy of getAllergyList();
           let i = index;
@@ -565,7 +565,7 @@
         [ngClass]="{ odd: !isOdd }"
       >
         <ng-container [formGroupName]="i">
-          <div class="col-xs-12 col-sm-6 col-md-3 box">
+          <div class="col-3 box">
             <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
@@ -585,7 +585,7 @@
             </mat-form-field>
           </div>
 
-          <div class="col-xs-12 col-sm-6 col-md-3 box">
+          <div class="col-3 box">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
@@ -612,9 +612,7 @@
               >
             </mat-form-field>
           </div>
-
-          <div class="clearfix"></div>
-          <div class="col-xs-12 col-sm-6 col-md-3 box" [hidden]="true">
+          <div class="col-3 box" [hidden]="true">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.opd_NCD_PNCHistory
@@ -630,7 +628,7 @@
             </mat-form-field>
           </div>
 
-          <div class="col-xs-12 col-sm-6 col-md-3 box">
+          <div class="col-3 box">
             <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
@@ -655,10 +653,7 @@
             </mat-form-field>
           </div>
 
-          <div
-            class="col-xs-10 col-sm-4 col-md-2 box"
-            *ngIf="allergy.value.enableOtherAllergy"
-          >
+          <div class="col-3 box" *ngIf="allergy.value.enableOtherAllergy">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
@@ -676,7 +671,7 @@
           </div>
 
           <div
-            class="col-sm-2 col-md-2 box action-btn-container pull-right padding-0-left-right-al"
+            class="col-2 box action-btn-container pull-right padding-0-left-right-al"
           >
             <button
               mat-mini-fab
