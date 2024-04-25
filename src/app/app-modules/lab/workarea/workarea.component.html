@@ -3,15 +3,6 @@
     <mat-sidenav #sidenav mode="side" opened="true">
       <div class="example-scrolling-content sidenav">
         <app-beneficiary-details></app-beneficiary-details>
-
-        <button
-          mat-mini-fab
-          class="btn btn-primary example-fab"
-          color="primary"
-          (click)="sideNavModeChange(sidenav)"
-        >
-          <mat-icon>account_box</mat-icon>
-        </button>
       </div>
     </mat-sidenav>
     <div class="example-scrolling-content">
@@ -795,4 +786,13 @@
       </form>
     </div>
   </mat-sidenav-container>
+
+  <button
+    mat-mini-fab
+    class="btn btn-primary example-fab"
+    color="primary"
+    (click)="sideNavModeChange(sidenav)"
+  >
+    <mat-icon>account_box</mat-icon>
+  </button>
 </div>
