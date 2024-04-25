@@ -3,6 +3,15 @@
     <mat-sidenav #sidenav mode="side" opened="true">
       <div class="example-scrolling-content sidenav">
         <app-beneficiary-details></app-beneficiary-details>
+
+        <button
+          mat-mini-fab
+          class="btn btn-primary example-fab"
+          color="primary"
+          (click)="sideNavModeChange(sidenav)"
+        >
+          <mat-icon>account_box</mat-icon>
+        </button>
       </div>
     </mat-sidenav>
     <div class="example-scrolling-content">
@@ -13,11 +22,12 @@
               currentLanguageSet?.labTechnicianData?.laboratoryinformation
             }}"
             *ngIf="labForm"
+            style="overflow: hidden"
           >
             <section
               formArrayName="labForm"
               class="container-fluid"
-              style="min-height: 400px"
+              style="min-height: 400px; overflow: hidden"
             >
               <mat-accordion>
                 <div *ngIf="labTechnicianData()">
@@ -80,8 +90,7 @@
                                     }}"
                                     mat-button
                                     type="button"
-                                    class="button-style"
-                                    style="margin-right: 15px"
+                                    class="btn btn-primary button-style"
                                     *ngIf="
                                       procedure?.value?.procedureStartAPI !==
                                       undefined
@@ -166,26 +175,39 @@
                                             "
                                           />
 
-                                          <mat-hint
-                                            >{{
-                                              currentLanguageSet?.coreComponents
-                                                ?.range
-                                            }}
-                                            {{ component.value.range_min }}
-                                            {{
-                                              currentLanguageSet?.coreComponents
-                                                ?.to
-                                            }}
-                                            {{ component.value.range_max }}
+                                          <mat-hint>
+                                            <span
+                                              style="
+                                                position: absolute;
+                                                margin-top: -20px;
+                                                font-weight: 700;
+                                                right: -25px;
+                                              "
+                                              >{{
+                                                component.value.measurementUnit
+                                              }}
+                                            </span>
+                                            <span
+                                              style="
+                                                position: absolute;
+                                                margin-top: 2px;
+                                                width: 100%;
+                                                right: 00px;
+                                              "
+                                            >
+                                              {{
+                                                currentLanguageSet
+                                                  ?.coreComponents?.range
+                                              }}
+                                              {{ component.value.range_min }}
+                                              {{
+                                                currentLanguageSet
+                                                  ?.coreComponents?.to
+                                              }}
+                                              {{ component.value.range_max }}
+                                            </span>
                                           </mat-hint>
                                         </mat-form-field>
-                                        <span
-                                          style="
-                                            margin-top: unset;
-                                            font-weight: 700;
-                                          "
-                                          >{{ component.value.measurementUnit }}
-                                        </span>
                                       </div>
                                     </section>
                                     <section
@@ -742,41 +764,35 @@
             </section>
           </mat-tab>
         </mat-tab-group>
-        <div class="row m-t-20" style="margin-bottom: 30px">
-          <div class="col-sm-12 step-btn" style="text-align: right">
+        <div class="row m-t-20" style="margin-bottom: 30px; margin-top: 50px">
+          <div class="col-sm-12 step-btn" style="text-align: right; bottom: 0">
             <button
               mat-raised-button
               id="submitButton"
-              class="btn-green button-submit-disabled"
+              class="btn btn-primary button-submit-disabled"
               color="primary"
               (click)="validateSubmit(true)"
               type="submit"
               [disabled]="technicianForm.invalid"
+              style="border-radius: 30px; width: 80px"
             >
               {{ currentLanguageSet?.common?.submit }}
             </button>
             <button
               id="resetButton"
-              class="button-reset-disabled"
+              class="btn btn-primary button-reset-disabled"
               [disabled]="!technicianForm.dirty"
               mat-raised-button
               color="primary"
               type="submit"
               (click)="confirmFormReset()"
+              style="border-radius: 30px; width: 80px"
             >
               {{ currentLanguageSet?.common?.reset }}
             </button>
           </div>
         </div>
       </form>
-      <button
-        mat-mini-fab
-        class="example-fab"
-        color="primary"
-        (click)="sideNavModeChange(sidenav)"
-      >
-        <mat-icon>account_box</mat-icon>
-      </button>
     </div>
   </mat-sidenav-container>
 </div>
