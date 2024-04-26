@@ -187,6 +187,9 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
               timePeriodAgo: null,
               timePeriodUnit: null,
             });
+            // to disable the fields
+            medicationHistoryForm?.get('timePeriodAgo')?.disable();
+            medicationHistoryForm?.get('timePeriodUnit')?.disable();
           } else medicationHistoryList.removeAt(i);
           this.medicationHistoryForm.updateValueAndValidity();
           console.log(this.medicationHistoryForm.dirty);
@@ -244,8 +247,8 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   initMedicationHistory() {
     return this.fb.group({
       currentMedication: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
     });
   }
 
@@ -272,6 +275,13 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
       );
       formGroup.patchValue({ timePeriodAgo: null, timePeriodUnit: null });
     }
+    if (duration && !durationUnit) {
+      formGroup?.get('timePeriodUnit')?.enable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('timePeriodUnit')?.disable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    }
   }
 
   checkValidity(medicationForm: any) {
@@ -289,5 +299,16 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+  enableDuration(medicationHistory?: AbstractControl<any, any>) {
+    if (medicationHistory?.value?.currentMedication) {
+      medicationHistory?.get('timePeriodAgo')?.enable();
+      medicationHistory?.get('timePeriodAgo')?.reset();
+    } else {
+      medicationHistory?.get('timePeriodAgo')?.disable();
+      medicationHistory?.get('timePeriodAgo')?.reset();
+      medicationHistory?.get('timePeriodUnit')?.disable();
+      medicationHistory?.get('timePeriodUnit')?.reset();
+    }
   }
 }

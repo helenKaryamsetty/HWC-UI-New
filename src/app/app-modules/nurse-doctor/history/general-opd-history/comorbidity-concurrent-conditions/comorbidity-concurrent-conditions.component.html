@@ -29,7 +29,14 @@
       [ngClass]="{ odd: !isOdd }"
     >
       <ng-container [formGroupName]="i">
-        <div class="col-3 box">
+        <div
+          [class]="
+            comorbidityConcurrentConditions.value.comorbidConditions
+              ?.comorbidCondition === 'Other'
+              ? 'col-2 box'
+              : 'col-3 box'
+          "
+        >
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.historyData?.ancHistory
@@ -58,13 +65,13 @@
         </div>
 
         <div
-          class="col-3 box"
+          class="col-2 box"
           *ngIf="
             comorbidityConcurrentConditions.value.comorbidConditions
               ?.comorbidCondition === 'Other'
           "
         >
-          <mat-form-field class="input-full-width">
+          <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
                 ?.others
@@ -81,20 +88,8 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="
-            (comorbidityConcurrentConditions?.value?.comorbidConditions !==
-              null &&
-              comorbidityConcurrentConditions?.value?.comorbidConditions !==
-                '') ||
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'None' ||
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'Nil'
-          "
-        >
-          <mat-form-field class="input-full-width">
+        <div class="col-2 box">
+          <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.DurationData?.duration
             }}</mat-label>
@@ -111,17 +106,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="
-            (comorbidityConcurrentConditions?.value?.timePeriodAgo !== null &&
-              comorbidityConcurrentConditions?.value?.timePeriodAgo !== '') ||
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'None' ||
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'Nil'
-          "
-        >
+        <div class="col-2 box">
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.DurationData?.durationUnit
@@ -143,14 +128,8 @@
           [class]="
             comorbidityConcurrentConditions.value.comorbidConditions
               ?.comorbidCondition === 'Other'
-              ? 'col-xs-12 col-sm-6 box checkOthers'
+              ? 'col-xs-12 col-sm-6 col-md-2 box checkStyle'
               : 'col-xs-12 col-sm-6 col-md-2 box checkStyle'
-          "
-          *ngIf="
-            (comorbidityConcurrentConditions?.value?.timePeriodAgo !== null &&
-              comorbidityConcurrentConditions?.value?.timePeriodAgo !== '') ||
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'None'
           "
         >
           <mat-checkbox
@@ -161,7 +140,7 @@
             {{ currentLanguageSet?.inactiveForFutureVisits }}
           </mat-checkbox>
         </div>
-        <div class="col-3 box action-btn-container" style="text-align: end">
+        <div class="col-2 box action-btn-container" style="text-align: end">
           <button
             mat-mini-fab
             color="warn"

@@ -85,15 +85,7 @@
             </mat-form-field>
           </div>
 
-          <div
-            class="col-sm-6 col-md-2 box"
-            *ngIf="
-              (pastIllness?.value?.illnessType !== null &&
-                pastIllness?.value?.illnessType !== '') ||
-              pastIllness.value.illnessType?.illnessType === 'Nil' ||
-              pastIllness.value.illnessType?.illnessType === 'None'
-            "
-          >
+          <div class="col-sm-6 col-md-2 box">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
@@ -111,13 +103,7 @@
             </mat-form-field>
           </div>
 
-          <div
-            class="col-sm-4 col-md-2 box"
-            *ngIf="
-              pastIllness?.value?.timePeriodAgo !== null &&
-              pastIllness?.value?.timePeriodAgo !== ''
-            "
-          >
+          <div class="col-sm-4 col-md-2 box">
             <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.DurationData?.timeperiodAgo
@@ -196,7 +182,7 @@
               class="select-full-width"
               formControlName="surgeryType"
               name="surgeryType"
-              (change)="filterPastSurgeryType($event, i, pastSurgery)"
+              (selectionChange)="filterPastSurgeryType($event, i, pastSurgery)"
             >
               <mat-option
                 *ngFor="let surgery of pastSurgerySelectList[i]"
@@ -228,15 +214,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-sm-6 col-md-2 box"
-          *ngIf="
-            (pastSurgery?.value?.surgeryType !== null &&
-              pastSurgery?.value?.surgeryType !== '') ||
-            pastSurgery.value.surgeryType?.surgeryType === 'None' ||
-            pastSurgery.value.surgeryType?.surgeryType === 'Nil'
-          "
-        >
+        <div class="col-sm-6 col-md-2 box">
           <mat-form-field class="input-full-width">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
@@ -254,13 +232,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-sm-4 col-md-2 box"
-          *ngIf="
-            pastSurgery?.value?.timePeriodAgo !== null &&
-            pastSurgery?.value?.timePeriodAgo !== ''
-          "
-        >
+        <div class="col-sm-4 col-md-2 box">
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.DurationData?.timeperiodAgo
