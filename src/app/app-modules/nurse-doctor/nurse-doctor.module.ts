@@ -168,6 +168,10 @@ import { FollowUpForImmunizationComponent } from './follow-up-for-immunization/f
 import { QuickConsultComponent } from './quick-consult/quick-consult.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FamilyTaggingService } from '../registrar/shared/services/familytagging.service';
+import { Referred104BeneficiaryDetailsComponent } from './cdss/referred-104-beneficiary-details/referred-104-beneficiary-details.component';
+import { Cdss104FormComponent } from './cdss/cdss-form-104/cdss-form.component';
+import { Referred104CdssDetailsComponent } from './cdss/referred-104-cdss-details/referred-104-cdss-details.component';
+import { Referred104DetailsPopupComponent } from './cdss/referred-104-details-popup/referred-104-details-popup.component';
 
 @NgModule({
   imports: [
@@ -306,16 +310,16 @@ import { FamilyTaggingService } from '../registrar/shared/services/familytagging
     ChildhoodOralVitaminComponent,
     ImmunizationServiceComponent,
     Nurse104RefferedWorklistComponent,
-    // Referred104CdssDetailsComponent,
-    // Referred104DetailsPopupComponent,
+    Referred104CdssDetailsComponent,
+    Referred104DetailsPopupComponent,
     Referred104WorkareaComponent,
-    // Referred104CdssDetailsComponent,
+    Referred104CdssDetailsComponent,
     CdssFormComponent,
     DiseaseFormComponent,
-    // Cdss104FormComponent,
+    Cdss104FormComponent,
     ViewDiseaseSummaryDetailsComponent,
     CdssFormResultPopupComponent,
-    // Referred104BeneficiaryDetailsComponent
+    Referred104BeneficiaryDetailsComponent,
   ],
 
   providers: [

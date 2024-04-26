@@ -1,13 +1,12 @@
 <section id="editFamilyTaggingDialog" class="container-fluid">
   <div class="row title info">
     <h4>{{ currentLanguageSet?.EditTheFamilyDetails }}</h4>
-    <button
-      class="pull-right close-btn"
+    <mat-icon
+      class="pull-right close-btn md-24"
       (click)="matDialogRef.close(false)"
       mat-icon-button
+      >close</mat-icon
     >
-      <mat-icon class="md-24">close</mat-icon>
-    </button>
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10">
@@ -28,39 +27,6 @@
   </div>
   <mat-dialog-content>
     <div class="table-responsive m-t-10">
-      <!-- <table aria-describedby="FamilyTaggingDetails" class="table table-striped" [md2Data]="familyDetails.familyMembers" #md2="md2DataTable" [rowsPerPage]="5" [activePage]="1">
-        <thead>
-          <tr>
-            <th id="sno">{{currentLanguageSet?.coreComponents?.sno}}</th>
-            <th id="memberId">{{currentLanguageSet?.memberId}}</th>
-            <th id="memberName">{{currentLanguageSet?.memberName}}</th>
-            <th id="relationWithHead">{{currentLanguageSet?.relationshipWthHead}}</th>
-            <th id="check" *ngIf="showCheckbox">{{currentLanguageSet?.bendetails?.action}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="familyDetails.familyMembers.length === 0">
-            <td colspan="5" class="text-center text-field-color" style="text-align: center;">{{currentLanguageSet?.casesheet?.noRecordFound}}</td>
-          </tr>
-          <tr *ngFor="let item of md2.data">
-            <td data-title="sno">{{familyDetails.familyMembers.indexOf(item)+1}}</td>
-            <td data-title="Member ID">{{ item?.memberId}} </td>
-            <td data-title="Member Name">{{ item?.memberName}} </td>
-            <td data-title="Relation with head">{{ item?.relationWithHead}} </td>
-            <td *ngIf="showCheckbox">
-              <md-checkbox (change)="selectMember($event, item)" [checked]="uncheckMember && item.selected" ></md-checkbox>
-            </td>
-          </tr>
-        </tbody>  
-        <tfoot>
-          <tr>
-            <td colspan="5" style="text-align:right;">
-              <md2-pagination class="colorpagination"></md2-pagination>
-            </td>
-          </tr>
-        </tfoot>
-      </table>  -->
-
       <table
         class="table table-striped"
         mat-table

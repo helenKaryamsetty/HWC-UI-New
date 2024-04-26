@@ -16,41 +16,25 @@ height: 50px !important;
   background: rgba(37, 55, 70, 0.2);
 }
 
-/********/
 .btn-group button {
-  background-color: #C21F1F; /* Green background */
+  background-color: #C21F1F;
   margin:5px;
-  /* border: 1px solid green; */
-  color: white; /* White text */
-  /* padding: 10px 24px;  */
-  /* cursor: pointer;  */
-  float: left; /* Float the buttons side by side */
+  color: white;
+  float: left;
 }
 
 .btn-group1 button {
-  background-color: #10df3d; /* Green background */
+  background-color: #10df3d;
   margin:5px;
-  /* border: 1px solid green; */
-  color: white; /* White text */
-  /* padding: 10px 24px;  */
-  /* cursor: pointer;  */
-  float: left; /* Float the buttons side by side */
+  color: white;
+  float: left;
 }
 
-
-/* Clear floats (clearfix hack) */
 .btn-group:after {
   content: "";
   clear: both;
   display: table;
 }
-/* .box{
-  margin-right: -8%;
-} */
-
-/* .btn-group button:not(:last-child) {
-  border-right: none; 
-} */
 
 @media screen and (max-width: 768px) {
 .labelAlign {

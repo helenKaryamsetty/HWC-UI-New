@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <button
     mat-mini-fab
-    class="example-fab"
+    style="margin-left: 10px; position: absolute"
+    class="mat_blue_circle"
     color="primary"
     (click)="sideNavModeChange(sidenav)"
   >
@@ -9,7 +10,7 @@
   </button>
   <mat-sidenav-container class="example-sidenav-fab-container">
     <mat-sidenav #sidenav mode="side" opened="true">
-      <div class="example-scrolling-content">
+      <div class="example-scrolling-content sidenav">
         <app-beneficiary-details></app-beneficiary-details>
       </div>
     </mat-sidenav>
@@ -30,16 +31,14 @@
               (click)="openSearchFamily()"
               data-toggle="modal"
             >
-              <!-- {{ currentLanguageSet?.searchFamily }} -->
-              SEARCH FAMILY
+              {{ currentLanguageSet?.searchFamily }}
             </button>
 
             <button
               class="btn pull-right full-width-logins background-overall"
               (click)="backToRegistration()"
             >
-              <!-- {{ currentLanguageSet?.backToRegistration }} -->
-              BACK TO REGISTRATION
+              {{ currentLanguageSet?.backToRegistration }}
             </button>
 
             <button
@@ -59,43 +58,6 @@
         <div class="col-sm-12">
           <mat-card>
             <div class="table-responsive" *ngIf="enableFamilyCreateTable">
-              <!-- <table class="table table-striped" aria-describedby="newFamilyTag" [md2Data]="createdFamilyList" #md2="md2DataTable" >
-        <thead>
-
-          <tr style="text-align:center;">
-            <th style="padding-left: 100px;" id="familyID">{{currentLanguageSet?.familyId}}</th>
-            <th style="padding-left: 100px;" id="familyName">{{currentLanguageSet?.familyName}}</th>
-            <th style="padding-left: 100px;" id="headOfTheFamily">{{currentLanguageSet?.headOfTheFamily}}</th>
-            <th style="padding-left: 100px;" id="beneficiaryRelationWithHeadOfFamily">{{currentLanguageSet?.benRelationWithHeadOfFamily}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-template [ngIf]="createdFamilyList.length === 0">
-            <tr *ngFor="let row of blankTable">
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-            </tr>
-          </ng-template>
-        
-            <tr class="table-striped" *ngFor="let item of md2.data" >
-              <td style="padding-left: 100px;">{{item.familyId}}</td>
-              <td style="padding-left: 100px;">{{item.familyName | titlecase}}</td>
-              <td style="padding-left: 100px;">{{((item.familyHeadName !== undefined && item.familyHeadName !== null) ? item.familyHeadName : "Not Declared") | titlecase}}</td>
-              <td style="padding-left: 100px;">{{item.headofFamily_Relation}}</td>
-          </tr>  
-      </tbody>
-
-      </table> -->
-
               <table mat-table [dataSource]="createdFamilyList">
                 <ng-container matColumnDef="familyId">
                   <th mat-header-cell *matHeaderCellDef>
@@ -164,59 +126,6 @@
             </div>
 
             <div class="table-responsive" *ngIf="!enableFamilyCreateTable">
-              <!-- <table class="table table-striped" aria-describedby="searchResultFamilyTag" [md2Data]="familySearchList" #md2="md2DataTable" >
-        <thead>
-
-          <tr style="text-align:center">
-            <th id="sNo">{{currentLanguageSet?.coreComponents?.sno}}</th>
-            <th id="familyId">{{currentLanguageSet?.familyId}}</th>
-            <th id="headOfTheFamily">{{currentLanguageSet?.headOfTheFamily}}</th>
-            <th id="familyName">{{currentLanguageSet?.familyName}}</th> 
-            <th id="noOfMembers">{{currentLanguageSet?.members}}</th>
-            <th id="action">{{currentLanguageSet?.bendetails?.action}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-template [ngIf]="familySearchList?.length === 0">
-            <tr *ngFor="let row of blankTable">
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-              <td> &nbsp; </td>
-            </tr>
-          </ng-template>
-            <tr class="table-hover table-striped" *ngFor="let element of md2.data" >
-              <td>{{familySearchList.indexOf(element)+1}}</td>
-              <td>{{element.familyId}}</td>
-              <td>{{(element.familyHeadName !== undefined && element.familyHeadName !== null && element.familyHeadName !== "" ? element.familyHeadName : "Not Declared") | titlecase}}</td>
-              <td>{{element.familyName | titlecase}}</td>
-              <td>{{element.noOfmembers}}</td>
-              <td>
-                <md-icon mdTooltip="Edit" class="mat-icon material-icons" *ngIf="benFamilyId !== null && benFamilyId === element.familyId" (click)="getFamilyMembers(true,element)" role="img" aria-hidden="true" style="cursor: pointer" 
-                >edit</md-icon>
-                <md-icon mdTooltip="Add Member" class="mat-icon material-icons" *ngIf="benFamilyId === null" (click)="getFamilyMembers(false,element)" role="img" aria-hidden="true" style="cursor: pointer"
-                >add</md-icon>
-              </td>
-
-          </tr>  
-      </tbody>
-
-  <tfoot>
-    <tr>
-      <td colspan="7" style="text-align:right;">
-        <md2-pagination class="colorpagination"></md2-pagination>
-      </td>
-    </tr>
-  </tfoot>
-      </table> -->
-
               <table
                 class="table table-striped"
                 mat-table

@@ -19,25 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ChangeDetectorRef,
-  AfterViewChecked,
-  DoCheck,
-} from '@angular/core';
-import {
-  MatDialogRef,
-  MatDialog,
-  MatDialogConfig,
-} from '@angular/material/dialog';
+import { Component, OnInit, ChangeDetectorRef, DoCheck } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { CommonService } from '../../core/services/common-services.service';
 import { environment } from 'src/environments/environment';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface Beneficary {
   firstName: string;
@@ -69,13 +59,15 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   districtID: any;
   govtIDs: any;
   countryId = environment.countryId;
-  @ViewChild('newSearchForm') form: any;
   currentLanguageSet: any;
   today!: Date;
   blockList: any[] = [];
   blockID: any;
   villageID: any;
   villageList: any[] = [];
+  newSearchForm!: FormGroup;
+  location: any;
+  maxDate = new Date();
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -84,15 +76,13 @@ export class SearchDialogComponent implements OnInit, DoCheck {
     public commonService: CommonService,
     private registrarService: RegistrarService,
     private changeDetectorRef: ChangeDetectorRef,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
-    this.createBeneficiaryForm();
+    this.newSearchForm = this.createBeneficiaryForm();
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
-    // Call For MAster Data which will be loaded in Sub Components
     this.callMasterDataObservable();
-    // this.getStates();
     this.getStatesData(); //to be called from masterobservable method layter
     this.today = new Date();
   }
@@ -111,22 +101,21 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   }
 
   createBeneficiaryForm() {
-    this.beneficiary = {
-      firstName: '',
-      lastName: '',
-      fatherName: '',
-      dob: '',
-      gender: '',
-      genderName: '',
-      govtIDtype: '',
-      govtIDvalue: '',
-      stateID: '',
-      districtID: '',
-    };
+    return this.fb.group({
+      firstName: [null, Validators.required],
+      lastName: [null],
+      fatherName: [null],
+      dob: [null],
+      gender: [null, Validators.required],
+      stateID: [null],
+      districtID: [null],
+      blockID: [null],
+      villageID: [null],
+    });
   }
 
   resetBeneficiaryForm() {
-    this.form.reset();
+    this.newSearchForm.reset();
     this.getStatesData();
   }
 
@@ -150,12 +139,8 @@ export class SearchDialogComponent implements OnInit, DoCheck {
         if (res !== null) {
           this.masterData = Object.assign({}, res);
           console.log(this.masterData, 'masterDataall');
-          // this.getStatesData();
           this.govtIDData();
-        } /* else {
-          this.confirmationService.alert("Not able to get required Information, try again later.", 'warn');
-          this.mdDialogRef.close(false);
-        } */
+        }
       });
   }
 
@@ -165,11 +150,11 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   selectGender() {
     const genderMaster = this.masterData.genderMaster;
     genderMaster.forEach((element: any) => {
-      if (element.genderID === this.beneficiary.gender) {
-        this.beneficiary.genderName = element.genderName;
+      if (element.genderID === this.newSearchForm.controls['gender']) {
+        this.newSearchForm.controls['genderName'] = element.genderName;
       }
     });
-    console.log(this.beneficiary, 'csdvde');
+    console.log(this.newSearchForm.controls, 'csdvde');
   }
 
   /**
@@ -185,7 +170,6 @@ export class SearchDialogComponent implements OnInit, DoCheck {
       govID.push(element);
     });
     this.govtIDs = govID;
-    //  this.govtIDs = Object.assign({}, this.masterData.govIdEntityMaster, this.masterData.otherGovIdEntityMaster);
     console.log(this.govtIDs, 'idsss');
   }
 
@@ -196,21 +180,24 @@ export class SearchDialogComponent implements OnInit, DoCheck {
    */
   getStatesData() {
     const location: any = localStorage.getItem('location');
+    this.location = JSON.parse(location);
     console.log(location, 'gotit');
     if (location) {
-      this.states = location.stateMaster;
+      this.states = this.location.stateMaster;
       if (location.otherLoc) {
-        this.beneficiary.stateID = location.otherLoc.stateID;
-        // this.beneficiary.districtID = location.otherLoc.districtID;
+        this.newSearchForm.controls['stateID'] = this.location.otherLoc.stateID;
+        this.newSearchForm.controls['districtID'] =
+          this.location.otherLoc.districtList[0].districtID;
         this.onStateChange();
       }
     }
   }
 
   onStateChange() {
-    if (this.beneficiary.stateID) {
+    const stateIDVal: any = this.newSearchForm.controls['stateID'].value;
+    if (stateIDVal) {
       this.registrarService
-        .getDistrictList(this.beneficiary.stateID)
+        .getDistrictList(stateIDVal)
         .subscribe((res: any) => {
           if (res && res.statusCode === 200) {
             this.districts = res.data;
@@ -227,10 +214,6 @@ export class SearchDialogComponent implements OnInit, DoCheck {
         });
     }
   }
-  // getStates() {
-  //   this.commonService.getStates(this.countryId).subscribe(res => {this.states = res});
-
-  // }
 
   getDistricts(stateID: any) {
     this.commonService.getDistricts(stateID).subscribe((res) => {
@@ -241,7 +224,6 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   beneficiaryList: any = [];
   dataObj: any;
   getSearchResult(formValues: any) {
-    // console.log(formValues,'formValues')
     this.dataObj = {
       firstName: formValues.firstName,
       lastName: formValues.lastName,
@@ -255,21 +237,6 @@ export class SearchDialogComponent implements OnInit, DoCheck {
         districtBranchID: formValues.villageID,
       },
     };
-    // console.log(this.dataObj, 'daatObj')
-    /*     this.dataObj.beneficiaryID = formValues.beneficiaryID;
-    this.dataObj.firstName = formValues.firstName;
-    this.dataObj.lastName = formValues.lastName;
-    this.dataObj.phoneNo = formValues.contactNo;
-    this.dataObj.aadharNo = formValues.aadharNo;
-    this.dataObj.govtIdentityNo = formValues.governmentID;
-    this.dataObj.stateID = null;
-  if(formValues.stateID!=undefined){
-      this.dataObj.stateID = formValues.stateID;
-    }
-    this.dataObj.districtID = null;
-    if(formValues.districtID!=undefined){
-      this.dataObj.districtID = formValues.districtID;
-    } */
     //Passing form data to component and closing the dialog
     this.matDialogRef.close(this.dataObj);
   }

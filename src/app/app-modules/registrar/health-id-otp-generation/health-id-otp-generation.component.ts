@@ -33,6 +33,7 @@ import { GenerateMobileOtpGenerationComponent } from '../generate-mobile-otp-gen
 import { HealthIdValidateComponent } from '../registration/register-other-details/register-other-details.component';
 import { SetPasswordForAbhaComponent } from '../set-password-for-abha/set-password-for-abha.component';
 import { RegistrarService } from '../shared/services/registrar.service';
+import { ServicePointService } from 'src/app/user-login/service-point/service-point.service';
 
 @Component({
   selector: 'app-health-id-otp-generation',
@@ -50,6 +51,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   showProgressBar = false;
   password: any;
   aadharNum: any;
+  registrarMasterData: any;
+  demographicsMaster: any;
   // mobileLinkedOtp: any;
 
   constructor(
@@ -59,6 +62,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
+    private servicePointService: ServicePointService,
     private dialog: MatDialog,
   ) {
     dialogRef.disableClose = true;
@@ -122,7 +126,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     } else {
       this.mobileNum = this.mobileNumber;
     }
-    //
     this.enablehealthIdOTPForm = true;
     this.showProgressBar = true;
     let reqObj = null;
@@ -141,42 +144,42 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
         this.aadharNum = this.data.aadharNumber;
       }
     }
-    // this.registrarService.generateOTP(reqObj, this.healthIdMode)!.subscribe(
-    //   (res: any) => {
-    //     if (res.statusCode === 200) {
-    //       this.showProgressBar = false;
-    //       if (this.healthIdMode === 'MOBILE')
-    //         this.confirmationService.alert(
-    //           this.currentLanguageSet.OTPSentToMobNo + res.data.mobile,
-    //           'success',
-    //         );
-    //       else if (this.healthIdMode === 'AADHAR')
-    //         this.confirmationService.alert(
-    //           this.currentLanguageSet.OTPSentToAadharLinkedNo,
-    //           'success',
-    //         );
+    this.registrarService.generateOTP(reqObj, this.healthIdMode).subscribe(
+      (res: any) => {
+        if (res.statusCode === 200) {
+          this.showProgressBar = false;
+          if (this.healthIdMode === 'MOBILE')
+            this.confirmationService.alert(
+              this.currentLanguageSet.OTPSentToMobNo + res.data.mobile,
+              'success',
+            );
+          else if (this.healthIdMode === 'AADHAR')
+            this.confirmationService.alert(
+              this.currentLanguageSet.OTPSentToAadharLinkedNo,
+              'success',
+            );
 
-    //       this.transactionId = res.data.txnId;
-    //       this.enablehealthIdOTPForm = true;
-    //     } else {
-    //       this.showProgressBar = false;
-    //       this.dialogRef.close();
-    //       this.dialogRef.afterClosed().subscribe((result) => {
-    //         this.confirmationService.alert(res.errorMessage, 'error');
-    //       });
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.showProgressBar = false;
-    //     this.dialogRef.close();
-    //     this.dialogRef.afterClosed().subscribe((result) => {
-    //       this.confirmationService.alert(
-    //         this.currentLanguageSet.issueInGettingBeneficiaryABHADetails,
-    //         'error',
-    //       );
-    //     });
-    //   },
-    // );
+          this.transactionId = res.data.txnId;
+          this.enablehealthIdOTPForm = true;
+        } else {
+          this.showProgressBar = false;
+          this.dialogRef.close();
+          this.dialogRef.afterClosed().subscribe((result) => {
+            this.confirmationService.alert(res.errorMessage, 'error');
+          });
+        }
+      },
+      (err: any) => {
+        this.showProgressBar = false;
+        this.dialogRef.close();
+        this.dialogRef.afterClosed().subscribe((result) => {
+          this.confirmationService.alert(
+            this.currentLanguageSet.issueInGettingBeneficiaryABHADetails,
+            'error',
+          );
+        });
+      },
+    );
   }
 
   getHealthIdOtp() {
@@ -188,7 +191,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     } else {
       this.mobileNum = this.mobileNumber;
     }
-    //
     this.enablehealthIdOTPForm = true;
     this.showProgressBar = true;
     let reqObj = null;
@@ -201,43 +203,43 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
         aadhaar: this.data.aadharNumber,
       };
     }
-    // this.registrarService.generateOTP(reqObj, this.healthIdMode)!.subscribe(
-    //   (res: any) => {
-    //     if (res.statusCode === 200) {
-    //       this.showProgressBar = false;
-    //       if (this.healthIdMode === 'MOBILE')
-    //         this.confirmationService.alert(
-    //           this.currentLanguageSet.OTPSentToMobNo + res.data.mobile,
-    //           'success',
-    //         );
-    //       else if (this.healthIdMode === 'AADHAR')
-    //         this.confirmationService.alert(
-    //           this.currentLanguageSet.OTPSentToAadharLinkedNo,
-    //           'success',
-    //         );
+    this.registrarService.generateOTP(reqObj, this.healthIdMode).subscribe(
+      (res: any) => {
+        if (res.statusCode === 200) {
+          this.showProgressBar = false;
+          if (this.healthIdMode === 'MOBILE')
+            this.confirmationService.alert(
+              this.currentLanguageSet.OTPSentToMobNo + res.data.mobile,
+              'success',
+            );
+          else if (this.healthIdMode === 'AADHAR')
+            this.confirmationService.alert(
+              this.currentLanguageSet.OTPSentToAadharLinkedNo,
+              'success',
+            );
 
-    //       this.transactionId = res.data.txnId;
-    //       this.enablehealthIdOTPForm = true;
-    //     } else {
-    //       this.showProgressBar = false;
-    //       this.confirmationService.alert(res.errorMessage, 'error');
-    //       if (this.healthIdMode === 'MOBILE')
-    //         this.enablehealthIdOTPForm = false;
-    //       else this.enablehealthIdOTPForm = true;
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.showProgressBar = false;
-    //     this.confirmationService.alert(err.errorMessage, 'error');
-    //     if (this.healthIdMode === 'MOBILE') this.enablehealthIdOTPForm = false;
-    //     else this.enablehealthIdOTPForm = true;
-    //   },
-    // );
+          this.transactionId = res.data.txnId;
+          this.enablehealthIdOTPForm = true;
+        } else {
+          this.showProgressBar = false;
+          this.confirmationService.alert(res.errorMessage, 'error');
+          if (this.healthIdMode === 'MOBILE')
+            this.enablehealthIdOTPForm = false;
+          else this.enablehealthIdOTPForm = true;
+        }
+      },
+      (err: any) => {
+        this.showProgressBar = false;
+        this.confirmationService.alert(err.errorMessage, 'error');
+        if (this.healthIdMode === 'MOBILE') this.enablehealthIdOTPForm = false;
+        else this.enablehealthIdOTPForm = true;
+      },
+    );
   }
   posthealthIDButtonCall() {
     const dialogRefPass = this.dialog.open(SetPasswordForAbhaComponent, {
-      height: '300px',
-      width: '420px',
+      height: '400px',
+      width: '520px',
       disableClose: true,
     });
     dialogRefPass.afterClosed().subscribe((result) => {
@@ -263,20 +265,95 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
             const dialogRefSuccess = this.dialog.open(
               HealthIdOtpSuccessComponent,
               {
-                height: '300px',
-                width: '420px',
+                height: '400px',
+                width: '520px',
                 disableClose: true,
                 data: res,
               },
             );
             this.showProgressBar = false;
             dialogRefSuccess.afterClosed().subscribe((result) => {
-              const dat = {
-                healthIdNumber: res.data.healthIdNumber,
-                healthId: res.data.healthId,
-              };
-              this.registrarService.setHealthIdMobVerification(dat);
-              this.dialogRef.close(dat);
+              const dob = `${res.data.dayOfBirth}/${res.data.monthOfBirth}/${res.data.yearOfBirth}`;
+              let gender = '';
+              if (res.data.gender === 'F') {
+                gender = 'Female';
+              } else if (res.data.gender === 'M') {
+                gender = 'Male';
+              } else {
+                gender = 'Transgender';
+              }
+
+              const filteredGender =
+                this.registrarMasterData.genderMaster.filter(
+                  (g: any) => g.genderName === gender,
+                );
+
+              let genderID: any = null;
+              let genderName: any = null;
+              if (filteredGender.length > 0) {
+                genderID = filteredGender[0].genderID;
+                genderName = filteredGender[0].genderName;
+              }
+              let stateID: any;
+              let stateName: any;
+              let matchedState;
+              let matchedDistrict;
+              let districtID: any;
+              let districtName: any;
+              const locationData: any = localStorage.getItem('location');
+              const location = JSON.parse(locationData);
+              location.stateMaster.forEach((item: any) => {
+                if (item.govtLGDStateID === res.data.stateCode) {
+                  matchedState = item;
+                  stateID = matchedState.stateID;
+                  stateName = matchedState.stateName;
+
+                  this.registrarService
+                    .getDistrictList(stateID)
+                    .subscribe((resp: any) => {
+                      if (resp && resp.statusCode === 200) {
+                        const districtList = resp.data;
+                        this.registrarService.updateDistrictList(districtList);
+                        resp.data.forEach((item: any) => {
+                          if (
+                            item.govtLGDDistrictID === res.data.districtCode
+                          ) {
+                            matchedDistrict = item;
+                            districtID = matchedDistrict.districtID;
+                            districtName = matchedDistrict.districtName;
+                          }
+                        });
+                        this.registrarService
+                          .getSubDistrictList(districtID)
+                          .subscribe((res: any) => {
+                            if (res && res.statusCode === 200) {
+                              const subDistrictList = res.data;
+                              this.registrarService.updateSubDistrictList(
+                                subDistrictList,
+                              );
+                            }
+                          });
+
+                        const dat = {
+                          healthIdNumber: res.data.healthIdNumber,
+                          healthId: res.data.healthId,
+                          firstName: res.data.firstName,
+                          lastName: res.data.lastName,
+                          phoneNo: res.data.mobile,
+                          dob: dob,
+                          gender: genderID,
+                          genderName: genderName,
+                          stateID: stateID,
+                          stateName: stateName,
+                          districtID: districtID,
+                          districtName: districtName,
+                        };
+                        this.registrarService.setHealthIdMobVerification(dat);
+                        this.dialogRef.close(dat);
+                      }
+                    });
+                }
+              });
             });
           } else {
             this.showProgressBar = false;
@@ -310,7 +387,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
             res.data.mobileNumber === null
           ) {
             this.transactionId = res.data.tnxId;
-            // this.mobileLinkedOtp = null;
             this.checkandGenerateToVerifyMobileOTP();
           } else {
             const requestObj = {
@@ -322,13 +398,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
               .subscribe((resOtp: any) => {
                 if (resOtp.statusCode === 200 && resOtp.data) {
                   this.transactionId = resOtp.data.txnId;
-                  // if(resOtp.data.mobileLinked === false) {
-                  //   this.mobileLinkedOtp = resOtp.data.mobileLinked;
-                  //   this.checkandGenerateToVerifyMobileOTP();
-                  // } else{
                   this.dialogRef.close();
                   this.posthealthIDButtonCall();
-                  // }
                 }
               });
           }
@@ -470,8 +541,8 @@ export class HealthIdOtpSuccessComponent implements OnInit, DoCheck {
 
   openDialogForprintHealthIDCard(data: any, txnId: any) {
     const dialogRefValue = this.dialog.open(HealthIdValidateComponent, {
-      height: '250px',
-      width: '420px',
+      height: '300px',
+      width: '500px',
       disableClose: true,
       data: {
         healthId: data,

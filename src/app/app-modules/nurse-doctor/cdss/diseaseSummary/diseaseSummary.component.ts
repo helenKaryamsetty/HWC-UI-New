@@ -1,13 +1,9 @@
 import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-
+import { FormGroup } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { CDSSService } from '../../shared/services/cdss-service';
-
 import { MatDialog } from '@angular/material/dialog';
 import { DoctorService, MasterdataService } from '../../shared/services';
-import { Router } from '@angular/router';
-
 import { ViewDiseaseSummaryDetailsComponent } from '../viewDiseaseSummaryDetails/viewDiseaseSummaryDet.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
@@ -25,7 +21,6 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
   filteredOptions!: Observable<string[]>;
   @Input()
   DiseaseSummaryForm!: FormGroup;
-  // diseaseFormControl: FormControl = new FormControl();
   @Input()
   mode!: string;
   result: any;
@@ -50,20 +45,15 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
   viewMode = false;
   constructor(
     private httpServiceService: HttpServiceService,
-    private fb: FormBuilder,
     private cdssService: CDSSService,
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private masterdataService: MasterdataService,
-    private router: Router,
     private doctorService: DoctorService,
   ) {}
 
   ngOnInit() {
     this.getChiefComplaintSymptoms();
-    //   this.filteredOptions = this.DiseaseSummaryForm.controls.presentChiefComplaint.valueChanges
-    // .startWith(null)
-    // .map((val) => (val ? this.filter(val) : this.chiefComplaints.slice()));
     this.getDiseaseNames();
   }
 
@@ -182,7 +172,6 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
           this.DiseaseSummaryForm.controls['diseaseSummaryView'].patchValue(
             value.data.cdss.diseaseSummary,
           );
-          // this.cdssForm.patchValue({ presentChiefComplaintView : value.data.Cdss.presentChiefComplaint.presentChiefComplaint});
         });
     } else {
       this.viewMode = true;
@@ -281,9 +270,6 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
             }
             if (sessionStorage.getItem('diseaseClose') === 'False') {
               this.DiseaseSummaryForm.reset();
-              // this.DiseaseSummaryForm.controls["diseaseSummary"].setValue(" ");
-              // this.DiseaseSummaryForm.controls["informationGiven"].setValue(" ");
-              // this.DiseaseSummaryForm.controls["recommendedAction"].setValue(" ");
             }
           });
         }

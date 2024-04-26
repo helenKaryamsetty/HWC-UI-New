@@ -53,10 +53,6 @@
         <textarea
           matInput
           textAreaValidator
-          placeholder="{{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails
-              ?.diseaseSummary
-          }}"
           formControlName="diseaseSummaryView"
           [readonly]="viewMode"
         ></textarea>
@@ -70,7 +66,6 @@
         <textarea
           matInput
           textAreaValidator
-          placeholder="{{ currentLanguageSet?.infoGiven }}"
           rows="2"
           [style.width]="'100%'"
           formControlName="informationGiven"
@@ -90,7 +85,6 @@
         <textarea
           matInput
           textAreaValidator
-          placeholder="{{ currentLanguageSet?.recommendedAction }}"
           rows="2"
           name="recommendedAction"
           formControlName="recommendedAction"
@@ -106,7 +100,6 @@
       </mat-label>
       <textarea
         matInput
-        placeholder="{{ currentLanguageSet?.common?.remarks }}"
         maxlength="300"
         minlength="3"
         name="remarks"

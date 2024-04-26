@@ -30,7 +30,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable, Subscription, mergeMap, of } from 'rxjs';
+import { Subscription, mergeMap, of } from 'rxjs';
 import { NCDScreeningUtils } from '../shared/utility';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
 import {
@@ -126,10 +126,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     this.questions1 = [];
     this.idrsScoreService.clearScoreFlag();
     this.idrsScoreService.clearDiabetesSelected();
-    //this.idrsScoreService.clearDiseaseSelected();
     this.idrsScoreService.clearUnchecked();
-    // this.idrsScoreService.clearDiastolicBp();
-    // this.idrsScoreService.clearSystolicBp();
     this.idrsScoreService.clearHypertensionSelected();
     this.idrsScoreService.finalDiagnosisDiabetesConfirm(null);
     this.idrsScoreService.finalDiagnosisHypertensionConfirm(null);
@@ -218,7 +215,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     } else {
       this.removeConfirmDiseaseArray(this.unchecked);
       this.addToSuspected(this.unchecked);
-      // this.suspect.push(this.unchecked);
       for (const value of this.diseases) {
         if (value.disease.indexOf(this.unchecked) > -1) {
           value.confirmed = false;
@@ -408,9 +404,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
             if (confirmDisease.disease.indexOf('Diabetes') > -1)
               confirmDisease.confirmed = false;
           }
-          // if (this.suspect.includes("Diabetes")) {
-          //   this.checkQuestionsToAddInSuspect("Diabetes");
-          // }
         }
       },
     );
@@ -450,9 +443,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
         if (respone === 1) {
           this.hypertensionChecked = true;
         }
-        // else {
-        //   this.addHypertensionToSuspectedArray();
-        // }
       });
     this.addHypertensionToSuspectedArray();
   }
@@ -523,7 +513,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
       this.diastolicBpValueSubscription.unsubscribe();
     if (this.hypertensionSelectedFlagSubscription)
       this.hypertensionSelectedFlagSubscription.unsubscribe();
-    // this.idrsScoreService.clearScoreFlag();
   }
   getPreviousVisit() {
     const obj = {
@@ -785,8 +774,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
               suspectArray.forEach((element: any) => {
                 this.addToSuspected(element);
               });
-              // clearing suspect array observable according to suspect array
-              // this.settingSuspectedObservable();
             }
           }
           if (
@@ -912,7 +899,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((data) => {
         if (data) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.questions = data.IDRSQuestions;
           if (this.questions !== undefined && this.questions.length > 0) {
             for (const question of this.questions) {
@@ -962,7 +948,6 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
                     60
                 ) {
                   disease.flag = false;
-                  // disease.disabled = true;
                 }
                 if (
                   disease !== undefined &&

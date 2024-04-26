@@ -72,6 +72,8 @@ export class RegisterPersonalDetailsComponent
 
   @ViewChild(BsDatepickerDirective) datepicker!: BsDatepickerDirective;
   personalDataOnHealthIDSubscription!: Subscription;
+  maritalSubscription!: Subscription;
+  MaritalStatus = false;
 
   @HostListener('window:scroll')
   onScrollEvent() {
@@ -98,6 +100,7 @@ export class RegisterPersonalDetailsComponent
     this.setDateLimits();
     this.setDefaultAgeUnit();
     this.loadMasterDataObservable();
+    this.isMaritalStatus();
     this.setPhoneSelectionEnabledByDefault();
     this.setImageChangeFlagToFalseByDefault();
     this.setCalendarConfig();
@@ -445,6 +448,21 @@ export class RegisterPersonalDetailsComponent
     } else {
       this.isFingerPrintRequired = false;
     }
+  }
+
+  isMaritalStatus() {
+    this.maritalSubscription = this.registrarService.maritalStatus$.subscribe(
+      (response) => {
+        if (response === true) {
+          this.MaritalStatus = true;
+          this.enableMaritalStatus = true;
+          this.onGenderSelected();
+        } else {
+          this.MaritalStatus = false;
+          this.enableMaritalStatus = false;
+        }
+      },
+    );
   }
 
   /**

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { DatePipe } from '@angular/common';
@@ -31,7 +31,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 
@@ -42,7 +41,6 @@ import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/
   providers: [DatePipe],
 })
 export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
-  healthIDArray: any = [];
   chooseHealthID: any;
   currentLanguageSet: any;
   healthIDMapped: any;
@@ -53,18 +51,34 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
   selectedHealthID: any;
   healthIdOTPForm!: FormGroup;
   showProgressBar = false;
-  searchDetails: any = [];
   searchPopup = false;
 
-  displayedColumns: string[] = [
+  displayedColumns: any = [
     'sno',
-    'abhaNumber',
-    'abha',
-    'dateOfCreation',
-    'abhaMode',
+    'healthIDNo',
+    'healthID',
+    'createdDate',
+    'healthIDMode',
   ];
-  dataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  searchDetails = new MatTableDataSource<any>();
+
+  displayedColumns1: any = [
+    'sno',
+    'healthIDNo',
+    'healthID',
+    'createdDate',
+    'healthIDMode',
+    'action',
+  ];
+  displayedColumns2: any = [
+    'sno',
+    'healthIDNo',
+    'healthID',
+    'createdDate',
+    'healthIDMode',
+    'rblMode',
+  ];
+  healthIDArray = new MatTableDataSource<any>();
 
   constructor(
     public dialogRef: MatDialogRef<HealthIdDisplayModalComponent>,
@@ -81,13 +95,12 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     console.log('datalist', this.input);
-    this.searchDetails = null;
+    this.searchDetails.data = [];
     this.selectedHealthID = null;
     this.searchPopup = false;
     this.assignSelectedLanguage();
     this.searchPopup =
       this.input.search !== undefined ? this.input.search : false;
-    // this.httpServiceService.currentLangugae$.subscribe(response => this.currentLanguageSet = response);
     this.healthIDMapping = this.input.healthIDMapping;
     if (
       this.input.dataList !== undefined &&
@@ -124,12 +137,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
           healthID.createdDate,
           'yyyy-MM-dd hh:mm:ss a',
         );
-        // let date = new Date(healthID.createdDate);
-        // let mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-        //   day = ("0" + date.getDate()).slice(-2);
-        // let newDate = [day, mnth, date.getFullYear()].join("-");
-        // healthID.createdDate = newDate;
-        this.healthIDArray.push(healthID);
+        this.healthIDArray.data.push(healthID);
       });
     }
   }
@@ -272,8 +280,6 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     dialogRefValue.afterClosed().subscribe((result) => {
       console.log('result', result);
     });
-
-    // this.closeDialog();
   }
 
   printHealthIDCard(data: any) {
@@ -304,11 +310,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
       (res: any) => {
         if (res.statusCode === 200 && Object.keys(res.data).length > 0) {
           this.dialogRef.close();
-          // this.confirmationService.confirmHealthId('success', this.currentLanguageSet.OTPSentToRegMobNo).subscribe((result) => {
-          //   if(result)
-          //   {
           this.dialogRef.afterClosed().subscribe((result) => {
-            // console.log('result', result)
             this.transactionId = res.data.txnId;
             if (healthMode === 'MOBILE') {
               this.confirmationService
@@ -340,16 +342,9 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
                 });
             }
           });
-
-          // }
           this.showProgressBar = false;
-          // });
         } else {
-          // let dat={
-          //   "clearHealthID":true
-          // };
           this.showProgressBar = false;
-          // this.dialogRef.close();
           this.confirmationService.alert(res.status, 'error');
         }
       },

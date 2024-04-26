@@ -5,7 +5,7 @@
         (!healthIDMapping && !enablehealthIdOTPForm && !searchPopup) ||
         (searchDetails !== undefined &&
           searchDetails !== null &&
-          searchDetails.length > 0)
+          searchDetails.data.length > 0)
       "
     >
       {{ currentLanguageSet?.abhaDetails }}
@@ -32,13 +32,19 @@
   <section class="message">
     <section
       class="table-responsive vw100"
+      class="table table-striped"
       *ngIf="
         searchDetails !== undefined &&
         searchDetails !== null &&
-        searchDetails.length > 0
+        searchDetails.data.length > 0
       "
     >
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table
+        mat-table
+        class="table table-striped"
+        [dataSource]="searchDetails"
+        class="mat-elevation-z8"
+      >
         <!-- sno Column -->
         <ng-container matColumnDef="sno">
           <th mat-header-cell *matHeaderCellDef>
@@ -90,50 +96,24 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 15]"
-        showFirstLastButtons
-      ></mat-paginator>
-
-      <!-- <table [md2Data]="searchDetails" #md2="md2DataTable" [rowsPerPage]="4" class="table table-striped" aria-describedby="toShowHealthIDDetails">
-        <thead>
-          <tr class="column">
-            <th id="sno">{{currentLanguageSet?.coreComponents?.sno}}</th>
-            <th id="healthIDNo">{{currentLanguageSet?.abhaNumber}}</th>
-            <th id="healthID">{{currentLanguageSet?.abha}}</th>
-            <th id="createdDate">{{currentLanguageSet?.dateOfCreation}}</th>
-            <th id="healthIDMode">{{currentLanguageSet?.abhaMode}}</th>   
-                               
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="searchDetails === null || searchDetails?.length==0">
-            <td colspan="6" class="record-not-found text-field-color">
-              {{currentLanguageSet?.casesheet?.noRecordFound}} 
-            </td>
-          </tr>
-          <tr *ngFor="let data of md2.data;let i = index">
-            <td >{{i+1}} </td>
-            <td >{{ data?.HealthIDNumber ? data?.HealthIDNumber : NA}} </td>
-            <td >{{ data?.HealthID ? data?.HealthID : NA}} </td>
-            <td >{{ data?.CreatedDate | date: 'yyyy-MM-dd hh:mm:ss a'}} </td>
-            <td >{{ data?.AuthenticationMode}} </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="6">
-              <mat-paginator class="colorpagination"></mat-paginator>
-            </td> 
-          </tr>
-        </tfoot>
-      </table> -->
+      <div
+        class="pull-center"
+        style="margin-top: 5px; text-align: center"
+        *ngIf="searchDetails === null || searchDetails?.data?.length === 0"
+      >
+        <strong>{{ currentLanguageSet?.casesheet?.noRecordFound }}</strong>
+      </div>
     </section>
     <section
       class="table-responsive vw100"
       *ngIf="!healthIDMapping && !enablehealthIdOTPForm && !searchPopup"
     >
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table
+        mat-table
+        class="table table-striped"
+        [dataSource]="healthIDArray"
+        class="mat-elevation-z8"
+      >
         <!-- sno Column -->
         <ng-container matColumnDef="sno">
           <th mat-header-cell *matHeaderCellDef>
@@ -182,157 +162,155 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 15]"
-        showFirstLastButtons
-      ></mat-paginator>
+        <ng-container matColumnDef="action">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ currentLanguageSet?.bendetails?.action }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              matTooltip="{{ currentLanguageSet?.printABHACard }}"
+              (click)="printHealthIDCard(element)"
+              class="pull-right width-20px"
+            >
+              <mat-icon>print</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <!-- <table [md2Data]="healthIDArray" #md2="md2DataTable" [rowsPerPage]="4" class="table table-striped" aria-describedby="toShowHealthIDDetails">
-        <thead>
-          <tr class="column">
-            <th id="sno">{{currentLanguageSet?.coreComponents?.sno}}</th>
-            <th id="healthIDNo">{{currentLanguageSet?.aBHANumber}}</th>
-            <th id="healthID">{{currentLanguageSet?.aBHA}}</th>
-            <th id="createdDate">{{currentLanguageSet?.dateOfCreation}}</th>
-            <th id="healthIDMode">{{currentLanguageSet?.aBHAMode}}</th>   
-            <th id="action">{{currentLanguageSet?.bendetails?.action}}</th>                    
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="healthIDArray?.length==0">
-            <td colspan="6" class="record-not-found text-field-color">
-              {{currentLanguageSet?.casesheet?.noRecordFound}} 
-            </td>
-          </tr>
-          <tr *ngFor="let data of md2.data;let i = index">
-            <td >{{healthIDArray.indexOf(data)+1}} </td>
-            <td >{{ data?.healthIdNumber ? data?.healthIdNumber : NA}} </td>
-            <td >{{ data?.healthId ? data?.healthId : NA}} </td>
-            <td >{{ data?.createdDate}} </td>
-            <td >{{ data?.authenticationMode}} </td>
-            <td>
-              <button mat-icon-button  tooltip="{{currentLanguageSet?.printABHACard}}" (click)="printHealthIDCard(data)" class="pull-right  width-20px">
-                <mat-icon>print</mat-icon>
-              </button> 
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="6">
-              <mat-paginator class="colorpagination"></mat-paginator>
-            </td>
-          </tr>
-        </tfoot>
-      </table> -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+      </table>
+      <div
+        class="pull-center"
+        style="margin-top: 5px; text-align: center"
+        *ngIf="healthIDArray?.data?.length === 0"
+      >
+        <strong>{{ currentLanguageSet?.casesheet?.noRecordFound }}</strong>
+      </div>
     </section>
     <!--Map health ID to care context-->
     <section
       class="table-responsive vw100"
       *ngIf="healthIDMapping && !enablehealthIdOTPForm && !searchPopup"
     >
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        <!-- sno Column -->
+      <table
+        mat-table
+        class="table table-striped"
+        [dataSource]="healthIDArray"
+        class="mat-elevation-z8"
+      >
         <ng-container matColumnDef="sno">
-          <th mat-header-cell *matHeaderCellDef>
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             {{ currentLanguageSet?.coreComponents?.sno }}
           </th>
-          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
-        </ng-container>
-
-        <!-- abhaNumber Column -->
-        <ng-container matColumnDef="abhaNumber">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abhaNumber }}
-          </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.healthIdNumber ? element?.healthIdNumber : "" }}
+            {{ element?.sno }}
           </td>
         </ng-container>
-
-        <!-- abha Column -->
-        <ng-container matColumnDef="abha">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abha }}
+        <ng-container matColumnDef="healthIDNo">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ currentLanguageSet?.aBHANumber }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.HealthID ? element?.HealthID : "" }}
+            {{ element?.healthIdNumber ? element?.healthIdNumber : null }}
           </td>
         </ng-container>
-
-        <!-- dateOfCreation Column -->
-        <ng-container matColumnDef="dateOfCreation">
-          <th mat-header-cell *matHeaderCellDef>
+        <ng-container matColumnDef="healthID">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ currentLanguageSet?.aBHA }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element?.healthId ? element?.healthId : null }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="createdDate">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
             {{ currentLanguageSet?.dateOfCreation }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.CreatedDate | date: "yyyy-MM-dd hh:mm:ss a" }}
+            {{ element?.createdDate }}
           </td>
         </ng-container>
-
-        <!-- abhaMode Column -->
-        <ng-container matColumnDef="abhaMode">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abhaMode }}
+        <ng-container matColumnDef="healthIDMode">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            {{ currentLanguageSet?.aBHAMode }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.AuthenticationMode }}
+            {{ element?.authenticationMode }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="rblMode">
+          <th
+            mat-header-cell
+            style="border-bottom: none"
+            *matHeaderCellDef
+            mat-sort-header
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              matTooltip="{{ currentLanguageSet?.printABHACard }}"
+              (click)="printHealthIDCard(element)"
+              class="pull-right width-20px"
+            >
+              <mat-icon>print</mat-icon>
+            </button>
+          </td>
+          <td mat-cell *matCellDef="let element">
+            <mat-radio-group [(ngModel)]="chooseHealthID">
+              <mat-radio-button
+                color="primary"
+                class="radio-btnn"
+                [value]="element"
+                (change)="onRadioChange(element)"
+              >
+              </mat-radio-button>
+            </mat-radio-group>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
       </table>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 15]"
-        showFirstLastButtons
-      ></mat-paginator>
-      <!-- <table [md2Data]="healthIDArray" #md2="md2DataTable" [rowsPerPage]="4" class="table table-striped" aria-describedby="mapHealthIDWithCC">
-        <thead>
-          <tr class="column">
-            <th id="sno">{{currentLanguageSet?.coreComponents?.sno}}</th>
-            <th id="healthIDNo">{{currentLanguageSet?.aBHANumber}}</th>
-            <th id="healthID">{{currentLanguageSet?.aBHA}}</th>
-            <th id="createdDate">{{currentLanguageSet?.dateOfCreation}}</th>
-            <th id="healthIDMode">{{currentLanguageSet?.aBHAMode}}</th>
-            <th id="rblMode"></th> 
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="healthIDArray?.length==0">
-            <td colspan="6" class="record-not-found text-field-color">
-              {{currentLanguageSet?.casesheet?.noRecordFound}}
-            </td>
-          </tr>
-          <tr *ngFor="let data of md2.data;let i = index">
-            <td >{{healthIDArray.indexOf(data)+1}} </td>
-            <td >{{ data?.healthIdNumber ? data?.healthIdNumber : NA}} </td>
-            <td >{{ data?.healthId ? data?.healthId : NA}} </td>
-            <td >{{ data?.createdDate}} </td>
-            <td >{{ data?.authenticationMode}} </td>
-            <td>
-              <mat-radio-group [(ngModel)]="chooseHealthID" >
-                <mat-radio-button color="primary" class="radio-btnn" [value] = "data" (change)="onRadioChange(data)">
-                </mat-radio-button>
-              </mat-radio-group>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3">
-              <mat-paginator class="colorpagination"></mat-paginator>
-            </td>
-            <td colspan="3" *ngIf="healthIDArray?.length!==0">
-              <button mat-raised-button class="pull-right button-overall-disabled" color='primary'  (click)="generateOtpForMapping()" 
-              [disabled]="(selectedHealthID === undefined || selectedHealthID === null)">{{currentLanguageSet?.generateOTP}}</button>
-            </td>
-          </tr>
-        </tfoot>
-      </table> -->
+
+      <div
+        class="pull-center"
+        style="margin-top: 5px; text-align: center"
+        *ngIf="healthIDArray?.data?.length === 0"
+      >
+        <strong>{{ currentLanguageSet?.casesheet?.noRecordFound }}</strong>
+      </div>
     </section>
   </section>
 </div>
@@ -366,14 +344,15 @@
         mat-raised-button
         type="button"
         color="primary"
+        class="pull-right mat_blue"
         (click)="resendOtp()"
       >
         {{ currentLanguageSet?.resendOTP }}
       </button>
       <button
         id="submitButton"
-        class="button-health-id-disabled"
         mat-raised-button
+        class="pull-right mat_blue"
         type="accent"
         color="accent"
         [disabled]="!healthIdOTPForm.valid || !checkOTP()"

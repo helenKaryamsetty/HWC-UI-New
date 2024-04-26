@@ -3,11 +3,11 @@ h5{
 }
 
 .option1 { 
-    display: inline-block; /* show on the same line */
+    display: inline-block;
 } 
 
 .option2 { 
-    padding-left: 500px; /* small gap on the right of each header */ 
+    padding-left: 500px; 
 }
 
 .mat-expansion-panel-header{
@@ -52,11 +52,8 @@ h5{
     float: right;
 }
 
-/********/
 .btn-group button {
-    /* background-color:lightgray; */
     margin:5px;
-    /* color: white;  */
     float: left; 
   }
 

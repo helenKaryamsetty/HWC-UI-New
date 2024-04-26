@@ -28,9 +28,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { DoctorService, NurseService } from '../../shared/services';
-import { AudioRecordingService } from '../../shared/services/audio-recording.service';
 import { environment } from 'src/environments/environment';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
@@ -66,32 +64,7 @@ export class NeonatalPatientVitalsComponent
   startWeightTest = environment.startWeighturl;
   startTempTest = environment.startTempurl;
   doctorScreen = false;
-
-  // Audio - SWAASA
-  isRecording = false;
-  recordedTime: any;
-  blobUrl: any;
-  teste: any;
-  enableResult = false;
-  enableSymptoms = false;
-  frequentCough = false;
-  sputum = false;
-  coughAtNight = false;
-  wheezing = false;
-  painInChest = false;
-  shortnessOfBreath = false;
   benGenderType: any;
-  age: any;
-  coughBlobFile!: Blob;
-  severityValue: any;
-  cough_pattern_Value: any;
-  assessmentDetail: any;
-  enableLungAssessment = false;
-  severity: any;
-  cough_pattern: any;
-  cough_severity_score: any;
-  record_duration: any;
-  disabledLungAssesment = false;
 
   constructor(
     private dialog: MatDialog,
@@ -100,46 +73,12 @@ export class NeonatalPatientVitalsComponent
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private nurseService: NurseService,
-    private audioRecordingService: AudioRecordingService,
-    private sanitizer: DomSanitizer,
-  ) {
-    //   this.audioRecordingService
-    //   .recordingFailed()
-    //   .subscribe(() => (this.isRecording = false));
-    // this.audioRecordingService
-    //   .getRecordedTime()
-    //   .subscribe(time => {this.recordedTime = time;
-    //     if(this.recordedTime=="00:16"){
-    //       this.stopRecording();
-    //     }});
-    // this.audioRecordingService.getRecordedBlob().subscribe(data => {
-    //   this.teste = data;
-    //   this.coughBlobFile = data.blob;
-    //   this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
-    //     URL.createObjectURL(data.blob)
-    //   );
-    // });
-  }
+  ) {}
 
   ngOnInit() {
     this.getBeneficiaryDetails();
-    if (this.benAge < 18) {
-      this.disabledLungAssesment = true;
-    } else {
-      this.disabledLungAssesment = false;
-    }
-
     this.nurseService.clearEnableLAssessment();
     this.getGender();
-    // this.nurseService.enableLAssessment$.subscribe(
-    //   (response) => {
-    //     if(response === true) {
-    //       this.enableLungAssessment = true;
-    //     } else {
-    //       this.enableLungAssessment = false;
-    //     }
-    //   }
-    // );
   }
 
   ngOnChanges() {
@@ -147,7 +86,6 @@ export class NeonatalPatientVitalsComponent
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
-      // this.getAssessmentID();
       this.doctorScreen = true;
     }
 
@@ -195,11 +133,6 @@ export class NeonatalPatientVitalsComponent
             if (beneficiary && beneficiary.ageVal) {
               this.benGenderAndAge = beneficiary;
               this.benAge = beneficiary.ageVal;
-              if (this.benAge < 18) {
-                this.disabledLungAssesment = true;
-              } else {
-                this.disabledLungAssesment = false;
-              }
               this.benGenderAndAge = beneficiary;
               const ageMonth = this.benGenderAndAge.age;
               const ar = ageMonth.split(' ');
@@ -238,7 +171,6 @@ export class NeonatalPatientVitalsComponent
     dialogRef.afterClosed().subscribe((result) => {
       console.log('he;;p', result, result['result']);
       if (result !== null) {
-        //result['result']
         this.neonatalVitalsForm.patchValue({
           weight_Kg: result['result'],
         });
@@ -381,139 +313,10 @@ export class NeonatalPatientVitalsComponent
     return this.neonatalVitalsForm.controls['headCircumference_cm'].value;
   }
 
-  // startRecording() {
-  //   if (!this.isRecording) {
-  //     this.isRecording = true;
-  //     this.audioRecordingService.startRecording();
-  //   }
-  // }
-
-  // abortRecording() {
-  //   if (this.isRecording) {
-  //     this.isRecording = false;
-  //     this.audioRecordingService.abortRecording();
-  //   }
-  // }
-
-  // stopRecording() {
-  //   if (this.isRecording) {
-  //     this.audioRecordingService.stopRecording();
-  //     this.isRecording = false;
-  //   }
-  // }
-
-  // clearRecordedData() {
-  //   this.confirmationService.confirm(
-  //     `info`,
-  //     "Do you really want to clear the recording?"
-
-  //   ).subscribe((res)=>{
-  //     if(res){
-  //       this.blobUrl = null;
-  //      this.coughBlobFile = null;
-  //      this.frequentCough = false;
-  //      this.sputum = false;
-  //      this.coughAtNight = false;
-  //      this.wheezing = false;
-  //      this.painInChest = false;
-  //      this.shortnessOfBreath = false;
-  //      this.enableResult = false;
-  //      this.nurseService.isAssessmentDone = false;
-  //     }
-  //   });
-
-  // }
-
   getGender() {
     const gender = localStorage.getItem('beneficiaryGender');
     if (gender === 'Female') this.benGenderType = 1;
     else if (gender === 'Male') this.benGenderType = 0;
     else if (gender === 'Transgender') this.benGenderType = 2;
   }
-
-  // onCheckboxChange(symptomName: string, event: any) {
-  //   this[symptomName] = event.checked ? 1 : 0;
-  // }
-
-  // startAssessment() {
-  //   let todayDate = new Date();
-  //   formData.append('File', file, file.name); // file.name was mandatory for us (otherwise again an error occured)
-  //   this.enableResult = true;
-  //   const symptoms = {
-  //     frequent_cough: this.frequentCough ? 1 : 0,
-  //     sputum: this.sputum ? 1 : 0,
-  //     cough_at_night: this.coughAtNight ? 1 : 0,
-  //     wheezing: this.wheezing ? 1 : 0,
-  //     pain_in_chest: this.painInChest ? 1 : 0,
-  //     shortness_of_breath: this.shortnessOfBreath ? 1 : 0
-  //   };
-  //   let reqObj = {
-  //     coughsoundfile: null,
-  //     gender: this.benGenderType,
-  //     age: this.benAge,
-  //     patientId: localStorage.getItem('beneficiaryRegID'),
-  //     timestamp: moment(todayDate).format('YYYY-MM-DD HH:mm:ss'),
-  //     assessmentId: null,
-  //     providerServiceMapID: localStorage.getItem("providerServiceID"),
-  //     createdBy: localStorage.getItem("userName"),
-  //     symptoms: symptoms,
-  //   }
-  //   const file = new File([this.coughBlobFile], 'coughSound.wav');
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("request", JSON.stringify(reqObj));
-  //   console.log("reqObjFile", formData.get('file'));
-  //   this.audioRecordingService.getResultStatus(formData)
-  //   .subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       this.severity = res.data.severity;
-  //       this.cough_pattern = res.data.cough_pattern;
-  //       this.cough_severity_score = res.data.cough_severity_score;
-  //       this.record_duration = res.data.record_duration;
-  //       this.nurseService.setEnableLAssessment(false);
-  //       this.enableResult = true;
-  //       this.nurseService.isAssessmentDone = true;
-  //       console.log("Cough Result Data", res.data)
-  //       }
-  //       else
-  //       {
-  //         this.confirmationService.alert(res.errorMessage, 'error')
-  //       }
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(
-  //         err,
-  //         'error'
-  //       );
-  //     });
-  //   console.log("reqObj",reqObj);
-  // }
-
-  // getAssessmentID() {
-  //   let benRegID = localStorage.getItem("beneficiaryRegID");
-  //   this.doctorService.getAssessment(benRegID).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null && res.data.length > 0) {
-  //       const lastElementIndex = res.data.length - 1;
-  //       const lastElementData = res.data[lastElementIndex];
-  //       let assessmentId = lastElementData.assessmentId;
-  //       if(assessmentId !== null && assessmentId !== undefined) {
-  //         this.getAssessmentDetails(assessmentId);
-  //       }
-  //     }
-  //   })
-  // }
-
-  // getAssessmentDetails(assessmentId) {
-  //   this.doctorService.getAssessmentDet(assessmentId).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       this.severity = res.data.severity;
-  //       this.cough_pattern = res.data.cough_pattern;
-  //       this.cough_severity_score = res.data.cough_severity_score;
-  //       this.record_duration = res.data.record_duration;
-  //       this.nurseService.setEnableLAssessment(false);
-  //       this.enableResult = true;
-  //       this.nurseService.isAssessmentDone = true;
-  //     }
-  //   })
-  // }
 }

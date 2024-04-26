@@ -1,7 +1,6 @@
 import { Component, DoCheck, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
@@ -25,7 +24,6 @@ export class ViewDiseaseSummaryDetailsComponent implements OnInit, DoCheck {
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
     private dialogRef: MatDialogRef<ViewDiseaseSummaryDetailsComponent>,
-    private confirmationDialogsService: ConfirmationService,
     public HttpServices: HttpServiceService,
   ) {
     dialogRef.disableClose = true;

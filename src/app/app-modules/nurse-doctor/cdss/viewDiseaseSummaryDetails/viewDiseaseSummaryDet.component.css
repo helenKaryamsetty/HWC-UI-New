@@ -22,13 +22,6 @@
     margin-left: auto;
   }
 
- /* ::ng-deep.cdk-overlay-container .cdk-global-overlay-wrapper .cdk-overlay-pane .mat-dialog-container {
-    padding: 20px !important;
-    height: 500px !important;
-    width: 1000px !important;
-    overflow-y: scroll !important;
-
-  } */
   .list-unstyled {
     padding-left: 0;
     list-style: none;
@@ -50,7 +43,6 @@
   }
 
   .pccStyle {
-    /*border-bottom: 1px solid #ccc;*/
     margin-top: 40px;
   }
   
@@ -74,9 +66,9 @@
     margin: 20px;
   }
   .custom-dialog-content {
-    padding: 20px; /* Adjust the padding as needed */
-    max-height: 400px; /* Adjust the maximum height as needed */
-    overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
   }
 
   .mat-icon {

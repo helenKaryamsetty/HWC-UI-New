@@ -19,9 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 @Component({
   selector: 'app-referred-104-cdss-details',
   templateUrl: './referred-104-cdss-details.component.html',

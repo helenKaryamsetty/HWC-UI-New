@@ -22,7 +22,6 @@
 import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -103,9 +102,7 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
   }
 
   getSurname() {
-    //  let patchSurname = "sharma";
     this.familyName = this.benFamilyName;
-    // this.newFamilyTaggingForm.controls['familyName'].setValue(patchSurname);
   }
 
   createNewFamilyTagging() {
@@ -131,9 +128,6 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
     console.log('Details to be saved', reqObject);
     this.familyTaggingService.createFamilyTagging(reqObject).subscribe(
       (response: any) => {
-        //       let response = {
-        //   "data":{"benFamilyTagId":10,"familyId":"16626482041101581","familyName":"Mishra","noOfmembers":1,"villageId":899,"familyHeadName":"Shubham","createdBy":"tmall","vanID":220,"parkingPlaceID":246,"beneficiaryRegId":265240,"headofFamily_RelationID":1,"headofFamily_Relation":"io"},"statusCode":200,"errorMessage":"Success","status":"Success"
-        // }
         if (response.statusCode === 200 && response.data) {
           this.confirmationService.alert(
             this.currentLanguageSet.familyCreatedSuccessfully,
@@ -169,73 +163,6 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
   }
 
   populateRelation(isHead: any) {
-    //   this.relationShipType=[
-    //     {
-    //       "benRelationshipID": 16,
-    //       "benRelationshipType": "Self",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 13,
-    //       "benRelationshipType": "Aunt",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 6,
-    //       "benRelationshipType": "Brother",
-    //       "gender": "male"
-    //     },
-    //     {
-    //       "benRelationshipID": 9,
-    //       "benRelationshipType": "Daughter",
-    //       "gender": "female"
-    //     },
-    //     {
-    //       "benRelationshipID": 4,
-    //       "benRelationshipType": "Father",
-    //       "gender": "male"
-    //     },
-    //     {
-    //       "benRelationshipID": 14,
-    //       "benRelationshipType": "Grand Father",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 15,
-    //       "benRelationshipType": "Grand Mother",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 5,
-    //       "benRelationshipType": "Mother",
-    //       "gender": "female"
-    //     },
-    //     {
-    //       "benRelationshipID": 11,
-    //       "benRelationshipType": "Other",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 7,
-    //       "benRelationshipType": "Sister",
-    //       "gender": "female"
-    //     },
-    //     {
-    //       "benRelationshipID": 8,
-    //       "benRelationshipType": "Son",
-    //       "gender": "male"
-    //     },
-    //     {
-    //       "benRelationshipID": 10,
-    //       "benRelationshipType": "Spouse",
-    //       "gender": "unisex"
-    //     },
-    //     {
-    //       "benRelationshipID": 12,
-    //       "benRelationshipType": "Uncle",
-    //       "gender": "unisex"
-    //     }
-    //   ];
     this.relationShipList = [];
     this.enableOther = false;
     this.otherRelation = null;

@@ -34,13 +34,11 @@
             class="display-flex"
             style="padding: 0 24px 24px 24px"
           >
-            <!-- <ng-container class="row m-t-10" > -->
             <div
               class="display-flex-box"
               formArrayName="vaccines"
               *ngFor="let vaccines of getVaccines(immunization); let j = index"
             >
-              <!-- <ng-container [formGroupName]="j"> -->
               <div
                 [formGroupName]="j"
                 class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
@@ -65,9 +63,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <!-- </ng-container> -->
             </div>
-            <!-- </ng-container> -->
 
             <div class="clearfix"></div>
 

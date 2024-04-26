@@ -22,8 +22,6 @@ export class GenerateAbhaComponentComponent implements OnInit {
   modeofAbhaHealthID: any;
   aadharNumber: any;
   disableGenerateOTP!: boolean;
-  // modeofAbhaHealthID: any;
-  // aadharNumber: any;
 
   constructor(
     public dialogRef: MatDialogRef<GenerateAbhaComponentComponent>,

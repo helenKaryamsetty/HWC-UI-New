@@ -26,6 +26,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 import { environment } from 'src/environments/environment';
 import { DoctorService, MasterdataService } from '../../../shared/services';
+import { CDSSService } from '../../../shared/services/cdss-service';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -132,49 +133,15 @@ export class DoctorDiagnosisCaseSheetComponent
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    // private nurseService: NurseService
+    public cdssService: CDSSService,
   ) {}
 
   ngOnInit() {
     this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
-    // this.isCdss = localStorage.getItem('isCdss');
-    // this.isCdssStatus = this.isCdss;
-    // this.language = sessionStorage.getItem('setLanguage');
     this.fetchHRPPositive();
     this.getHealthIDDetails();
     this.assignSelectedLanguage();
     this.getVaccinationTypeAndDoseMaster();
-    // this.getAssessmentID();
-
-    // if (this.language !== undefined) {
-    //   this.httpServiceService
-    //     .getLanguage(this.language_file_path + this.language + ".json")
-    //     .subscribe(
-    //       response => {
-    //         if (response) {
-    //           this.current_language_set = response[this.language];
-
-    //         } else {
-    //           console.log(
-    //             this.current_language_set.alerts.info.comingUpWithThisLang +
-    //               " " +
-    //               this.language
-    //           );
-    //         }
-    //       },
-    //       error => {
-    //         console.log(
-    //           this.current_language_set.alerts.info.comingUpWithThisLang +
-    //             " " +
-    //             this.language
-    //         );
-    //       }
-    //     );
-    // }else{
-    //   this.httpServiceService.currentLangugae$.subscribe(
-    //     response => (this.current_language_set = response)
-    //   );
-    // }
   }
 
   ngDoCheck() {
@@ -378,7 +345,6 @@ export class DoctorDiagnosisCaseSheetComponent
             },
           ],
         };
-        // this.caseRecords.LabReport.push(vitalsRBSValue);
         this.caseRecords.LabReport = [vitalsRBSValue].concat(
           this.caseRecords.LabReport,
         );
@@ -531,52 +497,25 @@ export class DoctorDiagnosisCaseSheetComponent
     }
   }
 
-  // getAssessmentID() {
-  //   let benRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
-  //   this.doctorService.getAssessment(benRegID).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       const lastElementIndex = res.data.length - 1;
-  //       const lastElementData = res.data[lastElementIndex];
-  //       let assessmentId = lastElementData.assessmentId;
-  //       if(assessmentId !== null && assessmentId !== undefined) {
-  //         this.getAssessmentDetails(assessmentId);
-  //       }
-  //     }
-  //   })
-  // }
-
-  // getAssessmentDetails(assessmentId) {
-  //   this.doctorService.getAssessmentDet(assessmentId).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       this.severity = res.data.severity;
-  //       this.cough_pattern = res.data.cough_pattern;
-  //       this.cough_severity_score = res.data.cough_severity_score;
-  //       this.record_duration = res.data.record_duration;
-  //       this.nurseService.setEnableLAssessment(false);
-  //       this.enableResult = true;
-  //     }
-  //   })
-  // }
-
   padLeft() {
     const len = String(10).length - String(this).length + 1;
     return len > 0 ? new Array(len).join('0') + this : this;
   }
   downloadSign() {
-    // if (this.beneficiaryDetails && this.beneficiaryDetails.tCSpecialistUserID) {
-    //   const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
-    //   this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
-    //     (response:any) => {
-    //       const blob = new Blob([response], { type: response.type });
-    //       this.showSign(blob);
-    //     },
-    //     (err:any) => {
-    //       console.log('error');
-    //     },
-    //   );
-    // } else {
-    //   console.log('No tCSpecialistUserID found');
-    // }
+    if (this.beneficiaryDetails && this.beneficiaryDetails.tCSpecialistUserID) {
+      const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
+      this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
+        (response: any) => {
+          const blob = new Blob([response], { type: response.type });
+          this.showSign(blob);
+        },
+        (err: any) => {
+          console.log('error');
+        },
+      );
+    } else {
+      console.log('No tCSpecialistUserID found');
+    }
   }
   showSign(blob: any) {
     const reader = new FileReader();

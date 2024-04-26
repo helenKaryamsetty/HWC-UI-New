@@ -22,8 +22,6 @@
 import {
   Component,
   DoCheck,
-  Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -99,9 +97,6 @@ export class FamilyTaggingDetailsComponent
   benDistrictId: any;
   benBlockId: any;
 
-  // enableBacktoReg: boolean = true;
-  // beneficiaryId: any;
-
   constructor(
     private dialog: MatDialog,
     public httpServiceService: HttpServiceService,
@@ -139,12 +134,10 @@ export class FamilyTaggingDetailsComponent
       this.searchRequest = familySearchListObj.searchRequest;
       this.enableFamilyCreateTable = false;
       this.createdFamilyList = [];
-      // this.enableBacktoReg = true;
     } else {
       this.familySearchList = [];
       this.enableFamilyCreateTable = true;
       this.createdFamilyList = [];
-      // this.enableBacktoReg = false;
     }
 
     this.benFamilyId =
@@ -203,20 +196,6 @@ export class FamilyTaggingDetailsComponent
       this.beneficiaryId !== 'null'
         ? this.beneficiaryId
         : null;
-
-    // if((familySearchListValues !== undefined && familySearchListValues !== null))
-    // {
-    //       this.enableFamilyCreateTable = true;
-    //       this.familySearchList = [];
-    //       this.enableBacktoReg = false;
-
-    // }
-
-    // else{
-    //   this.enableFamilyCreateTable = false;
-    //   this.createdFamilyList = [];
-    //   this.enableBacktoReg = true;
-    // }
 
     if (this.benFamilyId !== undefined && this.benFamilyId !== null) {
       const reqObj = {
@@ -311,12 +290,6 @@ export class FamilyTaggingDetailsComponent
 
         this.getBeneficiaryDetailsAfterFamilyTag();
       }
-      // else{
-      //   this.familySearchList = [];
-      //   this.enableFamilyCreateTable = false;
-      //   this.createdFamilyList = [];
-      // }
-      // this.getBeneficiaryDetailsAfterFamilyTag();
     });
   }
 
@@ -332,7 +305,6 @@ export class FamilyTaggingDetailsComponent
         ) {
           this.familySearchList = res.data;
         } else {
-          //
           this.familySearchList = [];
         }
         (err: string) => {
@@ -372,28 +344,6 @@ export class FamilyTaggingDetailsComponent
         this.confirmationService.alert(err, 'error');
       },
     );
-
-    //comment below code
-    // let familyMembersList =  { "familyMembers": [
-    //   {
-    //     "memberId": 10,
-    //     "memberName": "Shobha",
-    //     "relationWithHead": "Self"
-    //   },
-    //   {
-    //     "memberId": 11,
-    //     "memberName": "Nissi",
-    //     "relationWithHead": "Mother"
-    //   },
-    //   {
-    //     "memberId": 12,
-    //     "memberName": "Helen",
-    //     "relationWithHead": "Sister"
-    //   }
-    // ]};
-    // this.openFamilyTagDialog(isEdit,familyDetails,familyMembersList);
-
-    //
   }
 
   openFamilyTagDialog(isEdit: any, familyDetails: any, familyMembersList: any) {
@@ -438,11 +388,9 @@ export class FamilyTaggingDetailsComponent
             beneficiaryDetails[0].familyId !== null
               ? beneficiaryDetails[0].familyId
               : null;
-          //  this.benFamilyName =  (beneficiaryDetails[0].familyName !== undefined && beneficiaryDetails[0].familyName !== null) ? beneficiaryDetails[0].familyName : null ;
           this.registrarService.getBenFamilyDetails(this.benFamilyId);
         } else {
           this.benFamilyId = null;
-          //  this.benFamilyName = null;
         }
       },
       (error: string) => {
@@ -450,11 +398,4 @@ export class FamilyTaggingDetailsComponent
       },
     );
   }
-
-  // backToEdit()
-  // {
-  //   this.router.navigate([
-  //     "/registrar/search/" + parseInt(this.beneficiaryId),
-  //   ]);
-  // }
 }

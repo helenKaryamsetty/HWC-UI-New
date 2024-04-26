@@ -1,21 +1,21 @@
-<section id="searchDialog" class="container-fluid">
-  <div class="row title info">
+<section id="searchDialog" class="container-fluid" style="overflow: hidden">
+  <div class="title info">
     <h4>{{ currentLanguageSet?.common?.advanceBeneficiarySearch }}</h4>
-    <button
-      class="pull-right close-btn"
+    <mat-icon
+      class="pull-right md-24"
+      style="cursor: pointer"
       (click)="matDialogRef.close(false)"
       mat-icon-button
+      >close</mat-icon
     >
-      <mat-icon class="md-24">close</mat-icon>
-    </button>
   </div>
 
-  <mat-dialog-content>
-    <form #newSearchForm="ngForm">
+  <mat-dialog-content style="overflow: hidden">
+    <form [formGroup]="newSearchForm">
       <section class="row m-t-10">
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field [style.width]="'100%'">
-            <mat-label>
+            <mat-label class="mat-label-text">
               {{ currentLanguageSet?.ro?.personalInfo?.firstName }}
             </mat-label>
             <input
@@ -24,22 +24,25 @@
               allowText="alphabet"
               required="true"
               name="firstName"
-              [(ngModel)]="beneficiary.firstName"
-              #firstNameV="ngModel"
+              formControlName="firstName"
               minlength="2"
               maxlength="50"
             />
-            <mat-error *ngIf="firstNameV?.errors?.['required']">{{
-              currentLanguageSet?.common?.firstNameisrequired
-            }}</mat-error>
-            <mat-error *ngIf="firstNameV?.errors?.['minlength']">{{
-              currentLanguageSet?.common?.pleaseprovideatleast2character
-            }}</mat-error>
+            <mat-error
+              *ngIf="newSearchForm.controls['firstName'].errors?.['required']"
+              >{{ currentLanguageSet?.common?.firstNameisrequired }}</mat-error
+            >
+            <mat-error
+              *ngIf="newSearchForm.controls['firstName'].errors?.['minlength']"
+              >{{
+                currentLanguageSet?.common?.pleaseprovideatleast2character
+              }}</mat-error
+            >
           </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field myName [style.width]="'100%'">
-            <mat-label>
+            <mat-label class="mat-label-text">
               {{ currentLanguageSet?.ro?.personalInfo?.lastName }}
             </mat-label>
             <input
@@ -47,8 +50,7 @@
               matInput
               allowText="alphaspace"
               name="lastName"
-              [(ngModel)]="beneficiary.lastName"
-              #lastNameV="ngModel"
+              formControlName="lastName"
               minlength="1"
               maxlength="50"
             />
@@ -56,7 +58,7 @@
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <mat-form-field [style.width]="'100%'">
-            <mat-label>
+            <mat-label class="mat-label-text">
               {{ currentLanguageSet?.ro?.otherInfo?.fatherName }}
             </mat-label>
             <input
@@ -64,28 +66,31 @@
               matInput
               allowText="alphabet"
               name="fatherName"
-              [(ngModel)]="beneficiary.fatherName"
-              #fatherNameV="ngModel"
+              formControlName="fatherName"
               minlength="2"
               maxlength="50"
             />
-            <mat-error *ngIf="fatherNameV?.errors?.['minlength']">{{
-              currentLanguageSet?.common?.pleaseprovideatleast2character
-            }}</mat-error>
+            <mat-error
+              *ngIf="newSearchForm.controls['fatherName'].errors?.['minlength']"
+              >{{
+                currentLanguageSet?.common?.pleaseprovideatleast2character
+              }}</mat-error
+            >
           </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
             <mat-form-field [style.width]="'100%'">
-              <mat-label>
+              <mat-label class="mat-label-text">
                 {{ currentLanguageSet?.ro?.personalInfo?.gender }}
               </mat-label>
               <mat-select
                 class="p-t-12"
-                (change)="selectGender()"
+                (selectionChange)="selectGender()"
                 required
+                [style.width]="'100%'"
                 name="gender"
-                [(ngModel)]="beneficiary.gender"
+                formControlName="gender"
               >
                 <mat-option
                   *ngFor="let gender of masterData?.genderMaster"
@@ -97,22 +102,15 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 box">
-          <!-- <md2-datepicker [openOnFocus]="true" style="width:100%" name='dob' [(ngModel)]="beneficiary.dob" 
-                        placeholder="{{currentLanguageSet?.dateOfBirth}}" [max]='today' ng-readonly="true" ></md2-datepicker> -->
           <mat-form-field class="input-full-width">
-            <mat-label>
+            <mat-label class="mat-label-text">
               {{ currentLanguageSet?.dateOfBirth }}
             </mat-label>
             <input
               matInput
+              [max]="maxDate"
               [matDatepicker]="picker"
-              openOnFocus="true"
-              name="dob"
-              id="dob"
-              [(ngModel)]="beneficiary.dob"
-              formControlName="startDate"
-              ng-readonly="true"
-              max="today"
+              formControlName="dob"
             />
             <mat-datepicker-toggle
               matPrefix
@@ -126,14 +124,15 @@
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
             <mat-form-field [style.width]="'100%'">
-              <mat-label>
+              <mat-label class="mat-label-text">
                 {{ currentLanguageSet?.ro?.locInfo?.state }}
               </mat-label>
               <mat-select
                 class="p-t-12"
                 (selectionChange)="onStateChange()"
-                name="stateID"
-                [(ngModel)]="beneficiary.stateID"
+                [style.width]="'100%'"
+                name="state"
+                formControlName="stateID"
               >
                 <mat-option *ngFor="let state of states" [value]="state.stateID"
                   >{{ state.stateName | titlecase }}
@@ -145,13 +144,13 @@
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
             <mat-form-field [style.width]="'100%'">
-              <mat-label>
+              <mat-label class="mat-label-text">
                 {{ currentLanguageSet?.travel?.district }}
               </mat-label>
               <mat-select
                 class="p-t-12"
                 name="districtID"
-                [(ngModel)]="districtID"
+                formControlName="districtID"
                 (selectionChange)="onDistrictChange()"
               >
                 <mat-option
@@ -167,14 +166,14 @@
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
             <mat-form-field [style.width]="'100%'">
-              <mat-label>
+              <mat-label class="mat-label-text">
                 {{ currentLanguageSet?.block }}
               </mat-label>
               <mat-select
                 class="p-t-12"
                 (selectionChange)="onBlockChange()"
                 name="blockID"
-                [(ngModel)]="blockID"
+                formControlName="blockID"
               >
                 <mat-option
                   *ngFor="let block of blockList"
@@ -189,14 +188,13 @@
         <div class="col-xs-12 col-sm-6 box">
           <div class="select-container">
             <mat-form-field [style.width]="'100%'">
-              <mat-label>
+              <mat-label class="mat-label-text">
                 {{ currentLanguageSet?.village }}
               </mat-label>
               <mat-select
                 class="p-t-12"
-                placeholder=""
                 name="villageID"
-                [(ngModel)]="villageID"
+                formControlName="villageID"
               >
                 <mat-option
                   *ngFor="let village of villageList"

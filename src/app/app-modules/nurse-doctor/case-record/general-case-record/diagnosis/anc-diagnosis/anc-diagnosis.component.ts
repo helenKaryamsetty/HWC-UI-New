@@ -19,20 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  MasterdataService,
-  NurseService,
-  DoctorService,
-} from '../../../../shared/services';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
@@ -68,10 +57,7 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   complicationPregHRP = 'false';
 
   constructor(
-    private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
-
-    private nurseService: NurseService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     public beneficiaryDetailsService: BeneficiaryDetailsService,

@@ -209,11 +209,9 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
           diseaseArr.push(result[a].diseases);
 
           this.getSnomedCTRecord(result[a].diseases, 'psd');
-          //  this.psd.slice(0,100);
           if (!this.recommendedAction.includes(result[a].action)) {
             recomdAction.push(result[a].action);
           }
-          //  this.recommendedAction.slice(0,100);
           for (let k = 0; k < result[a].symptoms.length; k++) {
             this.selectedSymptoms += result[a].symptoms[k] + ' ';
           }
@@ -247,8 +245,6 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
         );
       } else {
         this.cdssForm.reset();
-        // this.psd = this.pcc.trim();
-        // this.recommendedAction="";
       }
     });
   }

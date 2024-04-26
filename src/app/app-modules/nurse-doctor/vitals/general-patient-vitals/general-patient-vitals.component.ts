@@ -19,16 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  ChangeDetectorRef,
-  DoCheck,
-  OnDestroy,
-} from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { NurseService, DoctorService } from '../../shared/services';
@@ -38,8 +30,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { HrpService } from '../../shared/services/hrp.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AudioRecordingService } from '../../shared/services/audio-recording.service';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -95,41 +85,10 @@ export class GeneralPatientVitalsComponent
   hideVitalsFormForNcdScreening = true;
   disablingVitalsSectionSubscription!: Subscription;
   enableCBACForm = false;
-
-  // Audio - SWAASA
-  isRecording = false;
-  recordedTime: any;
-  blobUrl: any;
-  teste: any;
-  enableResult = false;
-  enableSymptoms = false;
-  frequentCough = false;
-  sputum = false;
-  coughAtNight = false;
-  wheezing = false;
-  painInChest = false;
-  shortnessOfBreath = false;
   benGenderType: any;
-  age: any;
-  coughBlobFile!: Blob;
-  severityValue: any;
-  cough_pattern_Value: any;
-  assessmentDetail: any;
-  disabledLungAssesment = false;
-  severity: any;
-  cough_pattern: any;
-  cough_severity_score: any;
-  record_duration: any;
-  frequentCoughChecked: any;
-  sputumChecked: any;
-  coughAtNightChecked: any;
-  wheezingChecked: any;
-  painInChestChecked: any;
-  shortnessOfBreathChecked: any;
 
   constructor(
     private dialog: MatDialog,
-    private fb: FormBuilder,
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -140,31 +99,9 @@ export class GeneralPatientVitalsComponent
     private testInVitalsService: TestInVitalsService,
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
-    private audioRecordingService: AudioRecordingService,
-    private sanitizer: DomSanitizer,
-  ) {
-    // this.audioRecordingService
-    //   .recordingFailed()
-    //   .subscribe(() => (this.isRecording = false));
-    // this.audioRecordingService
-    //   .getRecordedTime()
-    //   .subscribe(time => {this.recordedTime = time;
-    //     if(this.recordedTime=="00:16"){
-    //       this.stopRecording();
-    //     }});
-    // this.audioRecordingService.getRecordedBlob().subscribe(data => {
-    //   this.teste = data;
-    //   this.coughBlobFile = data.blob;
-    //   this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
-    //     URL.createObjectURL(data.blob)
-    //   );
-    // });
-  }
+  ) {}
 
   ngOnInit() {
-    // this.patientVitalsForm = this.fb.group({
-    //   bMI: [''] // Initializing with an empty string
-    // });
     this.hrpService.setHeightFromVitals(null);
     this.hrpService.setHemoglobinValue(null);
     this.nurseService.clearEnableLAssessment();
@@ -179,26 +116,15 @@ export class GeneralPatientVitalsComponent
     this.hideVitalsForm();
     this.rbsPopup = false;
     this.rbsCheckBox = true;
-    // this.ncdTemperature = false;
     this.nurseService.clearNCDTemp();
     this.nurseService.clearRbsSelectedInInvestigation();
     this.idrsscore.clearDiabetesSelected();
     this.doctorService.setValueToEnableVitalsUpdateButton(false);
-    // this.nurseService.ncdTemp$.subscribe((response) =>
-    //   response === undefined
-    //     ? (this.ncdTemperature = false)
-    //     : (this.ncdTemperature = response)
-    // );
     this.httpServiceService.currentLangugae$.subscribe(
       (response) => (this.currentLanguageSet = response),
     );
     this.attendant = this.route.snapshot.params['attendant'];
     this.getBeneficiaryDetails();
-    // if(this.benAge < 18){
-    //   this.disabledLungAssesment = true;
-    // } else {
-    //   this.disabledLungAssesment = false;
-    // }
     this.rbsSelectedInInvestigationSubscription =
       this.nurseService.rbsSelectedInInvestigation$.subscribe((response) =>
         response === undefined
@@ -217,15 +143,6 @@ export class GeneralPatientVitalsComponent
       (response) => (this.diabetesSelected = response),
     );
     this.getGender();
-    // this.nurseService.enableLAssessment$.subscribe(
-    //   (response) => {
-    //     if(response === true) {
-    //       this.enableLungAssessment = true;
-    //     } else {
-    //       this.enableLungAssessment = false;
-    //     }
-    //   }
-    // );
   }
 
   hideVitalsForm() {
@@ -261,7 +178,6 @@ export class GeneralPatientVitalsComponent
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
-      // this.getAssessmentID();
       this.doctorScreen = true;
     }
 
@@ -430,8 +346,6 @@ export class GeneralPatientVitalsComponent
     }
   }
   loadMMURBS() {
-    // if(this.attendant !== "nurse")
-    // {
     this.doctorService
       .getRBSPreviousVitals({
         benRegID: localStorage.getItem('beneficiaryRegID'),
@@ -475,15 +389,6 @@ export class GeneralPatientVitalsComponent
           });
         }
       });
-    // }
-    // else{
-    //   this.dialog.open(MmuRbsDetailsComponent, {
-    //     data: {
-    //       rbsResult: this.rbsResult,
-    //       rbsRemarks:this.rbsRemarks
-    //     },
-    //   });
-    // }
   }
   generalVitalsDataSubscription: any;
   getGeneralVitalsData() {
@@ -564,7 +469,6 @@ export class GeneralPatientVitalsComponent
   }
 
   ngOnDestroy() {
-    // this.abortRecording();
     if (this.beneficiaryDetailSubscription)
       this.beneficiaryDetailSubscription.unsubscribe();
     if (this.generalVitalsDataSubscription)
@@ -598,14 +502,6 @@ export class GeneralPatientVitalsComponent
             if (beneficiary && beneficiary.ageVal >= 0) {
               this.benGenderAndAge = beneficiary;
               this.benAge = beneficiary.ageVal;
-              if (this.benAge < 18) {
-                this.disabledLungAssesment = true;
-              } else {
-                this.disabledLungAssesment = false;
-              }
-              // this.age = beneficiary.age;
-              // const birthdate = new Date(beneficiary.dOB);
-              // this.age = this.calculateAge(birthdate);
               this.benGenderAndAge = beneficiary;
               const ageMonth = this.benGenderAndAge.age;
               const ar = ageMonth.split(' ');
@@ -633,17 +529,6 @@ export class GeneralPatientVitalsComponent
         },
       );
   }
-
-  // calculateAge(birthdate: Date): number {
-  //   const today = new Date();
-  //   const birthDate = new Date(birthdate);
-  //   let age = today.getFullYear() - birthDate.getFullYear();
-  //   const monthDiff = today.getMonth() - birthDate.getMonth();
-  //   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-  //     age--;
-  //   }
-  //   return age;
-  // }
 
   normalBMI = true;
   calculateBMI() {
@@ -843,9 +728,6 @@ export class GeneralPatientVitalsComponent
         this.currentLanguageSet.alerts.info.recheckValue,
       );
     }
-    // if(systolicBP !== null){
-    //   localStorage.setItem("systolicBP",systolicBP)
-    // }
     if (systolicBP !== null) this.idrsscore.setSystolicBp(systolicBP);
     else this.idrsscore.setSystolicBp(0);
   }
@@ -984,7 +866,6 @@ export class GeneralPatientVitalsComponent
     dialogRef.afterClosed().subscribe((result) => {
       console.log('he;;p', result, result['result']);
       if (result !== null) {
-        //result['result']
         this.patientVitalsForm.patchValue({
           weight_Kg: result['result'],
         });
@@ -1103,7 +984,6 @@ export class GeneralPatientVitalsComponent
       data: { startAPI: this.startPulseTest },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      // console.log("sPO2", result, result['sPO2']);
       if (result !== null) {
         this.patientVitalsForm.patchValue({
           sPO2: result['spo2'],
@@ -1204,7 +1084,6 @@ export class GeneralPatientVitalsComponent
         this.IDRSWaistScore = 20;
       }
     }
-    // localStorage.setItem("waistIDRSScore", this.IDRSWaistScore.toStr);
     this.idrsscore.setIDRSScoreWaist(this.IDRSWaistScore);
     this.idrsscore.setIDRSScoreFlag();
   }
@@ -1230,7 +1109,6 @@ export class GeneralPatientVitalsComponent
         this.IDRSWaistScore = 20;
       }
     }
-    // localStorage.setItem("waistIDRSScore", this.IDRSWaistScore.toStr);
     this.idrsscore.setIDRSScoreWaist(this.IDRSWaistScore);
   }
 
@@ -1258,49 +1136,6 @@ export class GeneralPatientVitalsComponent
     }
   }
 
-  // startRecording() {
-  //   if (!this.isRecording) {
-  //     this.isRecording = true;
-  //     this.audioRecordingService.startRecording();
-  //   }
-  // }
-
-  // abortRecording() {
-  //   if (this.isRecording) {
-  //     this.isRecording = false;
-  //     this.audioRecordingService.abortRecording();
-  //   }
-  // }
-
-  // stopRecording() {
-  //   if (this.isRecording) {
-  //     this.audioRecordingService.stopRecording();
-  //     this.isRecording = false;
-  //   }
-  // }
-
-  // clearRecordedData() {
-  //   this.confirmationService.confirm(
-  //     `info`,
-  //     "Do you really want to clear the recording?"
-
-  //   ).subscribe((res)=>{
-  //     if(res){
-  //       this.blobUrl = null;
-  //      this.coughBlobFile = null;
-  //      this.frequentCough = false;
-  //      this.sputum = false;
-  //      this.coughAtNight = false;
-  //      this.wheezing = false;
-  //      this.painInChest = false;
-  //      this.shortnessOfBreath = false;
-  //      this.enableResult = false;
-  //      this.nurseService.isAssessmentDone = false;
-  //     }
-  //   });
-
-  // }
-
   getGender() {
     const gender = localStorage.getItem('beneficiaryGender');
     if (gender === 'Female') this.benGenderType = 1;
@@ -1311,86 +1146,4 @@ export class GeneralPatientVitalsComponent
   onCheckboxChange(symptomName: any, event: any) {
     symptomName = event.checked ? 1 : 0;
   }
-
-  // startAssessment() {
-  //   let todayDate = new Date();
-  //   // formData.append('File', file, file.name); // file.name was mandatory for us (otherwise again an error occured)
-  //   // this.enableResult = true;
-  //   const symptoms = {
-  //     frequent_cough: this.frequentCough ? 1 : 0,
-  //     sputum: this.sputum ? 1 : 0,
-  //     cough_at_night: this.coughAtNight ? 1 : 0,
-  //     wheezing: this.wheezing ? 1 : 0,
-  //     pain_in_chest: this.painInChest ? 1 : 0,
-  //     shortness_of_breath: this.shortnessOfBreath ? 1 : 0
-  //   };
-  //   let reqObj = {
-  //     coughsoundfile: null,
-  //     gender: this.benGenderType,
-  //     age: this.benAge,
-  //     patientId: localStorage.getItem('beneficiaryRegID'),
-  //     // timestamp: moment(todayDate).format('YYYY-MM-DD HH:mm:ss'),
-  //     assessmentId: null,
-  //     providerServiceMapID: localStorage.getItem("providerServiceID"),
-  //     createdBy: localStorage.getItem("userName"),
-  //     symptoms: symptoms,
-  //   }
-  //   const file = new File([this.coughBlobFile], 'coughSound.wav');
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("request", JSON.stringify(reqObj));
-  //   console.log("reqObjFile", formData.get('file'));
-  //   this.audioRecordingService.getResultStatus(formData)
-  //   .subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       this.severity = res.data.severity;
-  //       this.cough_pattern = res.data.cough_pattern;
-  //       this.cough_severity_score = res.data.cough_severity_score;
-  //       this.record_duration = res.data.record_duration;
-  //       this.nurseService.setEnableLAssessment(false);
-  //       this.enableResult = true;
-  //       this.nurseService.isAssessmentDone = true;
-  //       console.log("Cough Result Data", res.data)
-  //       }
-  //       else
-  //       {
-  //         this.confirmationService.alert(res.errorMessage, 'error')
-  //       }
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(
-  //         err,
-  //         'error'
-  //       );
-  //     });
-  //   console.log("reqObj",reqObj);
-  // }
-
-  // getAssessmentID() {
-  //   let benRegID = localStorage.getItem("beneficiaryRegID");
-  //   this.doctorService.getAssessment(benRegID).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null && res.data.length > 0) {
-  //       const lastElementIndex = res.data.length - 1;
-  //       const lastElementData = res.data[lastElementIndex];
-  //       let assessmentId = lastElementData.assessmentId;
-  //       if(assessmentId !== null && assessmentId !== undefined) {
-  //         this.getAssessmentDetails(assessmentId);
-  //       }
-  //     }
-  //   })
-  // }
-
-  // getAssessmentDetails(assessmentId) {
-  //   this.doctorService.getAssessmentDet(assessmentId).subscribe(res => {
-  //     if (res.statusCode === 200 && res.data !== null) {
-  //       this.severity = res.data.severity;
-  //       this.cough_pattern = res.data.cough_pattern;
-  //       this.cough_severity_score = res.data.cough_severity_score;
-  //       this.record_duration = res.data.record_duration;
-  //       this.nurseService.setEnableLAssessment(false);
-  //       this.enableResult = true;
-  //       this.nurseService.isAssessmentDone = true;
-  //     }
-  //   })
-  // }
 }

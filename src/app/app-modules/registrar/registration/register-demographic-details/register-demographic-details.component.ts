@@ -102,6 +102,7 @@ export class RegisterDemographicDetailsComponent
     this.assignSelectedLanguage();
     //this.locationData = JSON.parse(localStorage.getItem('locationData'));
     this.loadMasterDataObservable();
+    this.getDistrictList();
 
     if (this.patientRevisit) {
       this.configMasterForDemographics();
@@ -131,6 +132,18 @@ export class RegisterDemographicDetailsComponent
       this.demographicsEditText =
         this.currentLanguageSet.bendetails.editLocation;
     }
+  }
+
+  getDistrictList() {
+    this.registrarService.districtList$.subscribe((mainDistrictList) => {
+      this.demographicDetailsForm.value.blockID = '';
+      this.districtList = mainDistrictList;
+      this.registrarService.subDistrictList$.subscribe(
+        (mainSubDistrictList) => {
+          this.subDistrictList = mainSubDistrictList;
+        },
+      );
+    });
   }
 
   ngOnDestroy() {

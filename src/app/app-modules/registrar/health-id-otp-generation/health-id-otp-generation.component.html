@@ -1,14 +1,13 @@
 <!-- Enterin Mobile Number for OTP generation-->
 <div class="title info">
   <h4>{{ currentLanguageSet?.generateABHA }}</h4>
-  <button
-    class="pull-right close-btn"
+  <mat-icon
+    class="md-24 pull-right close-btn"
     matDialogClose
     (click)="closeDialog()"
     mat-icon-button
+    >close</mat-icon
   >
-    <mat-icon class="md-24">close</mat-icon>
-  </button>
 </div>
 <div class="overlay" *ngIf="showProgressBar">
   <div class="overlay-content">
@@ -118,8 +117,10 @@
     <div class="col-sm-12 step-btn m-b-20" style="text-align: right">
       <button
         id="cancelButton"
+        mat-raised-button
         type="button"
-        class="full-width-login background-overall"
+        color="primary"
+        class="mat_blue"
         (click)="getHealthIdOtp()"
       >
         {{ currentLanguageSet?.resendOTP }}
@@ -127,8 +128,8 @@
       <button
         id="submitButton"
         mat-raised-button
-        type="accent"
-        class="full-width-login background-overall button-overall-disabled"
+        class="mat_green"
+        style="margin-right: 10px"
         [disabled]="!healthIdOTPForm.valid || !checkOTP()"
         (click)="verifyOTPOnSubmit()"
       >

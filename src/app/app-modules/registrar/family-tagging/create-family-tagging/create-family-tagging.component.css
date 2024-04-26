@@ -2,10 +2,6 @@
     padding: 15px;
 }
 
-/* .grayborder {
-    border-bottom: 1px solid lightgray;
-} */
-
 #searchDialog {
     z-index: 998 !important;
 }

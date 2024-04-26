@@ -9,7 +9,6 @@
 
 .message {
     font-size: 16px;
-    /* color: rgba(0, 0, 0, 0.6); */
     padding: 24px 24px 24px;
     box-sizing: border-box;
     overflow-y: auto;
@@ -24,7 +23,6 @@
     padding: 8px;
     width: 100%;
     text-align: right;
-    /* border-top: 1px solid #52575C; */
     border-top: 1px solid rgb(82 87 92 / 30%)
 }
 
@@ -62,11 +60,6 @@
 .alert {
     border-radius: unset !important;
 }
-
-/* .background-primary {
-    background-color: #336CFB !important;
-    color: white;
-} */
 
 .full-width-login {
     width: 100%;

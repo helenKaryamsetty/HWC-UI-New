@@ -13,21 +13,23 @@ table {
   
 .example-sidenav-fab-container {
   width: 100%;
-  overflow: auto;
 }
 
-.example-sidenav-fab-container md-sidenav {
+.example-sidenav-fab-container mat-sidenav {
   max-width: 250px;
 }
 
 .example-sidenav-fab-container .mat-sidenav-content,
-.example-sidenav-fab-container md-sidenav {
+.example-sidenav-fab-container mat-sidenav {
   display: flex;
+}
+
+.sidenav {
+  padding: 16px;
 }
 
 .example-scrolling-content {
   flex: auto;
-  /* overflow: auto; */
   padding: 20px;
   background: #f2f2f0 !important;
   min-height: 500px;
@@ -44,7 +46,7 @@ table {
     height: 10px;
   }
 
-  md-card {
+  mat-card {
     min-height: 403px;
     padding: 15px;
   }
@@ -53,7 +55,7 @@ table {
     margin: 0;
   }
 
-  #topRow md-input-container {
+  #topRow mat-form-field {
     width: 60%;
   }
 
@@ -69,14 +71,6 @@ table {
   .buttonGrp button {
     margin-left: 5px;
   }
-
-  /* .mat-button,
-  .mat-icon-button,
-  .mat-raised-button {
-      width: 30%;
-      margin: 0 1px 0 1px;
-      padding: 1px;
-  } */
 
   .searchBox {
     background: #fff;
@@ -129,7 +123,7 @@ table {
     .adv-button {
       margin: 0;
     }
-    #topRow>md-input-container {
+    #topRow>mat-form-field {
       width: 100%;
     }
     #quickSearch {

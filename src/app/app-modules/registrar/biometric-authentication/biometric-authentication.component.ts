@@ -31,11 +31,6 @@ export class BiometricAuthenticationComponent implements OnInit {
       this.enableImage = true;
       this.messageInfo = 'Issue in connecting with the device';
     }
-    //Second method calling
-    // let resposne = "success"
-    // if(resposne === "success"){
-    //   this.messageInfo = "Finger print captured successfully"
-    // }
   }
 
   closeDialog() {

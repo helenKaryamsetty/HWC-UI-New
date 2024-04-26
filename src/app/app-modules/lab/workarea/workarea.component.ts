@@ -83,7 +83,6 @@ export class WorkareaComponent
     'csv',
     'txt',
   ];
-  // invalid_file_extensions_flag: boolean = false;
   stepExpand!: number;
   currentLanguageSet: any;
   testName!: string;
@@ -143,7 +142,6 @@ export class WorkareaComponent
     );
   }
 
-  /////////////////////////////// CALLING AND LOADING ALL TESTS CODE BELOW/////////////////////////////
   /**
    * Call Service for getting Test Details Requirements
    */
@@ -190,9 +188,6 @@ export class WorkareaComponent
       this.errorLoading(this.loadingErrorMessage);
     }
   }
-  /////////////////////////////// CALLING AND LOADING ALL TESTS CODE ABOVE/////////////////////////////
-
-  ////////////////////////////////////////////////LAB TESTS RELATED CODE BELOW/////////////////////
 
   /**
    *
@@ -202,7 +197,6 @@ export class WorkareaComponent
     if (labtests.length) {
       this.labForm = this.fb.array([this.utils.createLabProcedureForm()]);
       labtests.forEach((test: any, i: any) => {
-        // patch values at current position
         this.patchLabTestProcedureMasterData(test, i);
 
         if (i < labtests.length - 1) {
@@ -210,8 +204,6 @@ export class WorkareaComponent
         }
       });
     }
-
-    //  console.log(this.labForm, 'labform', this.labForm.value);
   }
 
   /**
@@ -366,10 +358,6 @@ export class WorkareaComponent
     }
   }
 
-  ////////////////////////////////////////////////LAB TESTS RELATED CODE ABOVE/////////////////////
-
-  //////////////////////////////////////////RADIOLOGY TESTS RELATED CODE BELOW/////////////////////
-
   /**
    *
    * Radiology Tests loading out of response
@@ -383,7 +371,6 @@ export class WorkareaComponent
         this.utils.createRadiologyProcedureForm(),
       ]);
       radiologytests.forEach((test: any, i: any) => {
-        //patch values at current position
         this.patchRadiologyProcedureMasterData(test, i);
 
         if (i < radiologytests.length - 1) {
@@ -404,7 +391,6 @@ export class WorkareaComponent
       prescriptionID: test.prescriptionID,
       procedureDesc: test.procedureDesc,
       gender: test.gender,
-      // compListDetails: this.fb.array([this.utils.createLabComponent()])
     });
     this.patchRadiologyComponentCommonMasterData(test.compDetails, index);
   }
@@ -751,10 +737,6 @@ export class WorkareaComponent
     });
   }
 
-  //////////////////////////////////////////RADIOLOGY TESTS RELATED CODE ABOVE/////////////////////
-
-  ///////////////////////////////////////////EXTERNAL TESTS RELATED CODE BELOW/////////////////////
-
   /**
    *
    * External Tests loading out of response
@@ -767,7 +749,6 @@ export class WorkareaComponent
       });
     }
   }
-  ///////////////////////////////////////////EXTERNAL TESTS RELATED CODE ABOVE/////////////////////
 
   /**
    * Loading Error COMMON
@@ -776,7 +757,6 @@ export class WorkareaComponent
     this.confirmationService.alert(errorMessage);
     this.router.navigate(['/lab/worklist']);
   }
-  ///////////////////////////////////////////ARCHIVE RELATED CODE BELOW/////////////////////
   radiologyFile: any = [];
   laboratoryData: any = [];
   filteredRadiologyData: any = [];
@@ -837,9 +817,6 @@ export class WorkareaComponent
     }
   }
 
-  ///////////////////////////////////////////ARCHIVE RELATED CODE ABOVE/////////////////////
-
-  //////////////FORM RESET CODE BELOW////////////////
   confirmFormReset() {
     if (this.technicianForm.dirty) {
       this.confirmationService
@@ -861,8 +838,6 @@ export class WorkareaComponent
     this.mergeForms();
     console.log(this.technicianForm, 'formere');
   }
-
-  //////////////FORM RESET CODE ABOVE////////////////
 
   fileIDs: any = [];
   radiologyObj: any;
@@ -1028,7 +1003,6 @@ export class WorkareaComponent
     dialogRef.afterClosed().subscribe((result) => {
       console.log('he;;p', result, result['result']);
       if (result !== null) {
-        //result['result']
         const comarr = api.controls['compListDetails'] as FormArray;
         for (let i = 0; i < result.length; i++) {
           if (result[i] !== undefined) {

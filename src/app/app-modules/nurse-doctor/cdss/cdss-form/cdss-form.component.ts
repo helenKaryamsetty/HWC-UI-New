@@ -159,7 +159,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           this.cdssForm.controls['presentChiefComplaintView'].patchValue(
             value.data.cdss.presentChiefComplaint,
           );
-          // this.cdssForm.patchValue({ presentChiefComplaintView : value.data.Cdss.presentChiefComplaint.presentChiefComplaint});
         });
     } else {
       this.disableVisit = true;
@@ -184,7 +183,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           this.cdssForm.controls['presentChiefComplaintView'].patchValue(
             value.data.Cdss.presentChiefComplaint.presentChiefComplaint,
           );
-          // this.cdssForm.patchValue({ presentChiefComplaintView : value.data.Cdss.presentChiefComplaint.presentChiefComplaint});
         });
     }
     this.filteredOptions = this.cdssForm.controls[
@@ -244,9 +242,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           res.data !== null &&
           res.data?.Questions.length
         ) {
-          // res.data.Msg !== 'No Question Found' &&
-          //   res.data !== 'No Question Found'
-          // this.autocompleteTrigger.closePanel();
           this.openDialog(searchSymptom);
         } else {
           this.confirmationService.alert(
@@ -304,11 +299,9 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           diseaseArr.push(result[a].diseases);
 
           this.getSnomedCTRecord(result[a].diseases, 'psd');
-          //  this.psd.slice(0,100);
           if (!this.recommendedActionPc.includes(result[a].action)) {
             recomdAction.push(result[a].action);
           }
-          //  this.recommendedActionPc.slice(0,100);
           for (let k = 0; k < result[a].symptoms.length; k++) {
             this.selectedSymptoms += result[a].symptoms[k] + ' ';
           }
@@ -347,14 +340,8 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
         this.cdssForm?.controls['selectedProvisionalDiagnosisID'].patchValue(
           this.selectedProvisionalDiagnosisID,
         );
-        console.log(
-          'this.cdssForm***********************99999999999999999',
-          this.cdssForm,
-        );
       } else {
         this.cdssForm.reset();
-        // this.psd = this.pcc.trim();
-        // this.recommendedActionPc="";
       }
     });
   }

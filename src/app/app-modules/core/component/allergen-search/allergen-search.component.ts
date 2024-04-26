@@ -101,7 +101,6 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   showProgressBar = false;
 
   search(term: string, pageNo: any): void {
-    // this.selectedComponent=null;
     if (term.length > 2) {
       this.showProgressBar = true;
       this.masterdataService
@@ -151,25 +150,20 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   setPage(page: number) {
     if (page <= this.pageCount - 1 && page >= 0) {
       this.search(this.input.searchTerm, page);
-      // get pager object
       this.pager = this.getPager(page);
     }
   }
 
   getPager(page: any) {
-    // Total page count
     const totalPages = this.pageCount;
-    // ensure current page isn't out of range
     if (page > totalPages) {
       page = totalPages - 1;
     }
     let startPage: number, endPage: number;
     if (totalPages <= 5) {
-      // less than 5 total pages so show all
       startPage = 0;
       endPage = totalPages - 1;
     } else {
-      // more than 5 total pages so calculate start and end pages
       if (page <= 2) {
         startPage = 0;
         endPage = 4;
@@ -181,11 +175,9 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
         endPage = page + 2;
       }
     }
-    // create an array of pages to ng-repeat in the pager control
     const pages = Array.from(Array(endPage + 1 - startPage).keys()).map(
       (i) => startPage + i,
     );
-    // return object with all pager properties required by the view
     return {
       currentPage: page,
       totalPages: totalPages,

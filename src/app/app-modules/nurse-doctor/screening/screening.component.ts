@@ -249,7 +249,6 @@ export class ScreeningComponent
   ngOnChanges() {
     if (String(this.ncdScreeningMode) === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
-      // this.doctorScreen = true;
       this.updateNCDScreeningDataFromDoctor(
         this.patientMedicalForm,
         visitCategory,

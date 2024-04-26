@@ -28,7 +28,10 @@ import { SearchComponent } from './search/search.component';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { RegisterDemographicDetailsComponent } from './registration/register-demographic-details/register-demographic-details.component';
 import { ViewHealthIdCardComponent } from './registration/register-other-details/view-health-id-card/view-health-id-card.component';
-import { HealthIdOtpGenerationComponent } from './health-id-otp-generation/health-id-otp-generation.component';
+import {
+  HealthIdOtpGenerationComponent,
+  HealthIdOtpSuccessComponent,
+} from './health-id-otp-generation/health-id-otp-generation.component';
 import { QuickSearchComponent } from './quick-search/quick-search.component';
 import { EditFamilyTaggingComponent } from './family-tagging/edit-family-tagging/edit-family-tagging.component';
 import { ConsentFormComponent } from './consent-form/consent-form.component';
@@ -39,7 +42,10 @@ import { GenerateMobileOtpGenerationComponent } from './generate-mobile-otp-gene
 import { SetPasswordForAbhaComponent } from './set-password-for-abha/set-password-for-abha.component';
 import { GenerateAbhaComponentComponent } from './generate-abha-component/generate-abha-component.component';
 import { BiometricAuthenticationComponent } from './biometric-authentication/biometric-authentication.component';
-import { RegisterOtherDetailsComponent } from './registration/register-other-details/register-other-details.component';
+import {
+  HealthIdValidateComponent,
+  RegisterOtherDetailsComponent,
+} from './registration/register-other-details/register-other-details.component';
 import { RegisterPersonalDetailsComponent } from './registration/register-personal-details/register-personal-details.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -71,10 +77,10 @@ import { RegistrarService } from './shared/services/registrar.service';
     RegisterDemographicDetailsComponent,
     RegisterOtherDetailsComponent,
     HealthIdOtpGenerationComponent,
-    // HealthIdOtpSuccessComponent,
+    HealthIdOtpSuccessComponent,
     ConsentFormComponent,
     SearchFamilyComponent,
-    // HealthIdValidateComponent,
+    HealthIdValidateComponent,
     ViewHealthIdCardComponent,
     QuickSearchComponent,
     GenerateMobileOtpGenerationComponent,

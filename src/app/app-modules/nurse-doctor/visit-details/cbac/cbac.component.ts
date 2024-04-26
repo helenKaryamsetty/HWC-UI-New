@@ -584,7 +584,6 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   calculateTotalCBACScore() {
-    // this.cbacScreeningForm.value.totalScore = 0;
     const cbacTotalScore =
       this.ageScore +
       this.consumeGutkaScore +

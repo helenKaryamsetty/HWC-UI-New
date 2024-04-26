@@ -13,7 +13,7 @@
     width: 90px;
 }
 .full-card {
-    width: 100%; /* or try width: 100vw; */
+    width: 100%;
 }
 .textarea {
     min-height: 100px;
@@ -86,30 +86,20 @@ legend {
     border: unset;
 }
 
-
-/********/
 .btn-group button {
-     background-color: #C21F1F;  /* Green background */
+     background-color: #C21F1F;
     margin:5px;
-    /* border: 1px solid green; */
-    color: white; /* White text */
-    /* padding: 10px 24px;  */
-    /* cursor: pointer;  */
-    float: left; /* Float the buttons side by side */
+    color: white;
+    float: left;
   }
 
   .btn-group1 button {
-    background-color: #10df3d; /* Green background */
+    background-color: #10df3d;
     margin:5px;
-    /* border: 1px solid green; */
-    color: white; /* White text */
-    /* padding: 10px 24px;  */
-    /* cursor: pointer;  */
-    float: left; /* Float the buttons side by side */
+    color: white;
+    float: left;
   }
 
-  
-  /* Clear floats (clearfix hack) */
   .btn-group:after {
     content: "";
     clear: both;

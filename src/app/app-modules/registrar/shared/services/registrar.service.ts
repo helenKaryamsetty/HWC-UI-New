@@ -99,6 +99,30 @@ export class RegistrarService {
 
   // }
 
+  districtMainList = new BehaviorSubject<any[]>([]);
+  districtList$ = this.districtMainList.asObservable();
+
+  updateDistrictList(districtList: any[]) {
+    this.districtMainList.next(districtList);
+  }
+
+  subDistrictMainList = new BehaviorSubject<any[]>([]);
+  subDistrictList$ = this.subDistrictMainList.asObservable();
+  updateSubDistrictList(subDistrictList: any) {
+    this.subDistrictMainList.next(subDistrictList);
+  }
+
+  maritalStatus = false;
+  isMarriageStatus = new BehaviorSubject<any>(null);
+  maritalStatus$ = this.isMarriageStatus.asObservable();
+
+  isMarriageEnable(maritalStatus: any) {
+    this.isMarriageStatus.next(maritalStatus);
+  }
+  clearMaritalDetails() {
+    this.isMarriageStatus.next(null);
+  }
+
   constructor(private http: HttpClient) {}
 
   getRegistrationMaster(servicePointID: any) {
@@ -253,6 +277,9 @@ export class RegistrarService {
       return this.http.post(environment.otpGenerationUrl, mobileNo);
     } else if (mode === 'AADHAR') {
       return this.http.post(environment.otpGenerationWithUIDUrl, mobileNo);
+    } else {
+      // Default return statement if mode is neither "MOBILE" nor "AADHAR"
+      throw new Error('Invalid mode');
     }
   }
 

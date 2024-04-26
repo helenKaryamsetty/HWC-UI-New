@@ -3,7 +3,6 @@ h5 {
 }
 
 .mat-expansion-panel-header {
-    /* background: #E1EAFF !important; */
     padding: 0 15px;
 }
 
@@ -37,7 +36,7 @@ md-expansion-panel {
 }
 
 .btn{
-    background: #336CFB !important !important;
+    background: #336CFB !important;
 }
 
 

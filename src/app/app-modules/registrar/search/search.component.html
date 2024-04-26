@@ -200,9 +200,7 @@
                   class="btn text-center"
                   (click)="editPatientInfo(beneficiary)"
                 >
-                  <span class="fa fa-pencil cursorPointer fa-lg">
-                    <!-- aria-hidden="true " -->
-                  </span>
+                  <span class="fa fa-pencil cursorPointer fa-lg"> </span>
                 </button>
               </td>
               <td (click)="patientRevisited(beneficiary.benObject)">
@@ -216,7 +214,6 @@
               </td>
               <td (click)="patientRevisited(beneficiary.benObject)">
                 {{ beneficiary.genderName | titlecase }}
-                <!-- {{ beneficiary | json }} -->
               </td>
               <td (click)="patientRevisited(beneficiary.benObject)">
                 {{ beneficiary.age === "a year" ? "1 year" : beneficiary.age }}
@@ -265,11 +262,6 @@
                 </div>
               </td>
               <td colspan="8">
-                <!-- <pagination class="pull-right" boundaryLinks="true" (pageChanged)="pageChanged($event)"
-                  *ngIf="filteredBeneficiaryList.length" totalItems="filteredBeneficiaryList.length"
-                  itemsPerPage="rowsPerPage" maxSize="rowsPerPage" rotate="rotate" previousText="&lsaquo;"
-                  nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination> -->
-
                 <mat-paginator
                   *ngIf="filteredBeneficiaryList.length > 0"
                   [pageSizeOptions]="[5, 10, 20]"

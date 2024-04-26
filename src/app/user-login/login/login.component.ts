@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   _keySize: any;
   _ivSize: any;
   _iterationCount: any;
+  eSanjeevaniArr: any = [];
 
   @ViewChild('focus') private elementRef!: ElementRef;
 
@@ -152,6 +153,21 @@ export class LoginComponent implements OnInit {
                   JSON.stringify(res.data),
                 );
                 this.getServicesAuthdetails(res.data);
+                for (
+                  let i = 0;
+                  i < res.data.previlegeObj[0].roles.length;
+                  i++
+                ) {
+                  if (
+                    res.data.previlegeObj[0].roles[i].RoleName.toLowerCase() ===
+                    'nurse'
+                  ) {
+                    this.eSanjeevaniArr =
+                      res.data.previlegeObj[0].roles[i].isSanjeevani;
+                  }
+                }
+                this.confirmationService.eSanjeevaniFlagArry =
+                  this.eSanjeevaniArr;
               } else {
                 this.confirmationService.alert(
                   'Seems you are logged in from somewhere else, Logout from there & try back in.',
@@ -212,6 +228,7 @@ export class LoginComponent implements OnInit {
                     } else {
                       sessionStorage.clear();
                       this.router.navigate(['/login']);
+                      this.confirmationService.alert(res.errorMessage, 'error');
                     }
                   });
               } else {

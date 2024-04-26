@@ -19,15 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnDestroy,
-  OnChanges,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import {
@@ -214,7 +207,6 @@ export class ObstetricExaminationComponent
   benVisitNo: any;
   visitReason: any;
   constructor(
-    private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     private hrpService: HrpService,
@@ -435,7 +427,6 @@ export class ObstetricExaminationComponent
       this.lmpDate !== undefined &&
       !isNaN(this.lmpDate.getTime())
     ) {
-      //var newLmpDate = new Date(new Date(this.lmpDate).setHours(0, 0, 0, 0));
       const newLmpDate = this.datePipe.transform(this.lmpDate, 'yyyy-MM-dd');
       this.today = new Date();
       const todayDate = new Date(this.today + 'UTC');

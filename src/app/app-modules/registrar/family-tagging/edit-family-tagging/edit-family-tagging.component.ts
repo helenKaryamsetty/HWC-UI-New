@@ -20,13 +20,11 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Component, DoCheck, Inject, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { FamilyTaggingService } from '../../shared/services/familytagging.service';
-import { RegistrarService } from '../../shared/services/registrar.service';
 
 @Component({
   selector: 'app-edit-family-tagging',
@@ -69,7 +67,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     public matDialogRef: MatDialogRef<EditFamilyTaggingComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private confirmationService: ConfirmationService,
-    private registrarService: RegistrarService,
     private familyTaggingService: FamilyTaggingService,
   ) {}
 
@@ -156,74 +153,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
   }
 
   populateRelation(isHead: any) {
-    // this.relationShipType=[
-    //   {
-    //     "benRelationshipID": 16,
-    //     "benRelationshipType": "Self",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 13,
-    //     "benRelationshipType": "Aunt",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 6,
-    //     "benRelationshipType": "Brother",
-    //     "gender": "male"
-    //   },
-    //   {
-    //     "benRelationshipID": 9,
-    //     "benRelationshipType": "Daughter",
-    //     "gender": "female"
-    //   },
-    //   {
-    //     "benRelationshipID": 4,
-    //     "benRelationshipType": "Father",
-    //     "gender": "male"
-    //   },
-    //   {
-    //     "benRelationshipID": 14,
-    //     "benRelationshipType": "Grand Father",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 15,
-    //     "benRelationshipType": "Grand Mother",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 5,
-    //     "benRelationshipType": "Mother",
-    //     "gender": "female"
-    //   },
-    //   {
-    //     "benRelationshipID": 11,
-    //     "benRelationshipType": "Other",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 7,
-    //     "benRelationshipType": "Sister",
-    //     "gender": "female"
-    //   },
-    //   {
-    //     "benRelationshipID": 8,
-    //     "benRelationshipType": "Son",
-    //     "gender": "male"
-    //   },
-    //   {
-    //     "benRelationshipID": 10,
-    //     "benRelationshipType": "Spouse",
-    //     "gender": "unisex"
-    //   },
-    //   {
-    //     "benRelationshipID": 12,
-    //     "benRelationshipType": "Uncle",
-    //     "gender": "unisex"
-    //   }
-    // ];
-
     this.disableUntag = true;
     this.relationShipList = [];
     this.other = null;
@@ -311,7 +240,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
 
         const requestObjEdit = {
           familyId: this.memberFamilyId,
-          // "beneficiaryRegId": this.data.beneficiaryRegID,
           beneficiaryRegId: this.selectedMembersList[0].memberId,
           isHeadOfTheFamily:
             typeOfRelation[0].benRelationshipType.toLowerCase() === 'self'
@@ -385,7 +313,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     this.selectedMembersList.filter((item) => {
       memberList.push({
         familyId: this.memberFamilyId,
-        // "beneficiaryRegId": this.data.beneficiaryRegID,
         beneficiaryRegId: item.memberId,
         isHeadOfTheFamily:
           item.relationWithHead.toLowerCase() === 'self' ? true : false,

@@ -4,18 +4,6 @@
       <mat-label>
         {{ currentLanguageSet?.presentChiefComplaint }}
       </mat-label>
-      <!-- <mat-autocomplete
-        class="m-b-20"
-        [items]="chiefComplaints"
-        [style.width]="'100%'"
-        item-text="chiefComplaint"
-        [readonly]="(cdssForm.controls['selectedProvisionalDiagnosis'].value !== undefined && cdssForm.controls['selectedProvisionalDiagnosis'].value !== null && cdssForm.controls['selectedProvisionalDiagnosis'].value !== '')"
-        formControlName="presentChiefComplaint"
-        (selectionChange)="getQuestions(cdssForm.controls['presentChiefComplaint'].value)"
-        (keyup.enter)="getQuestions(cdssForm.controls['presentChiefComplaint'].value)"
-      >
-      </mat-autocomplete> -->
-
       <mat-form-field class="input-full-width">
         <mat-label class="mat-label-text">
           {{ currentLanguageSet?.presentChiefComplaint }}
@@ -56,39 +44,6 @@
       </mat-hint>
     </div>
 
-    <!-- <div
-      class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t--10"
-    >
-      <md-input-container
-        [style.width]="'100%'"
-        class='m-t-10'
-      >
-        <input
-          maxlength="20"
-          mdInput
-          presentChiefComplaintValidator 
-          placeholder="{{ currentLanguageSet?.presentChiefComplaint }} *"
-          name="presentChiefComplaint"
-          formControlName="presentChiefComplaint"
-        />
-        <md-hint>
-          <span *ngIf="cdssForm.controls['presentChiefComplaint'].dirty && cdssForm.controls['presentChiefComplaint'].untouched">{{
-            currentLanguageSet?.max20
-          }}</span>
-        </md-hint>
-      </md-input-container>
-      <md2-autocomplete
-        class="m-b-20"
-        [items]="chiefCompliants"
-        [style.width]="'100%'"
-        item-text="chiefCompliants"
-        item-value="chiefCompliants"
-        placeholder="{{ currentLanguageSet?.presentChiefComplaint }} *"
-        [readonly]="(cdssForm.controls['selectedProvisionalDiagnosis'].value !== undefined && cdssForm.controls['selectedProvisionalDiagnosis'].value !== null && cdssForm.controls['selectedProvisionalDiagnosis'].value !== '')"
-      >
-      </md2-autocomplete>
-    </div> -->
-
     <div class="col-xs-12 col-sm-6 col-md-4">
       <mat-form-field [style.width]="'100%'">
         <mat-label>
@@ -116,7 +71,6 @@
       </md-hint> -->
       </mat-form-field>
     </div>
-    <!-- <div  class="clearfix visible-sm"></div> -->
     <div class="col-xs-12 col-sm-6 col-md-4">
       <mat-form-field [style.width]="'100%'">
         <mat-label>

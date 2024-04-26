@@ -1,5 +1,4 @@
 .pccStyle {
-    /*border-bottom: 1px solid #ccc;*/
     margin-top: 40px;
   }
   
@@ -31,9 +30,9 @@ text-overflow: unset !important;
       }
 
 .custom-dialog-content {
-  padding: 20px; /* Adjust the padding as needed */
-  max-height: 400px; /* Adjust the maximum height as needed */
-  overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 .dropdownValueSubVisitCategory {
   display: block;

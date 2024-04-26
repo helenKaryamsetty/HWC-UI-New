@@ -30,7 +30,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import { LocalDataSource } from 'angular2-smart-table';
-// import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'app-cdss-form-result-popup',
@@ -51,7 +50,6 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   ];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    // private saved_data: dataService,
     private cdssService: CDSSService,
     public dialog: MatDialog,
     public HttpServices: HttpServiceService,
@@ -207,18 +205,13 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
       const selected = this.formattedResult.data[index].selected;
       let per = '';
       if (selected !== undefined && selected.length !== 0) {
-        //this.formattedResult.data[index].selected.sort(this.sortn);
         per =
           this.formattedResult.data[index].selected.length +
           '/' +
           this.formattedResult.data[index].Symptoms.length;
-        //per = Math.round(per * 1000) / 1000;
       }
       this.formattedResult.data[index].percentage = per;
-
-      //  this.formattedResult.data
     }
-    // this.formattedResult.data.selected.sort();
     this.formattedResult1 = JSON.parse(
       JSON.stringify(this.formattedResult.data),
     );
@@ -272,7 +265,6 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   }
   diseasess: Array<any> = [];
   action: Array<any> = [];
-  // action:any="";
   indexArray: Array<any> = [];
   getDiseaseName(
     val: any,

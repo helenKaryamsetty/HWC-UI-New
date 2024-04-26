@@ -25,38 +25,20 @@ import {
   OnInit,
   ChangeDetectorRef,
   ViewChild,
-  ElementRef,
   AfterViewChecked,
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  FormArray,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
-import {
-  Params,
-  RouterModule,
-  Routes,
-  Router,
-  ActivatedRoute,
-} from '@angular/router';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   HealthIdValidateComponent,
   RegisterOtherDetailsComponent,
 } from './register-other-details/register-other-details.component';
 import { RegisterPersonalDetailsComponent } from './register-personal-details/register-personal-details.component';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { RegistrationUtils } from '../shared/utility/registration-utility';
 
@@ -123,18 +105,19 @@ export class RegistrationComponent
   consentGranted: any;
   externalSearchTerm: any;
   myText: any;
+  today!: Date;
+  formattedDate: any;
+  enableMaritalStatus = false;
 
   constructor(
     private confirmationService: ConfirmationService,
     private registrarService: RegistrarService,
     private fb: FormBuilder,
-    private cameraService: CameraService,
     private router: Router,
     private route: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
     public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
-    // public dialog: MdDialog,
   ) {}
 
   ngOnInit() {
@@ -145,7 +128,6 @@ export class RegistrationComponent
       this.fb,
     ).createRegistrationDetailsForm();
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     // Call For MAster Data which will be loaded in Sub Components
     this.callMasterDataObservable();
 
@@ -160,12 +142,9 @@ export class RegistrationComponent
       },
     );
 
-    //  this.registrarService.GenerateOTP$.subscribe(response => (response === true ? this.disableGenerateOTP = true : this.disableGenerateOTP = false));
-
     this.personalDetailsForm = this.beneficiaryRegistrationForm.get(
       'personalDetailsForm',
     ) as FormGroup;
-    //  this.personalDetailsForm = (this.beneficiaryRegistrationForm.controls['personalDetailsForm'] as FormGroup);
     this.demographicDetailsForm = this.beneficiaryRegistrationForm.get(
       'demographicDetailsForm',
     ) as FormGroup;
@@ -202,12 +181,105 @@ export class RegistrationComponent
     (<FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     )).patchValue({ healthIdNumber: result.healthIdNumber });
-
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ firstName: result.firstName });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ lastName: result.lastName });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ phoneNo: result.phoneNo });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ gender: result.gender });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ genderName: result.genderName });
     (<FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     )).controls['healthId'].disable();
-    // (<FormGroup>this.beneficiaryRegistrationForm.controls['otherDetailsForm']).controls['healthIdNumber'].disable();
-    this.disableGenerateOTP = true;
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['demographicDetailsForm']
+    )).patchValue({ stateID: result.stateID });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['demographicDetailsForm']
+    )).patchValue({ stateName: result.stateName });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['demographicDetailsForm']
+    )).patchValue({ districtID: result.districtID });
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['demographicDetailsForm']
+    )).patchValue({ districtName: result.districtName });
+
+    const parts = result.dob.split('/');
+    const parsedDate = new Date(
+      parseInt(parts[2]),
+      parseInt(parts[1]) - 1,
+      parseInt(parts[0]),
+    );
+    (<FormGroup>(
+      this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+    )).patchValue({ dob: parsedDate });
+
+    if (
+      result.dob &&
+      (<FormGroup>(
+        this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+      )).controls['dob'].valid
+    ) {
+      const dateDiff = Date.now() - parsedDate.getTime();
+      const age = new Date(dateDiff);
+      const yob = Math.abs(age.getFullYear() - 1970);
+      const mob = Math.abs(age.getMonth());
+      const dob = Math.abs(age.getDate() - 1);
+      this.today = new Date();
+      if (yob > 0) {
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ age: yob });
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ ageUnit: 'Years' });
+      } else if (mob > 0) {
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ age: mob });
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ ageUnit: 'Months' });
+      } else if (dob > 0) {
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ age: dob });
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ ageUnit: 'Days' });
+      }
+      if (parsedDate.setHours(0, 0, 0, 0) === this.today.setHours(0, 0, 0, 0)) {
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ age: 1 });
+        (<FormGroup>(
+          this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+        )).patchValue({ ageUnit: 'Day' });
+      }
+    }
+    const marriageAge = 12;
+    if (
+      (<FormGroup>(
+        this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+      )).value.age >= marriageAge &&
+      (<FormGroup>(
+        this.beneficiaryRegistrationForm.controls['personalDetailsForm']
+      )).value.ageUnit === 'Years'
+    ) {
+      this.enableMaritalStatus = true;
+      this.registrarService.isMarriageEnable(true);
+    } else {
+      this.enableMaritalStatus = false;
+      this.registrarService.isMarriageEnable(false);
+    }
   }
 
   /**
@@ -231,17 +303,7 @@ export class RegistrationComponent
       this.patientRevisit = false;
     }
     this.openConsent();
-    // Call This Method To Check for Text to be displayed on Post Form Button
-    // this.decidePostButtonText();
   }
-
-  /**
-   *
-   * Decide Post Button Text, Submit or Update
-   */
-  // decidePostButtonText() {
-  //   this.postButtonText = this.patientRevisit ? 'Update' : 'Submit';
-  // }
 
   /**
    *
@@ -259,7 +321,6 @@ export class RegistrationComponent
   loadMasterDataObservable() {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res) => {
-        // console.log('Registrar master data', res);
         if (res !== null) {
           this.masterData = Object.assign({}, res);
           this.govIDMaster = Object.assign({}, res);
@@ -275,10 +336,8 @@ export class RegistrationComponent
    * Loading Data of Beneficiary as Observable
    */
   callBeneficiaryDataObservable(benID: any) {
-    // this.registrarService.getPatientDataAsObservable(benRegID);
     this.revisitDataSubscription =
       this.registrarService.beneficiaryEditDetails$.subscribe((res) => {
-        // console.log(JSON.stringify(res, null, 4), 'subject data here...');
         if (res !== null && benID === res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
         } else {
@@ -333,7 +392,6 @@ export class RegistrationComponent
   }
 
   confirmFormReset(reset: any) {
-    // let resetflag = reset;
     if (this.beneficiaryRegistrationForm.dirty) {
       if (reset === true) {
         this.confirmationService
@@ -374,7 +432,6 @@ export class RegistrationComponent
     const otherDetailsForm = <FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
-    //  govID.pop();
     const govID = <FormArray>otherDetailsForm.controls['govID'];
     const otherGovID = <FormArray>otherDetailsForm.controls['otherGovID'];
     if (govID !== undefined && govID !== null && govID.length > 0) {
@@ -391,8 +448,6 @@ export class RegistrationComponent
         otherGovID.removeAt(i);
       }
     }
-    // otherDetailsForm.setControl('govID', new FormArray([this.utils.initGovID()]));
-    // otherDetailsForm.setControl('otherGovID', new FormArray([this.utils.initGovID()]));
   }
 
   /**
@@ -438,15 +493,7 @@ export class RegistrationComponent
       registrationForm.controls['otherDetailsForm']
     );
 
-    // console.log(personalForm, 'personalForm');
-    // const govtIds = otherDetailsForm.value.govID;
-    // let idsCount = 0;
-    // const otherGovtIds = otherDetailsForm.value.otherGovID;
-    // let otherIdsCount = 0;
-
     Object.keys(personalForm.controls).forEach((control) => {
-      // console.log(control, 'control')
-      // console.log(personalForm.controls[control].valid, 'valid hai');
       if (!personalForm.controls[control].valid) {
         if (control === 'maritalStatus') {
           if (
@@ -465,10 +512,8 @@ export class RegistrationComponent
           required.push(this.currentLanguageSet.bendetails.phoneNo);
         } else if (control === 'age') {
           required.push(this.currentLanguageSet.bendetails.age);
-          // required.push(this.currentLanguageSet.ro.personalInfo.firstName)
         } else if (control === 'name') {
           required.push(this.currentLanguageSet.ro.personalInfo.name);
-          // required.push(this.currentLanguageSet.ro.personalInfo.firstName)
         } else if (control === 'alternatePhoneNumber') {
           required.push(
             this.currentLanguageSet.ro.personalInfo.alternateNumber,
@@ -503,12 +548,9 @@ export class RegistrationComponent
               this.currentLanguageSet.ro.personalInfo.educationalQualification,
             );
         }
-        // else { required.push(control) }
       }
     });
     Object.keys(demographicsForm.controls).forEach((control) => {
-      // console.log(control, 'control')
-      // console.log(personalForm.controls[control].valid, 'valid hai');
       if (!demographicsForm.controls[control].valid) {
         if (control === 'stateID') {
           required.push(this.currentLanguageSet.ro.locInfo.state);
@@ -525,7 +567,6 @@ export class RegistrationComponent
         } else if (control === 'servicePoint') {
           /* required.push('Service Point'); */
         }
-        // else { required.push(control) }
       }
     });
     let govCount = 0;
@@ -535,9 +576,7 @@ export class RegistrationComponent
           required.push(this.currentLanguageSet.emailAddress);
         } else if (control === 'blockID') {
           required.push(this.currentLanguageSet.block);
-        }
-        // else if (control === 'religionOther') { required.push(this.currentLanguageSet.otherReligionName); }
-        else if (control === 'govID') {
+        } else if (control === 'govID') {
           govCount++;
         } else if (control === 'otherGovID') {
           required.push(this.currentLanguageSet.otherGovtID);
@@ -595,7 +634,6 @@ export class RegistrationComponent
       registrationForm.controls['otherDetailsForm']
     );
 
-    // console.log(personalForm, 'personalForm');
     Object.keys(personalForm.controls).forEach((control) => {
       if (!personalForm.controls[control].valid) {
         if (
@@ -725,14 +763,6 @@ export class RegistrationComponent
         }
       }
     }
-    // otherDetailsForm.value.govID.forEach((element) => {
-    //   if (element.idValue && element.idValue.length < element.maxLength) {
-    //     govCount++;
-    //   }
-    // })
-    // if (govCount) {
-    //   required.push('Gov ID');
-    // }
 
     if (required.length) {
       this.confirmationService.notify(
@@ -795,7 +825,6 @@ export class RegistrationComponent
   }
 
   generateABHACard() {
-    // this.getOTP();
     let validValue: boolean | undefined = false;
     validValue = this.checkgenerateOtpValids(this.beneficiaryRegistrationForm);
 
@@ -803,8 +832,6 @@ export class RegistrationComponent
       this.generateHealthIDCard();
       this.getOTP();
     }
-    // if (this.patientRevisit) { this.getOTP(); } else
-    //     if (!this.patientRevisit) { this.getOTP(); }
   }
 
   generateHealthIDCard() {
@@ -833,8 +860,6 @@ export class RegistrationComponent
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
 
-    // createdBy, vanID, servicePointID
-    // const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
     const servicePointObject: any = localStorage.getItem('serviceLineDetails');
     const servicePointDetails = JSON.parse(servicePointObject);
     iEMRForm['vanID'] = servicePointDetails.vanID;
@@ -843,16 +868,8 @@ export class RegistrationComponent
     phoneMaps[0]['vanID'] = servicePointDetails.vanID;
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     phoneMaps[0]['createdBy'] = localStorage.getItem('userName');
-
-    // console.log(JSON.stringify(iEMRForm, null, 4), ' biEMRFOrm');
     this.registrarService.submitBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res.statusCode === 200) {
-        // this.confirmationService.confirm('success',res.data.response + " Do you want to proceed for family tagging process?", 'yes','No').subscribe((res)) => {
-        //   if (res) {
-        //     this.router.navigate(['/registrar/search/']);
-        //   }
-        // }
-        // this.confirmationService.alert(res.data.response, 'success');
         const responseValue = res.data.response;
         const benId = responseValue.replace(/^\D+/g, '');
 
@@ -944,7 +961,6 @@ export class RegistrationComponent
   updateBeneficiarynPassToNurse(passToNurse = true) {
     const iEMRForm: any = this.updateBenDataManipulation();
     iEMRForm['passToNurse'] = passToNurse;
-    // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrm');
     const otherDetailsForm = <FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
@@ -1010,8 +1026,6 @@ export class RegistrationComponent
           benBlockId: benBlockId,
           benVillageId: benVillageId,
         },
-        // benDistrictId: 60, 3465
-        // benBlockId: benBlockId,
       },
     );
     mdDialogRef.afterClosed().subscribe((result) => {
@@ -1143,8 +1157,6 @@ export class RegistrationComponent
         .subscribe((res: any) => {
           if (res && res.statusCode === 200) {
             this.confirmationService.alert(res.data.response, 'success');
-            // var txt = res.data.response;
-            // var numb = txt.replace(/\D/g,'');
             if (this.checkValidHealthID('save')) {
               const reqObj = {
                 beneficiaryRegID: null,
@@ -1204,7 +1216,6 @@ export class RegistrationComponent
     phoneMaps[0]['vanID'] = servicePointDetails.vanID;
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
     phoneMaps[0]['modifiedBy'] = localStorage.getItem('userName');
-    // console.log(JSON.stringify(iEMRForm, null, 4), 'iEMRFOrmupdate');
     return iEMRForm;
   }
 
@@ -1244,17 +1255,12 @@ export class RegistrationComponent
         },
         occupationID: personalForm.occupation || undefined,
         occupationName: personalForm.occupationOther || undefined,
-        // 'literacystatusID': personalForm.literacyStatus || undefined,
         communityID: othersForm.community || undefined,
         communityName: othersForm.communityName || undefined,
         m_community: {
           communityID: othersForm.community || undefined,
           communityType: othersForm.communityName || undefined,
         },
-        // 'm_literacy': {
-        //   'literacystatusID': personalForm.literacyStatus || undefined,
-        //   'literacystatus': personalForm.literacystatus || undefined
-        // },
         religionID: othersForm.religion || undefined,
         religionName: othersForm.religionOther || undefined,
         addressLine1: demographicsForm.addressLine1 || undefined,
@@ -1331,10 +1337,6 @@ export class RegistrationComponent
         genderName: personalForm.genderName,
       },
       name: personalForm.name,
-      // 'm_ageUnit': {
-      //   'id': personalForm.ageUnit,
-      //   'name': personalForm.name
-      // },
       maritalStatusID: personalForm.maritalStatus || undefined,
       maritalStatus: {
         maritalStatusID: personalForm.maritalStatus || undefined,
@@ -1359,10 +1361,8 @@ export class RegistrationComponent
       changeInAssociations: true,
       is1097: false,
       createdBy: localStorage.getItem('userName'),
-      // 'createdDate': '2018-04-27T14:37:15.000Z',
       changeInBankDetails: true,
       beneficiaryIdentities: iEMRids,
-      // 'marriageDate': '2017-04-27T14:38:26.000Z',
       ageAtMarriage: personalForm.ageAtMarriage || undefined,
       literacyStatus: personalForm.literacyStatus || undefined,
       motherName: othersForm.motherName || undefined,
@@ -1445,7 +1445,6 @@ export class RegistrationComponent
       }
       return null;
     });
-    // console.log(govArr, 'new', otherGovArr, 'nw');
 
     govID.forEach((gov) => {
       govArr.forEach((id) => {
@@ -1586,8 +1585,6 @@ export class RegistrationComponent
         }
       });
     });
-
-    // console.log('before return', iEMRids);
     if (iEMRids.length) {
       return iEMRids;
     } else {
@@ -1626,9 +1623,6 @@ export class RegistrationComponent
       this.beneficiaryRegistrationForm.value.otherDetailsForm,
     );
     const iEMRids = this.iEMRids(othersForm.govID, othersForm.otherGovID);
-    // console.log(iEMRids, 'ids our');
-    // console.log(personalForm, demographicsForm, othersForm, 'forms');
-    // console.log('submiting form', this.beneficiaryRegistrationForm.value);
 
     const finalForm = {
       beneficiaryConsent: true,
@@ -1653,7 +1647,6 @@ export class RegistrationComponent
       genderID: personalForm.gender,
       genderName: personalForm.genderName,
       literacyStatus: personalForm.literacyStatus,
-      // 'id': personalForm.ageUnit,
       name: personalForm.name,
       email: othersForm.emailID,
       providerServiceMapId: localStorage.getItem('providerServiceID'),
@@ -1668,8 +1661,6 @@ export class RegistrationComponent
         educationName: personalForm.educationQualificationName,
         communityID: othersForm.community,
         communityName: othersForm.communityName,
-        // 'literacystatusID': personalForm.literacyStatus,
-        // 'literacystatus': personalForm.literacystatus,
         religionID: othersForm.religion,
         religionName: othersForm.religionOther,
         countryID: this.country.id,
@@ -1758,12 +1749,10 @@ export class RegistrationComponent
         }
       });
     });
-    // console.log('before return', iEMRids);
     return iEMRids;
   }
 
   canDeactivate(): Observable<boolean> {
-    // console.log('deactivate called');
     if (this.beneficiaryRegistrationForm.dirty)
       return this.confirmationService.confirm(
         `info`,
@@ -1784,15 +1773,11 @@ export class RegistrationComponent
     const otherDetailsForm = <FormGroup>(
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
-    // let date= new Date(personalForm.controls['dob'].value);
-    // personalForm.controls['dob'].value.Now.ToString("MM/dd/yyyy hh:mm:ss");
     const date = new Date(personalForm.controls['dob'].value),
       mnth = ('0' + (date.getMonth() + 1)).slice(-2),
       day = ('0' + date.getDate()).slice(-2);
     const newDate = [date.getFullYear(), mnth, day].join('-');
     const date1 = new Date(newDate);
-    // console.log('value1', demographicsForm.controls['addressLine3'].value);
-    //combining address
     let addessValue = null;
     if (
       demographicsForm.controls['addressLine2'].value === null &&
@@ -1832,7 +1817,6 @@ export class RegistrationComponent
       );
     }
 
-    // console.log('date1', personalForm.controls['gender'].value);
     const dialogRef = this.dialog.open(HealthIdOtpGenerationComponent, {
       height: '250px',
       width: '420px',
@@ -1864,7 +1848,6 @@ export class RegistrationComponent
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // console.log('result', result);
       if (result) {
         (<FormGroup>(
           this.beneficiaryRegistrationForm.controls['otherDetailsForm']
@@ -1876,7 +1859,6 @@ export class RegistrationComponent
         (<FormGroup>(
           this.beneficiaryRegistrationForm.controls['otherDetailsForm']
         )).controls['healthId'].disable();
-        // (<FormGroup>this.beneficiaryRegistrationForm.controls['otherDetailsForm']).controls['healthIdNumber'].disable();
         this.disableGenerateOTP = true;
       }
     });
@@ -1926,7 +1908,6 @@ export class RegistrationComponent
           : null,
       beneficiaryId: this.revisitData.beneficiaryID,
     };
-    // console.log('reqObj', reqObj);
     this.router.navigate(['/registrar/familyTagging', reqObj]);
   }
 
@@ -1994,7 +1975,6 @@ export class RegistrationComponent
             this.beneficiaryRegistrationForm.controls['otherDetailsForm']
           )).markAsDirty();
           this.registrarService.changePersonalDetailsData(result);
-          // this.disableValidateHealthID = false;
           this.disableGenerateOTP = true;
         }
       }
@@ -2005,11 +1985,6 @@ export class RegistrationComponent
     this.genrateHealthIDCard = true;
     this.healthIdSearch();
   }
-
-  // openHealthIDSearch() {
-  //   this.genrateHealthIDCard = false;
-  //   this.healthIdSearch();
-  // }
 
   generateAbhaCard() {
     this.dialog.open(GenerateAbhaComponentComponent, {

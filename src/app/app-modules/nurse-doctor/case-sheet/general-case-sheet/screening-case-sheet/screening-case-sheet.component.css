@@ -64,19 +64,13 @@ legend {
     border: unset;
 }
 
-
-/********/
 .btn-group button {
-    background-color: #C21F1F; /* Green background */
+    background-color: #C21F1F;
     margin:5px;
-    /* border: 1px solid green; */
-    color: white; /* White text */
-    /* padding: 10px 24px;  */
-    /* cursor: pointer;  */
-    float: left; /* Float the buttons side by side */
+    color: white;
+    float: left;
   }
   
-  /* Clear floats (clearfix hack) */
   .btn-group:after {
     content: "";
     clear: both;
@@ -86,5 +80,5 @@ legend {
     background-color: orange;
     margin:5px;
     color: white;
-    float: left; /* Float the buttons side by side */
+    float: left;
   }

@@ -22,7 +22,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -298,11 +298,6 @@ export class DoctorService {
     });
   }
 
-  // getPreviousVisitDetails(benRegID) {
-  //   return this.http.post(environment.getPreviousVisitDetailsUrl, { benRegID: benRegID })
-  //     .map(res => res.json().data);
-  // }
-
   getMMUHistory() {
     const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previousMMUHistoryUrl, {
@@ -371,7 +366,6 @@ export class DoctorService {
     return this.http.post(environment.saveDoctorGeneralQuickConsult, {
       quickConsultation,
     });
-    // return Observable.of({statusCode: 5000, data:{ response: 'furrrr'} , errorMessage: 'furrrr'});
   }
 
   updateQuickConsultDetails(
@@ -437,7 +431,6 @@ export class DoctorService {
   getNcdScreeningForCbac() {
     return this.http.post(environment.getNcdScreeningDetailsForCbac, {
       beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
-      // benVisitId: localStorage.getItem('visitID'),
       visitCode: localStorage.getItem('visitCode'),
     });
   }
@@ -462,11 +455,6 @@ export class DoctorService {
       JSON.stringify(ncdScreeningFormValue),
     );
 
-    // if (postNCDScreeningFormValue.screeningCondition) {
-    //   postNCDScreeningFormValue.ncdScreeningConditionID = postNCDScreeningFormValue.screeningCondition.ncdScreeningConditionID;
-    //   postNCDScreeningFormValue.screeningCondition = postNCDScreeningFormValue.screeningCondition.ncdScreeningCondition;
-    // }
-
     if (postNCDScreeningFormValue.reasonForScreening) {
       postNCDScreeningFormValue.ncdScreeningReasonID =
         postNCDScreeningFormValue.reasonForScreening.ncdScreeningReasonID;
@@ -489,7 +477,6 @@ export class DoctorService {
     }
 
     if (postNCDScreeningFormValue.labTestOrders) {
-      // procedureName
       let bP = false;
       let bG = false;
 
@@ -593,8 +580,6 @@ export class DoctorService {
       'ANC Doctor Visit Details',
       JSON.stringify(ancVisitDetails, null, 4),
     );
-
-    // return Observable.of(null);
     return this.http.post(environment.saveDoctorANCDetails, ancVisitDetails);
   }
 
@@ -627,8 +612,6 @@ export class DoctorService {
       detailedANC,
       {
         gravida_G: obstetricFormula.gravida_G,
-        // termDeliveries_T: obstetricFormula.termDeliveries_T,
-        // pretermDeliveries_P: obstetricFormula.pretermDeliveries_P,
         para: obstetricFormula.para,
         abortions_A: obstetricFormula.abortions_A,
         stillBirth: obstetricFormula.stillBirth,
@@ -744,7 +727,6 @@ export class DoctorService {
       environment.saveDoctorGeneralOPDDetails,
       generalVisitDetails,
     );
-    // return Observable.of({errorMessage: 'furrrr'});
   }
 
   /**
@@ -900,44 +882,6 @@ export class DoctorService {
   /**
    **************************END OF COVID**************************
    */
-
-  //  postDoctorCovidDetails(patientMedicalForm, otherDetails, tcRequest, isSpecialist) {
-  //   let vanID = JSON.parse(localStorage.getItem('serviceLineDetails')).vanID;
-  //   let parkingPlaceID = JSON.parse(localStorage.getItem('serviceLineDetails')).parkingPlaceID;
-  //   let findingForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalFindingsForm'];
-  //   let investigationForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalDoctorInvestigationForm'];
-  //   let prescriptionForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['drugPrescriptionForm'];
-  //   let diagnosisForm = (<FormGroup>patientMedicalForm.controls['patientCaseRecordForm']).controls['generalDiagnosisForm'];
-  //   let referForm = patientMedicalForm.controls['patientReferForm'];
-
-  //   let covidVisitDetails = {
-  //     "findings": this.postGeneralCaseRecordFindings(findingForm, otherDetails),
-  //     "diagnosis": this.postCovidCaseRecordDiagnosis(diagnosisForm, otherDetails),
-  //     "investigation": this.postGeneralCaseRecordInvestigation(investigationForm, otherDetails),
-  //     "prescription": this.postGeneralCaseRecordPrescription(prescriptionForm, otherDetails),
-  //     "refer": this.postGeneralRefer(referForm, otherDetails),
-  //     "benFlowID": localStorage.getItem('benFlowID'),
-  //     "beneficiaryID": localStorage.getItem('beneficiaryID'),
-  //     "doctorFlag": localStorage.getItem('doctorFlag'),
-  //     "nurseFlag": localStorage.getItem('nurseFlag'),
-  //     "pharmacist_flag": localStorage.getItem('pharmacist_flag'),
-  //     sessionID: localStorage.getItem('sessionID'),
-  //     parkingPlaceID: parkingPlaceID, vanID: vanID,
-  //     beneficiaryRegID: "" + localStorage.getItem('beneficiaryRegID'),
-  //     providerServiceMapID: localStorage.getItem('providerServiceID'),
-  //     visitCode: localStorage.getItem('visitCode'),
-  //     benVisitID: localStorage.getItem('visitID'),
-  //     serviceID: localStorage.getItem('serviceID'),
-  //     createdBy: localStorage.getItem('userName'),
-  //     tcRequest: tcRequest,
-  //     isSpecialist: isSpecialist
-  //   }
-
-  //   console.log("Doctor Covid Visit Details", JSON.stringify(covidVisitDetails, null, 4));
-
-  //   return this.http.post(environment.saveDoctorCovidDetails, covidVisitDetails)
-  //     .map(res => res.json());
-  // }
 
   /**
    **************************END OF Covid**************************
@@ -1556,8 +1500,6 @@ export class DoctorService {
       if (item.diseaseType) {
         item.diseaseTypeID = '' + item.diseaseType.diseaseTypeID;
         item.diseaseType = item.diseaseType.diseaseType;
-        // item.snomedCode = item.diseaseType.snomedCode;
-        // item.snomedTerm = item.diseaseType.snomedTerm;
       }
     });
     const familyHistoryData = Object.assign({}, familyHistoryFormValue, temp);
@@ -1583,11 +1525,6 @@ export class DoctorService {
       temp.bloodFlowDuration = temp.bloodFlowDuration.menstrualCycleRange;
     }
 
-    // if (temp.problemName) {
-    //   temp.menstrualProblemID = "" + temp.problemName.menstrualProblemID;
-    //   temp.problemName = temp.problemName.name;
-    // }
-
     if (
       temp.lMPDate === null ||
       temp.lMPDate === undefined ||
@@ -1608,12 +1545,6 @@ export class DoctorService {
       pastObstetricHistoryFormValue.pastObstericHistoryList;
 
     pastObstetricList.map((item: any) => {
-      // if (item.pregComplicationList) {
-      //   item.pregComplicationList.map(complication => {
-      //     complication.pregComplicationID = complication.complicationID;
-      //     complication.pregComplicationType = complication.complicationType;
-      //   })
-      // }
       if (item.durationType) {
         item.pregDurationID = item.durationType.pregDurationID;
         item.durationType = item.durationType.durationType;
@@ -1626,22 +1557,10 @@ export class DoctorService {
         item.deliveryPlaceID = item.deliveryPlace.deliveryPlaceID;
         item.deliveryPlace = item.deliveryPlace.deliveryPlace;
       }
-      // if (item.deliveryComplicationType) {
-      //   item.deliveryComplicationID = item.deliveryComplicationType.complicationID;
-      //   item.deliveryComplicationType = item.deliveryComplicationType.complicationValue;
-      // }
-      // if (item.postpartumComplicationType) {
-      //   item.postpartumComplicationID = item.postpartumComplicationType.complicationID;
-      //   item.postpartumComplicationType = item.postpartumComplicationType.complicationValue;
-      // }
       if (item.pregOutcome) {
         item.pregOutcomeID = item.pregOutcome.pregOutcomeID;
         item.pregOutcome = item.pregOutcome.pregOutcome;
       }
-      // if (item.postNatalComplication) {
-      //   item.postNatalComplicationID = item.postNatalComplication.complicationID;
-      //   item.postNatalComplication = item.postNatalComplication.complicationValue;
-      // }
       if (item.newBornComplication) {
         item.newBornComplicationID = item.newBornComplication.complicationID;
         item.newBornComplication = item.newBornComplication.complicationValue;
@@ -1665,11 +1584,6 @@ export class DoctorService {
       JSON.stringify(immunizationHistoryForm.value),
     );
     const formData = immunizationHistoryFormValue.immunizationList;
-    // formData.forEach((item)=>{
-    //   item.vaccines.forEach((vaccine)=>{
-    //     vaccine.status = ""+vaccine.status
-    //   })
-    // })
     const immunizationHistoryData = Object.assign(
       {},
       { immunizationList: formData },
@@ -1957,10 +1871,6 @@ export class DoctorService {
           patientExaminationForm.headToToeExaminationForm,
           updateDetails,
         ),
-        // oralDetails: this.updateOralExaminationForm(
-        //   patientExaminationForm.oralExaminationForm,
-        //   updateDetails
-        // ),
         gastroIntestinalExamination: this.updateGastroIntestinalSystemForm(
           patientExaminationForm.systemicExaminationForm
             .gastroIntestinalSystemForm,
@@ -2231,26 +2141,6 @@ export class DoctorService {
     return diagnosisFormData;
   }
 
-  // postNCDCareCaseRecordDiagnosis(diagnosisForm, otherDetails) {
-  //   let diagnosisFormData = JSON.parse(JSON.stringify(diagnosisForm.value));
-
-  //   if (diagnosisFormData.ncdScreeningCondition) {
-  //     diagnosisFormData.ncdScreeningConditionID =
-  //       diagnosisFormData.ncdScreeningCondition.ncdScreeningConditionID;
-  //     diagnosisFormData.ncdScreeningCondition =
-  //       diagnosisFormData.ncdScreeningCondition.screeningCondition;
-  //   }
-
-  //   if (diagnosisFormData.ncdCareType) {
-  //     diagnosisFormData.ncdCareTypeID =
-  //       diagnosisFormData.ncdCareType.ncdCareTypeID;
-  //     diagnosisFormData.ncdCareType = diagnosisFormData.ncdCareType.ncdCareType;
-  //   }
-
-  //   let diagnosisData = Object.assign({}, diagnosisFormData, otherDetails);
-  //   return diagnosisData;
-  // }
-
   postNCDCareCaseRecordDiagnosis(diagnosisForm: any, otherDetails: any) {
     const diagnosisFormData = JSON.parse(JSON.stringify(diagnosisForm.value));
 
@@ -2269,12 +2159,6 @@ export class DoctorService {
 
     const diagnosisData = Object.assign({}, diagnosisFormData, otherDetails);
     return diagnosisData;
-    // let diagnosisFormData = Object.assign(
-    //   {},
-    //   diagnosisForm.value,
-    //   otherDetails
-    // );
-    // return diagnosisFormData;
   }
 
   postGeneralCaseRecordInvestigation(
@@ -2334,12 +2218,6 @@ export class DoctorService {
 
   deleteMedicine(id: any) {
     return this.http.post(environment.drugDeleteUrl, { id });
-    // return Observable.of({
-    //   statusCode: 200,
-    //   data: {
-    //     msg: 'success'
-    //   }
-    // });
   }
 
   postGeneralRefer(referForm: any, otherDetails: any) {
@@ -2563,9 +2441,6 @@ export class DoctorService {
         temp.newBornHealthStatus.newBornHealthStatusID;
       temp.newBornHealthStatus = temp.newBornHealthStatus.newBornHealthStatus;
     }
-    // if (!temp.dateOfDelivery || temp.dateOfDelivery === null) {
-    //   temp.dateOfDelivery = undefined;
-    // }
     const updatedPNCDetails = Object.assign({}, temp, otherDetails);
 
     console.log(
@@ -2595,21 +2470,11 @@ export class DoctorService {
     visitID: any,
     visitCategory: any,
   ) {
-    // if(localStorage.getItem("referredVisitCode") === "undefined" || localStorage.getItem("referredVisitCode") === null || parseInt(localStorage.getItem('specialist_flag'))==3)
-    // {
     const otherDetails = Object.assign({
       benRegID: beneficiaryRegID,
       benVisitID: visitID,
       visitCode: localStorage.getItem('visitCode'),
     });
-    // } else {
-
-    //   otherDetails = Object.assign({
-    //     benRegID: beneficiaryRegID,
-    //     benVisitID: localStorage.getItem("referredVisitID"),
-    //     visitCode: localStorage.getItem("referredVisitCode")
-    //   });
-    // }
 
     if (!this.caseRecordAndReferDetails) {
       if (visitCategory === 'General OPD (QC)') {
@@ -3053,9 +2918,7 @@ export class DoctorService {
 
     return this.http.get(environment.getSwymedMailUrl + `/${vanID}`);
   }
-  // getCancerScreeningDoctorDetails() {
-  //   return this.http.post(environment.getCancerScreeningDoctorDetailsUrl, {})
-  // }
+
   saveSpecialistCancerObservation(
     specialistDiagonosis: any,
     otherDetails: any,
@@ -3102,9 +2965,9 @@ export class DoctorService {
   }
   /* Doctor Signature download */
   downloadSign(userID: any) {
-    //let option = new RequestOptions({ responseType: ResponseContentType.Blob });
-    //return this.http
-    //  .get(environment.downloadSignUrl + userID, option)
+    return this.http
+      .get(environment.downloadSignUrl + userID, { responseType: 'blob' })
+      .pipe(map((res: any) => <Blob>res.blob()));
   }
   getIDRSDetails(beneficiaryID: string, visitID: string): Observable<any> {
     const visitCategory = localStorage.getItem('visitCategory');
@@ -3217,7 +3080,6 @@ export class DoctorService {
       physicalActivityHistory.value,
       otherDetails,
     );
-    // console.log('General examination', JSON.stringify(generalExaminationForm, null, 4));
     return physicalActivityHistoryForm;
   }
   getMMUData(loadMMUData: any) {
@@ -3487,7 +3349,6 @@ export class DoctorService {
   getPreviousBirthImmunizationHistoryDetails(
     visitCategory: any,
   ): Observable<any> {
-    // let visitCategory = localStorage.getItem("visitCategory");
     if (
       visitCategory.toLowerCase() === 'neonatal and infant health care services'
     ) {
@@ -3590,7 +3451,6 @@ export class DoctorService {
       environment.saveDoctorFamilyPlanningDetails,
       generalVisitDetails,
     );
-    // return Observable.of({errorMessage: 'furrrr'});
   }
 
   /* Neonatal and infant health care services */
@@ -3601,20 +3461,6 @@ export class DoctorService {
     const followUpForImmunization = JSON.parse(
       JSON.stringify(followUpImmunizationForm.value),
     );
-    // if (followUpForImmunization.nextDueVaccines) {
-    //   followUpForImmunization.nextDueVaccinesID =
-    //   followUpForImmunization.nextDueVaccines.id;
-    //   followUpForImmunization.nextDueVaccines =
-    //   followUpForImmunization.nextDueVaccines.name;
-    // }
-
-    // if (followUpForImmunization.locationOfNextImmunization) {
-    //   followUpForImmunization.locationOfNextImmunizationID =
-    //   followUpForImmunization.locationOfNextImmunization.id;
-    //   followUpForImmunization.locationOfNextImmunization =
-    //   followUpForImmunization.locationOfNextImmunization.name;
-    // }
-
     if (followUpForImmunization.dueDateForNextImmunization) {
       followUpForImmunization.dueDateForNextImmunization =
         followUpImmunizationForm.controls['dueDateForNextImmunization'].value;
@@ -4052,10 +3898,6 @@ export class DoctorService {
   }
 
   getAssessment(benRegID: any) {
-    // let url = "{%3FpatientId%3D}";
-    //   // let swaasaurl = unescape(url + +encodeURIComponent($scope.entityId));
-    //   // const encodedSyntax = encodeURIComponent('/{patientId}?patientId=');
-    //   // return this.http.get(`${environment.getAssessmentIdUrl}/${'patientId'}?patientId=${benRegID}`);
     return this.http.get(environment.getAssessmentIdUrl + '/' + benRegID);
   }
 

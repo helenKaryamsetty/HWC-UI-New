@@ -135,9 +135,6 @@ mat-card-title {
     justify-content: space-between;
 }
 
-/* .input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
-    box-shadow: 0 0 0 20px #e1eaff inset !important;
-} */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

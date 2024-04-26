@@ -22,11 +22,6 @@ md-icon {
     font-weight: bold;
 }
 
-/* 
-.col-lg-3{
-    border: 1px solid black;
-} */
-
 .select-container {
     height: 55px;
 }
@@ -104,7 +99,6 @@ md-expansion-panel {
 }
 
 .full-width-login {
-    /* width: 17%; */
     margin-top: 10px;
     margin-bottom: 10px;
     height: 35px;
