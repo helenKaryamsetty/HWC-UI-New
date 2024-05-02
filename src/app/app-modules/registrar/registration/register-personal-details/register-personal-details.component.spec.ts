@@ -40,9 +40,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../../core/material.module';
 import { RegisterPersonalDetailsComponent } from './register-personal-details.component';
@@ -59,11 +56,6 @@ class MockActivatedRoute {
   };
 }
 class RegistrarServiceMock {
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary() spy').andCallFake(function(){
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary');
-
   registrationMaster = {
     occupationMaster: [
       { occupationID: 2, occupationType: 'Agricultural labour' },
@@ -256,8 +248,6 @@ describe('RegisterPersonalDetailsComponent', () => {
       fingerprint: null,
     });
     component.patientRevisit = false;
-
-    // fixture.detectChanges();
     registrarService.getRegistrationMaster();
   });
 

@@ -65,9 +65,6 @@ export class RegisterDemographicDetailsComponent
   @Input()
   demographicDetailsForm!: FormGroup;
 
-  // @Input("patientRevisit")
-  // patientRevisit!: Boolean;
-
   @Input()
   patientRevisit = false;
 
@@ -100,7 +97,6 @@ export class RegisterDemographicDetailsComponent
   ngOnInit() {
     this.abhaSearchResponse = null;
     this.assignSelectedLanguage();
-    //this.locationData = JSON.parse(localStorage.getItem('locationData'));
     this.loadMasterDataObservable();
     this.getDistrictList();
 
@@ -247,12 +243,6 @@ export class RegisterDemographicDetailsComponent
    * Config States  for Ben Edit
    */
   configState() {
-    // this.demographicsMaster = Object.assign(
-    //   {},
-    //   localStorage.getItem('location'),
-    //   { servicePointID: localStorage.getItem('servicePointID') },
-    //   { servicePointName: localStorage.getItem('servicePointName') },
-    // );
     const location: any = localStorage.getItem('location');
     this.demographicsMaster = Object.assign(
       {},
@@ -657,7 +647,6 @@ export class RegisterDemographicDetailsComponent
 
     if (event.checked === true) {
       this.demographicsEditEnabled = true;
-      // this.demographicsEditText = 'Restore Default';
       this.confirmationService
         .choice(this.currentLanguageSet.bendetails.editLocation, locationChoice)
         .subscribe((res) => {
@@ -800,7 +789,6 @@ export class RegisterDemographicDetailsComponent
             villageID: this.locationData.subDistrictID,
             villageName: this.locationData.villageName,
           });
-          // this.onVillageChangeOnLoad();
         } else {
           this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.IssuesInFetchingLocationDetails,

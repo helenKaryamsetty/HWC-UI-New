@@ -24,14 +24,6 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-// const commonIP = 'https://amritwprdev.piramalswasthya.org';
-// const identityIP = 'https://amritwprdev.piramalswasthya.org';
-// const tmIP = 'https://amritwprdev.piramalswasthya.org';
-// const IP104 = 'https://amritwprdev.piramalswasthya.org';
-// const mmuIP = 'https://amritwprdev.piramalswasthya.org';
-// const schedulerIP = 'https://amritwprdev.piramalswasthya.org';
-// const adminIP = 'https://amritwprdev.piramalswasthya.org';
-
 const commonIP = 'http://183.82.107.186:8080';
 const identityIP = 'http://183.82.107.186:8080';
 const tmIP = 'http://183.82.107.186:8080';
@@ -45,24 +37,13 @@ const FHIRIP = 'http://183.82.107.186:8080';
 const SERVER_IP = '10.208.122.39';
 const SWYMED_IP = '14.143.13.109';
 
-// With API MAN Configuration
-// const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
-// const COMMON_API = `http://${IP}:8080/apiman-gateway/IEMR/Common/1.0/`;
-// const TM_API = `http://${IP}:8080/apiman-gateway/IEMR/TM/1.0/`;
-// const MMU_API = `http://${IP}:8080/apiman-gateway/IEMR/MMU/1.0/`
-// const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
-
 // Without API MAN Configuration
 const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
 const COMMON_API = `${commonIP}/commonapi-v1.0/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
-// const COMMON_API_OPEN = `http://localhost:8080/`;
-// const COMMON_API = `http://localhost:8080/`;
-// const TM_API = `${tmIP}/hwc-facility-service-v0.1/`;
 const TM_API = `${tmIP}/hwc-facility-service/`;
 
 const API104 = `${IP104}/104api-v1.0/`;
-// const TM_API = `http://localhost:8082/`;
 const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
@@ -88,12 +69,6 @@ export const environment = {
   IdrsOrCbac: ['IDRS', 'CBAC'],
 
   parentAPI: `${TM_API}`,
-
-  // INVENTORY_URL: 'http://localhost:4400/#/redirin?',
-  // fallbackUrl: `/pharmacist/redirfallback`,
-  // redirInUrl: `/pharmacist/redirin`,
-
-  // TELEMEDICINE_URL: 'http://localhost:4300/#/?',
 
   INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-ui-next/#/redirin?',
   fallbackUrl: '/pharmacist/redirfallback',
@@ -188,18 +163,12 @@ export const environment = {
 
   getCompleteBeneficiaryDetail: `${TM_API}registrar/get/beneficiaryDetails`,
 
-  // getBeneficiaryImage: `${TM_API}registrar/get/beneficiaryImage`,
   // New API
   getBeneficiaryImage: `${TM_API}registrar/getBenImage`,
   getPreviousVisitDetailsUrl: `${TM_API}casesheet/getBeneficiaryCaseSheetHistory`,
   updateVisitStatus: `${TM_API}doctor/updateBeneficiaryStatus`,
 
-  // printCancerCase_sheet_url: `${mmuUICasesheet}`,
-  // updateOncologistRemarksCancelUrl: `${TM_API}oncologist/update/examinationScreen/diagnosis`,
   updateOncologistRemarksCancelUrl: `${TM_API}CS-cancerScreening/update/examinationScreen/diagnosis`,
-  //commented by NEERAJ on 06-03-2018, because modified the url
-  //getStatesURL: `${COMMON_API}location/states/`,
-  //getDistrictsURL: `${COMMON_API}location/districts/`,
 
   getnurse104referredworklistURL: `${TM_API}location/get/stateMaster`,
   getStatesURL: `${TM_API}location/get/stateMaster`,
@@ -210,7 +179,6 @@ export const environment = {
    * NCD SCREENING API URLs
    */
   postNCDScreeningDetails: `${TM_API}NCD/save/nurseData`,
-  // getNCDScreeningVisitDetails: `${TM_API}CS-cancerScreening/getBenDataFrmNurseToDocVisitDetailsScreen`,
   updateNCDVitalsDetailsUrl: `${TM_API}NCD/update/vitalScreen`,
   getNCDScreeningVisitDetails: `${TM_API}NCD/getBenVisitDetailsFrmNurseNCDScreening`,
   getNCDScreeningDetails: `${TM_API}NCD/get/nurseData`,
@@ -494,8 +462,6 @@ export const environment = {
   confirmedDiseaseUrl: `${TM_API}NCD/get/ncd/screening/data`,
 
   previousVisitConfirmedUrl: `${TM_API}NCD/fetchConfirmedScreeningDisease`,
-
-  // fpMasterReferralUrl: ${TM_API}NCD/fetchConfirmedScreeningDisease
 
   /* Family Planning Urls*/
   getFamilyPlanningVisitDetails: `${TM_API}family-planning/getBenVisitDetails-Nurse-FamilyPlanning`,

@@ -76,7 +76,6 @@ export class ImmunizationHistoryComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.childVaccinations) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.getBeneficiaryDetails();
           this.filterImmunizationList(masterData.childVaccinations);
@@ -244,10 +243,6 @@ export class ImmunizationHistoryComponent
     const immunizationList = <FormArray>(
       this.immunizationHistoryForm.controls['immunizationList']
     );
-    // const vaccineList = (<FormArray>immunizationList.controls[i]).controls[
-    //   'vaccines'
-    // ];
-    // vaccineList.push(this.initVaccineList());
   }
 
   addImmunization() {
@@ -317,24 +312,7 @@ export class ImmunizationHistoryComponent
     const immunizationList = <FormArray>(
       this.immunizationHistoryForm.controls['immunizationList']
     );
-    // const vaccineList = (<FormArray>immunizationList.controls[i]).controls[
-    //   'vaccines'
-    // ];
     immunizationList.markAsDirty();
-
-    // if (value) {
-    //   vaccineList.controls.forEach((vaccine: FormGroup) => {
-    //     if (vaccine.controls['hide'].value !== true) {
-    //       vaccine.patchValue({ status: true });
-    //     }
-    //     this.onVaccineCheck(vaccine);
-    //   });
-    // } else {
-    //   vaccineList.controls.forEach((vaccine: FormGroup) => {
-    //     vaccine.patchValue({ status: false });
-    //     this.onVaccineCheck(vaccine);
-    //   });
-    // }
   }
 
   onVaccineCheck(vaccine: any) {

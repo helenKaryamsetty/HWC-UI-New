@@ -76,25 +76,7 @@ export class ExaminationCaseSheetComponent
     this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
     this.visitID = localStorage.getItem('visitID');
     this.assignSelectedLanguage();
-    // this.visitCategory = localStorage.getItem('visitCategory');
-    // this.getReferDetails(this.beneficiaryRegID, this.visitID, this.visitCategory);
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
-    // this.changeLanguage();
   }
-  // referSubscription: any;
-  // getReferDetails(beneficiaryRegID, visitID, visitCategory) {
-  //   this.referSubscription = this.doctorService.getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
-  //     .subscribe(res => {
-  //       if (res && res.statusCode === 200 && res.data && res.data.Refer) {
-  //         this.patchReferDetails(res.data.Refer);
-  //       }
-  //     })
-  // }
-
-  // patchReferDetails(referDetails) {
-  //   console.log("revisitDate:" + this.revisitDate);
-  //   this.revisitDate=referDetails.revisitDate;
-  // }
 
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -147,8 +129,6 @@ export class ExaminationCaseSheetComponent
         this.gastroIntestinalExamination =
           examination.gastrointestinalExamination;
     }
-    // let t = new Date();
-    //   this.date = t.getDate() + "/" + (t.getMonth() + 1) + "/" + t.getFullYear();
     if (this.casesheetData && this.casesheetData.doctorData) {
       this.referDetails = this.casesheetData.doctorData.Refer;
       console.log('refer', this.referDetails);
@@ -182,14 +162,6 @@ export class ExaminationCaseSheetComponent
         JSON.stringify(this.casesheetData, null, 4),
       );
     }
-    // if(this.casesheetData.doctorData.Refer)
-    // {
-    //   let sDate = new Date(this.referDetails.revisitDate);
-    //   this.referDetails.revisitDate = [
-    //     this.padLeft.apply(sDate.getDate()),
-    //     this.padLeft.apply((sDate.getMonth() + 1)),
-    //     this.padLeft.apply(sDate.getFullYear())].join('/')
-    // }
   }
   padLeft() {
     const len = String(10).length - String(this).length + 1;

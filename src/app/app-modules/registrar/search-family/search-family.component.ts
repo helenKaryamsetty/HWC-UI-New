@@ -76,7 +76,6 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
   disableBlock = false;
 
   familyDetails: any;
-  // demographicsMaster: any;
   districtList: any;
   blockList: any;
   villageList: any;
@@ -105,7 +104,6 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
     this.createFamilySearchForm();
     this.assignSelectedLanguage();
     console.log('this.familySearchForm line 107', this.familySearchForm.value);
-    // this.configState();
     if (this.data !== null && this.data !== undefined) {
       this.familySearchForm.controls['surname'].setValue(
         this.data.benSurname !== undefined &&
@@ -126,16 +124,6 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
-
-  // configState() {
-  //   this.demographicsMaster = Object.assign(
-  //     {},
-  //     JSON.parse(localStorage.getItem("location")),
-  //     { servicePointID: localStorage.getItem("servicePointID") },
-  //     { servicePointName: localStorage.getItem("servicePointName") }
-  //   );
-  //   // this.stateValue = this.demographicsMaster.otherLoc.stateID;
-  // }
 
   createFamilySearchForm() {
     this.familySearchForm = this.formBuilder.group({
@@ -186,42 +174,6 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-
-  // loadLocationFromStorage() {
-  //   let location = JSON.parse(localStorage.getItem("location"));
-  //   this.demographicsMaster = Object.assign({}, location,
-  //   );
-
-  //   console.log(this.demographicsMaster, "demographics master");
-
-  //   if (
-  //     this.demographicsMaster.otherLoc &&
-  //     this.demographicsMaster.stateMaster &&
-  //     this.demographicsMaster.stateMaster.length >= 1
-
-  //   ) {
-  //     this.districtList = this.demographicsMaster.otherLoc.districtList;
-  //     this.blockList = [];
-  //     this.villageList = [];
-  //     this.emptyDistrict();
-  //     this.emptyVillage();
-  //     this.emptyBlock();
-  //     this.disableDistrict = false;
-  //   } else if (
-  //     this.demographicsMaster.stateMaster &&
-  //     this.demographicsMaster.stateMaster.length >= 1
-  //   ) {
-  //     this.statesList = this.demographicsMaster.stateMaster;
-  //     this.districtList = [];
-  //     this.blockList = [];
-  //     this.villageList = [];
-
-  //     this.emptyVillage();
-  //     this.emptyBlock();
-  //     this.emptyDistrict();
-  //     this.emptyState();
-  //   }
-  // }
 
   onVillageChange() {
     this.updateVillageName();
@@ -380,9 +332,6 @@ export class SearchFamilyComponent implements OnInit, DoCheck {
   }
 
   onClose() {
-    // this.router.navigate([
-    //     "/registrar/familyTagging/"
-    //   ]);
     this.matDialogRef.close();
   }
 

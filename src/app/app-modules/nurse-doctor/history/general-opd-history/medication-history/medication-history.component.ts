@@ -95,7 +95,6 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
 
           if (String(this.mode) === 'view') {
@@ -180,7 +179,6 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
             this.medicationHistoryForm.controls['medicationHistoryList']
           );
           this.medicationHistoryForm.markAsDirty();
-          //this.medicationHistoryForm.parent.markAsDirty();
           if (medicationHistoryList.length === 1 && !!medicationHistoryForm) {
             medicationHistoryList.controls[i].patchValue({
               currentMedication: null,

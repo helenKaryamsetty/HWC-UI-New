@@ -46,8 +46,6 @@ export class PncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   constructor(public httpServiceService: HttpServiceService) {}
 
   ngOnInit() {
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
-    // this.changeLanguage();
     this.assignSelectedLanguage();
   }
 

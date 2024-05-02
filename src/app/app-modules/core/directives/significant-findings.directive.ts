@@ -59,7 +59,6 @@ export class SignificantFindingsDirective {
     if (searchTerm.length > 2) {
       const dialogRef = this.dialog.open(DiagnosisSearchComponent, {
         width: '800px',
-        // panelClass: 'fit-screen',
         data: {
           searchTerm: searchTerm,
           addedDiagnosis: this.previousSelected,

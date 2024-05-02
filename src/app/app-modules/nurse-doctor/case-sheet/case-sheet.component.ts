@@ -79,8 +79,6 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   ngOnDestroy() {
-    // localStorage.removeItem('caseSheetVisitCategory');
-    // localStorage.removeItem('previousCaseSheetVisitCategory')
     console.log('success');
   }
 
@@ -118,7 +116,6 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
 
         default:
           this.QC = false;
-          // this.NCDScreening = false;
           this.General = false;
           break;
       }

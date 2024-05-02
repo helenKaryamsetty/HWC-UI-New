@@ -223,8 +223,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
       if (item.itemFormName === this.currentPrescription.formName)
         this.currentPrescription.formID = item.itemFormID;
     });
-    // this.currentPrescription["formID"] = this.tempform.itemFormID;
-    // this.currentPrescription["formName"] = this.tempform.itemFormName;
     this.filterDrugMaster();
     this.filterDoseMaster();
   }
@@ -234,7 +232,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     this.filteredDrugMaster = [];
     drugMasterCopy.forEach((element: any) => {
       if (this.currentPrescription.formID === element.itemFormID) {
-        // element["isEDL"] = true;
         this.filteredDrugMaster.push(element);
       }
     });

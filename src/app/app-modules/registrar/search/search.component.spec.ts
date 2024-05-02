@@ -71,12 +71,6 @@ class RegistrarServiceMock {
   patientRevisit() {}
 
   quickSearch() {}
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
 
   registrationMaster = {
     occupationMaster: [
@@ -294,8 +288,6 @@ describe('SearchComponent', () => {
     router = TestBed.get(Router);
     route = TestBed.get(ActivatedRoute);
     beneficiaryService = TestBed.get(BeneficiaryDetailsService);
-    //button = fixture.debugElement.queryAll(By.css('button'));
-    //quickSearchButton = button[0];
     fixture.detectChanges();
   });
 

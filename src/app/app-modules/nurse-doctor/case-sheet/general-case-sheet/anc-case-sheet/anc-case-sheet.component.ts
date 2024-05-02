@@ -48,8 +48,6 @@ export class AncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
-    // this.changeLanguage();
   }
 
   ngDoCheck() {

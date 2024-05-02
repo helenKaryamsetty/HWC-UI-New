@@ -40,15 +40,12 @@ import { CameraService } from '../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { RegistrarService } from '../shared/services/registrar.service';
 import * as moment from 'moment';
-// import { log } from "util";
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/component/set-language.component';
 import { QuickSearchComponent } from '../quick-search/quick-search.component';
 import { CommonService } from '../../core/services/common-services.service';
-// import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { HealthIdDisplayModalComponent } from '../../core/component/health-id-display-modal/health-id-display-modal.component';
 import { environment } from 'src/environments/environment';
-import { ConsentFormComponent } from '../consent-form/consent-form.component';
 
 export interface Consent {
   consentGranted: string;
@@ -98,7 +95,6 @@ export class SearchComponent implements OnInit, DoCheck {
     'GovID',
   ];
   searchCategory!: string;
-  // searchType: string;
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
@@ -115,8 +111,6 @@ export class SearchComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.searchCategory = this.searchCategories[0];
     console.log('this.searchCategory', this.searchCategory);
-    // this.searchType = 'ID';
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     this.searchPattern = '/^[a-zA-Z0-9](.|@|-)*$/;';
     this.assignSelectedLanguage();
     this.stateMaster();
@@ -503,7 +497,6 @@ export class SearchComponent implements OnInit, DoCheck {
         benObject: element,
       });
     });
-    // console.log(JSON.stringify(requiredBenData, null, 4), 'yoooo!');
 
     return requiredBenData;
   }
@@ -525,42 +518,12 @@ export class SearchComponent implements OnInit, DoCheck {
       );
   }
   pageChanged(event: any): void {
-    // console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
     this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    // console.log('list', this.pagedList);
   }
 
   getCorrectPhoneNo(phoneMaps: any, benObject: any) {
-    // let phone;
-    // if (benObject && !benObject && !benObject.phoneNo) {
-    //   return phoneMaps[0].phoneNo;
-    // } else if (
-    //   benObject &&
-    //   !benObject &&
-    //   !benObject.phoneNo &&
-    //   !phoneMaps.length
-    // ) {
-    //   return phoneMaps[0].phoneNo || 'Not Available';
-    // } else if (benObject && benObject.phoneNo && phoneMaps.length > 0) {
-    //   phoneMaps.forEach((elem: any) => {
-    //     if (elem.phoneNo === benObject.phoneNo) {
-    //       phone = elem.phoneNo;
-    //     }
-    //   });
-    //   if (phone) {
-    //     return phone;
-    //   } else if (phoneMaps.length > 0) {
-    //     return phoneMaps[0].phoneNo;
-    //   } else {
-    //     return 'Not Available';
-    //   }
-    // } else if (phoneMaps.length > 0) {
-    //   return phoneMaps[0].phoneNo;
-    // } else {
-    //   return 'Not Available';
-    // }
     if (!phoneMaps.length) {
       return 'Not Available';
     }
@@ -621,29 +584,6 @@ export class SearchComponent implements OnInit, DoCheck {
     });
   }
 
-  // filterExternalBeneficiaryList(searchTerm?: string) {
-  //   if (!searchTerm)
-  //     this.filteredExternalBeneficiaryList = this.externalBeneficiaryList;
-  //   else {
-  //     this.filteredExternalBeneficiaryList = [];
-  //     this.externalBeneficiaryList.forEach((item) => {
-  //       for (let key in item) {
-  //         if (key !== 'benObject') {
-  //           let value: string = '' + item[key];
-  //           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-  //             this.filteredExternalBeneficiaryList.push(item); break;
-  //           }
-  //         }
-  //       }
-  //     });
-  //   }
-  //   this.activePage = 1;
-  //   this.pageChangedExternal({
-  //     page: 1,
-  //     itemsPerPage: this.rowsPerPage
-  //   });
-  // }
-
   patientRevisited(benObject: any) {
     if (
       benObject &&
@@ -703,17 +643,13 @@ export class SearchComponent implements OnInit, DoCheck {
 
   sendToNurseWindow(userResponse: boolean, benObject: any) {
     if (userResponse) {
-      // let regIdObject = { beneficiaryRegID: "" };
-      // regIdObject.beneficiaryRegID = benregID;
       this.registrarService.identityPatientRevisit(benObject).subscribe(
         (result: any) => {
           if (result.data)
-            // this.confirmationService.alert(result.data.response, "success");
             this.confirmationService.alert(
               this.currentLanguageSet.common.beneficiaryMovedtoNurse,
               'success',
             );
-          //this.confirmationService.alert(result.status, "warn");
           else
             this.confirmationService.alert(
               this.currentLanguageSet.common.beneAlreadyAdded,
@@ -1077,7 +1013,6 @@ export class SearchComponent implements OnInit, DoCheck {
     this.pageNo = this.pageNo + 1;
     if (this.externalSearchTerm.pageNo !== undefined && this.pageNo !== null)
       this.externalSearchTerm.pageNo = this.pageNo - 1;
-    // this.searchBeneficiaryInMongo(this.pageNo);
     this.registrarService
       .externalSearchIdentity(this.externalSearchTerm)
       .subscribe(
@@ -1097,19 +1032,12 @@ export class SearchComponent implements OnInit, DoCheck {
                 this.searchExternalRestruct(externalBenList);
               this.filteredExternalBeneficiaryList =
                 this.externalBeneficiaryList;
-              // this.activePage = 1;
-              // this.pageChangedExternal({
-              //   page: this.activePage,
-              //   itemsPerPage: this.rowsPerPage,
-              // });
             } else {
               this.confirmationService.alert(
                 this.currentLanguageSet.noFurtherRecordsToShow,
                 'info',
               );
               this.pageNo = this.pageNo - 1;
-              // this.externalBeneficiaryList =[];
-              // this.filteredExternalBeneficiaryList =[];
             }
           }
         },
@@ -1152,43 +1080,6 @@ export class SearchComponent implements OnInit, DoCheck {
       }
     }
   }
-
-  // migrateBeneficiaryToAmrit(benDetails)
-  // {
-  //   this.confirmationService.confirm(`info`, "Please Confirm to Migrate Beneficiary Details to Amrit")
-  //   .subscribe(result => {
-  //     if (result) this.sendBenToAmrit(benDetails);
-  //   });
-
-  // }
-
-  // sendBenToAmrit(benDetails)
-  // {
-  //   this.registrarService.migrateBenToAmrit(benDetails)
-  //   .subscribe(resp => {
-  //     if (resp && resp.statusCode === 200 && resp.response) {
-  //     if (resp.response !== undefined && resp.response === "Patient Already Migrated") {
-
-  //       this.confirmationService.alert("Patient Already Migrated to Amrit", 'info');
-  //       this.transferMigratedBeneficiaryToNurse(benDetails);
-
-  //     } else {
-
-  //       if(resp.response !== undefined && resp.response === "Patient Successfully Migrated")
-  //       {
-  //         this.confirmationService.alert("Patient Already Migrated to Amrit", 'info');
-  //         this.transferMigratedBeneficiaryToNurse(benDetails);
-  //       }
-  //     }
-  //   }
-  //   else{
-  //     this.confirmationService.alert(resp.errorMessage, 'error')
-  //   }
-
-  //   }, error => {
-  //     this.confirmationService.alert(error, 'error');
-  //   });
-  // }
 
   transferMigratedBeneficiaryToNurse(benObject: any) {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');

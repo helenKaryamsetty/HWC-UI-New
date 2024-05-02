@@ -99,21 +99,8 @@ export class GeneralOpdHistoryComponent
     this.getBeneficiaryDetails();
     this.enableIdrsHistoryForm();
     console.log('showHistory', this.showHistory);
-    // this.enableHistoryOnIDRSSelection();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     console.log('visit', this.visitCategory);
   }
-  // enableHistoryOnIDRSSelection() {
-  //   this.enablingHistorySectionSubscription = this.ncdScreeningService.enableHistoryFormafterFormInit$.subscribe(
-  //     (response) => {
-  //       if(response === true) {
-  //         this.historyFormDeclared = true;
-  //         } else {
-  //           this.historyFormDeclared = true;
-  //         }
-  //     });
-
-  // }
 
   loadFormData() {
     this.pastHistory = this.patientHistoryForm.get('pastHistory') as FormGroup;
@@ -273,8 +260,6 @@ export class GeneralOpdHistoryComponent
             } else {
               this.beneficiaryAge = age;
             }
-
-            //  this.ageCalculator(this.beneficiary.dob);
 
             this.canShowObstetricHistory();
           }

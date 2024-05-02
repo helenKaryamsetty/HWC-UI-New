@@ -67,40 +67,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   otherVaccineData: any;
 
   vaccineMasterData: any = [];
-  // vaccineMasterData = [
-  //   {
-  //     vaccineID: 1,
-  //     vaccineName: "PCV"
-  //   },
-  //   {
-  //     vaccineID: 2,
-  //     vaccineName: "MMR"
-  //   },
-  //   {
-  //     vaccineID: 3,
-  //     vaccineName: "Hepatitis-A Vaccine"
-  //   },
-  //   {
-  //     vaccineID: 4,
-  //     vaccineName: "Varicella Vaccine"
-  //   },
-  //   {
-  //     vaccineID: 5,
-  //     vaccineName: "Typhoid Vaccine"
-  //   },
-  //   {
-  //     vaccineID: 6,
-  //     vaccineName: "Meningococcal Vaccine"
-  //   },
-  //   {
-  //     vaccineID: 6,
-  //     vaccineName: "Other"
-  //   },
-  //   {
-  //     vaccineID: 7,
-  //     vaccineName: "Nil"
-  //   }
-  // ];
   previousSelectedVaccineList: any = [];
   vaccineSelectList: any = [];
   currentLanguageSet: any;
@@ -122,8 +88,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     this.getMasterData();
     this.getBeneficiaryDetails();
     this.callMasterDataObservable();
-
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
   }
 
   ngOnDestroy() {
@@ -167,9 +131,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
       }
     });
     this.validateAge(vaccineForm);
-    // if (this.personalDetailsForm.value.age !== null) {
-    //   this.onAgeEntered();
-    // }
   }
 
   nurseMasterDataSubscription: any;
@@ -177,7 +138,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.vaccineMasterData = masterData.vaccineMasterData;
 
@@ -292,8 +252,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     const previousValue = this.previousSelectedVaccineList[i];
     const snomedCTCode = vaccine.sctCode;
     const snomedCTTerm = vaccine.sctTerm;
-    //snomedCTCode=vaccineForm.sctCode;
-    //console.log("count:", snomedCTCode);
     if (vaccineForm && vaccine.vaccineName !== 'Other') {
       vaccineForm.patchValue({ otherVaccineName: null });
       if (vaccine.sctCode !== null) {
@@ -423,13 +381,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
         ageUnit,
         this.beneficiary.age,
       );
-
-      // if (this.beneficiary && (this.beneficiary.ageVal *365) < actualReceivingAge) {
-      //   this.confirmationService.alert(this.currentLanguageSet.alerts.info.ageOfReceivingVaccine);
-      //   formGroup.patchValue({ actualReceivingAge: null });
-      //   formGroup.patchValue({ ageUnitID: null });
-      //   formGroup.patchValue({ ageUnit: null });
-      // }
       if (!flag) {
         this.confirmationService.alert(
           this.currentLanguageSet.alerts.info.ageOfReceivingVaccine,

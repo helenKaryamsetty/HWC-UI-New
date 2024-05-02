@@ -142,7 +142,6 @@ export class PastHistoryComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.illnessTypes && masterData.surgeryTypes) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           console.log('Nurse Master Called==');
 
           this.illnessMasterData = masterData.illnessTypes.slice();
@@ -165,10 +164,6 @@ export class PastHistoryComponent
           this.addPastSurgery();
 
           console.log('Add Past Illness Called==');
-          // if (String(this.mode) === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
-          //   this.addPastIllness();
-          //   this.addPastSurgery();
-          // }
 
           this.changeDetectorRef.detectChanges();
           const specialistFlagString = localStorage.getItem('specialistFlag');
@@ -187,51 +182,6 @@ export class PastHistoryComponent
         }
       });
   }
-
-  // getMMUMasterData() {
-
-  //   this.nurseMasterDataSubscription = this.masterdataService.nurseMasterData$
-  //     .subscribe(masterData => {
-  //       if (masterData && masterData.illnessTypes && masterData.surgeryTypes) {
-  //         this.illnessMasterData = masterData.illnessTypes.slice();
-  //         this.filteredIllnessMasterData = masterData.illnessTypes.slice();
-
-  //         console.log("filteredIllnessMasterData",this.filteredIllnessMasterData)
-
-  //         this.surgeryMasterData = masterData.surgeryTypes.slice();
-
-  //         if (this.beneficiary && (this.beneficiary.genderName.toLowerCase() !== "female" || this.beneficiary.ageVal <= 18)) {
-  //           let temp = this.surgeryMasterData.filter(item => {
-  //             return this.femaleSurgeryList.indexOf(item.surgeryType) < 0;
-  //           });
-  //           this.surgeryMasterData = temp;
-  //         }
-
-  //         this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
-
-  //         // if (String(this.mode) === 'view' || parseInt(localStorage.getItem("specialistFlag")) !== 100) {
-  //         //   this.addPastIllness();
-  //         //   this.addPastSurgery();
-  //         // }
-  //         this.addPastIllness();
-  //         this.addPastSurgery();
-
-  //         this.changeDetectorRef.detectChanges();
-
-  //       // this.patchHistory();
-
-  //         if(parseInt(sessionStorage.getItem("specialistFlag")) === 100)
-  //         {
-
-  //            let visitID = localStorage.getItem('visitID');
-  //           let benRegID = localStorage.getItem('beneficiaryRegID')
-  //           this.getGeneralHistory(benRegID, visitID);
-  //         }
-
-  //       }
-  //     })
-
-  // }
 
   generalHistorySubscription: any;
   getGeneralHistory() {

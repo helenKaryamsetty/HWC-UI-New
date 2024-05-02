@@ -150,7 +150,6 @@ export class ComorbidityConcurrentConditionsComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.comorbidityMasterData = masterData.comorbidConditions;
           this.comorbidityFilteredMasterData = masterData.comorbidConditions;
 
@@ -246,8 +245,6 @@ export class ComorbidityConcurrentConditionsComponent
             );
           else return false;
         });
-        // let flag = arr.length === 0 ? true : false;
-        // return flag;
         if (item.comorbidCondition === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;

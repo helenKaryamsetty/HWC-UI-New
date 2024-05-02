@@ -84,20 +84,6 @@ export class RegistrarService {
     this.abhaDetail = abhaDetailDetails;
     this.abhaDetailData.next(this.abhaDetail);
   }
-  // getBenFamilyDetails(value){
-  //  this.benFamilyDetails = value;
-  // }
-
-  // GenerateOTPEnable: any;
-  // GenerateOTP = new BehaviorSubject(this.GenerateOTPEnable);
-  // GenerateOTP$ = this.GenerateOTP.asObservable();
-
-  // setGenerateOTPFlag(value) {
-  //   this.GenerateOTPEnable = value;
-
-  //   this.GenerateOTP.next(value);
-
-  // }
 
   districtMainList = new BehaviorSubject<any[]>([]);
   districtList$ = this.districtMainList.asObservable();
@@ -130,7 +116,6 @@ export class RegistrarService {
     return this.http
       .post(environment.registrarMasterDataUrl, tmpSPID)
       .subscribe((res: any) => {
-        // console.log(JSON.stringify(res.data), 'json data');
         if (res.data) this.registrationMasterDetails.next(res.data);
       });
   }

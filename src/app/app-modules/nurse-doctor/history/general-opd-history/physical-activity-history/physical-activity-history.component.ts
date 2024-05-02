@@ -84,12 +84,6 @@ export class PhysicalActivityHistoryComponent
     this.getBeneficiaryDetails();
   }
 
-  // getMasterData(){
-  //   this.masterData = this.dummy;
-  //   this.physicalActivityQuestions = this.masterData.physicalActivitQuestions
-  //   console.log("questions", this.physicalActivityQuestions);
-
-  // }
   ngOnChanges() {
     if (String(this.mode) === 'view') {
       // let visitID = localStorage.getItem('visitID');
@@ -99,14 +93,9 @@ export class PhysicalActivityHistoryComponent
   }
   nurseMasterDataSubscription: any;
   getMasterData() {
-    // this.masterData = this.dummy;
-    // this.diseaseMasterData = this.masterData.data.DiseaseTypes;
-    // this.familyMemeberMasterData = this.masterData.data.familyMemberTypes;
-    // this.addFamilyDisease();
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.physicalActivityQuestions = this.masterData.physicalActivity;
           console.log('masterData', this.masterData);
@@ -165,7 +154,6 @@ export class PhysicalActivityHistoryComponent
       this.idrsScoreService.setIRDSscorePhysicalActivity(
         selectedQuestion[0].score,
       );
-      // this.idrsScoreService.setIDRSScoreFlag();
     }
   }
   calculateIDRSScore(event: any, formGrpup: any) {
@@ -185,8 +173,6 @@ export class PhysicalActivityHistoryComponent
     this.physicalActivityHistory.patchValue({
       score: IDRSScoreForPhysicalActivity,
     });
-
-    // this.physicalActivityHistory.patchValue(selectedQuestion);
 
     this.idrsScoreService.setIRDSscorePhysicalActivity(
       IDRSScoreForPhysicalActivity,

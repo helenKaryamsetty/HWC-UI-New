@@ -79,7 +79,6 @@ export class DispensationDetailsComponent
     this.attendant = this.route.snapshot.params['attendant'];
     this.futureDate.setDate(this.futureDate.getDate() + 1);
     this.pastDate.setDate(this.today.getDate() - 1);
-    // this.enableDispensationData();
     this.loadMasterData();
     this.getFamilyPlanningNurseFetchDetails();
 
@@ -99,7 +98,6 @@ export class DispensationDetailsComponent
     } else {
       this.dispensationDetailsForm.reset();
     }
-    // this.dispensationDetailsForm.reset();
     if (this.benFamilyPlanningSubscription)
       this.benFamilyPlanningSubscription.unsubscribe();
 
@@ -114,15 +112,6 @@ export class DispensationDetailsComponent
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
-
-  // enableDispensationData(){
-  //   this.enablingDispenseSubscriptionValue =
-  //   this.registrarService.enablingDispense$.subscribe((response) =>{
-  //     if(response === false){
-  //        this.resetDispensationDetailsForm();
-  //     }
-  //   });
-  // }
 
   resetDispensationDetailsForm() {
     this.dispensationDetailsForm.controls[
@@ -164,7 +153,6 @@ export class DispensationDetailsComponent
         console.log('Error in fetching nurse master data details');
       }
       this.doctorService.enableDispenseFlag = false;
-      // this.getFamilyPlanningFetchDetailsForRevisit();
     });
   }
 

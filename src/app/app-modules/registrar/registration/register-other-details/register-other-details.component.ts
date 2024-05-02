@@ -89,55 +89,19 @@ export class RegisterOtherDetailsComponent
 
   @Input()
   disableGenerateOTP!: boolean;
-  //currentLanguageSet: any;
   patterns: any;
 
   @Output() disableGenerateHealthID = new EventEmitter<any>();
   consentGranted: any;
-  //disableValidateHealthID: boolean = true;
-  // constructor(private fb: FormBuilder,public dialogRef: MdDialogRef<HealthIdOtpGenerationComponent>,
-  //   public httpServiceService: HttpServiceService,@Inject(MD_DIALOG_DATA) public data: any,
-  //   private registrarService: RegistrarService,
-  //   private confirmationService: ConfirmationService,private dialog: MdDialog)
   constructor(
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-  ) {
-    // this.httpServiceService.currentLangugae$.subscribe(response =>
-    //   {this.currentLanguageSet = response;
-    //     this.patterns = [
-    //       {
-    //         'govtIdentityTypeID': 1, allow: 'number', error: this.currentLanguageSet.common.enterDigitAadharNumber,
-    //         maxLength: 12, pattern: /^\d{4}\d{4}\d{4}$/, 'identityType': 'Aadhar'
-    //       },
-    //       {
-    //         'govtIdentityTypeID': 2, allow: 'alphanumeric', error: this.currentLanguageSet.common.enterCharacterVoterID,
-    //         maxLength: 15, pattern: /^([A-Za-z]+[0-9]|[0-9]+[A-Za-z])[A-Za-z0-9]*$/, 'identityType': 'Voter ID'
-    //       },
-    //       {
-    //         'govtIdentityTypeID': 3, allow: 'alphanumerichyphen', error: this.currentLanguageSet.common.enterCharacterDrivingLicenseID,
-    //         maxLength: 18, pattern: /^([A-Za-z]+[0-9]|[0-9]+[A-Za-z])[A-Za-z0-9]*$/, 'identityType': 'Driving License'
-    //       },
-    //       {
-    //         'govtIdentityTypeID': 4, allow: 'alphanumeric', error: this.currentLanguageSet.common.EnterCharacterPanID,
-    //         maxLength: 10, pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/, 'identityType': 'PAN'
-    //       },
-    //       {
-    //         'govtIdentityTypeID': 5, allow: 'alphanumeric', error: this.currentLanguageSet.common.EnterCharacterPassport,
-    //         maxLength: 15, pattern: /^([A-Za-z]+[0-9]|[0-9]+[A-Za-z])[A-Za-z0-9]*$/, 'identityType': 'Passport'
-    //       },
-    //       {
-    //         'govtIdentityTypeID': 6, allow: 'alphanumeric', error: this.currentLanguageSet.common.EnterCharacterRationcardID,
-    //         maxLength: 15, pattern: /^([A-Za-z]+[0-9]|[0-9]+[A-Za-z])[A-Za-z0-9]*$/, 'identityType': 'Ration Card'
-    //       }]
-    //   });
-  }
+  ) {}
 
   ngOnInit() {
-    // this.openConsent();
     this.assignSelectedLanguage();
     this.setErrorMessageForID();
     this.setcheckBoxEnabledByDefault();
@@ -150,9 +114,6 @@ export class RegisterOtherDetailsComponent
         this.otherDetailsForm.reset();
       }
     });
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
-    //console.log(this.currentLanguageSet);
-    //  console.log(this.patientRevisit,'revisit others');
     console.log('currentLanguageSet in ngOnInit', this.currentLanguageSet);
   }
 
@@ -167,7 +128,6 @@ export class RegisterOtherDetailsComponent
   }
 
   patchDetails() {
-    // this.otherDetailsForm.controls['healthId'].setValue(this.registrarService.abhaGenerateData.healthIdNumber);
     const id = <FormArray>this.otherDetailsForm.controls['govID'];
     const govIdValue = this.govIDMaster[0].govIdEntityMaster;
     let aadharId: any;
@@ -188,8 +148,6 @@ export class RegisterOtherDetailsComponent
       idValue: this.registrarService.aadharNumberNew,
       allow: this.getAllowedGovChars(aadharId),
     });
-    // this.loadMasterDataObservable();
-    // this.otherDetailsForm.controls.govID.value[0].idValue.setValue(this.registrarService.aadharNumberNew);
   }
 
   ngDoCheck() {
@@ -223,14 +181,6 @@ export class RegisterOtherDetailsComponent
 
   setErrorMessageForID() {
     this.patterns = [
-      // {
-      //   govtIdentityTypeID: 1,
-      //   allow: 'number',
-      //   error: this.currentLanguageSet.common.enterDigitAadharNumber,
-      //   maxLength: 12,
-      //   pattern: /^\d{4}\d{4}\d{4}$/,
-      //   identityType: 'Aadhar',
-      // },
       {
         govtIdentityTypeID: 2,
         allow: 'alphanumeric',
@@ -319,13 +269,10 @@ export class RegisterOtherDetailsComponent
   loadMasterDataObservable() {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res) => {
-        // console.log('res other', res)
         if (res !== null) {
-          // console.log(res,'res other')
           this.masterData = Object.assign({}, res);
           this.govIDMaster[0] = Object.assign({}, res);
           console.log('PK', this.govIDMaster[0]);
-          // this.otherDetailsForm.controls['[govID].type'].setValue(this.govIDMaster[0].govIdEntityMaster[0])
           this.govLength = this.masterData.govIdEntityMaster.length;
           this.otherGovLength = this.masterData.otherGovIdEntityMaster.length;
           this.otherGovIDMaster[0] = Object.assign({}, res);
@@ -346,7 +293,6 @@ export class RegisterOtherDetailsComponent
         if (res && res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
           if (this.patientRevisit) {
-            // this.setDemographicDefaults();
             this.loadBenEditDetails();
           }
         }
@@ -376,20 +322,8 @@ export class RegisterOtherDetailsComponent
       checked1: true,
       checked2: true,
     });
-    //  this.loadHealthIDMappingData();
     this.loadPreviousBenIdData();
   }
-
-  //   checkHealthID(){
-  //     // if(this.revisitData.healthId && this.revisitData.healthIdNumber){
-  //       if(this.otherDetailsForm.controls['healthId'].value!==null && this.otherDetailsForm.controls['healthIdName'].value!==null){
-  //   this.otherDetailsForm.controls['healthId'].disable();
-  //  this.otherDetailsForm.controls['healthIdName'].disable();
-  // //  this.registrarService.setGenerateOTPFlag(true)
-
-  //     }
-
-  // }
 
   loadPreviousBenIdData() {
     if (
@@ -407,8 +341,6 @@ export class RegisterOtherDetailsComponent
         }
       });
       console.log(identityData, 'identityData');
-      // this.loadGovIDs(identityData);
-      // this.loadotherGovIDs(identityData);
       const govIDs: any[] = [];
       const otherGovIDs: any[] = [];
       identityData.forEach((item) => {
@@ -482,7 +414,6 @@ export class RegisterOtherDetailsComponent
 
   loadGovIDs(govtids: any) {
     console.log(govtids, 'here');
-    // let govIdIndex = 0;
     const id = <FormArray>this.otherDetailsForm.controls['govID'];
     console.log(id, 'formGovID');
     govtids.forEach((val: any, i: any) => {
@@ -502,9 +433,6 @@ export class RegisterOtherDetailsComponent
       this.addID(1, i);
       console.log(formGroupIndexed.value, 'formGroupValue');
       console.log(val, 'value to be added', i, 'and index');
-      // if (i !== 0) {
-      // govIdIndex++;
-      // }
       console.log(id, 'formGovID again');
     });
   }
@@ -521,7 +449,6 @@ export class RegisterOtherDetailsComponent
   }
   loadOtherGovIDs(otherGovtIDs: any) {
     console.log(otherGovtIDs, 'here');
-    // let govIdIndex = 0;
     const id = <FormArray>this.otherDetailsForm.controls['otherGovID'];
     console.log(id, 'formGovID');
     otherGovtIDs.forEach((val: any, i: any) => {
@@ -540,55 +467,9 @@ export class RegisterOtherDetailsComponent
       this.addID(0, i);
       console.log(formGroupIndexed.value, 'formGroupValue');
       console.log(val, 'value to be added', i, 'and index');
-      // if (i !== 0) {
-      // govIdIndex++;
-      // }
       console.log(id, 'formGovID again');
     });
   }
-
-  /*   loadGovIDs(identityData) {
-      let govIdIndex = 0;
-      const govid = <FormArray>this.otherDetailsForm.controls['govID'];
-      identityData.forEach((element, i) => {
-        if (element.govtIdentityType && element.govtIdentityType.isGovtID === true) {
-          if (i !== 0) {
-            this.addID(1, govIdIndex); // 1 = govt id
-            govIdIndex++;
-          }
-          govid.at(govIdIndex).patchValue({
-            type: element.govtIdentityTypeID,
-            idValue: element.govtIdentityNo
-          })
-          this.filtergovIDs(element.govtIdentityTypeID, govIdIndex)
-
-        }
-      });
-
-    }
-    loadotherGovIDs(identityData) {
-      let othergovIdIndex = 0;
-      const othergovid = <FormArray>this.otherDetailsForm.controls['otherGovID'];
-      console.log(othergovid, 'othergovIDDdd');
-      identityData.forEach((element, j) => {
-        if (element.govtIdentityType && element.govtIdentityType.isGovtID === true){
-
-        } else
-        if (element.govtIdentityType.isGovtID === false)  {
-          // if (j !== 0) {
-            // }
-            othergovid.at(othergovIdIndex).patchValue({
-              type: element.govtIdentityTypeID,
-              idValue: element.govtIdentityNo
-            })
-            console.log('called called');
-            this.filterOtherGovIDs(element.govtIdentityTypeID, othergovIdIndex)
-            this.addID(0, othergovIdIndex); // 0 = other govt id
-            othergovIdIndex++;
-
-        }
-      });
-    } */
 
   /**
    *
@@ -636,9 +517,6 @@ export class RegisterOtherDetailsComponent
       const id = <FormArray>this.otherDetailsForm.controls['govID'];
       const formGroupIndexed = <FormGroup>id.at(index);
       console.log(formGroupIndexed, 'formgroupIndexed');
-      // formGroupIndexed.patchValue({
-      //   idValue: null
-      //  })
       formGroupIndexed.controls['idValue'].reset();
 
       const toBePushed = this.masterData.govIdEntityMaster.filter(
@@ -646,7 +524,6 @@ export class RegisterOtherDetailsComponent
           return item.govtIdentityTypeID === this.previousGovID[index];
         },
       );
-      // })
       let indexToRemove;
       let newDataforOtherLists;
 
@@ -692,12 +569,6 @@ export class RegisterOtherDetailsComponent
         });
       }
     });
-    // if (index === 0 && length - 1 === index) {
-    //   console.log(id, 'here')
-    //   id.at(index).patchValue({
-    //     type: null,
-    //     value: null
-    //   })
   }
 
   /**
@@ -705,19 +576,11 @@ export class RegisterOtherDetailsComponent
    * Filter Other GovIDs for List
    */
   filterOtherGovIDs(selectedID: any, index: number) {
-    // console.log(selectedID, index);
     const nextIndex = index + 1;
-    // console.log(nextIndex, 'nextIndex')
-    // console.log(this.previousOtherGovID[index], 'before at previous ids');
-
     if (this.previousOtherGovID[index] === undefined) {
       this.previousOtherGovID[index] = selectedID;
 
       const govIDs = this.otherDetailsForm.value.otherGovID;
-      // console.log(govIDs, 'ids');
-      // console.log(govIDs.length, 'length')
-      // console.log(this.previousOtherGovID[index], 'at previous ids');
-      // console.log(govIDs[index], 'value at index', index);
 
       this.otherGovIDMaster[nextIndex] = JSON.parse(
         JSON.stringify(this.masterData),
@@ -731,21 +594,17 @@ export class RegisterOtherDetailsComponent
             },
           );
       });
-      // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
 
       for (let i = 0; i < this.otherGovIDMaster.length; i++) {
         let indexToRemove;
         let newDataforOtherLists;
         if (i !== index) {
-          // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
-
           const temp = JSON.parse(
             JSON.stringify(this.otherGovIDMaster[i].otherGovIdEntityMaster),
           );
           temp.forEach((removing: any, j: any) => {
             if (removing.govtIdentityTypeID === selectedID) {
               indexToRemove = j;
-              // console.log(indexToRemove, j, 'index to remove');
             }
           });
 
@@ -756,7 +615,6 @@ export class RegisterOtherDetailsComponent
         }
         indexToRemove = undefined;
       }
-      // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
     } else {
       const id = <FormArray>this.otherDetailsForm.controls['otherGovID'];
       const formGroupIndexed = <FormGroup>id.at(index);
@@ -764,18 +622,11 @@ export class RegisterOtherDetailsComponent
       formGroupIndexed.patchValue({
         idValue: null,
       });
-      // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
       const toBePushed = this.masterData.otherGovIdEntityMaster.filter(
         (item: any) => {
-          // console.log(item, 'item to check');
           return item.govtIdentityTypeID === this.previousOtherGovID[index];
         },
       );
-      // let toBeRemoved = this.masterData.otherGovIdEntityMaster.filter((item)=>{
-      //   return item.govtIdentityTypeID === selectedID;
-      // })
-      // console.log(this.previousOtherGovID[index], 'tobePushed index');
-      // console.log(toBePushed, 'tobePushed');
       let indexToRemove;
       let newDataforOtherLists;
 
@@ -789,11 +640,9 @@ export class RegisterOtherDetailsComponent
           const temp = JSON.parse(
             JSON.stringify(this.otherGovIDMaster[i].otherGovIdEntityMaster),
           );
-          // console.log(temp, 'here');
           temp.forEach((removing: any, j: any) => {
             if (removing.govtIdentityTypeID === selectedID) {
               indexToRemove = j;
-              // console.log(indexToRemove, j, 'index to remove');
             }
           });
 
@@ -805,17 +654,9 @@ export class RegisterOtherDetailsComponent
         indexToRemove = undefined;
       }
       this.previousOtherGovID[index] = selectedID;
-
-      // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
     }
-    //  this.otherGovIDMaster[nextIndex].otherGovIdEntityMaster = this.masterData.otherGovIdEntityMaster.filter((item)=>{
-    //    return item.govtIdentityTypeID !== selectedID;
-    // })
-    // console.log(this.otherGovIDMaster, 'masterchange')
-    // console.log(this.masterData.otherGovIdEntityMaster, 'master untouched');
   }
 
-  // Removed Gov IDs
   getRemovedIDs() {
     return {
       removedGovIDs: this.removedGovIDs,
@@ -830,10 +671,6 @@ export class RegisterOtherDetailsComponent
   removeID(idtype: any, index: any) {
     let length = 0;
     length = this.otherDetailsForm.get('govID')?.value.length;
-    // console.log(index, 'index');
-    // console.log(length, 'length')
-    //id type '1' means govID
-    //id type '0' means otherGovID
     if (idtype === 1) {
       if (this.otherDetailsForm.value.govID[index].type !== null) {
         if (
@@ -843,7 +680,6 @@ export class RegisterOtherDetailsComponent
           this.removedGovIDs.push(this.otherDetailsForm.value.govID[index]);
         }
         this.previousGovID.splice(index, 1);
-        // console.log(this.govIDMaster[index], 'its master');
         const values = this.govIDMaster[index].govIdEntityMaster.filter(
           (item: any) => {
             return (
@@ -852,7 +688,6 @@ export class RegisterOtherDetailsComponent
             );
           },
         );
-        // console.log(values, 'restoring');
         this.govIDMaster.splice(index, 1);
         this.govIDMaster.forEach((item) => {
           item.govIdEntityMaster.push(values[0]);
@@ -860,7 +695,6 @@ export class RegisterOtherDetailsComponent
       }
       const id = <FormArray>this.otherDetailsForm.controls['govID'];
       if (index === 0 && length - 1 === index) {
-        // console.log(id, 'here')
         id.at(index).patchValue({
           type: null,
           idValue: null,
@@ -894,7 +728,6 @@ export class RegisterOtherDetailsComponent
             this.otherDetailsForm.value.otherGovID[index].type
           );
         });
-        // console.log(values, 'restoring');
         this.otherGovIDMaster.splice(index, 1);
         this.otherGovIDMaster.forEach((item) => {
           item.otherGovIdEntityMaster.push(values[0]);
@@ -903,7 +736,6 @@ export class RegisterOtherDetailsComponent
 
       const id = <FormArray>this.otherDetailsForm.controls['otherGovID'];
       if (index === 0 && length - 1 === index) {
-        // console.log(id, 'here')
         id.at(index).patchValue({
           type: null,
           idValue: null,
@@ -924,10 +756,6 @@ export class RegisterOtherDetailsComponent
    *
    */
   addID(idtype: any, index: any) {
-    //id type '1' means govID
-    //id type '0' means otherGovID
-
-    // console.log(index, 'index');
     if (idtype === 1) {
       if (
         this.otherDetailsForm.value.govID[index] &&
@@ -941,8 +769,6 @@ export class RegisterOtherDetailsComponent
           this.currentLanguageSet.alerts.info.PleaseInputFieldFirst,
           'warn',
         );
-
-        // console.log('please enter value for This ID')
       }
     } else if (idtype === 0) {
       if (
@@ -957,8 +783,6 @@ export class RegisterOtherDetailsComponent
           this.currentLanguageSet.alerts.info.PleaseInputFieldFirst,
           'warn',
         );
-
-        // console.log('please enter value for This ID')
       }
     }
   }
@@ -1168,7 +992,6 @@ export class RegisterOtherDetailsComponent
           (<FormGroup>this.otherDetailsForm.controls['healthId']).disable();
           (<FormGroup>this.otherDetailsForm.controls['healthId']).markAsDirty();
           this.registrarService.changePersonalDetailsData(result);
-          //this.disableValidateHealthID = false;
           this.disableGenerateHealthID.emit(true);
         }
       }
@@ -1176,7 +999,6 @@ export class RegisterOtherDetailsComponent
   }
 
   openDialogForValidate() {
-    // this.showProgressBar = true;
     const reqObj = {
       healthID:
         this.otherDetailsForm.controls['healthId'].value !== undefined &&
@@ -1189,8 +1011,6 @@ export class RegisterOtherDetailsComponent
     this.registrarService.generateOTPValidateHealthID(reqObj).subscribe(
       (res: any) => {
         if (res.statusCode === 200) {
-          // this.showProgressBar = false;
-          // this.transactionId = res.data.txnId;
           if (res.data && res.data.txnId) {
             if (
               this.otherDetailsForm.controls['healthIdMode'].value === 'MOBILE'
@@ -1226,11 +1046,6 @@ export class RegisterOtherDetailsComponent
             );
           }
         } else {
-          // this.showProgressBar = false;
-          // let dat={
-          //   "clearHealthID":true
-          // };
-          // this.dialogRef.close(dat);
           (<FormGroup>this.otherDetailsForm.controls['healthId']).patchValue(
             null as any,
           );
@@ -1241,7 +1056,6 @@ export class RegisterOtherDetailsComponent
         }
       },
       (err) => {
-        // this.showProgressBar = false;
         this.confirmationService.alert(
           this.currentLanguageSet.issueInGettingBeneficiaryABHADetails,
           'error',
@@ -1367,37 +1181,10 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
     if (!this.healthIdMode)
       required.push(this.currentLanguageSet.aBHAGenerationMode);
     if (required.length) {
-      //this.confirmationValService.notify(this.currentLanguageSet.alerts.info.mandatoryFields, required);
       this.confirmationValService.alert(required.toString(), 'info');
     }
-    // let c = 0;
-    // let cflag = false;
-    // if (
-    //   this.searchHealthid !== "" &&
-    //   this.searchHealthid !== undefined &&
-    //   this.searchHealthid !== null
-    // ) {
-    //   let hid = this.searchHealthid;
-    //   for (var i = 0; i < hid.length; i++) {
-    //     if (!this.is_numeric(hid.charAt(i))) {
-    //       if (!this.isLetter(hid.charAt(i))) {
-    //         if (hid.charAt(i) === ".") c++;
-    //         else {
-    //           cflag = true;
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   if (c > 1 || cflag)
-    //     this.confirmationValService.alert(
-    //       this.currentLanguageSet.validHealthIDMessage,
-    //       "error"
-    //     );
-    // }
     if (this.searchHealthid && this.healthIdMode && this.checkValidHealthID()) {
       this.valhealthId = this.searchHealthid;
-      // this.enablehealthIdOTP = "OTP";
       this.getHealthIdOtpForInitial();
     }
   }
@@ -1657,7 +1444,6 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
     } else {
       healthIDPattern = /^([a-zA-Z0-9])+(\.[a-zA-Z0-9]+)?@([a-zA-Z]{3})$/;
     }
-    // const healthIDPattern = /^([a-zA-Z0-9])+(\.[a-zA-Z0-9]+)?@([a-zA-Z]{3,4})$/;
     const checkPattern = healthIDPattern.test(healthidval);
     if (checkPattern) {
       return true;
@@ -1676,9 +1462,6 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
           this.showProgressBar = false;
           this.RequestId = res.data.RequestId;
           if (this.RequestId) {
-            // gender - 0 - male
-            // gender - 1 - female
-            // gender other - transgender
             this.gender =
               res.data.Auth.Patient.Gender === '0'
                 ? 1
@@ -1714,16 +1497,12 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
               data: res,
             });
             this.dialogRef.close(dat);
-
-            // this.confirmationValService.alert("Health ID Validated Successfuly.Health ID: " + this.userHealthId + ", Name: "+ res.data.Auth.Patient.Name + ", Gender: "+genderName, 'success');
-            //this.confirmationValService.alert("Health ID Validated Successfuly..", 'success');
           } else {
             this.showProgressBar = false;
             const dat = {
               clearHealthID: true,
             };
             this.dialogRef.close(dat);
-            // this.closeDialog();
             this.confirmationValService.alert(res.data.response, 'error');
           }
         } else {

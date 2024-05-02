@@ -61,15 +61,6 @@ export class AppFooterComponent implements OnInit, DoCheck {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
-  // ngDoCheck() {
-  //   let currentUrl = this.activatedRoute.snapshot['_routerState'].url
-  //   let urlCheck = '/common/attendant/tcspecialist/patient/' + localStorage.getItem('beneficiaryRegID')
-  //   if (currentUrl === urlCheck) {
-  //     this.isSpecialist = true;
-  //   }else{
-  //     this.isSpecialist = false
-  //   }
-  // }
   openSnackBar() {
     const snackBarRef: MatSnackBarRef<SpecialistLoginComponent> =
       this.snackBar.openFromComponent(SpecialistLoginComponent, {

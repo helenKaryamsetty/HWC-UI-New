@@ -91,8 +91,6 @@ export class RegisterPersonalDetailsComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
   ) {
-    // dateAdapter: DateAdapter<NativeDateAdapter>
-    // dateAdapter.setLocale('en-IN');
     setTheme('bs4'); // or 'bs4'
   }
 
@@ -111,10 +109,6 @@ export class RegisterPersonalDetailsComponent
         if (res !== null && res !== undefined)
           this.setPersonalDetailsFromHealthId(res);
       });
-    // console.log(
-    //   'personalDataOnHealthIDSubscription',
-    //   this.personalDataOnHealthIDSubscription,
-    // );
   }
   setPersonalDetailsFromHealthId(res: any) {
     this.personalDetailsForm.patchValue({
@@ -180,7 +174,6 @@ export class RegisterPersonalDetailsComponent
   loadMasterDataObservable() {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
-        // console.log('res personal', res)
         if (res !== null) {
           this.masterData = res;
           if (this.patientRevisit) {
@@ -287,7 +280,6 @@ export class RegisterPersonalDetailsComponent
       }`,
       spouseName: element.spouseName || null,
       ageAtMarriage: element.ageAtMarriage || null,
-      // income: element.i_bendemographics && element.i_bendemographics.incomeStatus || null,
       incomeName:
         (element.i_bendemographics && element.i_bendemographics.incomeStatus) ||
         null,
@@ -335,20 +327,12 @@ export class RegisterPersonalDetailsComponent
     } else {
       this.enableMarriageDetails = true;
     }
-
-    // console.log(this.personalDetailsForm.value ,'personal data updated ')
     this._parentBenRegID = `${
       (element.benPhoneMaps.length > 0 &&
         element.benPhoneMaps[0].parentBenRegID) ||
       null
     }`;
   }
-
-  // patchGender() {
-  //   this.personalDetailsForm.patchValue({
-  //     gender: this.revisitData.m_gender.genderID,
-  //     genderName: this.revisitData.m_gender.genderName });
-  // }
 
   /**
    *
@@ -617,10 +601,6 @@ export class RegisterPersonalDetailsComponent
         valueEntered > this.ageLimit &&
         this.personalDetailsForm.value.ageUnit === 'Years'
       ) {
-        // this.confirmationService.alert(
-        //   `Age can only be set between Today to ${this.ageLimit} Years`,
-        //   "info"
-        // );
         this.confirmationService.alert(
           this.current_language_set.alerts.info.ageRestriction,
           'info',
@@ -641,27 +621,6 @@ export class RegisterPersonalDetailsComponent
     }
     this.confirmMarriageEligible();
     this.checkAgeAtMarriage();
-    //     if (this.personalDetailsForm.value.age !== null && this.personalDetailsForm.value.age <= this.ageLimit && this.personalDetailsForm.value.age !== 0) {
-    //   if (!this.personalDetailsForm.value.ageUnit) {
-    //     this.personalDetailsForm.value.ageUnit = 'Years';
-    //   }
-    //   let age = new Date();
-    //   if (this.personalDetailsForm.value.ageUnit === 'Days') { age.setDate(age.getDate() - this.personalDetailsForm.value.age); }
-    //   else if (this.personalDetailsForm.value.ageUnit === 'Months') { age.setMonth(age.getMonth() - this.personalDetailsForm.value.age); }
-    //   else if (this.personalDetailsForm.value.ageUnit === 'Years') { age.setFullYear(age.getFullYear() - this.personalDetailsForm.value.age); }
-
-    //   this.confirmMarriageEligible();
-    //   let newAge = age.toISOString()
-    //   this.personalDetailsForm.patchValue({dob : newAge});
-    // } else if (this.personalDetailsForm.value.age > this.ageLimit) {
-    //   this.confirmationService.alert(`Age can only be between 1 Day to ${this.ageLimit} Years`, 'warn');
-    // } else if (this.personalDetailsForm.value.age > this.ageLimit && this.personalDetailsForm.value.ageUnit === 'Years') {
-    //   this.confirmationService.alert(`Age can only be between 1 Day to ${this.ageLimit} Years`, 'warn');
-    //   this.personalDetailsForm.patchValue({age : null});
-    // }  else if(this.personalDetailsForm.value.age === null) {
-    //   this.confirmationService.alert(`Please Enter Age of Beneficiary`, 'warn');
-
-    // }
   }
 
   onAgeUnitEntered() {
@@ -686,8 +645,6 @@ export class RegisterPersonalDetailsComponent
   dobChangeByCalender(dobval: any) {
     const date = new Date(this.dateForCalendar);
     console.log(this.personalDetailsForm.value.dob);
-    // console.log(this.dateForCalendar,'fromcalendar');
-    // console.log(date,'new')
     if (
       this.dateForCalendar &&
       (!dobval || dobval.length === 10) &&

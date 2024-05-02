@@ -156,14 +156,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         services.push(service);
       }
     });
-    //console.log(services, "services");
-    // services.push(
-    //   Object.assign({
-    //     serviceName: this.higherHealthFacility,
-    //     serviceLoaded: false,
-    //   })
-    // );
-    //uncomment to see bahmni clinical records
     return services;
   }
 
@@ -238,7 +230,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         this.doctorService.getTMCasesheetData(reqObj).subscribe((res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
             this.historyOfHWC.data[i]['benPreviousData'] = res.data;
-            //this.previousVisitData.push({ 'benPreviousData': res.data});
             this.filteredHWCHistory = res.data;
             this.previousHWCHistoryPageChanged({
               page: this.previousHWCHistoryActivePage,
@@ -295,7 +286,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   getVisitDetails(serviceType: any, visit: any, print: any) {
-    // if (visit.VisitCategory !== 'NCD screening') {
     this.confirmationService
       .confirm('info', this.current_language_set.alerts.info.viewCasesheet)
       .subscribe((res) => {
@@ -330,15 +320,11 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           }
         }
       });
-    // } else {
-    //   this.confirmationService.alert(this.current_language_set.alerts.info.noCasesheet)
-    // }
   }
 
   hideMCTSFetch = false;
   previousMCTSHistoryRowsPerPage = 5;
   previousMCTSHistoryActivePage = 1;
-  // historyOfMCTS: any = [];
   filteredMCTSHistory: any = [];
   getMCTSHistory() {
     this.doctorService.getMCTSHistory().subscribe(
@@ -409,7 +395,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   hide104Fetch = false;
   previous104HistoryRowsPerPage = 5;
   previous104HistoryActivePage = 1;
-  // historyOf104: any = [];
   filtered104History: any = [];
   get104History() {
     this.doctorService.get104History().subscribe(
@@ -480,7 +465,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   callData: any;
   getPatientMCTSCallHistory(call: any) {
     const callDetailID = { callDetailID: call.callDetailID };
-    // let callDetailID={ "callDetailID": "19099" }
     this.doctorService
       .getPatientMCTSCallHistory(callDetailID)
       .subscribe((data: any) => {
@@ -614,7 +598,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           this.historyOfHWC.data = data.data;
           this.historyOfHWC.paginator = this.paginator;
           this.getEachVisitData();
-          // this.filteredHWCHistory = data.data;
         } else {
           this.confirmationService.alert(
             this.current_language_set.unableToLoadData,

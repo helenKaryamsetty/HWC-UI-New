@@ -556,9 +556,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
               observationsArray.removeAt(index);
             } else {
               observationsListForm.reset();
-              // observationsListForm.controls[
-              //   'clinicalObservationsProvided'
-              // ].enable();
             }
             this.generalFindingsForm.markAsDirty();
           }
@@ -568,7 +565,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
         observationsArray.removeAt(index);
       } else {
         observationsListForm.reset();
-        //observationsListForm.controls['clinicalObservationsProvided'].enable();
       }
     }
   }
@@ -607,7 +603,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
               findingsArray.removeAt(index);
             } else {
               findingsList.reset();
-              // findingsList.controls['significantFindingsProvided'].enable();
             }
             this.generalFindingsForm.markAsDirty();
             this.resetFindingsCheckbox(
@@ -622,7 +617,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
         findingsArray.removeAt(index);
       } else {
         findingsList.reset();
-        // findingsList.controls['significantFindingsProvided'].enable();
       }
       this.resetFindingsCheckbox(
         this.generalFindingsForm.controls['significantFindingsList'].value.at(0)

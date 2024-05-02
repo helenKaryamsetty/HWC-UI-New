@@ -101,12 +101,8 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
-          // this.snomedCode = masterData.DiseaseTypes.snomedCode;
-          // this.snomedTerm = masterData.DiseaseTypes.snomedTerm;
-          // this.familyMemeberMasterData = masterData.familyMemberTypes;
 
           this.familyMemeberMasterData = masterData.familyMemberTypes.filter(
             (item: any) => {
@@ -184,10 +180,6 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       });
 
       if (diseaseType.length > 0) temp[i].diseaseType = diseaseType[0];
-      // temp[i].snomedCode = this.snomedCode[0];
-      // temp[i].snomedTerm = this.snomedTerm[0];
-      // console.log("diseaseType",   temp[i].diseaseType)
-      // console.log("snomedTerm", temp[i].snomedTerm)
 
       if (temp[i].diseaseType) {
         const k: any = formArray.get('' + i);
@@ -219,8 +211,6 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
         if (item.diseaseType === 'None' && temp.length > 0) return false;
         else if (arr.length === 0) return true;
         else return false;
-        // let flag = arr.length === 0 ? true : false;
-        // return flag;
       });
       this.diseaseSelectList.push(result.slice());
     }
@@ -256,11 +246,6 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
     }
-
-    // if(disease.snomedCode){
-    // familyDiseaseForm.patchValue({c})
-    // }
-
     this.diseaseSelectList.map((item: any, t: any) => {
       const index = item.indexOf(disease);
       if (index !== -1 && t !== i && disease.diseaseType !== 'Other')

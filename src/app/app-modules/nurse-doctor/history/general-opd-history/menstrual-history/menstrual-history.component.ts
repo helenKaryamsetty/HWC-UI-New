@@ -98,7 +98,6 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           masterData.menstrualCycleBloodFlowDuration &&
           masterData.menstrualProblem
         ) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.checkVisitType();
           if (String(this.mode) === 'view') {
@@ -154,9 +153,6 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
                 return item.menstrualCycleRange === temp.bloodFlowDuration;
               },
             )[0];
-          // temp.problemName = this.masterData.menstrualProblem.filter(item => {
-          //   return item.name === temp.problemName;
-          // })[0];
           const tempMenstrualProblem: any = [];
           if (
             temp.menstrualProblemList &&

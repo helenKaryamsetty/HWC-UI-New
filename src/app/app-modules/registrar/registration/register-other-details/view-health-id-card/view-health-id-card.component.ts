@@ -42,7 +42,6 @@ export class ViewHealthIdCardComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.convertIMGToPDF(this.data.imgBase64);
   }
 
   ngDoCheck() {
@@ -92,7 +91,6 @@ export class ViewHealthIdCardComponent implements OnInit, DoCheck {
       // chrome
       const blob = new Blob([blobData], { type: 'image/png' });
       const url = window.URL.createObjectURL(blob);
-      // window.open(url);
       const link = document.createElement('a');
       link.href = url;
       link.download = 'ABHACard';

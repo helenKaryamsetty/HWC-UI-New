@@ -97,7 +97,6 @@ export class FamilyPlanningAndReproductiveComponent
     this.attendant = this.route.snapshot.params['attendant'];
     this.getBeneficiaryDetails();
     this.assignSelectedLanguage();
-    // this.getAgeUnitMasters();
     this.getMastersOfcurrentlyFPMethod();
     /* Set Max date*/
     this.maxEndDate = new Date();
@@ -157,20 +156,14 @@ export class FamilyPlanningAndReproductiveComponent
   }
 
   checkWithFertilityStatus() {
-    // let fertilityStatusDetails =
-    //   this.familyPlanningAndReproductiveForm.controls.fertilityStatus.value;
-
     String(this.familyPlanningMode) === 'view' ||
     String(this.familyPlanningMode) === 'update'
       ? this.doctorService.familyPlanningValueChanged(true)
       : null;
-
-    // this.familyPlanningAndReproductiveForm.reset();
     this.resetFormOnRadioSelection();
     this.resetCurrentFPOptions();
 
     this.familyPlanningAndReproductiveForm.patchValue({
-      // fertilityStatus: fertilityStatusDetails,
       unitOfAge: 'Years',
     });
     this.fertilityStatusOption.filter((itemId: any) => {
@@ -183,9 +176,6 @@ export class FamilyPlanningAndReproductiveComponent
         ].setValue(itemId.id);
       }
     });
-    // (this.familyPlanningMode === "view" || this.familyPlanningMode === "update")
-    //   ? this.doctorService.familyPlanningValueChanged(true)
-    //   : null;
     if (
       this.fertilityStatus !== undefined &&
       this.fertilityStatus !== null &&
@@ -404,7 +394,6 @@ export class FamilyPlanningAndReproductiveComponent
   }
 
   checkAgeOfYoungestChildValidation(youngChildAge: any) {
-    // let benAge = this.beneficiary.ageVal
     if (youngChildAge !== undefined && youngChildAge !== null) {
       const youngChildageUnit =
         this.familyPlanningAndReproductiveForm.controls['unitOfAge'].value;
@@ -462,7 +451,6 @@ export class FamilyPlanningAndReproductiveComponent
           this.fertilityStatusOption = res.m_FertilityStatus;
           this.genderMasterData = res.m_gender;
           this.ageUnitMasterData = res.m_ageunits;
-          //making years value as a default
 
           this.familyPlanningAndReproductiveForm.patchValue({
             unitOfAge: 'Years',

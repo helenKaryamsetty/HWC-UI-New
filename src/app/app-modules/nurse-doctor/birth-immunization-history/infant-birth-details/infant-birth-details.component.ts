@@ -111,9 +111,6 @@ export class InfantBirthDetailsComponent
   }
 
   ngOnChanges() {
-    // if (this.mode === "view") {
-    //   this.getNurseFetchDetails();
-    // }
     console.log('success');
   }
 

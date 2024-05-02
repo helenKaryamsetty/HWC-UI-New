@@ -357,11 +357,6 @@ export class DoctorInvestigationsComponent
     ) {
       return true;
     }
-    // else if(((this.rbsTestResultCurrent === null || this.rbsTestResultCurrent === undefined) &&
-    // this.nurseService.rbsTestResultFromDoctorFetch ==null) && test.procedureName === environment.RBSTest)
-    // {
-    //   test.checked=false;
-    // }
     if (this.previousLabTestList) {
       const temp = this.previousLabTestList.filter((item: any) => {
         return item.procedureID === test.procedureID;
@@ -403,7 +398,6 @@ export class DoctorInvestigationsComponent
   }
   checkTestName(event: any) {
     console.log('testName', event);
-    // this.RBSTestDoneInVitals = false;
     this.VisualAcuityTestDone = false;
     let item = event.value;
     let oneSelected = 0;
@@ -415,7 +409,6 @@ export class DoctorInvestigationsComponent
         element.procedureName.toLowerCase() ===
         environment.RBSTest.toLowerCase()
       ) {
-        // this.RBSTestDoneInVitals = true;
         this.rbsSelectedInInvestigation = true;
         this.nurseService.setRbsSelectedInInvestigation(true);
         oneSelected++;
@@ -635,7 +628,6 @@ export class DoctorInvestigationsComponent
 
         (err) => {
           this.diabetesObservable();
-          // this.idrsScoreService.diabetesNotPresentInMMU = 1;
           this.confirmationService.alert(
             this.current_language_set.errorInFetchingMMUInvestigationDetails,
             'error',
@@ -647,7 +639,6 @@ export class DoctorInvestigationsComponent
 
   diabetesSelectedFlagSubscription!: Subscription;
   diabetesObservable() {
-    //this.idrsScoreService.clearDiabetesSelected();
     this.diabetesSelectedFlagSubscription =
       this.idrsScoreService.diabetesSelectedFlag$.subscribe((response) => {
         console.log('investigation', response);
@@ -656,7 +647,6 @@ export class DoctorInvestigationsComponent
 
           if (this.diabetesSelected === 1) {
             this.idrsScoreService.diabetesNotPresentInMMU = 1;
-            //this.RBSTestDoneInVitals = false;
           }
         }
       });

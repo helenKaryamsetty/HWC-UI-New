@@ -62,8 +62,6 @@ export class DiagnosisSearchDirective {
     if (searchTerm.length > 2) {
       const dialogRef = this.dialog.open(DiagnosisSearchComponent, {
         width: '800px',
-        // height: '500px',
-        //panelClass: 'fit-screen',
         data: {
           searchTerm: searchTerm,
           addedDiagnosis: this.previousSelected,

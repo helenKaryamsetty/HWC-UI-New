@@ -85,7 +85,6 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
           if (String(this.mode) === 'view') {

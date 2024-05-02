@@ -87,7 +87,6 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           console.log('this.masterData ', this.masterData);
           if (String(this.mode) === 'view') {

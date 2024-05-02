@@ -63,7 +63,6 @@ export class ServiceComponent implements OnInit, DoCheck {
                 this.serviceDetails,
               );
             } else if (designation === 'TC Specialist') {
-              // this.getDemographics();
               this.checkRoleAndDesingnationMappedForservice(
                 this.loginDataResponse,
                 this.serviceDetails,
@@ -221,9 +220,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   checkDesignationWithRole() {
     if (this.roleArray.includes(this.designation)) {
       localStorage.setItem('designation', this.designation);
-      // this.getSwymedMailLogin();  // need to uncomment it later
       this.routeToDesignation(this.designation);
-      // this.routeToDesignation(this.designation);
     } else {
       this.confirmationService.alert(
         this.currentLanguageSet.alerts.info.rolesNotMatched,

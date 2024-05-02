@@ -106,8 +106,6 @@ export class FollowUpForImmunizationComponent
               const ageInMonth = this.getAgeValueNew(calculateAgeInMonths);
 
               this.beneficiaryAge = ageInYear + ageInMonth + ' days';
-
-              // this.beneficiaryAge = ageInYear + ageInMonth + " days";
             } else {
               this.beneficiaryAge = beneficiaryDetails.age.split('-')[0].trim();
             }

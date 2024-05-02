@@ -72,8 +72,6 @@ export class HistoryCaseSheetComponent implements OnChanges, OnInit, DoCheck {
 
   ngOnInit() {
     this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
-    // this.changeLanguage();
     this.assignSelectedLanguage();
   }
 
@@ -215,7 +213,6 @@ export class HistoryCaseSheetComponent implements OnChanges, OnInit, DoCheck {
         }
       }
     }
-    // console.log("referDetails" , this.referDetails);
     console.log(
       'referDetailsForRefer',
       JSON.stringify(this.referDetails, null, 4),

@@ -119,37 +119,6 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     this.assignSelectedLanguage();
-    // this.language = sessionStorage.getItem('setLanguage');
-
-    // if (this.language !== undefined) {
-    //   this.httpServiceService
-    //     .getLanguage(this.language_file_path + this.language + ".json")
-    //     .subscribe(
-    //       response => {
-    //         if (response) {
-    //           this.current_language_set = response[this.language];
-
-    //         } else {
-    //           console.log(
-    //             this.current_language_set.alerts.info.comingUpWithThisLang +
-    //               " " +
-    //               this.language
-    //           );
-    //         }
-    //       },
-    //       error => {
-    //         console.log(
-    //           this.current_language_set.alerts.info.comingUpWithThisLang +
-    //             " " +
-    //             this.language
-    //         );
-    //       }
-    //     );
-    // }else{
-    //   this.httpServiceService.currentLangugae$.subscribe(
-    //     response => (this.current_language_set = response)
-    //   );
-    // }
   }
 
   ngDoCheck() {
@@ -170,9 +139,6 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   hideSelectQC = false;
 
   getCasesheetData(caseSheetRequest: any) {
-    // if (this.visitCategory === 'General OPD (QC)' || this.previous === true) {
-    //   this.hideSelectQC = true;
-    // }
     if (this.serviceType === 'TM') {
       this.getTMCasesheetData(caseSheetRequest);
     }

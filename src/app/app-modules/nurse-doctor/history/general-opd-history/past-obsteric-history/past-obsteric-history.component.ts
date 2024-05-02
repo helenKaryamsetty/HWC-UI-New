@@ -92,7 +92,6 @@ export class PastObstericHistoryComponent
     this.assignSelectedLanguage();
     this.hrpService.setPastObstetric(this.pastObstetricValues);
     this.subscribeTotalNoofPregChanges();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     this.getMasterData();
   }
 
@@ -172,7 +171,6 @@ export class PastObstericHistoryComponent
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) {
-          // this.nurseMasterDataSubscription.unsubscribe();
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
@@ -556,8 +554,6 @@ export class PastObstericHistoryComponent
         ' ' + this.currentLanguageSet.cannotBeZero,
       );
     }
-    // if (this.visitCategory === 'ANC' && totalNoOfPreg === 0)
-    //   this.confirmationService.alert("Total number of past pregnancy for ANC(MultiGravida) can not be zero(0)");
   }
 
   resetOtherPregnancyComplication(
@@ -565,8 +561,6 @@ export class PastObstericHistoryComponent
     index: any,
     setHrpStatus: any,
   ) {
-    //console.log("pastObstericHistoryForm value",this.pastObstericHistoryForm.controls[index].controls["pregComplicationList"].value);
-    //  this.hrpService.setPregnancyComplication(this.pastObstericHistoryForm.controls["pregComplicationList"].value);
     const pregComplicationList =
       pastObstericHistoryForm.value.pregComplicationList;
     let flag = false;
@@ -727,11 +721,6 @@ export class PastObstericHistoryComponent
     if (!flag)
       pastObstericHistoryForm.patchValue({ otherPostpartumCompType: null });
   }
-
-  // resetOtherPostNatalComplication(pastObstericHistoryForm) {
-  //   if (pastObstericHistoryForm.value.postNatalComplication.complicationValue === 'Other')
-  //     pastObstericHistoryForm.patchValue({ otherPostNatalComplication: null });
-  // }
 
   resetOtherNewBornComplications(pastObstericHistoryForm: any) {
     if (

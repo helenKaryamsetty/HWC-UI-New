@@ -35,7 +35,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();
@@ -59,7 +58,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();
@@ -104,7 +102,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = true;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
     dialogRef.componentInstance.btnCancelText = btnCancelText;
 
     return dialogRef.afterClosed();
@@ -204,7 +201,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.editRemarks = false;
     dialogRef.componentInstance.sessionTimeout = true;
     dialogRef.componentInstance.updateTimer(timer);
-    // dialogRef.componentInstance.comments = null;
 
     return dialogRef.afterClosed();
   }
@@ -262,7 +258,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alertFetsenseMessage = true;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
   }
   /*END*/
   public confirmCalibration(
@@ -285,7 +280,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
 
     return dialogRef.afterClosed();
   }
@@ -311,7 +305,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
     dialogRef.componentInstance.cbacData = data;
 
     return dialogRef.afterClosed();
@@ -339,7 +332,6 @@ export class ConfirmationService {
     dialogRef.componentInstance.alert = false;
     dialogRef.componentInstance.remarks = false;
     dialogRef.componentInstance.editRemarks = false;
-    // dialogRef.componentInstance.comments = null;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();

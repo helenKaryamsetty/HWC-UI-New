@@ -237,7 +237,6 @@ export class PreviousVisitDetailsComponent
     });
     console.log(k, 'dated');
     if (k && k.length) {
-      // k = k.reverse();
       k.forEach((element: any) => {
         if (
           element.date &&
@@ -283,7 +282,6 @@ export class PreviousVisitDetailsComponent
     );
     localStorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
     this.router.navigate(['/common/print']);
-    // }
   }
 
   chartClicked(type: any) {

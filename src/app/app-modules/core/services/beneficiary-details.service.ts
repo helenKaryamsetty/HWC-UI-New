@@ -54,9 +54,6 @@ export class BeneficiaryDetailsService {
     this.HRPPositiveFlag.next(0);
   }
 
-  // getCheck() {
-  //   return this.http.get('http://localhost:3000/profile')
-  // }
   getCBACDetails(beneficiaryRegID: string) {
     return this.http.post(environment.getBenCBACDetails, {
       benRegID: beneficiaryRegID,

@@ -49,7 +49,6 @@ export class ResetPasswordComponent {
 
   public questionId: any[] = [];
   public questions: any[] = [];
-  //public correctAnswers: any[] = [];
   public userAnswers: any[] = [];
   userFinalAnswers: any[] = [];
 

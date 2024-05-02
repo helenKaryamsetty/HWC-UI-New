@@ -48,12 +48,6 @@ export class ServicePointService {
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const spPSMID = localStorage.getItem('providerServiceID');
 
-    // const vanID =
-    //   serviceLineDetails !== null && serviceLineDetails !== undefined
-    //     ? JSON.parse(serviceLineDetails).vanID
-    //     : null;
-    // const spPSMID = localStorage.getItem('providerServiceID');
-
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       vanID: vanID,
       spPSMID: spPSMID,

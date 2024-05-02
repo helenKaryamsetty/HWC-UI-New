@@ -72,7 +72,6 @@ export class IecAndCounsellingComponent
     this.doctorService.setFamilyDataFetch(false);
     this.attendant = this.route.snapshot.params['attendant'];
     this.getMastersOfCounselledOn();
-    // this.getMastersOfContraceptiveOpted();
 
     this.doctorService.fetchFamilyDataCheck$.subscribe((responsevalue) => {
       if (responsevalue === true) {
@@ -137,20 +136,8 @@ export class IecAndCounsellingComponent
       } else {
         console.log('Error in fetching nurse master data details');
       }
-      // this.getFamilyPlanningFetchDetailsForRevisit();
     });
   }
-
-  // getMastersOfContraceptiveOpted() {
-  //   this.selectContraceptive = [];
-  //     this.masterdataService.nurseMasterData$.subscribe((res) => {
-  //         if (res !== undefined && res !== null) {
-  //         this.selectContraceptive = res.m_fpmethodfollowup;
-  //         } else{
-  //           console.log("Error in fetching nurse master data details");
-  //         }
-  //       });
-  // }
 
   onValueChange() {
     String(this.familyPlanningMode) === 'view' ||

@@ -19,18 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, OnInit, ViewChild, Input, DoCheck } from '@angular/core';
+import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { ServicePointService } from './service-point.service';
-import { AppHeaderComponent } from 'src/app/app-modules/core/component/app-header/app-header.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegistrationUtils } from 'src/app/app-modules/registrar/shared/utility/registration-utility';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
-// import { CDSSService } from 'app/app-modules/nurse-doctor/shared/services/cdss-service';
 
 @Component({
   selector: 'app-service-point',
@@ -41,39 +36,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   current_language_set: any;
   @ViewChild('f') form: any;
   designation: any;
-  // statesList = [
-  //   { id:0,
-  //   name:'AP',
-  // },
-  // { id:1,
-  //   name:'Telangana',
-  // },
-  // { id:2,
-  //   name:'Assam',
-  // },
-  // ];
-  // taluks = [
-  //   { id:0,
-  //   name:'AP',
-  // },
-  // { id:1,
-  //   name:'Telangana',
-  // },
-  // { id:2,
-  //   name:'Assam',
-  // },
-  // ];
-  // districts = [
-  //   { id:0,
-  //   name:'AP',
-  // },
-  // { id:1,
-  //   name:'Telangana',
-  // },
-  // { id:2,
-  //   name:'Assam',
-  // },
-  // ];
   streets = [
     { id: 0, name: 'AP' },
     { id: 1, name: 'Telangana' },
@@ -115,7 +77,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
     private servicePointService: ServicePointService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
-    private fb: FormBuilder,
     private registrarService: RegistrarService,
   ) {}
 
@@ -125,15 +86,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.userId !== localStorage.getItem('userID');
     this.getServicePoint();
     this.getCdssAdminStatus();
-    //this.getDemographics();
-    // console.log( "language",this.appLanguage.appCurrentLanguge.value);
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.current_language_set = response);
     console.log('here at three', this.current_language_set);
-
-    //this.currentLanguage = this.language.appCurrentLanguge;
   }
-
-  // @Input() currentLanguage: any;
 
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -144,15 +98,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  // ngOnChanges() {
-  // console.log("Chnage works",this.appLanguage.appCurrentLanguge.value);
-  // if(this.currentLanguage){
-  //   this.currentLanguage = this.language.appCurrentLanguge;
-  //   console.log("service point ", this.currentLanguage);
-  // }else{
-  //   console.log("error here at service point");
-  // }
-  // }
   resetLocalStorage() {
     localStorage.removeItem('sessionID');
     localStorage.removeItem('serviceLineDetails');
@@ -225,7 +170,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
       );
     if (serviceLineDetails.vanSession)
       localStorage.setItem('sessionID', serviceLineDetails.vanSession);
-    // this.getDemographics();
   }
 
   routeToDesignation(designation: any) {
@@ -271,12 +215,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
       if (data.stateMaster && data.stateMaster.length >= 1) {
         localStorage.setItem('location', JSON.stringify(data));
         this.goToWorkList();
-        // this.statesList = data.stateMaster;
-        // this.stateID = data.otherLoc.stateID;
-        // this.fetchDistrictsOnStateSelection(this.stateID);
-        // this.districtID = null;
-        // this.blockID = null;
-        // this.districtBranchID = null;
       } else {
         this.locationGathetingIssues();
       }

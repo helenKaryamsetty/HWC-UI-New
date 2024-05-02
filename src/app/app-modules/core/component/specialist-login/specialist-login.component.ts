@@ -41,19 +41,6 @@ export class SpecialistLoginComponent implements OnInit {
   ngOnInit() {
     console.log(' this.data', this.data);
     this.specialistTMLoginForm = this.createSpecialistTMLoginForm();
-
-    // if (localStorage.getItem('swymedLogin')) {
-    //   let logggedInDoctor = JSON.parse(localStorage.getItem('swymedLogin')).userName
-    //   let loginPassWord = JSON.parse(localStorage.getItem('swymedLogin')).password
-    //   let domainValue = JSON.parse(localStorage.getItem('swymedLogin')).domain
-    //   if (logggedInDoctor !== null && domainValue !== null && loginPassWord) {
-    //     this.specialistTMLoginForm.patchValue({
-    //       userName: logggedInDoctor,
-    //       password: loginPassWord,
-    //       domain: domainValue
-    //     })
-    //   }
-    // }
   }
 
   closeSnackBar(close: any) {

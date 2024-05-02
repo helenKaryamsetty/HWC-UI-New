@@ -126,11 +126,6 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
             sectionCount.sno = index + 1;
           });
           this.filterTerm = null;
-          // this.currentPage = 1;
-          // this.pageChanged({
-          //   page: this.activePage,
-          //   itemsPerPage: this.rowsPerPage,
-          // });
         } else this.confirmationService.alert(data.errorMessage, 'error');
       },
       (err) => {
@@ -202,12 +197,6 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
     }
-    // this.activePage = 1;
-    // this.pageChanged({
-    //   page: 1,
-    //   itemsPerPage: this.rowsPerPage,
-    // });
-    // this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {

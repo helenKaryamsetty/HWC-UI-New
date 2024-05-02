@@ -29,7 +29,6 @@ export class MyHealthIdDirective {
   constructor(element: ElementRef) {}
 
   @HostListener('keypress', ['$event']) onKeyPress(ev: any) {
-    // var regex = new RegExp(/^[0-9a-zA-Z_.]*$/);
     const regex = new RegExp(/^[~!@#$%^&*()_+\-=[]{};':"\\|,<>\/?]*$/);
     const key = String.fromCharCode(!ev.charCode ? ev.which : ev.charCode);
     if (regex.test(key)) {

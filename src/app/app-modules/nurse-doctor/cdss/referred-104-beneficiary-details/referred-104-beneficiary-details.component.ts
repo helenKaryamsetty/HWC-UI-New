@@ -93,7 +93,6 @@ export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
     this.registrarService.identityQuickSearch(reqObj).subscribe((res: any) => {
       if (res) {
         this.beneficiary = res[0];
-        //   this.benFamilyId = res[0].familyId;
         console.log(this.beneficiary);
         console.log(this.beneficiary.firstName);
         this.beneficiaryName =

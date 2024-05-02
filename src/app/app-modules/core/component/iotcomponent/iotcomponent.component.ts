@@ -111,7 +111,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
             this.progressMsg = JSON.parse(res['_body'])['message'];
             this.startedCalibration = true;
             this.stripShowMsg = true;
-            // this.getCalibStatus();
           } else {
             this.errorMsg = res['message'];
           }
@@ -140,14 +139,8 @@ export class IotcomponentComponent implements OnInit, DoCheck {
         if (res.status === 202 || res.status === 200) {
           this.stripShowMsg = false;
           this.statusCalibration = true;
-          // this.getstatus();
-          // this.datasave=res["_body"];
           this.progressMsg = JSON.parse(res['_body'])['message'];
           clearTimeout(this.statuscall);
-          //this.calibStop();
-          // if(this.output===undefined){
-          //   this.dialogRef.close(JSON.parse(res["_body"]) )
-          // }
           this.confirmationService
             .confirmCalibration(
               'success',
@@ -158,9 +151,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
                 this.start();
               } else this.dialogRef.close();
             });
-          //else{
-          //   this.closeOperation(JSON.parse(res["_body"]));
-          // }
         } else if (res.status === 206) {
           this.stripShowMsg = false;
           this.statusCalibration = true;
@@ -193,7 +183,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     this.stripShowMsg = false;
     this.statusCalibration = false;
     this.stoppedCalibration = false;
-    // var x="api/v1/physical_tests/weight";
     this.progressMsg = undefined;
     try {
       this.service.startAPI(this.startAPI).subscribe(
@@ -221,16 +210,11 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   }
 
   getstatus() {
-    // this.statuscall =  setTimeout(() => {
     this.service.statusAPI(this.startAPI + '/status').subscribe(
       (res: any) => {
         console.log('dfasdas', res);
         if (res.status === 200) {
-          // this.getstatus();
-          // this.datasave=res["_body"];
-
           this.statuscall = undefined;
-          // clearTimeout(this.statuscall)
 
           if (this.output === undefined) {
             this.dialogRef.close(JSON.parse(res['_body']));
@@ -241,11 +225,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
           this.progressMsg = JSON.parse(res['_body'])['message'];
           this.getstatus();
           this.statuscall = 1;
-          // this.statuscall= setTimeout(() => {
-          //   this.getstatus();
-          // },500);
         } else {
-          // clearTimeout(this.statuscall)
           this.statuscall = undefined;
           this.errorMsg = res['message'];
         }
@@ -266,7 +246,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     else {
       if (this.statuscall !== undefined) {
         this.statuscall = undefined;
-        // clearTimeout(this.statuscall)
 
         this.service.endAPI(this.startAPI).subscribe((res: any) => {
           console.log('dfasdas', res);
