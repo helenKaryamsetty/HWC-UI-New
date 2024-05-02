@@ -3,21 +3,21 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'http://10.208.122.38:8080/';
-const tmIP = 'http://10.208.122.38:8080/';
-const mmuIP = 'http://10.208.122.38:8080/';
-const schedulerIP = 'http://10.208.122.38:8080/';
-const tmUI_IP = 'http://10.208.122.38:8080/';
-const schedulerUI_IP = 'http://10.208.122.38:8080/';
-const inventoryUI_IP = 'http://10.208.122.38:8080/';
+const commonIP = 'http://183.82.107.186:8080/';
+const tmIP = 'http://183.82.107.186:8080/';
+const mmuIP = 'http://183.82.107.186:8080/';
+const schedulerIP = 'http://183.82.107.186:8080/';
+const tmUI_IP = 'http://183.82.107.186:8080/';
+const schedulerUI_IP = 'http://183.82.107.186:8080/';
+const inventoryUI_IP = 'http://183.82.107.186:8080/';
 const SERVER_IP = 'dataSYNCIP';
 const SWYMED_IP = 'swymed://14.143.13.109';
-const adminIP = 'http://10.208.122.38:8080';
-const FHIRIP = 'http://10.208.122.38:8080';
-const identityIP = 'http://10.208.122.38:8080/';
+const adminIP = 'http://183.82.107.186:8080';
+const FHIRIP = 'http://183.82.107.186:8080';
+const identityIP = 'http://183.82.107.186:8080/';
 const IDENTITY_API = `${identityIP}/hwc-identity-0.0.1/`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
-const IP104 = 'http://10.208.122.38:8080/';
+const IP104 = 'http://183.82.107.186:8080/';
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
 //const TM_API = `http://${IP}:8080/apiman-gateway/IEMR/TM/1.0/`;
