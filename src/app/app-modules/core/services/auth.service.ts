@@ -4,78 +4,80 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-
 @Injectable()
 export class AuthService {
   transactionId: any;
 
   constructor(
     private router: Router,
-    private http: HttpClient) { }
+    private http: HttpClient,
+  ) {}
 
   login(userName: any, password: any, doLogout: any) {
-    return this.http.post(environment.loginUrl, { userName: userName, password: password, doLogout: doLogout })
-      //.map(res => res.json());
+    return this.http.post(environment.loginUrl, {
+      userName: userName,
+      password: password,
+      doLogout: doLogout,
+    });
   }
 
   userLogoutPreviousSession(userName: any) {
-    return this.http.post(environment.userLogoutPreviousSessionUrl, { userName: userName })
-      //.map(res => res.json());
+    return this.http.post(environment.userLogoutPreviousSessionUrl, {
+      userName: userName,
+    });
   }
 
   getUserSecurityQuestionsAnswer(uname: any): Observable<any> {
-    return this.http.post(environment.getUserSecurityQuestionsAnswerUrl, { 'userName': uname.toLowerCase() })
-      //.map(res => res.json())
-  };
+    return this.http.post(environment.getUserSecurityQuestionsAnswerUrl, {
+      userName: uname.toLowerCase(),
+    });
+  }
 
   getSecurityQuestions() {
-    return this.http.get(environment.getSecurityQuestionUrl)
-      //.map(res => res.json())
+    return this.http.get(environment.getSecurityQuestionUrl);
   }
 
   saveUserSecurityQuestionsAnswer(userQuestionAnswer: any) {
-    return this.http.post(environment.saveUserSecurityQuestionsAnswerUrl, userQuestionAnswer)
-      //.map(res => res.json())
+    return this.http.post(
+      environment.saveUserSecurityQuestionsAnswerUrl,
+      userQuestionAnswer,
+    );
   }
 
   setNewPassword(userName: string, password: string, transactionId: any) {
-    return this.http.post(environment.setNewPasswordUrl, { 'userName': userName, 'password': password, 'transactionId': transactionId  })
-      //.map(res => res.json())
-  };
+    return this.http.post(environment.setNewPasswordUrl, {
+      userName: userName,
+      password: password,
+      transactionId: transactionId,
+    });
+  }
 
   validateSessionKey() {
-    return this.http.post(environment.getSessionExistsURL, {})
-      //.map((res: any) => res.json());
+    return this.http.post(environment.getSessionExistsURL, {});
   }
 
   logout() {
-    return this.http.post(environment.logoutUrl, '')
-      //.map((res) => res.json());
+    return this.http.post(environment.logoutUrl, '');
   }
-  // getSwymedLogout() {
-  //   return this.http.get(environment.getSwymedLogoutUrl)
-  //     .map(res => res.json())
-  //     .catch(err => {
-  //       return Observable.throw(err);
-  //     })
-  // }
+  getSwymedLogout() {
+    return this.http.get(environment.getSwymedLogoutUrl);
+  }
 
   getUIVersionAndCommitDetails(url: any) {
-    return this.http.get(url)
-      //.map((res) => res.json());
+    return this.http.get(url);
   }
   getAPIVersionAndCommitDetails() {
-    return this.http.get(environment.apiVersionUrl)
-      //.map((res) => res.json());
+    return this.http.get(environment.apiVersionUrl);
   }
   validateSecurityQuestionAndAnswer(ans: any, uname: any): Observable<any> {
-		return this.http.post(environment.validateSecurityQuestions, { 'SecurityQuesAns':ans,'userName': uname })
-    //.map((res) => res.json());
-	};
-	getTransactionIdForChangePassword(uname: any): Observable<any> {
-		return this.http.post(environment.getTransacIDForPasswordChange, { 'userName': uname })
-		//.map((res) => res.json());
-	};
-
-
+    return this.http.post(environment.validateSecurityQuestions, {
+      SecurityQuesAns: ans,
+      userName: uname,
+    });
+  }
+  getTransactionIdForChangePassword(uname: any): Observable<any> {
+    return this.http.post(environment.getTransacIDForPasswordChange, {
+      userName: uname,
+    });
+  }
 }

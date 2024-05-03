@@ -1,0 +1,444 @@
+<section class="row">
+  <section class="col-lg-8 col-md-8 col-sm-12 col-xs-12 d-flex flex-row">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+      <mat-form-field>
+        <mat-select
+          input
+          id="searchCategory"
+          name="searchCategory"
+          (selectionChange)="clearSearchTerm()"
+          [(value)]="searchCategory"
+          style="width: 100%; margin-bottom: -50px"
+        >
+          <mat-option
+            *ngFor="let catergory of searchCategories"
+            class="field-color"
+            [value]="catergory"
+            >{{ catergory }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <div
+        class="d-flex justify-content-start col-lg-12 col-md-12 col-sm-12 col-xs-12"
+      >
+        <div>
+          <input
+            autocomplete="off"
+            id="searchbox"
+            searchPattern
+            maxlength="32"
+            placeholder="{{ currentLanguageSet?.ro?.benIDOrPhNo }}"
+            class="search_textbox"
+            [(ngModel)]="quicksearchTerm"
+            (keyup.enter)="validateSearchTerm(quicksearchTerm, searchCategory)"
+            style="width: 215%; margin-top: 15px; margin-left: 20px"
+          />
+        </div>
+        <div>
+          <button
+            class="search_button pull-right"
+            (click)="validateSearchTerm(quicksearchTerm, searchCategory)"
+            matTooltip="{{ currentLanguageSet?.quickSearch }}"
+          >
+            <mat-icon class="material-icons search_icon">search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <section class="row search-button-container">
+      <button
+        mat-raised-button
+        style="display: none"
+        class="btn btn-link"
+        data-toggle="modal "
+        data-target="#fingerPrintPage "
+        tooltip="Fingerprint Search"
+      >
+        {{ currentLanguageSet?.fingerPrintSearch }}
+      </button>
+      <button
+        class="full-width-login background-overall box pull-right"
+        (click)="navigateTORegistrar()"
+      >
+        {{ currentLanguageSet?.ro?.registration }}
+      </button>
+      <button
+        class="full-width-login background-overall box pull-right adv-button"
+        data-toggle="modal "
+        (click)="openSearchDialog()"
+      >
+        {{ currentLanguageSet?.bendetails?.advanceSearch }}
+      </button>
+      <div id="fingerPrintPage " class="modal fade" role="dialog ">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button mat-raised-button class="close" data-dismiss="modal ">
+                &times;
+              </button>
+              <h4 class="modal-title">{{ currentLanguageSet?.modalHeader }}</h4>
+            </div>
+            <div class="modal-body" style="background: #000">
+              <img src="assets/images/fingerprintScannerPage.png" alt=" " />
+            </div>
+            <div class="modal-footer">
+              <button
+                mat-raised-button
+                class="btn btn-default pull-right"
+                data-dismiss="modal "
+              >
+                {{ currentLanguageSet?.common?.close }}
+              </button>
+              <button mat-raised-button class="btn btn-default pull-right">
+                {{ currentLanguageSet?.common?.clear }}
+              </button>
+              <button
+                mat-raised-button
+                class="btn btn-default pull-right"
+                data-dismiss="modal "
+              >
+                {{ currentLanguageSet?.common?.submit }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</section>
+
+<div class="row spacer"></div>
+
+<div class="row m-b-40">
+  <div class="col-sm-12">
+    <mat-card>
+      <div *ngIf="beneficiaryList?.length > 0" class="pull-right">
+        <mat-form-field id="filterbox" class="m-t-20">
+          <mat-label>
+            {{ currentLanguageSet?.common?.inTableSearch }}
+          </mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            #filterTerm
+            (keyup)="filterBeneficiaryList(filterTerm.value)"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      <div *ngIf="externalBeneficiaryList.length > 0" class="pull-right">
+        <mat-form-field id="filterbox" class="m-t-20">
+          <input
+            autocomplete="off"
+            matInput
+            placeholder="{{ currentLanguageSet?.common?.inTableSearch }}"
+            #filterTerm
+            (keyup)="filterExternalBeneficiaryList(filterTerm.value)"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="clearfix"></div>
+      <section class="table-responsive">
+        <table
+          *ngIf="externalBeneficiaryList?.length === 0"
+          class="table table-striped"
+          aria-describedby="editBeneficiaryTbl"
+        >
+          <thead>
+            <tr>
+              <th id="edit">{{ currentLanguageSet?.bendetails?.edit }}</th>
+              <th id="beneficiaryID">
+                {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+              </th>
+              <th id="beneficiaryName">
+                {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+              </th>
+              <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}</th>
+              <th id="age">{{ currentLanguageSet?.bendetails?.age }}</th>
+              <th id="fatherName">
+                {{ currentLanguageSet?.bendetails?.fatherName }}
+              </th>
+              <th id="district">
+                {{ currentLanguageSet?.bendetails?.district }}
+              </th>
+              <th id="phoneNo">
+                {{ currentLanguageSet?.bendetails?.phoneNo }}
+              </th>
+              <th id="registrationDate">
+                {{ currentLanguageSet?.bendetails?.registrationDate }}
+              </th>
+              <th id="abhaAddress">{{ currentLanguageSet?.abhaDetails }}</th>
+              <th id="image">{{ currentLanguageSet?.bendetails?.image }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-template [ngIf]="filteredBeneficiaryList.length === 0">
+              <tr *ngFor="let row of blankTable">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </ng-template>
+            <tr *ngFor="let beneficiary of pagedList" class="table-hover">
+              <td>
+                <button
+                  matTooltip="{{ currentLanguageSet?.editBeneficiary }}"
+                  type="button"
+                  class="btn text-center"
+                  (click)="editPatientInfo(beneficiary)"
+                >
+                  <span class="fa fa-pencil cursorPointer fa-lg"> </span>
+                </button>
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary?.beneficiaryID }}
+              </td>
+              <td
+                (click)="patientRevisited(beneficiary.benObject)"
+                style="max-width: 200px; word-break: break-word"
+              >
+                {{ beneficiary?.benName | titlecase }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.genderName | titlecase }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.age === "a year" ? "1 year" : beneficiary.age }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.fatherName | titlecase }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.districtName | titlecase }} /
+                {{ beneficiary.villageName | titlecase }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.phoneNo }}
+              </td>
+              <td (click)="patientRevisited(beneficiary.benObject)">
+                {{ beneficiary.registeredOn }}
+              </td>
+              <td>
+                <button
+                  mat-raised-button
+                  type="button"
+                  color="primary"
+                  class="btn text-center"
+                  (click)="getHealthIDDetails(beneficiary)"
+                >
+                  <span>View</span>
+                </button>
+              </td>
+              <td
+                (click)="patientImageView(beneficiary.beneficiaryRegID)"
+                matTooltip="{{ currentLanguageSet?.tc?.image }}"
+              >
+                <img alt="" src="assets/images/Avatar-Profile_30X30.png " />
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">
+                <div
+                  *ngIf="filteredBeneficiaryList.length > 0"
+                  class="totalCount"
+                >
+                  {{ currentLanguageSet?.common?.totalCount }} :
+                  {{ filteredBeneficiaryList.length }}
+                </div>
+              </td>
+              <td colspan="8">
+                <mat-paginator
+                  *ngIf="filteredBeneficiaryList.length > 0"
+                  [pageSizeOptions]="[5, 10, 20]"
+                  [pageSize]="5"
+                  showFirstLastButtons
+                  aria-label="Select patient in search Worklist"
+                >
+                </mat-paginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Table For Displaying External Beneficiary data from Mongo-->
+        <table
+          *ngIf="externalBeneficiaryList.length > 0"
+          class="table table-striped"
+          aria-describedby="externalBeneficiaryTable"
+        >
+          <thead>
+            <tr style="text-align: center">
+              <th id="sNo">{{ currentLanguageSet?.common?.sNo }}</th>
+              <th id="amritID">{{ currentLanguageSet?.amritID }}</th>
+              <th id="healthID">{{ currentLanguageSet?.abha }}</th>
+              <th id="healthIdNumber">{{ currentLanguageSet?.abhaNumber }}</th>
+              <th id="externalID">{{ currentLanguageSet?.externalID }}</th>
+              <th id="benName">{{ currentLanguageSet?.casesheet?.name }}</th>
+              <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}</th>
+              <th id="dob">{{ currentLanguageSet?.dateOfBirth }}</th>
+              <th id="state">{{ currentLanguageSet?.travel?.state }}</th>
+              <th id="district">{{ currentLanguageSet?.travel?.district }}</th>
+              <th id="action">{{ currentLanguageSet?.bendetails?.action }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-template [ngIf]="filteredExternalBeneficiaryList.length === 0">
+              <tr *ngFor="let row of blankTable">
+                <td colspan="11" *ngIf="row === 3">
+                  <h4 class="norecord text-field-color">
+                    {{ currentLanguageSet?.common?.noRecordFound }}
+                  </h4>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </ng-template>
+            <tr
+              *ngFor="let beneficiary of externalPagedList"
+              class="table-hover"
+            >
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ filteredExternalBeneficiaryList.indexOf(beneficiary) + 1 }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{
+                  beneficiary?.amritID === null ? "NA" : beneficiary?.amritID
+                }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{
+                  beneficiary?.healthID === null ? "NA" : beneficiary?.healthID
+                }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{
+                  beneficiary?.healthIdNumber === null
+                    ? "NA"
+                    : beneficiary?.healthIdNumber
+                }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{
+                  beneficiary?.externalId === null
+                    ? "NA"
+                    : beneficiary?.externalId
+                }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ beneficiary?.benName }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ beneficiary.gender | titlecase }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ beneficiary?.dob }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ beneficiary.state | titlecase }}
+              </td>
+              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
+                {{ beneficiary.district | titlecase }}
+              </td>
+              <td>
+                <button
+                  mat-raised-button
+                  class="button-overall-disabled"
+                  type="button"
+                  color="primary"
+                  [disabled]="
+                    beneficiary?.amritID !== '' &&
+                    beneficiary?.amritID !== null &&
+                    beneficiary?.amritID !== undefined &&
+                    beneficiary?.externalId !== null &&
+                    beneficiary?.externalId !== undefined &&
+                    beneficiary?.externalId !== ''
+                  "
+                  (click)="migrateBeneficiaryToAmrit(beneficiary.benObject)"
+                >
+                  {{ currentLanguageSet?.registertoAMRIT }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">
+                <div
+                  *ngIf="filteredExternalBeneficiaryList.length > 0"
+                  class="totalCount"
+                >
+                  {{ currentLanguageSet?.common?.totalCount }} :
+                  {{ filteredExternalBeneficiaryList.length }}
+                </div>
+              </td>
+              <td colspan="9">
+                <ul class="pagination">
+                  <li
+                    [ngClass]="{
+                      disabled:
+                        pageNo === 0 ||
+                        pageNo === 1 ||
+                        externalBeneficiaryList === null ||
+                        externalBeneficiaryList === undefined ||
+                        externalBeneficiaryList.length === 0
+                    }"
+                  >
+                    <a
+                      tabindex="{0}"
+                      (click)="prevPage()"
+                      (keydown.enter)="prevPage()"
+                      (keyup.enter)="prevPage()"
+                    >
+                    </a>
+                  </li>
+                  <li>
+                    <a>{{ pageNo }}</a>
+                  </li>
+                  <li
+                    [ngClass]="{
+                      disabled:
+                        externalBeneficiaryList === null ||
+                        externalBeneficiaryList === undefined ||
+                        externalBeneficiaryList.length === 0
+                    }"
+                  >
+                    <a
+                      tabindex="{0}"
+                      (click)="nextPage()"
+                      (keydown.enter)="nextPage()"
+                      (keyup.enter)="nextPage()"
+                    >
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+    </mat-card>
+  </div>
+</div>

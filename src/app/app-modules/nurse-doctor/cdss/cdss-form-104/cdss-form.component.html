@@ -1,0 +1,159 @@
+<form [formGroup]="cdssForm" autocomplete="off">
+  <div class="row m-t-20">
+    <div class="col-xs-12 col-sm-6 col-md-4 m-t-7">
+      <mat-label>
+        {{ currentLanguageSet?.presentChiefComplaint }}
+      </mat-label>
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">
+          {{ currentLanguageSet?.presentChiefComplaint }}
+        </mat-label>
+        <input
+          autocomplete="off"
+          type="text"
+          matInput
+          name="chiefComplaint"
+          formControlName="presentChiefComplaint"
+          (keyup)="
+            getQuestions(cdssForm.controls['presentChiefComplaint'].value)
+          "
+          [matAutocomplete]="auto"
+        />
+      </mat-form-field>
+
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        autoActiveFirstOption
+        (optionSelected)="
+          getQuestions(cdssForm.controls['presentChiefComplaint'].value)
+        "
+      >
+        <mat-option *ngFor="let compl of chiefComplaints" [value]="compl">
+          {{ compl.chiefComplaint }}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-hint>
+        <span
+          *ngIf="
+            cdssForm.controls['presentChiefComplaint'].dirty &&
+            cdssForm.controls['presentChiefComplaint'].untouched
+          "
+          >{{ currentLanguageSet?.max20CharectorsAllowed }}</span
+        >
+      </mat-hint>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>
+          {{ currentLanguageSet?.provisionalSelectedDiagnosis }}
+        </mat-label>
+        <textarea
+          matInput
+          textAreaValidator
+          placeholder="{{ currentLanguageSet?.provisionalSelectedDiagnosis }}"
+          rows="2"
+          name="psd"
+          required
+          minlength="4"
+          formControlName="selectedProvisionalDiagnosis"
+          maxlength="200"
+          readonly
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>
+          {{ currentLanguageSet?.recommendedAction }}
+        </mat-label>
+        <textarea
+          matInput
+          textAreaValidator
+          placeholder="{{ currentLanguageSet?.recommendedAction }}"
+          rows="2"
+          name="recommendedAction"
+          required
+          formControlName="recommendedAction"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 m-t-10">
+      <mat-form-field appName [style.width]="'100%'">
+        <mat-label>
+          {{ currentLanguageSet?.common?.remarks }}
+        </mat-label>
+        <textarea
+          matInput
+          placeholder="{{ currentLanguageSet?.common?.remarks }}"
+          maxlength="300"
+          minlength="3"
+          required
+          name="remarks"
+          formControlName="remarks"
+        ></textarea>
+        <mat-hint>
+          <span
+            *ngIf="
+              cdssForm.controls['remarks'].errors &&
+              cdssForm.controls['remarks'].touched
+            "
+            class="error_text"
+            >{{ currentLanguageSet?.enteratLeast3Characters }}</span
+          >
+          <span
+            *ngIf="
+              cdssForm.controls['remarks'].dirty &&
+              cdssForm.controls['remarks'].untouched
+            "
+            >{{ currentLanguageSet?.max300CharectorsAllowed }}</span
+          >
+        </mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 m-t-6" style="margin-top: 28px">
+      <mat-form-field>
+        <mat-label>
+          {{ currentLanguageSet?.action }}
+        </mat-label>
+        <mat-select
+          [style.width]="'100%'"
+          placeholder="{{ currentLanguageSet?.action }}"
+          name="action"
+          required
+          formControlName="action"
+          (selectionChange)="getActionId()"
+        >
+          <mat-option *ngFor="let item of actions" [value]="item.name">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<div class="row m-t-20" style="margin-bottom: 30px">
+  <div class="col-sm-12 step-btn" style="text-align: right">
+    <button
+      mat-raised-button
+      color="primary"
+      class="button-reset-disabled"
+      (click)="resetForm()"
+    >
+      {{ currentLanguageSet?.common?.clear }}
+    </button>
+    <button
+      [disabled]="cdssForm.invalid"
+      class="btn-green button-submit-disabled"
+      color="primary"
+      mat-raised-button
+      (click)="saveData()"
+    >
+      {{ currentLanguageSet?.common?.submit }}
+    </button>
+  </div>
+</div>

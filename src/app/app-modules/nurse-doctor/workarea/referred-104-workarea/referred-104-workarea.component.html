@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <button
+    mat-mini-fab
+    class="example-fab"
+    color="primary"
+    (click)="sideNavModeChange(sidenav)"
+  >
+    <mat-icon>account_box</mat-icon>
+  </button>
+
+  <mat-sidenav-container class="example-sidenav-fab-container">
+    <mat-sidenav #sidenav mode="side" opened="true">
+      <div class="example-scrolling-content sidenav">
+        <app-referred-104-beneficiary-details></app-referred-104-beneficiary-details>
+      </div>
+    </mat-sidenav>
+    <div class="example-scrolling-content content">
+      <mat-horizontal-stepper linear="false">
+        <mat-step
+          selected
+          label="Clinical Decision Support System (CDSS) Screen"
+        >
+          <ng-template matStepLabel>
+            {{ currentLanguageSet?.clinicalDecisionSupportSystemScreen }}
+          </ng-template>
+
+          <app-referred-104-cdss-details> </app-referred-104-cdss-details>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+  </mat-sidenav-container>
+</div>

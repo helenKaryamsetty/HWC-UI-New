@@ -1,0 +1,110 @@
+<section [formGroup]="neonatalVitalsForm">
+  <mat-accordion>
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+        <h5>
+          {{
+            currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
+          }}
+        </h5>
+      </mat-expansion-panel-header>
+      <div class="row m-t-10">
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              allowText="decimal"
+              id="height_cm"
+              name="height_cm"
+              formControlName="height_cm"
+              (change)="checkHeight(height_cm)"
+              defaultNull
+              allowMax="190"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              (change)="checkWeight(weight_Kg)"
+              allowText="decimal"
+              name="weight_Kg"
+              id="weight_Kg"
+              formControlName="weight_Kg"
+              allowMax="99"
+            />
+            <button
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matSuffix
+              (click)="openIOTWeightModel()"
+            >
+              <span class="glyphicon glyphicon-scale"></span>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              allowText="decimal"
+              (change)="checkHeadCircumference(headCircumference_cm)"
+              name="headCircumference_cm"
+              id="headCircumference_cm"
+              formControlName="headCircumference_cm"
+              allowMax="60"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
+              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                ?.temperature
+            }}</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              defaultNull
+              allowText="tempDecimal"
+              name="temperature"
+              id="temperature"
+              formControlName="temperature"
+              (change)="checkTemperature(temperature)"
+              allowMax="106"
+            />
+            <button
+              matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+              matSuffix
+              (click)="openIOTTempModel()"
+            >
+              <span class="glyphicon glyphicon-scale"></span>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</section>

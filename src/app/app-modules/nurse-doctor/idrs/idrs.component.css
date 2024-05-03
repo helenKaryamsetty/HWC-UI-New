@@ -1,0 +1,47 @@
+.btn1{
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 0px;
+text-decoration: none;
+background:#e44e4f;
+width: 80px !important;
+height: 50px !important;
+}
+.btn1 :hover{
+   background-color: none;
+}
+
+.mat-expansion-panel-header {
+  background: rgba(37, 55, 70, 0.2);
+}
+
+.btn-group button {
+  background-color: #C21F1F;
+  margin:5px;
+  color: white;
+  float: left;
+}
+
+.btn-group1 button {
+  background-color: #10df3d;
+  margin:5px;
+  color: white;
+  float: left;
+}
+
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+@media screen and (max-width: 768px) {
+.labelAlign {
+  padding-right: 130px;
+}
+}
+
+button#previousDiabetesHistory .mat-icon.material-icons {
+  color: #52575C !important;
+}

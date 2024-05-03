@@ -1,0 +1,159 @@
+<div class="container" *ngIf="!hideBack">
+  <div class="row">
+    <div class="col-12">
+      <button
+        mat-raised-button
+        color="primary"
+        class="pull-right mat_blue"
+        (click)="downloadCasesheet()"
+      >
+        {{ current_language_set?.casesheet?.print }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="pull-left mat_blue"
+        (click)="goBack()"
+      >
+        {{ current_language_set?.common?.back }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="col-12 button_postion">
+  <div>
+    <button
+      mat-mini-fab
+      matTooltip="{{ current_language_set?.casesheet?.caseComponent }}"
+      matTooltipPosition="left"
+      matTooltipClass="iemr-tooltip"
+      class="example-fab select non-printable"
+      color="primary"
+      (click)="selectPrintPage()"
+    >
+      <mat-icon>view_module</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <button
+      mat-mini-fab
+      matTooltip="{{ current_language_set?.casesheet?.goTop }}"
+      matTooltipPosition="left"
+      class="example-fab upward non-printable"
+      color="primary"
+      (click)="goToTop()"
+      *ngIf="!previous"
+    >
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <button
+      mat-mini-fab
+      matTooltip="{{ current_language_set?.casesheet?.printCaseheet }}"
+      matTooltipPosition="left"
+      class="example-fab print non-printable"
+      color="primary"
+      (click)="downloadCasesheet()"
+      *ngIf="!previous"
+    >
+      <mat-icon>print</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <button
+      mat-mini-fab
+      matTooltip="{{ current_language_set?.casesheet?.workList }}"
+      matTooltipPosition="left"
+      class="example-fab back non-printable"
+      color="primary"
+      (click)="goBack()"
+      *ngIf="!hideBack"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="p-t-10 p-b-10">
+  <app-doctor-diagnosis-case-sheet
+    [printPagePreviewSelect]="printPagePreviewSelect"
+    [casesheetData]="caseSheetData"
+    [previous]="previous"
+  ></app-doctor-diagnosis-case-sheet>
+  <div class="page-break" *ngIf="visitCategory !== 'General OPD (QC)'"></div>
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetANC">
+    <app-anc-case-sheet
+      *ngIf="visitCategory === 'ANC'"
+      [caseSheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-anc-case-sheet>
+    <div class="page-break"></div>
+  </ng-container>
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetPNC">
+    <app-pnc-case-sheet
+      *ngIf="visitCategory === 'PNC'"
+      [caseSheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-pnc-case-sheet>
+    <div class="page-break"></div>
+  </ng-container>
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetHistory">
+    <app-history-case-sheet
+      *ngIf="
+        visitCategory !== 'General OPD (QC)' &&
+        visitCategory !== 'FP & Contraceptive Services' &&
+        visitCategory?.toLowerCase() !==
+          'neonatal and infant health care services' &&
+        visitCategory !== 'Childhood & Adolescent Healthcare Services'
+      "
+      [caseSheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-history-case-sheet>
+    <div class="page-break"></div>
+  </ng-container>
+
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetExamination">
+    <app-examination-case-sheet
+      *ngIf="
+        visitCategory !== 'NCD care' &&
+        visitCategory !== 'General OPD (QC)' &&
+        visitCategory !== 'NCD screening' &&
+        visitCategory !== 'COVID-19 Screening' &&
+        visitCategory !== 'FP & Contraceptive Services' &&
+        visitCategory?.toLowerCase() !==
+          'neonatal and infant health care services' &&
+        visitCategory?.toLowerCase() !==
+          'childhood & adolescent healthcare services'
+      "
+      [casesheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-examination-case-sheet>
+  </ng-container>
+
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetFamilyPlanning">
+    <app-family-planning-case-sheet
+      *ngIf="visitCategory === 'FP & Contraceptive Services'"
+      [caseSheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-family-planning-case-sheet>
+    <div class="page-break"></div>
+  </ng-container>
+
+  <ng-container *ngIf="printPagePreviewSelect?.caseSheetNeonatalAndInfant">
+    <app-neonatal-and-infant-service-case-sheet
+      *ngIf="
+        visitCategory?.toLowerCase() ===
+          'neonatal and infant health care services' ||
+        visitCategory === 'Childhood & Adolescent Healthcare Services'
+      "
+      [caseSheetData]="caseSheetData"
+      [previous]="previous"
+    ></app-neonatal-and-infant-service-case-sheet>
+    <div class="page-break"></div>
+  </ng-container>
+</div>

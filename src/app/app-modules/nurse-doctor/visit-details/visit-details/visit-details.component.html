@@ -1,0 +1,389 @@
+<div class="row m-t-20" [formGroup]="patientVisitDetailsForm">
+  <ng-container
+    *ngIf="cbacData !== undefined && cbacData !== null && cbacData.length > 0"
+  >
+    <div
+      class="col-xs-12 col-lg-12 col-md-12 col-sm-12"
+      style="margin-top: 15px; margin-bottom: 10px"
+    >
+      {{
+        currentLanguageSet?.ThispatientissuspectedtohavethefollowinghealthconditionsasperthepreliminaryscreeningdonebytheASHA
+      }}
+    </div>
+    <div
+      class="col-xs-12 col-lg-12 col-md-12 col-sm-12"
+      *ngFor="let data of cbacData; let i = index"
+    >
+      {{ i + 1 }}.{{ data }}
+    </div>
+    <br />
+    <div
+      class="col-xs-12 col-lg-12 col-md-12 col-sm-12"
+      style="margin-bottom: 20px; margin-top: 10px"
+    >
+      {{ currentLanguageSet?.pleaseperformthenecessaryexaminationstoconfirm }}
+    </div>
+  </ng-container>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="mode?.toLowerCase() === 'view'"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.Reports?.visitcode
+      }}</mat-label>
+      <input matInput name="visitCode" formControlName="visitCode" />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
+      }}</mat-label>
+      <mat-select
+        matInput
+        [style.width]="'100%'"
+        name="visitReason"
+        formControlName="visitReason"
+        (selectionChange)="
+          reasonSelected(patientVisitDetailsForm.controls['visitReason'].value)
+        "
+        required
+      >
+        <mat-option
+          *ngFor="let visitReasons of templateVisitReasons"
+          [value]="visitReasons.visitReason"
+        >
+          {{ visitReasons.visitReason }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value"
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
+      }}</mat-label>
+      <mat-select
+        matInput
+        [style.width]="'100%'"
+        name="visitCategory"
+        formControlName="visitCategory"
+        (selectionChange)="
+          checkCategoryDependent(
+            patientVisitDetailsForm.controls['visitCategory'].value
+          )
+        "
+        required
+      >
+        <mat-option
+          class="dropdownValue"
+          *ngFor="let VisitCategories of templateFilterVisitCategories"
+          [value]="VisitCategories.visitCategory"
+        >
+          {{ VisitCategories.visitCategory }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="visitCategory === 'General OPD'"
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.subVisitCategory
+      }}</mat-label>
+      <mat-select
+        matInput
+        [style.width]="'100%'"
+        name="subVisitCategory"
+        formControlName="subVisitCategory"
+      >
+        <mat-option
+          class="dropdownValueSubVisitCategory"
+          *ngFor="let SubVisitCategories of templateSubVisitCategories"
+          [value]="SubVisitCategories.name"
+        >
+          {{ SubVisitCategories.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      showPregnancyStatus &&
+      visitCategory !== null &&
+      visitCategory !== undefined &&
+      visitCategory !== 'PNC' &&
+      visitCategory !== 'Neonatal and Infant Health Care Services'
+    "
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
+      }}</mat-label>
+      <mat-select
+        matInput
+        [style.width]="'100%'"
+        id="pregnancyStatus"
+        name="pregnancyStatus"
+        formControlName="pregnancyStatus"
+        [attr.readonly]="visitCategory === 'ANC'"
+      >
+        <mat-option
+          *ngFor="let pregnancyStatus of templatePregnancyStatus"
+          [value]="pregnancyStatus"
+        >
+          {{ pregnancyStatus }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      visitCategory !== null &&
+      visitCategory !== undefined &&
+      pregnancyStatus &&
+      pregnancyStatus === 'Yes' &&
+      visitCategory !== 'PNC' &&
+      visitCategory !== 'Neonatal and Infant Health Care Services'
+    "
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        allowText="number"
+        maxlength="12"
+        name="rCHID"
+        formControlName="rCHID"
+        class="text-field-disabled"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      visitCategory === 'FP & Contraceptive Services' &&
+      visitReason === 'Follow Up' &&
+      attendant === 'nurse'
+    "
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.followUpFpMethod
+      }}</mat-label>
+      <mat-select
+        matInput
+        [style.width]="'100%'"
+        name="followUpForFpMethod"
+        formControlName="followUpForFpMethod"
+        (selectionChange)="
+          checkForOtherFpMethodOption(
+            patientVisitDetailsForm.controls['followUpForFpMethod'].value
+          )
+        "
+        multiple
+        required
+      >
+        <ng-container *ngFor="let methods of fpMethodList">
+          <mat-option
+            class="dropdownHeight"
+            [value]="methods.name"
+            [disabled]="
+              disableAllFpOptions !== null &&
+              ((!disableAllFpOptions && methods.name === 'None') ||
+                (disableAllFpOptions && methods.name !== 'None'))
+            "
+          >
+            {{ methods.name }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableOtherFpTextField && attendant === 'nurse'"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.other
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        maxlength="100"
+        allowText="alphaspace"
+        name="otherFollowUpForFpMethod"
+        formControlName="otherFollowUpForFpMethod"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="
+      visitCategory === 'FP & Contraceptive Services' &&
+      visitReason === 'Follow Up' &&
+      attendant === 'nurse'
+    "
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.sideEffect
+      }}</mat-label>
+      <mat-select
+        [style.width]="'100%'"
+        matInput
+        name="sideEffects"
+        formControlName="sideEffects"
+        multiple
+        (selectionChange)="
+          checkForOtherSideEffectsOption(
+            patientVisitDetailsForm.controls['sideEffects'].value
+          )
+        "
+      >
+        <ng-container *ngFor="let effects of sideEffectsList">
+          <mat-option class="dropdownHeight" [value]="effects.name">
+            {{ effects.name }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableOtherSideEffectTextField && attendant === 'nurse'"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">{{
+        currentLanguageSet?.other
+      }}</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        maxlength="100"
+        allowText="alphaspace"
+        name="otherSideEffects"
+        formControlName="otherSideEffects"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-6 col-sm-6 align"
+    *ngIf="
+      visitCategory !== null &&
+      visitCategory !== undefined &&
+      visitCategory === 'NCD screening'
+    "
+  >
+    <mat-radio-group
+      *ngIf="isRadioGroupVisible"
+      formControlName="IdrsOrCbac"
+      (selectionChange)="enableHistoryScreenOnIdrs(IdrsOrCbac)"
+      [(ngModel)]="keyType"
+    >
+      <mat-radio-button color="primary" class="radio-button" value="IDRS">{{
+        currentLanguageSet?.idrsInCaps
+      }}</mat-radio-button>
+      <mat-radio-button color="primary" class="radio-button" value="CBAC">{{
+        currentLanguageSet?.cbacForm
+      }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+<div
+  class="row m-t-20"
+  *ngIf="
+    visitCategory === 'FP & Contraceptive Services' &&
+    visitReason === 'Follow Up' &&
+    attendant !== 'nurse'
+  "
+>
+  <div class="col-xs-12">
+    <table
+      class="table table-no-border family-table"
+      aria-describedby="visitDetailsTbl"
+    >
+      <tr>
+        <th class="alignTableFollow" id="followUpForFpMethod">
+          {{ currentLanguageSet?.followUpFpMethod }}:
+        </th>
+        <td class="alignTable">
+          {{ patientVisitDetailsForm.controls["followUpForFpMethod"].value }}
+        </td>
+
+        <th class="alignTableSide" id="sideEffects">
+          {{ currentLanguageSet?.sideEffect }}:
+        </th>
+        <td class="alignTableSide">
+          {{ patientVisitDetailsForm.controls["sideEffects"].value }}
+        </td>
+      </tr>
+
+      <tr>
+        <th
+          class="alignTableFollow"
+          id="otherFollowUpForFpMethod"
+          *ngIf="enableOtherFpTextField && attendant !== 'nurse'"
+        >
+          {{ currentLanguageSet?.otherFollowUp }}:
+        </th>
+        <td
+          class="alignTable"
+          *ngIf="enableOtherFpTextField && attendant !== 'nurse'"
+        >
+          {{
+            patientVisitDetailsForm.controls["otherFollowUpForFpMethod"].value
+          }}
+        </td>
+
+        <th
+          class="alignTableSide"
+          id="otherSideEffects"
+          *ngIf="enableOtherSideEffectTextField && attendant !== 'nurse'"
+        >
+          {{ currentLanguageSet?.otherSideEffect }}:
+        </th>
+        <td
+          class="alignTable"
+          *ngIf="enableOtherSideEffectTextField && attendant !== 'nurse'"
+        >
+          {{ patientVisitDetailsForm.controls["otherSideEffects"].value }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="row m-t-20" *ngIf="enableConfirmedDiseases">
+  <div class="col-xs-12">
+    <p>{{ currentLanguageSet?.existingNCDDisease }}: &nbsp;&nbsp;</p>
+    {{ previousConfirmedDiseasesList }}
+  </div>
+</div>

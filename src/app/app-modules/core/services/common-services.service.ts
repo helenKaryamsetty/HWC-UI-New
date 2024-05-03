@@ -3,32 +3,21 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-
 @Injectable()
 export class CommonService {
+  commonServices = new Subject<any>();
+  commonServices$ = this.commonServices.asObservable();
 
-    //headers = new Headers( { 'Content-Type': 'application/json' } );
+  getStatesURL = environment.getStatesURL;
+  getDistrictsURL = environment.getDistrictsURL;
 
-    commonServices = new Subject<any>();
-    commonServices$ = this.commonServices.asObservable();
+  constructor(private http: HttpClient) {}
 
-    getStatesURL = environment.getStatesURL; 
-    getDistrictsURL = environment.getDistrictsURL;
+  getStates(countryId: number) {
+    return this.http.get(this.getStatesURL);
+  }
 
-    constructor(private http: HttpClient) { }
-
-    // getStates( countryId: number ) {
-    //    return this.http.get(this.getStatesURL+countryId, this.options).map(res => res.json().data);
-    // }
-
-    
-    getStates( countryId: number ) {
-        return this.http.get(this.getStatesURL)
-        //.map((res: any) => res.json().data);
-     }
-
-    getDistricts ( stateId: number ) {
-       return this.http.get(this.getDistrictsURL + stateId)
-       //.map((res: any) => res.json().data);
-    }
+  getDistricts(stateId: number) {
+    return this.http.get(this.getDistrictsURL + stateId);
+  }
 }

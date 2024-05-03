@@ -1,0 +1,10 @@
+<div class="row m-t-10">
+  <div class="col-xs-12">
+    <app-nurse-general-opd-examination
+      *ngIf="showGeneralOPD"
+      [mode]="examinationMode"
+      [visitCategory]="visitCategory"
+      [patientExaminationForm]="patientExaminationForm"
+    ></app-nurse-general-opd-examination>
+  </div>
+</div>

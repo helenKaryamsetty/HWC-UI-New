@@ -1,0 +1,102 @@
+<div class="row m-t-20" [formGroup]="IecCounsellingForm">
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <div class="form-group">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.counselledOn }}
+      </mat-label>
+      <mat-select
+        multiple
+        class="select-full-width"
+        id="counselledOn"
+        name="counselledOn"
+        formControlName="counselledOn"
+        (selectionChange)="counselledOnOther()"
+      >
+        <mat-option *ngFor="let item of selectCounselling" [value]="item.name">
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableCounselledOnOther"
+  >
+    <div class="form-group">
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.other }}
+        </mat-label>
+        <input
+          autocomplete="off"
+          matInput
+          allowText="alphaspace"
+          defaultNull
+          matTextareaAutosize
+          id="otherCounselledOn"
+          name="otherCounselledOn"
+          formControlName="otherCounselledOn"
+          (change)="onValueChange()"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <div class="form-group">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.typeOfContraceptiveOpted }}
+      </mat-label>
+      <mat-select
+        multiple
+        class="select-full-width"
+        id="typeOfContraceptiveOpted"
+        name="typeOfContraceptiveOpted"
+        formControlName="typeOfContraceptiveOpted"
+        (selectionChange)="
+          resetOtherContraceptiveValues(
+            IecCounsellingForm.controls['typeOfContraceptiveOpted'].value
+          );
+          typeOfContraceptiveOptedForOther()
+        "
+      >
+        <ng-container *ngFor="let item of selectContraceptive">
+          <mat-option
+            class="dropdownHeight"
+            [value]="item.name"
+            [disabled]="
+              item.name === 'None' ? disableNoneOption : disableAllOptions
+            "
+          >
+            {{ item.name }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enablecontraceptiveOptedForOther"
+  >
+    <div class="form-group">
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.other }}
+        </mat-label>
+        <input
+          autocomplete="off"
+          matInput
+          allowText="alphaspace"
+          defaultNull
+          matTextareaAutosize
+          id="otherTypeOfContraceptiveOpted"
+          name="otherTypeOfContraceptiveOpted"
+          formControlName="otherTypeOfContraceptiveOpted"
+          (change)="onValueChange()"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+</div>

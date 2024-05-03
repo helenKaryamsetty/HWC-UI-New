@@ -1,0 +1,32 @@
+.radio-btn {
+    margin-left: 20px;
+  }
+
+  .control-label {
+    font-weight: normal;
+  }
+
+  
+  .box {
+    height: 60px;
+  }
+  
+  .input-full-width {
+    width: 100%;
+  }
+
+  button#previousDevelopmentalHistory .mat-icon.material-icons {
+    color: #52575C !important;
+}
+
+.display-flex{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.display-flex-box {
+  flex: 0 0 250px;
+  width: 100px;
+}

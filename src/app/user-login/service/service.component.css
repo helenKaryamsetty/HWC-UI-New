@@ -11,10 +11,13 @@
 }
 
 .width310px {
-  width: 310px;
   cursor: pointer;
 }
 
+.welcomeText{
+  font-size: 22px;
+  font-weight: 600;
+}
 .line-height-65 {
   line-height: 65px !important;
 }

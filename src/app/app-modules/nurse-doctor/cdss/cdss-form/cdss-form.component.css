@@ -1,0 +1,50 @@
+.pccStyle {
+    margin-top: 40px;
+  }
+  
+  .md2-autocomplete-trigger {
+    font-weight: bolder !important;
+    border-bottom: 1px solid #336CFB !important;
+  }
+  
+  ::ng-deep .md2-autocomplete-menu .md2-option .md2-text{
+    text-overflow: unset !important;
+    overflow: unset !important; 
+      }
+  tfoot>tr>td {
+    border-top: none!important;
+  }
+  .input-full-width {
+    width: 100%;
+  }
+  .scrolldiv{ 
+    width: 450px; height: 100px; 
+    overflow-x: hidden; overflow-y: auto; 
+    padding: 0px 10px 10px 0px; }
+
+    .button-submit-disabled[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .dropdownValueSubVisitCategory {
+      display: block;
+      line-height: 28px;
+      padding: 10px 15px;
+      text-align: left;
+      text-decoration: none;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      height: inherit;
+      white-space: inherit;
+      overflow: visible;
+      text-overflow: unset;
+      width: 400px;
+    }
+
+    ::ng-deep .md2-autocomplete.mat-form-field-underline {
+      background-color: #336CFB !important;
+      background-size: 4px 1px;
+      background-repeat: repeat-x;
+    }

@@ -1,0 +1,59 @@
+<section class="container-fluid" *ngIf="testReport">
+  <section class="row testReport title_background">
+    <h3 mat-dialog-title>
+      <span class="pull-left">{{ currentLanguageSet?.common?.labTest }}</span>
+      <span class="pull-right">
+        <button
+          mat-icon-button
+          class="closeBtn"
+          mat-dialog-close
+          (click)="matDialogRef.close(false)"
+        >
+          <span class="material-icons">{{
+            currentLanguageSet?.common?.close
+          }}</span>
+        </button>
+      </span>
+    </h3>
+  </section>
+  <div>
+    <table
+      class="table table-responsive table-bordered m-t-10"
+      aria-describedby="componentListTbl"
+    >
+      <tbody>
+        <tr>
+          <th colspan="3" class="procedureHead" id="procedureName">
+            <h4>
+              <strong>{{ testReport?.procedureName }}</strong>
+            </h4>
+          </th>
+        </tr>
+        <tr>
+          <th id="componentName">
+            {{ currentLanguageSet?.labTechnicianData?.componentName }}
+          </th>
+          <th id="testresult">{{ currentLanguageSet?.Reports?.testresult }}</th>
+          <th id="unit">{{ currentLanguageSet?.Prescription?.unit }}</th>
+        </tr>
+        <tr *ngFor="let report of testReport.componentList">
+          <td>{{ report?.componentName }}</td>
+          <td>{{ report?.testResultValue }}</td>
+          <td>{{ report?.testResultUnit }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button
+        mat-raised-button
+        color="warn"
+        class="pull-right m-b-10"
+        type="button"
+        mat-dialog-close
+        (click)="matDialogRef.close(false)"
+      >
+        {{ currentLanguageSet?.common?.close }}
+      </button>
+    </div>
+  </div>
+</section>

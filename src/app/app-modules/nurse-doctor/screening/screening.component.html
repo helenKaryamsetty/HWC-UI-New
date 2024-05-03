@@ -1,0 +1,96 @@
+<mat-expansion-panel class="m-t-20" expanded="true">
+  <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 m-t-20 box center-align">
+      <h5>
+        <strong>{{ currentLanguageSet?.screening }}&nbsp;:</strong>
+      </h5>
+    </div>
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 m-t-20 box btn-style">
+      <ng-container *ngFor="let disease of ncdScreeningDiseases">
+        <button
+          mat-raised-button
+          (click)="redirectToScreeningPage(disease)"
+          [ngClass]="{
+            active: disease.active === true,
+            inactive: !(disease.active === true),
+            disableOnConfirmed: disease.disable === true
+          }"
+        >
+          {{ disease.name }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 m-t-20 box center-align">
+      <h5>
+        <strong>{{ currentLanguageSet?.suspected }}&nbsp;:</strong>
+      </h5>
+    </div>
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 m-t-20 box btn-stylSuspect">
+      <ng-container *ngFor="let suspectedDiseases of suspectScreeningDiseases">
+        <button mat-raised-button disabled>
+          {{ suspectedDiseases }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 m-t-20 box center-align">
+      <h5>
+        <strong>{{ currentLanguageSet?.existingNCDDisease }}&nbsp;:</strong>
+      </h5>
+    </div>
+
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 m-t-20 box btn-stylConfirm">
+      <ng-container *ngFor="let confimedDiseases of confirmDiseaseArray">
+        <button mat-raised-button disabled>
+          {{ confimedDiseases }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="diabetes">
+    <app-diabetes-screening
+      [mode]="ncdScreeningMode"
+      [diabetesScreeningForm]="diabetesScreeningForm"
+      [confirmDiseasesList]="confirmDiseaseArray"
+      (diabetesFormStatus)="getDiabetesFormStatus($event)"
+    ></app-diabetes-screening>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="hypertension">
+    <app-hypertension-screening
+      [mode]="ncdScreeningMode"
+      [hypertensionScreeningForm]="hypertensionScreeningForm"
+      [confirmDiseasesList]="confirmDiseaseArray"
+      (hypertensionFormStatus)="getHypertensionFormStatus($event)"
+    ></app-hypertension-screening>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="oral">
+    <app-oral-cancer-screening
+      [mode]="ncdScreeningMode"
+      [confirmDiseasesList]="confirmDiseaseArray"
+      [oralCancerForm]="oralCancerForm"
+      (screeningValueChanged)="(screeningValueChanged)"
+      (oralFormStatus)="getOralFormStatus($event)"
+    ></app-oral-cancer-screening>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="breast">
+    <app-breast-cancer-screening
+      [mode]="ncdScreeningMode"
+      [confirmDiseasesList]="confirmDiseaseArray"
+      [breastCancerScreeningForm]="breastCancerScreeningForm"
+      (breastFormStatus)="getBreastFormStatus($event)"
+    ></app-breast-cancer-screening>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="cervical">
+    <app-cervical-cancer-screening
+      [mode]="ncdScreeningMode"
+      [confirmDiseasesList]="confirmDiseaseArray"
+      [cervicalScreeningForm]="cervicalScreeningForm"
+      (cervicalFormStatus)="getCervicalFormStatus($event)"
+    ></app-cervical-cancer-screening>
+  </div>
+</mat-expansion-panel>

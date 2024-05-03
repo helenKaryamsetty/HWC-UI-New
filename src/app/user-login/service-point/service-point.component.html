@@ -1,0 +1,48 @@
+<app-header [showRoles]="false"></app-header>
+
+<div class="container" style="margin-top: 3%">
+  <section>
+    <div class="col-md-3 col-sm-3 col-3"></div>
+    <div class="col-md-6 col-sm-6 col-6">
+      <div class="m-b-65 mdCardSonar">
+        <img
+          src="assets/images/SwasthyaL-withoutcard.png"
+          alt="Logo"
+          style="margin: auto auto"
+        />
+      </div>
+      <form #f="ngForm">
+        <div class="form-group m-t-50">
+          <mat-select
+            required
+            [style.width]="'100%'"
+            placeholder="{{ current_language_set?.spoke_selection?.spoke }}"
+            name="van"
+            [(ngModel)]="vanID"
+            van="ngModel"
+            (change)="getServiceLineDetails()"
+          >
+            <mat-option *ngFor="let van of vansList" [value]="van.vanID">
+              {{ van.vanNoAndType }}</mat-option
+            >
+          </mat-select>
+        </div>
+
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="primary"
+            class="pull-right p-l-r-38 font-regular f-s-18 button-overall-disabled"
+            [disabled]="!f.valid"
+            (click)="getDemographics()"
+          >
+            {{ current_language_set?.spoke_selection?.continue }}
+          </button>
+        </mat-card-actions>
+      </form>
+    </div>
+    <div class="col-md-3 col-sm-3 col-3"></div>
+  </section>
+</div>
+
+<app-footer></app-footer>

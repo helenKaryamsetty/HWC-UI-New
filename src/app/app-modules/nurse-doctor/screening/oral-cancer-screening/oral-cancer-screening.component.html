@@ -1,0 +1,167 @@
+<mat-card class="m-t-10 m-b-5">
+  <div class="row" [hidden]="hideOralForm">
+    <div
+      class="pull-right"
+      [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
+    >
+      <button mat-icon-button>
+        <mat-icon
+          matTooltip="Remove"
+          class="md-24 matIcon-button-style"
+          (click)="hideOralScreeningForm()"
+          >close</mat-icon
+        >
+      </button>
+    </div>
+
+    <div class="row col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <h5>
+        <strong>{{ currentLanguageSet?.oralCancerScreening }}</strong>
+      </h5>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-right">
+      <mat-checkbox
+        [disabled]="disableCheckbox"
+        [checked]="suspectOralCavity"
+        (change)="markAsUnsuspected($event.checked)"
+      ></mat-checkbox>
+      <mat-label style="color: grey; margin-bottom: 15px">{{
+        currentLanguageSet?.MarkAsSuspected
+      }}</mat-label>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <mat-label
+        *ngIf="suspectOralCavity"
+        style="color: red; margin-bottom: 15px"
+        >* {{ currentLanguageSet?.oralCancerissuspected }}
+      </mat-label>
+    </div>
+    <div class="row" [formGroup]="oralCancerForm">
+      <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height">
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.oralCavityFinding }}
+            </mat-label>
+            <mat-select
+              class="full-width"
+              formControlName="oralCavityFindingId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let oralCavity of oralCavityFindings"
+                [value]="oralCavity.id"
+              >
+                {{ oralCavity.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height">
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.mouthOpening }}
+            </mat-label>
+            <mat-select
+              class="full-width"
+              formControlName="mouthOpeningId"
+              placeholder=""
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let test of mouthOpeningFindings"
+                [value]="test.id"
+              >
+                {{ test.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height">
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.palpationofOralCavity }}
+            </mat-label>
+            <mat-select
+              class="full-width lineheight"
+              formControlName="palpationofOralCavityId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let palpation of palpationOralCavityFindings"
+                [value]="palpation.id"
+              >
+                {{ palpation.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height">
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.TemporomandibularJointRt }}
+            </mat-label>
+            <mat-select
+              class="full-width lineheight"
+              formControlName="temporomandibularJointRightId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let tempRight of temporomandibularRtLt"
+                [value]="tempRight.id"
+              >
+                {{ tempRight.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height">
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.TemporomandibularJointLt }}
+            </mat-label>
+            <mat-select
+              class="full-width lineheight"
+              formControlName="temporomandibularJointLeftId"
+              (change)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let tempLeft of temporomandibularRtLt"
+                [value]="tempLeft.id"
+              >
+                {{ tempLeft.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-4 dropdown-height heightAlign"
+        >
+          <mat-form-field>
+            <mat-label>
+              {{ currentLanguageSet?.CervicalLymphnodes }}
+            </mat-label>
+            <mat-select
+              class="full-width lineheight"
+              formControlName="cervicalLymphnodesId"
+              (selectionChange)="setNameBasedOnSelectedID()"
+              required
+            >
+              <mat-option
+                *ngFor="let cervicalLymphNode of cervicalLymphNodesFindings"
+                [value]="cervicalLymphNode.id"
+              >
+                {{ cervicalLymphNode.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>

@@ -1,0 +1,271 @@
+<h3 class="title info">{{ currentLanguageSet?.common?.selectPrintPage }}</h3>
+
+<div class="message">
+  <div class="pull-right">
+    <mat-checkbox
+      color="primary"
+      class=""
+      (change)="selectUnselectCheckBox($event)"
+      [(ngModel)]="printPagePreviewSelect.selectAllCheckBox"
+    >
+      {{ currentLanguageSet?.common?.selectAll }}
+    </mat-checkbox>
+  </div>
+  <div class="clearfix"></div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'ANC'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetANC"
+    >
+      {{ currentLanguageSet?.ancData?.anc }}
+    </mat-checkbox>
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'PNC'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetPNC"
+      >{{ currentLanguageSet?.pncData?.pnc }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory !== 'General OPD (QC)'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetHistory"
+    >
+      {{ currentLanguageSet?.historyData.history }}
+    </mat-checkbox>
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="
+      visitCategory !== 'NCD care' &&
+      visitCategory !== 'General OPD (QC)' &&
+      visitCategory !== 'COVID-19 Screening'
+    "
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetExamination"
+    >
+      {{ currentLanguageSet?.ExaminationData.examination }}
+    </mat-checkbox>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetPrescription"
+    >
+      {{ currentLanguageSet?.casesheet.prescribe }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetDiagnosis"
+    >
+      {{ currentLanguageSet?.DiagnosisDetails.diagnosis }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetInvestigations"
+    >
+      {{
+        currentLanguageSet?.nurseData?.investigationsDetails?.investigations
+      }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetExtInvestigation"
+    >
+      {{
+        currentLanguageSet?.Investigationdetails?.externalinvestigations
+      }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetChiefComplaints"
+      >{{
+        currentLanguageSet?.nurseData?.chiefComplaintsDetails?.chiefComplaints
+      }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetClinicalObservations"
+      >{{ currentLanguageSet?.casesheet.clinicalObs }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory !== 'General OPD (QC)'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetFindings"
+      >{{ currentLanguageSet?.Find?.findings }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetCurrentVitals"
+    >
+      {{ currentLanguageSet?.previousvisit?.currentvitals }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="
+      visitCategory.toLowerCase() !== 'neonatal and infant health care services'
+    "
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetCovidVaccinationDetails"
+      >{{ currentLanguageSet?.covidVaccinationStatus }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'NCD screening'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetNCDScreeningDetails"
+      >NCD Screening</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'FP & Contraceptive Services'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetFamilyPlanning"
+      >{{ currentLanguageSet?.familyPlanning }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'FP & Contraceptive Services'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetVisitDetails"
+      >Visit Details</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="visitCategory === 'FP & Contraceptive Services'"
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetTreatmentOnSideEffects"
+      >{{ currentLanguageSet?.treatmentOnSideEffects }}</mat-checkbox
+    >
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetCounsellingProvided"
+      >{{ currentLanguageSet?.counsellingProvided }}</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="
+      visitCategory.toLowerCase() === 'neonatal and infant health care services'
+    "
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetNeonatalAndInfant"
+      >Neonatal and Infant Health Care Services</mat-checkbox
+    >
+  </div>
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="
+      visitCategory.toLowerCase() ===
+      'childhood & adolescent healthcare services'
+    "
+  >
+    <mat-checkbox
+      (change)="unCheckSelectAll()"
+      color="primary"
+      class=""
+      [(ngModel)]="printPagePreviewSelect.caseSheetOralVitaminA"
+      >{{ currentLanguageSet?.oralVitaminAProphylaxis }}</mat-checkbox
+    >
+  </div>
+</div>
+<div class="action">
+  <button
+    class="full-width-login button-reset"
+    (click)="dialogRef.close(false)"
+  >
+    {{ currentLanguageSet?.common?.cancel }}
+  </button>
+  <button
+    class="full-width-login button-preview"
+    (click)="dialogRef.close(printPagePreviewSelect)"
+    cdkFocusInitial
+  >
+    {{ currentLanguageSet?.previousvisit?.previewmmu }}
+  </button>
+</div>

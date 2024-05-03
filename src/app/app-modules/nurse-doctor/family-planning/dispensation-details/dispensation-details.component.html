@@ -1,0 +1,211 @@
+<div class="row m-t-20" [formGroup]="dispensationDetailsForm">
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-label class="mat-label-text">
+      {{ current_language_set?.typeOfContraceptivePrescribed }}
+    </mat-label>
+    <mat-select
+      multiple
+      class="select-full-width"
+      style="margin-bottom: 15px"
+      name="typeOfContraceptivePrescribed"
+      formControlName="typeOfContraceptivePrescribed"
+      (selectionChange)="
+        populateDoseFieldForAntara();
+        otherContrasepiveType();
+        disableQuantityPrescribed();
+        resettypeOfContraceptivePrescribed(
+          dispensationDetailsForm.controls['typeOfContraceptivePrescribed']
+            .value
+        )
+      "
+    >
+      <ng-container *ngFor="let contraceptive of typeOfContraceptivesList">
+        <mat-option
+          class="dropdownHeight"
+          [value]="contraceptive.name"
+          [disabled]="
+            contraceptive.name === 'None'
+              ? disableNoneOption
+              : disableAllOptions
+          "
+          (click)="populateIucdFields(contraceptive.name)"
+        >
+          {{ contraceptive.name }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableOtherContraceptiveTypeField"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.other }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        allowText="alphaspace"
+        name="otherTypeOfContraceptivePrescribed"
+        formControlName="otherTypeOfContraceptivePrescribed"
+        maxlength="100"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.quantityPrescribed }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        defaultNull
+        [min]="1"
+        allowMax="100"
+        allowText="number"
+        name="qtyPrescribed"
+        formControlName="qtyPrescribed"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.nextVisitRefill }}
+      </mat-label>
+      <input
+        matInput
+        [min]="futureDate"
+        [matDatepicker]="nextVisitForRefillpicker"
+        formControlName="nextVisitForRefill"
+        readonly
+        (change)="onValueChange()"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="nextVisitForRefillpicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #nextVisitForRefillpicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableDoseFields"
+  >
+    <mat-form-field class="input-full-width">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.doseTake }}
+      </mat-label>
+      <input
+        autocomplete="off"
+        allowText="number"
+        matInput
+        defaultNull
+        [min]="1"
+        allowMax="180"
+        name="dosesTaken"
+        formControlName="dosesTaken"
+        (change)="onValueChange()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableDoseFields"
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.lastDateDoseTaken }}
+      </mat-label>
+      <input
+        matInput
+        [max]="pastDate"
+        name="dateOfLastDoseTaken"
+        [matDatepicker]="lastdosepicker"
+        readonly
+        formControlName="dateOfLastDoseTaken"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="lastdosepicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #lastdosepicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableIucdFields"
+  >
+    <mat-label class="mat-label-text">
+      {{ current_language_set?.typeOfIUCDInserted }}
+    </mat-label>
+    <mat-select
+      class="select-full-width"
+      name="typeOfIUCDInserted"
+      formControlName="typeOfIUCDInserted"
+      (selectionChange)="typeOfIucdInserteredID()"
+    >
+      <mat-option
+        *ngFor="let iucdInserted of typeOfIucdInsertedList"
+        [value]="iucdInserted.name"
+        >{{ iucdInserted.name }}</mat-option
+      >
+    </mat-select>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableIucdFields"
+  >
+    <mat-form-field [style.width]="'100%'">
+      <mat-label class="mat-label-text">
+        {{ current_language_set?.dateOfIUCDInsertion }}
+      </mat-label>
+      <input
+        matInput
+        [max]="pastDate"
+        [matDatepicker]="IUCDInsertionPicker"
+        name="dateOfIUCDInsertion"
+        formControlName="dateOfIUCDInsertion"
+        readonly
+        (change)="onValueChange()"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="IUCDInsertionPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #IUCDInsertionPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="enableIucdFields"
+  >
+    <mat-label class="mat-label-text">
+      {{ current_language_set?.iucdInsertionDone }}
+    </mat-label>
+    <mat-select
+      class="select-full-width"
+      name="iucdInsertionDoneBy"
+      formControlName="iucdInsertionDoneBy"
+      (selectionChange)="onValueChange()"
+    >
+      <mat-option
+        *ngFor="let iucdInsertedBy of iucdInsertionByList"
+        [value]="iucdInsertedBy.name"
+        >{{ iucdInsertedBy.name }}</mat-option
+      >
+    </mat-select>
+  </div>
+</div>

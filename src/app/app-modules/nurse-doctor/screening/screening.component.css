@@ -1,0 +1,44 @@
+.btn-style button {
+    margin:20px 5px 5px 5px;
+    color: white; 
+    float: left;
+  }
+  .green button{
+    background-color: green;
+    margin:5px;
+    color: white; 
+    float: left;
+  }
+  .active {
+    background-color: green;
+  }
+
+  .inactive {
+    background-color: rgba(31, 76, 226, 0.724);
+  }
+.disableOnConfirmed {
+  background-color: grey;
+}
+  .btn-group button {
+    background-color: #C21F1F;
+    margin:5px;
+    color: white;
+    float: left; 
+  }
+
+
+  .btn-stylConfirm button {
+    background-color: #C21F1F;
+    margin:5px;
+    color: white;
+    float: left;
+  }
+  .btn-stylSuspect button {
+    background-color: orange;
+    margin:5px;
+    color: white;
+    float: left;
+  }
+  .center-align{
+    align-content: center;
+  }

@@ -1,0 +1,205 @@
+<div class="title">
+  <h4>{{ currentLanguageSet?.common?.scheduler }}</h4>
+  <mat-icon
+    class="md-24 pull-right exit"
+    [matDialogClose]="null"
+    mat-icon-button
+    >close</mat-icon
+  >
+</div>
+<div class="container-fluid" *ngIf="scheduledData !== null">
+  <table
+    class="table table-no-border casesheet-table"
+    aria-describedby="schedulertbl"
+  >
+    <tr>
+      <th id="allocation">{{ currentLanguageSet?.common?.allocation }}:</th>
+      <td>
+        {{
+          scheduledData?.schedulerForm?.allocation
+            ? currentLanguageSet?.common?.walkIn
+            : currentLanguageSet?.tc?.schedule
+        }}
+      </td>
+      <th id="allocationDate">
+        {{ currentLanguageSet?.common?.allocationDate }}:
+      </th>
+      <td>
+        {{ scheduledData?.schedulerForm?.allocationDate | date: "dd/MM/yyyy" }}
+      </td>
+    </tr>
+
+    <tr>
+      <th id="specialization">
+        {{ currentLanguageSet?.common?.specialization }}:
+      </th>
+      <td>
+        {{ scheduledData?.schedulerForm?.specialization?.specialization }}
+      </td>
+      <th id="specialistName">
+        {{ currentLanguageSet?.common?.specialistName }}:
+      </th>
+      <td>{{ scheduledData?.schedulerForm?.specialistDetails?.userName }}</td>
+    </tr>
+
+    <tr>
+      <th id="fromTime">{{ currentLanguageSet?.common?.fromTime }}:</th>
+      <td>{{ scheduledData?.tmSlot?.fromTime }}</td>
+      <th id="toTime">{{ currentLanguageSet?.common?.toTime }} :</th>
+      <td>{{ scheduledData?.tmSlot?.toTime }}</td>
+    </tr>
+  </table>
+  <div class="row m-t-20">
+    <div class="col-sm-12 step-btn m-b-20">
+      <button
+        mat-raised-button
+        color="primary"
+        id="clearScheduledSlot"
+        class="mat_blue"
+        (click)="clearScheduledSlot()"
+      >
+        {{ currentLanguageSet?.common?.clearslots }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        id="closeModal"
+        class="mat_blue"
+        (click)="closeModal()"
+      >
+        {{ currentLanguageSet?.common?.close }}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container-fluid" *ngIf="scheduledData === null">
+  <form [formGroup]="schedulerForm">
+    <div class="row m-t-10">
+      <div class="col-xs-12 box">
+        <label class="control-label" for="allocationStatus"
+          >{{ currentLanguageSet?.common?.allocation }}*</label
+        >
+        <div class="clearfix"></div>
+        <mat-radio-group
+          name="allocation"
+          formControlName="allocation"
+          (change)="checkAllocation(allocation)"
+          required
+        >
+          <mat-radio-button color="primary" [value]="true">{{
+            currentLanguageSet?.common?.walkIn
+          }}</mat-radio-button>
+          <mat-radio-button color="primary" class="radio-btn" [value]="false">{{
+            currentLanguageSet?.tc?.schedule
+          }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="col-xs-12 box">
+        <mat-form-field
+          class="fieldAlignment fontStyle"
+          style="margin-top: 10px"
+        >
+          <mat-label class="mat-label-text" class="fontStyle"
+            >{{ currentLanguageSet?.common?.allocationDate }}
+          </mat-label>
+          <input
+            matInput
+            style="width: 100%"
+            name="allocationDate"
+            formControlName="allocationDate"
+            [min]="today"
+            [max]="schedulerDate"
+            [matDatepicker]="schedulerDatePicker"
+            (change)="getMasterSpecialization()"
+          />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="schedulerDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #schedulerDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 box" style="margin-top: 23px">
+        <mat-form-field style="width: 100%">
+          <mat-label>{{
+            currentLanguageSet?.common?.specialization
+          }}</mat-label>
+          <mat-select
+            class="input-full-width"
+            name="specialization"
+            formControlName="specialization"
+            (selectionChange)="getSpecialist()"
+            required
+          >
+            <mat-option
+              *ngFor="let specialization of masterSpecialization"
+              [value]="specialization"
+            >
+              {{ specialization.specialization }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 box">
+        <mat-form-field style="width: 100%">
+          <mat-label>{{
+            currentLanguageSet?.common?.specialistDetails
+          }}</mat-label>
+          <mat-select
+            class="input-full-width"
+            name="specialistDetails"
+            formControlName="specialistDetails"
+            required
+            (selectionChange)="getAvailableSlot(specialistDetails)"
+          >
+            <mat-option
+              *ngFor="let specialistDetails of masterSpecialistDetails"
+              [value]="specialistDetails"
+            >
+              {{ specialistDetails.userName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+  <div class="row slots-container m-t-10 m-b-10">
+    <div class="col-xs-12" *ngIf="availableSlotList?.length > 0">
+      <mat-chip-listbox #chipList [selectable]="true">
+        <mat-chip-option
+          *ngFor="let slot of availableSlotList; let i = index"
+          [ngClass]="slot.status | lowercase"
+          [selectable]="slot.status === 'available'"
+          [selected]="slot === selectedSlot"
+          (click)="selectAvailableSlot(slot)"
+          >{{
+            slot.fromTime.substring(0, 5) + " - " + slot.toTime.substring(0, 5)
+          }}</mat-chip-option
+        >
+      </mat-chip-listbox>
+    </div>
+
+    <div class="col-xs-12" *ngIf="availableSlotList?.length === 0">
+      <p class="text-center">
+        {{ currentLanguageSet?.common?.slotNotAvailable }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row m-t-10 m-b-20">
+    <div class="col-xs-12" *ngIf="selectedSlot && selectedSlot !== null">
+      <button
+        mat-raised-button
+        class="mat_green"
+        style="float: right"
+        color="primary"
+        id="slot"
+        (click)="saveScheduledSlot()"
+      >
+        {{ currentLanguageSet?.common?.submitSlot }}
+      </button>
+    </div>
+  </div>
+</div>

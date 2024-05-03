@@ -1,0 +1,38 @@
+<div class="row" [formGroup]="generalDiagnosisForm">
+  <div class="col-xs-12 col-sm-6 m-t-6">
+    <header class="mat-expansion-panel-header">
+      <h4>{{ current_language_set?.doctorDiagnosis }}*</h4>
+    </header>
+    <mat-form-field class="input-full-width">
+      <textarea
+        matInput
+        allowText="textAreaValidator"
+        defaultNull
+        matTextareaAutosize
+        maxlength="300"
+        name="doctorDiagnosis"
+        formControlName="doctorDiagnosis"
+        [readonly]="specialist"
+        required
+        >{{ doctorDiagnosis }} </textarea
+      >
+    </mat-form-field>
+  </div>
+  <div class="col-xs-12 col-sm-6 m-t-6">
+    <header class="mat-expansion-panel-header tabcolor">
+      <h4>{{ current_language_set?.DiagnosisDetails?.specialistssdvice }}</h4>
+    </header>
+    <mat-form-field class="input-full-width">
+      <textarea
+        matInput
+        defaultNull
+        matTextareaAutosize
+        maxlength="300"
+        name="specialistAdvice"
+        formControlName="specialistDiagnosis"
+        [readonly]="!specialist"
+      >
+      </textarea>
+    </mat-form-field>
+  </div>
+</div>
