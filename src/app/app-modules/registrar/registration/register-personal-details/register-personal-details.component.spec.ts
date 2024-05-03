@@ -141,7 +141,6 @@ class RegistrarServiceMock {
       { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
     ],
   };
-  // benDetails =
   benDetails = {
     beneficiaryRegID: 7878,
     firstName: 'neeraj',
@@ -226,7 +225,6 @@ describe('RegisterPersonalDetailsComponent', () => {
     registrarService = TestBed.get(RegistrarService);
     cameraService = TestBed.get(CameraService);
     confirmationService = TestBed.get(ConfirmationService);
-    // fixture.detectChanges()
     component.personalDetailsForm = fb.group({
       firstName: null,
       lastName: null,

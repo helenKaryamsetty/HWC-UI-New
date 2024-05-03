@@ -226,7 +226,6 @@ export class NurseTmFutureWorklistComponent
       });
   }
   reSchedule(beneficiary: any) {
-    // this.confirmationService.alert(beneficiary.statusMessage);
     this.openScheduler(beneficiary);
   }
   openScheduler(beneficiary: any) {

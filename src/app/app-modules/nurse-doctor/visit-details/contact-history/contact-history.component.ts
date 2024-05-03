@@ -53,8 +53,6 @@ export class ContactHistoryComponent
   feverCoughBreath_flag = false;
   confirmedCaseCOVID_flag = false;
   contactArray: any;
-  // contactData = ["Is a confirmed case of COVID-19 2020","Is having symptoms of Fever, Cough or breathing difficulty","Has a history of travel to places reporting local transmission","None of the above"]
-  // contactList = ["Is a confirmed case of COVID-19 2020","Is having symptoms of Fever, Cough or breathing difficulty","Has a history of travel to places reporting local transmission","None of the above"]
   contactList: any;
   contactData: any;
   cont: any;
@@ -78,7 +76,6 @@ export class ContactHistoryComponent
     localStorage.setItem('contact', 'null');
     console.log('contactvalue' + this.patientCovidForm.value);
     this.getContactHistoryMasterData();
-    // this.getContactDetails(benRegID, visitID);
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -147,7 +144,6 @@ export class ContactHistoryComponent
       this.masterdataService.nurseMasterData$.subscribe((response) => {
         if (response !== null) {
           console.log('contactmaster', response.covidContactHistoryMaster);
-          //this.contactData = response.covidContactHistoryMaster;
           this.contactArray = response.covidContactHistoryMaster;
           const selectedContact = this.contactArray.map(
             ({ contactHistory }: any) => contactHistory,
@@ -178,7 +174,6 @@ export class ContactHistoryComponent
         this.contactData = this.contactList.filter((item: any) => {
           return item === 'None of the above';
         });
-        //this.answer1=true;
       } else {
         localStorage.setItem('contact', 'true');
         this.contactData = this.contactList.filter((item: any) => {
@@ -186,13 +181,11 @@ export class ContactHistoryComponent
         });
       }
       this.cont = localStorage.getItem('contact');
-      //this.outputToParent.emit( this.answer1);
       this.httpServiceService.filter(this.cont);
     } else {
       this.contactData = this.contactList;
       localStorage.setItem('contact', 'null');
       this.cont = localStorage.getItem('contact');
-      //this.outputToParent.emit( this.answer1);
       this.httpServiceService.filter(this.cont);
     }
   }
@@ -206,53 +199,6 @@ export class ContactHistoryComponent
       this.contactReqiured = 'true';
     }
   }
-  /*contactStatuschange(contactStatus) {
-    this.confirmedCaseCOVID_flag = false;
-    this.feverCoughBreath_flag = false;
-    this.TravelPlaces_flag = false;
-console.log("contactStatus value " + contactStatus);
-
-    this.patientCovidForm.patchValue({ contactStatus : contactStatus});
-
-
-    if (contactStatus.length > 0) {
-      localStorage.setItem('contact',"true");//change
-      //this.covidFill_flag=true;
-      this.question3 = "yes";
-      this.contactArray = contactStatus;
-      for (let a = 0; a < contactStatus.length; a++) {
-       
-
-        if (contactStatus[a] === "Is a confirmed case of COVID-19") {
-          this.confirmedCaseCOVID_flag = true;
-        }
-
-        if (
-          contactStatus[a] ==
-          "Is having symptoms of Fever, Cough or breathing difficulty"
-        ) {
-          this.feverCoughBreath_flag = true;
-        }
-
-        if (
-          contactStatus[a] ==
-          "Has a history of travel to places reporting local transmission"
-        ) {
-          this.TravelPlaces_flag = true;
-        }
-
-        //this.contactArray.push(obj)
-      }
-    } else {
-      localStorage.setItem('contact',"false");//change
-      this.question3 = "no";
-    }
-    this.cont=localStorage.getItem("contact");
-    //this.outputToParent.emit( this.answer1);
-    this.httpServiceService.filter( this.cont);
-    //this.populate();
-    //this.changeSuspectedCovid();
-  }*/
   get contactStatus() {
     return this.patientCovidForm.controls['contactStatus'].value;
   }

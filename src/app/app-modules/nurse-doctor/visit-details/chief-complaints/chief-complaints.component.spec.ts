@@ -102,14 +102,6 @@ describe('ChiefComplaintsComponent', () => {
     },
   ));
 
-  // it('should call getNurseMasterData on Initialisation', inject([MasterdataService], (masterdataService) => {
-  //     masterdataService.nurseMasterDataSource.next(data.generalOPDNurseMasterdata.data);
-  //     spyOn(component, 'getNurseMasterData');
-  //     component.ngOnInit();
-  //     expect(component.getNurseMasterData).toHaveBeenCalled();
-  //     expect(component.selectChiefComplaint).toEqual(data.generalOPDNurseMasterdata.data.chiefComplaintMaster);
-  // }));
-
   it('should clear ChiefComplaintsForm when total complaints is one and remove button is clicked', () => {
     const complaint = component.patientChiefComplaintsForm.controls[
       'complaints'
@@ -164,7 +156,6 @@ describe('ChiefComplaintsComponent', () => {
       fixture.detectChanges();
       const de = fixture.debugElement.query(By.css('#removeBtn0'));
       de.triggerEventHandler('click', null);
-      // component.removeCheifComplaint(1, complaint.controls[1] as FormGroup);
       expect(complaint.value.length).toBe(1);
     },
   ));

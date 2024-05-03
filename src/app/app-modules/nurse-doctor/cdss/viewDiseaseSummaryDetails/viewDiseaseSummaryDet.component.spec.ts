@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-// import { ViewDiseaseSummaryDetailsComponent } from './cdss/viewDiseaseSummaryDetails/viewDiseaseSummaryDet';
 import { ViewDiseaseSummaryContentsComponent } from '../diseaseSummaryContents/disease-summary-contents.component';
 
 describe('ViewDiseaseSummaryContentsComponent', () => {

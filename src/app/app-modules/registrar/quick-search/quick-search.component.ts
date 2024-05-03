@@ -265,12 +265,6 @@ export class QuickSearchComponent implements OnInit, DoCheck {
         this.searchValue = 'Enter village';
         break;
       }
-      //  default:
-      //   this.idMinValue = "4";
-      //     this.idMaxValue = "32";
-      //     this.patternID = /^([A-Za-z]+[0-9]|[0-9]+[A-Za-z])[A-Za-z0-9]*$/;
-      //     this.idErrorText = "Enter Valid ID Number";
-      //     break;
     }
   }
 }

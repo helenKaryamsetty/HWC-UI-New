@@ -118,8 +118,6 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     checkdate.setMonth(this.today.getMonth() + 3);
     this.maxSchedulerDate = checkdate;
     this.tomorrow = d;
-
-    //designation to show the TMC suggestion.
     this.designation = localStorage.getItem('designation');
   }
 
@@ -144,7 +142,6 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
             sessionStorage.setItem('instFlag', 'true');
           }
           this.additionalServices = masterData.additionalServices;
-          //to add correct name by checking it from masterdata
           console.log(masterData.revisitDate);
           console.log('hi');
           this.revisitDate = masterData.revisitDate;
@@ -354,12 +351,6 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
               referAndRevistData.otherReferralReason,
             );
           }
-          // this.referForm.patchValue({
-          //   refrredToAdditionalServiceList: referAndRevistData.refrredToAdditionalServiceList,
-          // });
-          // this.referForm.patchValue({
-          //   referralReason: referAndRevistData.referralReason,
-          // });
           const referRevisitDetails = Object.assign({}, referAndRevistData, {
             revisitDate: new Date(referAndRevistData.revisitDate),
           });
@@ -402,15 +393,13 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.selectValueService = selected.length;
       console.log(this.selectValue);
     }
-
-    // should display the selected option.
   }
 
   public higherhealthcarecenter(selected: any): void {
     if (selected?.institutionName) {
       this.selectValue = 1;
       this.healthCareReferred = true;
-    } // should display the selected option.
+    }
 
     if (
       selected !== null &&

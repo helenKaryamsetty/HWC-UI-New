@@ -53,7 +53,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   aadharNum: any;
   registrarMasterData: any;
   demographicsMaster: any;
-  // mobileLinkedOtp: any;
 
   constructor(
     private fb: FormBuilder,

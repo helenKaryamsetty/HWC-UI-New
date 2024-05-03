@@ -145,8 +145,6 @@ export class CervicalCancerScreeningComponent
       }
     } else {
       this.resetCervicalForm();
-      // On nurse initial load, checkbox should be disabled and enable the checkbox if the cervical cancer is suspected.
-      //  ((this.attendant === "nurse" || this.attendant === "doctor") && this.visualExaminationSuspected === true) ? (this.disableCheckbox = false) : this.disableCheckbox = true;
     }
   }
   resetCervicalForm() {
@@ -171,8 +169,6 @@ export class CervicalCancerScreeningComponent
       }
     } else {
       this.resetCervicalFormOnMark();
-      // On nurse initial load, checkbox should be disabled and enable the checkbox if the cervical cancer is suspected.
-      //  ((this.attendant === "nurse" || this.attendant === "doctor") && this.visualExaminationSuspected === true) ? (this.disableCheckbox = false) : this.disableCheckbox = true;
     }
   }
   resetCervicalFormOnMark() {

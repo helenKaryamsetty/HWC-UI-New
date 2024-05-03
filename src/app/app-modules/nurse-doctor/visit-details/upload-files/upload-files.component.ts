@@ -61,7 +61,6 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     'csv',
     'txt',
   ];
-  // invalid_file_extensions_flag: boolean = false;
   disableFileSelection = false;
   enableForNCDScreening = false;
   maxFileSize = 5;
@@ -138,7 +137,6 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
       if (fileName !== undefined && fileName !== null && fileName !== '') {
         const validFormat = this.checkExtension(this.file);
         if (!validFormat) {
-          // this.invalid_file_extensions_flag = true;
           this.confirmationService.alert(
             this.currentLanguageSet.invalidFileExtensionSupportedFileFormats,
             'error',
@@ -160,18 +158,6 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
             myReader.onloadend = this.onLoadFileCallback.bind(this);
             myReader.readAsDataURL(this.file);
           }
-
-          // if (this.fileList.length === 0) {
-          //   this.confirmationService.alert("Please choose a file to upload", 'info');
-          // }
-          // else if (this.fileList.length > 0 && this.fileList[0].size / 1000 / 1000 <= this.maxFileSize) {
-          //   console.log(this.fileList[0].size / 1000 / 1000);
-          //   this.confirmationService.alert("File size should not exceed" + this.maxFileSize + "MB", 'error');
-          // }
-          // else if (this.fileList.length > 0 && this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
-          //   console.log(this.fileList[0].size / 1000 / 1000);
-          //   this.confirmationService.alert("File size should not exceed" + this.maxFileSize + "MB", 'error');
-          // }
         }
       } else
         this.confirmationService.alert(
@@ -360,22 +346,9 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   }
   triggerLog(event: any) {
     console.log(event.clientX);
-    //this.key=event.clientX;
     if (event.clientX !== 0) {
       const x: any = document.getElementById('fileUpload');
       x.click();
     }
   }
 }
-/*Validation to check special characters in file name*/
-// let uploadFileFlag = false;
-// let regex = /^[A-Za-z0-9 ]+$/;
-// if (this.file && this.file.name) {
-//   let isValid = regex.test(this.file.name);
-//   if (!isValid) {
-//     this.confirmationService.alert("Filename contains special characters");
-//     uploadFileFlag = true;
-//   } else {
-//     uploadFileFlag = false;
-//   }
-// }

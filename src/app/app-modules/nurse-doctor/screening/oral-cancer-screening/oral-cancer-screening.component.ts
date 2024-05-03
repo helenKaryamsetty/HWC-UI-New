@@ -175,8 +175,6 @@ export class OralCancerScreeningComponent
       }
     } else {
       this.resetOralForm();
-      // On nurse initial load, checkbox should be disabled and enable the checkbox if the oral cancer is suspected.
-      //  ((this.attendant === "nurse" || this.attendant === "doctor") && this.suspectOralCavity === true) ? (this.disableCheckbox = false) : this.disableCheckbox = true;
     }
   }
 
@@ -193,8 +191,6 @@ export class OralCancerScreeningComponent
       }
     } else {
       this.resetOralFormOnMark();
-      // On nurse initial load, checkbox should be disabled and enable the checkbox if the oral cancer is suspected.
-      //  ((this.attendant === "nurse" || this.attendant === "doctor") && this.suspectOralCavity === true) ? (this.disableCheckbox = false) : this.disableCheckbox = true;
     }
   }
 

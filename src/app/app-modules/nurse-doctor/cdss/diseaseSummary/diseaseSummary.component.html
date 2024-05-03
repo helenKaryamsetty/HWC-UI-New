@@ -106,23 +106,6 @@
         formControlName="remarks"
         [readonly]="viewMode"
       ></textarea>
-      <!-- <mat-hint>
-        <span
-          *ngIf="
-            DiseaseSummaryForm.controls['remarks'].errors &&
-            DiseaseSummaryForm.controls['remarks'].touched
-          "
-          class="error_text"
-          >{{ currentLanguageSet?.enteratLeast3Characters }}</span
-        >
-        <span
-          *ngIf="
-            DiseaseSummaryForm.controls['remarks'].dirty &&
-            DiseaseSummaryForm.controls['remarks'].untouched
-          "
-          >{{ currentLanguageSet?.max300CharectorsAllowed }}</span
-        >
-      </mat-hint> -->
     </mat-form-field>
   </div>
 </form>

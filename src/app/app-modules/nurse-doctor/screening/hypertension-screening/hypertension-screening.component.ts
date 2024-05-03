@@ -194,9 +194,6 @@ export class HypertensionScreeningComponent
         this.isHypertensionSuspected,
       );
       this.hypertensionScreeningForm.patchValue(ncdHypertensionData);
-      // if (this.bpStatus === undefined || this.bpStatus === null) {
-      //   this.checkBloodPressureStatus();
-      // }
     }
   }
 
@@ -218,47 +215,6 @@ export class HypertensionScreeningComponent
     this.resetBpStatus();
   }
 
-  // checkSystolicBP2() {
-  //   if (this.systolicBP_2ndReading < 40 || this.systolicBP_2ndReading > 320) {
-  //     this.confirmationService.alert(
-  //       this.currentLanguageSet.alerts.info.recheckValue
-  //     );
-  //   }
-  //   this.resetBpStatus();
-  // }
-
-  // checkDiastolicBP2() {
-  //   if (
-  //     this.diastolicBP_2ndReading < 10 ||
-  //     this.diastolicBP_2ndReading > 180
-  //   ) {
-  //     this.confirmationService.alert(
-  //       this.currentLanguageSet.alerts.info.recheckValue
-  //     );
-  //   }
-  //   this.resetBpStatus();
-  // }
-
-  // checkSystolicBP3() {
-  //   if (this.systolicBP_3rdReading < 40 || this.systolicBP_3rdReading > 320) {
-  //     this.confirmationService.alert(
-  //       this.currentLanguageSet.alerts.info.recheckValue
-  //     );
-  //   }
-  //   this.resetBpStatus();
-  // }
-
-  // checkDiastolicBP3() {
-  //   if (
-  //     this.diastolicBP_3rdReading < 10 ||
-  //     this.diastolicBP_3rdReading > 180
-  //   ) {
-  //     this.confirmationService.alert(
-  //       this.currentLanguageSet.alerts.info.recheckValue
-  //     );
-  //   }
-  //   this.resetBpStatus();
-  // }
   resetBpStatus() {
     this.bpStatus = null;
     this.isHypertensionSuspected = false;

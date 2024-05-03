@@ -26,7 +26,7 @@ export class TelemedicineService {
     if (sessionStorage.getItem('isAuthenticated')) {
       return sessionStorage.getItem('key');
     }
-    return null; // or return undefined; depending on your use case
+    return null;
   }
 
   getProtocol() {

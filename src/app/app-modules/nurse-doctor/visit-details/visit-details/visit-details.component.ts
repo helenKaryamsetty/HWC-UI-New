@@ -56,7 +56,6 @@ export class PatientVisitDetailsComponent
 
   templateNurseMasterData: any;
   templateVisitCategories: any;
-  // templateVisitReasons: any="Pandemic";
   templateVisitReasons: any;
   templateBeneficiaryDetails: any;
   templateFilterVisitCategories: any;
@@ -107,7 +106,6 @@ export class PatientVisitDetailsComponent
     this.getBenificiaryDetails();
     this.getVisitReasonAndCategory();
     this.loadNurseMasters();
-    // this.loadMastersForDoctor();
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -163,7 +161,6 @@ export class PatientVisitDetailsComponent
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.disableVisit = true;
       this.getVisitDetails(visitID, benRegID);
-      // this.loadMastersForDoctor();
     }
 
     const specialistFlagString = localStorage.getItem('specialistFlag');
@@ -177,8 +174,6 @@ export class PatientVisitDetailsComponent
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getMMUVisitDetails(visitID, benRegID);
-
-      // this.loadMastersForDoctor();
     }
   }
 
@@ -187,13 +182,6 @@ export class PatientVisitDetailsComponent
       beneficiaryRegId: benRegID,
       visitCode: localStorage.getItem('visitCode'),
     };
-
-    // {
-
-    //   "beneficiaryRegID": 1234,
-
-    //   "visitCode": 300220001700413
-    // }
 
     console.log('obj in enableCbacIdrs', obj);
 
@@ -230,7 +218,6 @@ export class PatientVisitDetailsComponent
 
     if (this.beneficiaryDetailsSubscription)
       this.beneficiaryDetailsSubscription.unsubscribe();
-    // this.nurseService.mmuVisitData=false;
     this.patientVisitDetailsForm.reset();
   }
 
@@ -250,8 +237,6 @@ export class PatientVisitDetailsComponent
           );
         }
       });
-    //this.templateVisitReasons ="Pandemic";
-    //this.templateVisitCategories="Pandemic";
   }
 
   visitDetSubscription: any;
@@ -267,14 +252,12 @@ export class PatientVisitDetailsComponent
             this.doctorService.fileIDs = value.data.benVisitDetails.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'ANC') {
             const visitDetails = value.data.ANCNurseVisitDetail;
             this.doctorService.fileIDs = value.data.ANCNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'General OPD') {
             const visitDetails = value.data.GOPDNurseVisitDetail;
@@ -282,7 +265,6 @@ export class PatientVisitDetailsComponent
               value.data.GOPDNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'NCD screening') {
             const visitDetails = value.data.NCDScreeningNurseVisitDetail;
@@ -290,9 +272,6 @@ export class PatientVisitDetailsComponent
               value.data.NCDScreeningNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // if(this.route.snapshot.params["attendant"]  === "nurse")
-            // this.nurseService.mmuVisitData=true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'NCD care') {
             const visitDetails = value.data.NCDCareNurseVisitDetail;
@@ -300,35 +279,30 @@ export class PatientVisitDetailsComponent
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
             this.loadConfirmedDiseasesFromNCD();
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'PNC') {
             const visitDetails = value.data.PNCNurseVisitDetail;
 
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'Neonatal and Infant Health Care Services') {
             const visitDetails = value.data.neonatalNurseVisitDetail;
 
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
           if (visitCategory === 'Childhood & Adolescent Healthcare Services') {
             const visitDetails = value.data.cacNurseVisitDetail;
 
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
-            // this.patientVisitDetailsForm.disable();
           }
 
           if (visitCategory === 'FP & Contraceptive Services') {
@@ -353,7 +327,6 @@ export class PatientVisitDetailsComponent
   visitDetailsSubscription: any;
   getVisitDetails(visitID: any, benRegID: any) {
     console.log('visitID and benRegID in 356', visitID, benRegID);
-    // localStorage.setItem('visitCategory', "General OPD");
     const visitCategory = localStorage.getItem('visitCategory');
     this.visitDetailsSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
@@ -536,9 +509,6 @@ export class PatientVisitDetailsComponent
             (item: any) => item.visitCategory.toLowerCase() !== 'ncd screening',
           );
       }
-      // if(this.beneficiary.ageVal < 30) {
-      //   this.templateFilterVisitCategories = this.templateFilterVisitCategories.filter(item => item.visitCategory.toLowerCase() !== "ncd care")
-      // }
 
       if (
         this.beneficiary.genderName === 'Male' ||
@@ -559,9 +529,6 @@ export class PatientVisitDetailsComponent
           item.visitCategory.toLowerCase() !== 'covid-19 screening' &&
           item.visitCategory.toLowerCase() !== 'synctest',
       );
-      // if(this.beneficiary.ageVal < 30) {
-      //   this.templateFilterVisitCategories = this.templateFilterVisitCategories.filter((item:any) => item.visitCategory.toLowerCase() !== "ncd care")
-      // }
       if (this.beneficiary.ageVal <= 12) {
         this.templateFilterVisitCategories =
           this.templateFilterVisitCategories.filter(
@@ -621,8 +588,6 @@ export class PatientVisitDetailsComponent
               item.visitCategory.toLowerCase() !== 'anc' &&
               item.visitCategory.toLowerCase() !== 'pnc' &&
               item.visitCategory.toLowerCase() !== 'synctest',
-
-            //&& item.visitCategory.toLowerCase() !== "ncd care"
           );
       else
         this.templateFilterVisitCategories =
@@ -690,15 +655,9 @@ export class PatientVisitDetailsComponent
 
     this.resetFPAndSideEffects();
     this.patientVisitDetailsForm.controls['subVisitCategory'].reset();
-
-    // if (visitCategory === 'FP & Contraceptive Services') {
-    //    this.loadNurseMasters();
-    // }
   }
 
   visitCategorySelected() {
-    // this.templateSubVisitCategories = [];
-
     if (this.beneficiaryAge > 1) {
       this.templateSubVisitCategories = this.subVisitCategoryList.filter(
         (item: any) => item.name.toLowerCase() !== 'newborn & infant opd care',
@@ -810,40 +769,6 @@ export class PatientVisitDetailsComponent
     });
   }
 
-  // loadMastersForDoctor() {
-  //   this.fpMethodList = [];
-  //   this.sideEffectsList = [];
-  //     this.masterdataService.nurseMasterData$.subscribe(
-  //       masterResp => {
-  //         if (masterResp) {
-
-  //           if(masterResp.m_fpmethodfollowup !== undefined && masterResp.m_fpmethodfollowup !== null &&
-  //             masterResp.m_FPSideEffects !== undefined && masterResp.m_FPSideEffects !== null ) {
-  //         this.fpMethodList = masterResp.m_fpmethodfollowup;
-  //         this.sideEffectsList = masterResp.m_FPSideEffects;
-  //             }
-
-  //             if (String(this.mode) === 'view') {
-  //               let visitID = localStorage.getItem('visitID');
-  //               let benRegID = localStorage.getItem('beneficiaryRegID')
-  //               this.disableVisit=true;
-  //               this.getVisitDetails(visitID, benRegID);
-  //             }
-
-  //             if(parseInt(localStorage.getItem("specialistFlag")) === 100)
-  //             {
-  //                console.log("MMUSpecialist")
-  //                let visitID = localStorage.getItem('visitID');
-  //               let benRegID = localStorage.getItem('beneficiaryRegID')
-  //               this.getMMUVisitDetails(visitID, benRegID);
-  //             }
-
-  //         }
-  //       }
-  //     );
-
-  // }
-
   checkForOtherFpMethodOption(selectedOption: any) {
     if (
       selectedOption !== undefined &&
@@ -864,15 +789,6 @@ export class PatientVisitDetailsComponent
       } else {
         this.disableAllFpOptions = false;
       }
-      // selectedOption.filter((checkForOtherOption) => {
-      //   if (checkForOtherOption.toLowerCase() === "other") {
-      //     this.enableOtherFpTextField = true;
-      //     this.patientVisitDetailsForm.controls["otherFollowUpForFpMethod"].setValue(null);
-      //   } else {
-      //     this.enableOtherFpTextField = false;
-      //     this.patientVisitDetailsForm.controls["otherFollowUpForFpMethod"].setValue(null);
-      //   }
-      // });
     } else {
       this.enableOtherFpTextField = false;
       this.patientVisitDetailsForm.controls[

@@ -34,7 +34,6 @@ export class GenerateAbhaComponentComponent implements OnInit {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.abhaGenerateForm = new RegistrationUtils(this.fb).createRegistrationDetailsForm();
     this.abhaGenerateForm = this.createAbhaGenerateForm();
   }
   assignSelectedLanguage() {

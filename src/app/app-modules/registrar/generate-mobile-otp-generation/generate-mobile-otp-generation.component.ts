@@ -44,9 +44,7 @@ export class GenerateMobileOtpGenerationComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   showProgressBar = false;
   txnId: any;
-  // mobileNumber: any = this.data.mobileNumber;
   enableMobileOTPForm = false;
-  // mobileLinkedOTP: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -62,12 +60,6 @@ export class GenerateMobileOtpGenerationComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.assignSelectedLanguage();
     this.txnId = this.data.transactionId;
-    // this.mobileLinkedOTP = this.data.mobileLinked;
-    // if(this.mobileLinkedOTP === false) {
-    //   this.enableMobileOTPForm = true;
-    // } else{
-    //   this.enableMobileOTPForm = false;
-    // }
     this.generateMobileOTPForm = this.createmobileOTPValidationForm();
   }
 

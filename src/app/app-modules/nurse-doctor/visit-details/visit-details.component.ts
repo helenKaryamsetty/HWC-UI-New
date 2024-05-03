@@ -155,7 +155,6 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
     this.getVisitCategory();
     this.getVisitReason();
-    // this.httpServiceService.currentLangugae$.subscribe(response =>this.currentLanguageSet = response);
     this.assignSelectedLanguage();
     const specialistFlagString = localStorage.getItem('specialistFlag');
 
@@ -241,10 +240,6 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
       this.showChildAndAdolescent = true;
     } else if (this.visitCategory === 'NCD care') {
       this.showNCDCare = true;
-      // } else if (
-      //   this.visitCategory === 'PNC' || this.visitCategory === 'General OPD'
-      // ) {
-      //   this.showPNC = true;
     } else if (this.visitCategory === 'COVID-19 Screening') {
       this.showCOVID = true;
     } else {

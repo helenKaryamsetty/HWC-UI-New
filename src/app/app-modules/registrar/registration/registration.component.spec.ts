@@ -41,9 +41,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../core/material.module';
 
@@ -59,13 +56,6 @@ class MockActivatedRoute {
 }
 
 class RegistrarServiceMock {
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
-
   registrationMaster = {
     occupationMaster: [
       { occupationID: 2, occupationType: 'Agricultural labour' },
@@ -197,7 +187,6 @@ describe('RegisterComponent', () => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
     registrarService = TestBed.get(RegistrarService);
-    // component.ngOnInit();
 
     spyOn(component, 'dateFormatChange').and.returnValue(1);
 
@@ -209,19 +198,16 @@ describe('RegisterComponent', () => {
   });
 
   it('should load form for new Beneficiary Registration', () => {
-    // component.ngOnInit();
     const form = component.beneficiaryRegistrationForm;
     expect(form).toBeTruthy();
   });
 
   it('should load component in New Beneficiary Mode  ', () => {
-    // component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(component.patientRevisit).toBe(false);
   });
 
   it('should set Post button text to Submit', () => {
-    //  component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(buttonText).toBe('Submit');
   });

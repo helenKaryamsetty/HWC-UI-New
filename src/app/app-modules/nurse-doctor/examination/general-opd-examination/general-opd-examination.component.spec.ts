@@ -131,7 +131,6 @@ describe('GeneralOpdExaminationComponent', () => {
       expect(component.getAncExaminationData).toHaveBeenCalled();
       expect(doctorService.getGeneralExamintionData).toHaveBeenCalled();
       fixture.detectChanges();
-      // expect(component.patientExaminationForm.value.generalExaminationForm).toEqual(data.examinationData.data.generalExamination)
     }),
   ));
 

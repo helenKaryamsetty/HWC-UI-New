@@ -88,8 +88,6 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData && masterData.procedures) {
-          // this.nurseMasterDataSubscription.unsubscribe();
-
           this.selectLabTest = masterData.procedures.filter((item: any) => {
             return item.procedureType === 'Laboratory';
           });
@@ -211,7 +209,6 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
             test.procedureName.toLowerCase() ===
             environment.haemoglobinTest.toLowerCase(),
         );
-        // this.hemoglobbinSelected = true;
         if (hbTest && !item.includes(hbTest)) {
           item.push(hbTest);
         }

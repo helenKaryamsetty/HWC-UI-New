@@ -86,8 +86,6 @@ export class Nurse104RefferedWorklistComponent
   ngOnInit() {
     this.assignSelectedLanguage();
     localStorage.setItem('currentRole', 'Nurse');
-    //this.removeBeneficiaryDataForNurseVisit();
-    //  this.getNurseWorklist();
     this.beneficiaryDetailsService.reset();
     this.nurse104ReferredWorklistResponce();
   }
@@ -170,104 +168,41 @@ export class Nurse104RefferedWorklistComponent
   nurse104ReferredWorklistResponce() {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanId = JSON.parse(serviceLineDetails).vanID;
-    // this.nurseService.loadNursePatientDetails(vanId).subscribe(
-    //   (res: any) => {
-    //     if (res !== null) {
-    //       const benlist = this.loadDataToNurse104ReferredWorklist(res);
-    //       this.beneficiaryList = benlist;
-    //       this.filteredBeneficiaryList = benlist;
-    //       this.dataSource.data = benlist;
-    //       this.dataSource.paginator = this.paginator;
-    //       this.dataSource.data.forEach((sectionCount: any, index: number) => {
-    //         sectionCount.sno = index + 1;
-    //       });
+    this.nurseService.loadNursePatientDetails(vanId).subscribe(
+      (res: any) => {
+        if (res !== null) {
+          const benlist = this.loadDataToNurse104ReferredWorklist(res);
+          this.beneficiaryList = benlist;
+          this.filteredBeneficiaryList = benlist;
+          this.dataSource.data = benlist;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.data.forEach((sectionCount: any, index: number) => {
+            sectionCount.sno = index + 1;
+          });
 
-    //       this.filterTerm = null;
-    //     } else this.confirmationService.alert(res.errorMessage, 'error');
-    //     this.dataSource.data = [];
-    //     this.dataSource.paginator = this.paginator;
-    //   },
-    //   (err) => {
-    //     this.confirmationService.alert(err, 'error');
-    //   },
-    // );
+          this.filterTerm = null;
+        } else this.confirmationService.alert(res.errorMessage, 'error');
+        this.dataSource.data = [];
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        this.confirmationService.alert(err, 'error');
+      },
+    );
   }
 
   loadDataToNurse104ReferredWorklist(data: any) {
-    // data.forEach((element: any) => {
-    //   element.genderName = element.genderName || 'Not Available';
-    //   element.age = element.age || 'Not Available';
-    //   element.benVisitNo = element.benVisitNo || 'Not Available';
-    //   element.districtName = element.districtName || 'Not Available';
-    //   element.villageName = element.villageName || 'Not Available';
-    //   element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-    //   element.referredFlag = element.referredFlag || 'Not Available';
-    // });
-    // return data;
-  }
-
-  /* 
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm)
-      this.filteredBeneficiaryList = this.beneficiaryList;
-    else {
-      this.filteredBeneficiaryList = [];
-      this.beneficiaryList.forEach((item) => {
-        console.log('item', JSON.stringify(item, null, 4))
-        for (let key in item) {
-          if (key === 'beneficiaryID' || key === 'benName' || key === 'genderName' || key === 'districtName' || key === 'preferredPhoneNum' || key === 'villageName') {
-            let value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item); break;
-            }
-          } else {
-            if (key === 'benVisitNo') {
-              let value: string = '' + item[key];
-              if (value === '1') {
-                let val = 'First visit'
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item); break;
-                }
-              } 
-              else if(value === '2'){
-                let val = 'Revist'
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item); break;
-                }
-              }
-              else if(value === '3'){
-                let val = 'Tele-Consultation Done'
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item); break;
-                }
-              }
-              else {
-                let val = 'Tele-Consultation'
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item); break;
-                }
-              }
-
-
-            }
-          }
-        }
-      });
-    }
-    this.activePage = 1;
-    this.pageChanged({
-      page: 1,
-      itemsPerPage: this.rowsPerPage
+    data.forEach((element: any) => {
+      element.genderName = element.genderName || 'Not Available';
+      element.age = element.age || 'Not Available';
+      element.benVisitNo = element.benVisitNo || 'Not Available';
+      element.districtName = element.districtName || 'Not Available';
+      element.villageName = element.villageName || 'Not Available';
+      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
+      element.referredFlag = element.referredFlag || 'Not Available';
     });
-    this.currentPage=1;
+    return data;
   }
-*/
-  // rebash() {
-  //   this.beneficiaryDetailsService.getCheck()
-  //   .subscribe(data => {
-  //     console.log(data);
-  //   })
-  // }
 
   filterBeneficiaryList(searchTerm: string) {
     if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;

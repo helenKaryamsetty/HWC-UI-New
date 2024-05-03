@@ -93,9 +93,6 @@ describe('GeneralPatientVitalsComponent', () => {
     debugElement = fixture.debugElement;
 
     fb = debugElement.injector.get(FormBuilder);
-    // beneficiaryDetailsService = TestBed.get(BeneficiaryDetailsService);
-    // doctorService = TestBed.get(DoctorService);
-    // confirmationService = TestBed.get(ConfirmationService);
     component.patientVitalsForm = new GeneralUtils(
       fb,
     ).createGeneralVitalDetailsForm();
@@ -630,10 +627,6 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.height_cm).toEqual('50');
         fixture.detectChanges();
         expect(component.checkHeight).toHaveBeenCalled();
-        // spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkHeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).not.toHaveBeenCalled();
       },
     ),
   ));
@@ -664,10 +657,6 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.height_cm).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkHeight).toHaveBeenCalled();
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkHeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -698,10 +687,6 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.weight_Kg).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkWeight).toHaveBeenCalled();
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -732,10 +717,6 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.weight_Kg).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkWeight).toHaveBeenCalled();
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -771,16 +752,11 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkHip).toHaveBeenCalled();
-        // fixture.detectChanges();
         console.log(component.female);
         console.log(component.normalHip);
         fixture.detectChanges();
         expect(component.female).toEqual(true);
         expect(component.normalHip).toEqual(false);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -820,10 +796,6 @@ describe('GeneralPatientVitalsComponent', () => {
         console.log(component.female);
         console.log(component.normalHip);
         expect(component.normalHip).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -862,10 +834,6 @@ describe('GeneralPatientVitalsComponent', () => {
         console.log(component.normalHip);
         expect(component.female).toEqual(false);
         expect(component.normalHip).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -904,10 +872,6 @@ describe('GeneralPatientVitalsComponent', () => {
         console.log(component.normalHip);
         expect(component.female).toEqual(false);
         expect(component.normalHip).toEqual(false);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -946,10 +910,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -992,10 +952,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1034,10 +990,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1080,10 +1032,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1126,10 +1074,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1166,10 +1110,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1206,10 +1146,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1244,10 +1180,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1282,10 +1214,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1322,10 +1250,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1362,10 +1286,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1404,10 +1324,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1446,10 +1362,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1490,10 +1402,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1532,10 +1440,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1574,10 +1478,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1616,10 +1516,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1658,10 +1554,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1700,10 +1592,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1742,10 +1630,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));
@@ -1784,10 +1668,6 @@ describe('GeneralPatientVitalsComponent', () => {
         fixture.detectChanges;
         console.log(component.female);
         expect(component.female).toEqual(true);
-        //  spyOn(confirmationService, 'alert');
-        // spyOn(component, 'checkWeight').and.callThrough();
-        // fixture.detectChanges();
-        // expect(confirmationService.alert).toHaveBeenCalled();
       },
     ),
   ));

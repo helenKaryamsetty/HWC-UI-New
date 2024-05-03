@@ -44,7 +44,6 @@ export class RedirInComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // sessionStorage.removeItem('setLanguage');
     this.getresponse();
   }
 

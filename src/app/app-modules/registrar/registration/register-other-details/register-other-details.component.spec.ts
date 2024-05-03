@@ -40,9 +40,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../../core/material.module';
 import { RegisterOtherDetailsComponent } from './register-other-details.component';
@@ -59,11 +56,6 @@ class MockActivatedRoute {
   };
 }
 class RegistrarServiceMock {
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary() spy').andCallFake(function(){
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary');
-
   registrationMaster = {
     occupationMaster: [
       { occupationID: 2, occupationType: 'Agricultural labour' },
@@ -149,7 +141,6 @@ class RegistrarServiceMock {
       { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
     ],
   };
-  // benDetails =
   benDetails = {
     beneficiaryRegID: 7878,
     firstName: 'neeraj',
@@ -234,7 +225,6 @@ describe('RegisterOtherDetailsComponent', () => {
     registrarService = TestBed.get(RegistrarService);
     cameraService = TestBed.get(CameraService);
     confirmationService = TestBed.get(ConfirmationService);
-    // fixture.detectChanges()
 
     function initGovID(): FormGroup {
       return fb.group({
@@ -257,8 +247,6 @@ describe('RegisterOtherDetailsComponent', () => {
       otherGovID: fb.array([initGovID()]),
     });
     component.patientRevisit = false;
-
-    // fixture.detectChanges();
     registrarService.getRegistrationMaster();
   });
 

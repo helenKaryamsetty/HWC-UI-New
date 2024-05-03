@@ -2300,7 +2300,6 @@ export class DoctorService {
 
   getHistoricalTrends() {
     // return this.http.post(this.getHistoricalTrendsUrl,{})
-    // .map(res => res.json())
   }
 
   clearCache() {

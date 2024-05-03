@@ -123,25 +123,4 @@ describe('ComorbidityConcurrentConditionsComponent', () => {
       );
     },
   ));
-
-  // it('should intialise comorbidity FormArray with comorbidity FormGroup on Initialisation', inject([MasterdataService], (masterdataService) => {
-  //   masterdataService.nurseMasterDataSource.next(data.generalOPDNurseMasterdata.data);
-  //   spyOn(component, 'getMasterData').and.callThrough();
-  //   spyOn(component, 'addComorbidityConcurrentConditions');
-  //   component.ngOnInit();
-  //   expect(component.getMasterData).toHaveBeenCalled();
-  //   expect(component.addComorbidityConcurrentConditions).toHaveBeenCalled();
-  //   expect((<FormArray>component.comorbidityConcurrentConditionsForm.controls.comorbidityConcurrentConditionsList).controls.length).toBe(1);
-  // }));
-
-  // it('should call getGeneralHistory when mode is view', async(inject([MasterdataService], (masterdataService) => {
-  //   masterdataService.nurseMasterDataSource.next(data.generalOPDNurseMasterdata.data);
-  //   spyOn(component, 'getMasterData').and.callThrough();
-  //   spyOn(component, 'getGeneralHistory');
-  //   component.mode = "view";
-  //   fixture.detectChanges();
-  //   component.ngOnInit();
-  //   expect(component.getMasterData).toHaveBeenCalled();
-  //   expect(component.getGeneralHistory).toHaveBeenCalled();
-  // })));
 });

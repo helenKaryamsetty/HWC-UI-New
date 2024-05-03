@@ -202,7 +202,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     const typeOfRelation = this.relationShipType.filter((item) => {
       if (item.benRelationshipID === this.relationWithHead) return item;
     });
-    // condition to check if head of the family is already present
     const familymembers: any[] = [];
     let headName: any = null;
     this.familyDetails.familyMembers.forEach((family: any) => {

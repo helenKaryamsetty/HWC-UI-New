@@ -34,15 +34,10 @@ import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../core/material.module';
 
 class RouterStub {
-  // navigateByUrl(url: string) { return url; }
-
   navigate(url: any) {}
 }
 
@@ -190,7 +185,6 @@ describe('RegisterComponent', () => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
     registrarService = TestBed.get(RegistrarService);
-    // component.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -199,26 +193,22 @@ describe('RegisterComponent', () => {
   });
 
   it('should load form for edit Beneficiary', () => {
-    // component.ngOnInit();
     const form = component.beneficiaryRegistrationForm;
     expect(form).toBeTruthy();
   });
 
   it('should load component in Edit Beneficiary Mode  ', () => {
-    // component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(component.patientRevisit).toBe(true);
   });
 
   it('should set Post button text to Update', () => {
-    // component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(buttonText).toBe('Update');
   });
 
   it('should redirect to Search Component as there is no Beneficiary data available', () => {
     const router = fixture.debugElement.injector.get(Router);
-    // spyOn(router, 'navigate')
 
     expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
   });

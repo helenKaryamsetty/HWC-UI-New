@@ -447,15 +447,12 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     this.addHypertensionToSuspectedArray();
   }
   addHypertensionToSuspectedArray() {
-    // adding hypertension to the suspected array according to the value of systolic BP
     this.systolicBpValueSubscription =
       this.idrsScoreService.systolicBpValue$.subscribe((response) => {
         if (response !== undefined) {
           if (!this.hypertensionChecked) this.systolicBPObs(response);
         }
       });
-
-    // adding hypertension to suspected array according to the value of diastolic BP
     this.diastolicBpValueSubscription =
       this.idrsScoreService.diastolicBpValue$.subscribe((response) => {
         if (response !== undefined) {

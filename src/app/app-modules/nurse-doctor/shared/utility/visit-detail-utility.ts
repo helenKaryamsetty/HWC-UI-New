@@ -35,9 +35,6 @@ export class VisitDetailUtils {
       patientInvestigationsForm:
         this.createPatientInvestigationsForm(diasableFlag),
       cdssForm: this.createCdssForm(),
-      // patientSymptomsForm: this.createPatientSymptomsForm(diasableFlag),
-      // patientTravelHistoryForm: this.createPatientTravelHistoryForm(diasableFlag),
-      // patientContactHistoryForm: this.createPatientContactHistoryForm(diasableFlag),
       patientCovidForm: this.createPatientCovidForm(diasableFlag),
       patientFileUploadDetailsForm:
         this.createPatientFileUploadDetailsForm(diasableFlag),
@@ -188,9 +185,6 @@ export class VisitDetailUtils {
       symptom: { value: null, disabled: disableFlag },
       contactStatus: { value: null, disabled: disableFlag },
       travelStatus: { value: null, disabled: disableFlag },
-      //travelType : {value : null , disabled  :disableFlag},
-      //domestic : {value : null , disabled  :disableFlag},
-      //international : {value : null , disabled  :disableFlag},
       travelList: this.fb.array([]),
       modeOfTravelDomestic: { value: null, disabled: disableFlag },
       fromStateDom: { value: null, disabled: disableFlag },
@@ -206,24 +200,12 @@ export class VisitDetailUtils {
       toCityInter: { value: null, disabled: disableFlag },
       suspectedStatusUI: { value: null, disabled: disableFlag },
       recommendation: this.fb.array([]),
-      //recommendation:{value : null , disabled  :disableFlag},
       createdBy: null,
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
-  // createPatientContactHistoryForm(disableFlag : boolean = false){
-  //   return this.fb.group({
-  //     beneficiaryRegID: null,
-  //     benVisitID: null,
-  //     providerServiceMapID: null,
-  //     conceptID: null,
-  //     contactstatus:{value : null , disabled  :disableFlag},
-  //     createdBy: null,
-  //     vanID:JSON.parse(localStorage.getItem('serviceLineDetails')).vanID,
-  //     parkingPlaceID :JSON.parse(localStorage.getItem('serviceLineDetails')).parkingPlaceID,
-  //   })
-  // }
+
   createCovidVaccineStatusForm(disableFlag: any): FormGroup {
     return this.fb.group({
       covidVSID: null,

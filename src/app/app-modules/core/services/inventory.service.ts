@@ -46,7 +46,7 @@ export class InventoryService {
   getAuthKey() {
     if (sessionStorage.getItem('isAuthenticated')) {
       return sessionStorage.getItem('key');
-    } else return undefined; // or return undefined; depending on your use case
+    } else return undefined;
   }
 
   getFacilityID() {

@@ -27,13 +27,6 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-
-      <!-- <mat-hint>
-        <span *ngIf="
-            cdssForm.controls['presentChiefComplaint'].dirty &&
-            cdssForm.controls['presentChiefComplaint'].untouched
-          ">{{ currentLanguageSet?.max20CharectorsAllowed }}</span>
-      </mat-hint> -->
     </div>
 
     <div class="col-xs-12 col-sm-6 col-md-4" *ngIf="viewMode === true">
@@ -100,16 +93,6 @@
           formControlName="remarksPc"
           [readonly]="viewMode"
         ></textarea>
-        <!-- <mat-hint>
-          <span *ngIf="
-              cdssForm.controls['remarksPc'].errors &&
-              cdssForm.controls['remarksPc'].touched
-            " class="error_text">{{ currentLanguageSet?.enteratLeast3Characters }}</span>
-          <span *ngIf="
-              cdssForm.controls['remarksPc'].dirty &&
-              cdssForm.controls['remarksPc'].untouched
-            ">{{ currentLanguageSet?.max300CharectorsAllowed }}</span>
-        </mat-hint> -->
       </mat-form-field>
     </div>
   </div>

@@ -270,8 +270,6 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
       otherDeliveryPlace: null,
       deliveryType: null,
     });
-    // this.patientPNCForm.controls['deliveryType'].markAsUntouched();
-    // this.patientPNCForm.controls['deliveryType'].markAsPristine();
   }
 
   masterData: any;

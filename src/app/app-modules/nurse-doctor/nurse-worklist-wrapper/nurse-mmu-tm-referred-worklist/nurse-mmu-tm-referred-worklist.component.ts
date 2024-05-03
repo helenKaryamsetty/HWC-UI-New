@@ -117,30 +117,27 @@ export class NurseMmuTmReferredWorklistComponent
   }
 
   getNurseWorklist() {
-    this.nurseService
-      .getMMUNurseWorklist()
-      // this.nurseService.getNurseWorklist()
-      .subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            const benlist = this.loadDataToBenList(res.data);
-            this.beneficiaryList = benlist;
-            this.filteredBeneficiaryList = benlist;
-            this.dataSource.data = [];
-            this.dataSource.data = benlist;
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.data.forEach((sectionCount: any, index: number) => {
-              sectionCount.sno = index + 1;
-            });
-            this.filterTerm = null;
-          } else this.confirmationService.alert(res.errorMessage, 'error');
+    this.nurseService.getMMUNurseWorklist().subscribe(
+      (res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          const benlist = this.loadDataToBenList(res.data);
+          this.beneficiaryList = benlist;
+          this.filteredBeneficiaryList = benlist;
           this.dataSource.data = [];
+          this.dataSource.data = benlist;
           this.dataSource.paginator = this.paginator;
-        },
-        (err) => {
-          this.confirmationService.alert(err, 'error');
-        },
-      );
+          this.dataSource.data.forEach((sectionCount: any, index: number) => {
+            sectionCount.sno = index + 1;
+          });
+          this.filterTerm = null;
+        } else this.confirmationService.alert(res.errorMessage, 'error');
+        this.dataSource.data = [];
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        this.confirmationService.alert(err, 'error');
+      },
+    );
   }
 
   loadDataToBenList(data: any) {
@@ -186,7 +183,6 @@ export class NurseMmuTmReferredWorklistComponent
         .subscribe((result) => {
           if (result) {
             localStorage.setItem('visitCode', beneficiary.visitCode);
-            // localStorage.setItem('visitCode', beneficiary.referredVisitCode);
             localStorage.setItem('beneficiaryGender', beneficiary.genderName);
             localStorage.setItem('visitCategory', 'NCD screening');
             localStorage.setItem('visitID', beneficiary.benVisitID);
@@ -222,21 +218,12 @@ export class NurseMmuTmReferredWorklistComponent
             localStorage.setItem('specialistFlag', beneficiary.specialist_flag);
 
             localStorage.setItem('visitCode', beneficiary.referredVisitCode);
-
-            // localStorage.setItem("visitCode", beneficiary.visitCode);
             localStorage.setItem('visitCat', beneficiary.VisitCategory);
-            // localStorage.setItem("visitID", beneficiary.benVisitID);
             localStorage.setItem('visitID', beneficiary.referred_visit_id);
             localStorage.setItem(
               'mmuReferredVisitCode',
               beneficiary.referredVisitCode,
             );
-
-            // localStorage.setItem('visitCat', "General OPD");
-            // sessionStorage.setItem('specialistFlag', "100")
-            // localStorage.setItem('visitID', "27824");
-            // localStorage.setItem('visitCode', "30022000027824");
-            // localStorage.setItem('beneficiaryRegID', "543931");
 
             this.router.navigate([
               '/nurse-doctor/attendant/nurse/patient/',
@@ -319,11 +306,4 @@ export class NurseMmuTmReferredWorklistComponent
     });
     this.currentPage = 1;
   }
-
-  // rebash() {
-  //   this.beneficiaryDetailsService.getCheck()
-  //   .subscribe(data => {
-  //     console.log(data);
-  //   })
-  // }
 }

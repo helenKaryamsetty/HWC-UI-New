@@ -178,7 +178,6 @@ export class DiabetesScreeningComponent
           suspected: null,
           formDisable: true,
         });
-        // this.ncdScreeningService.diabetesSuspectStatus(false);
         this.disableCheckbox = true;
       } else {
         this.ncdScreeningService.isDiabetesConfirmed = false;
@@ -333,18 +332,7 @@ export class DiabetesScreeningComponent
           this.isDiabetesSuspected,
         );
         this.diabetesScreeningForm.patchValue(ncdDiabetesData);
-        //   let boodGlucoseId = null;
-        //   boodGlucoseId = this.bloodGlucoseSampleTypes.filter((item) => {
-        //     if (item.name === ncdDiabetesData.bloodGlucoseType) return item;
-        //   });
-
-        //   this.diabetesScreeningForm.patchValue({
-        //     bloodGlucoseTypeID: boodGlucoseId[0] ? boodGlucoseId[0].id : null,
-        //   });
       }
-      // if (this.interpretation === undefined || this.interpretation === null) {
-      //   this.getDiabetes();
-      // }
     }
   }
 

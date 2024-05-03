@@ -43,12 +43,8 @@ import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '../../core/material.module';
-// import { element } from 'protractor';
 import { RegisterOtherDetailsComponent } from './register-other-details/register-other-details.component';
 import { RegisterPersonalDetailsComponent } from './register-personal-details/register-personal-details.component';
 
@@ -62,11 +58,6 @@ class RouterStub {
 }
 
 class RegistrarServiceMock {
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary() spy').andCallFake(function(){
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary');
-
   registrationMaster = {
     occupationMaster: [
       { occupationID: 2, occupationType: 'Agricultural labour' },
@@ -152,7 +143,6 @@ class RegistrarServiceMock {
       { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
     ],
   };
-  // benDetails =
   benDetails = {
     beneficiaryRegID: 7878,
     firstName: 'neeraj',
@@ -248,7 +238,6 @@ describe('RegisterComponent', () => {
     registrarService = TestBed.get(RegistrarService);
     spyOn(component, 'dateFormatChange').and.returnValue('1');
 
-    // component.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -263,19 +252,16 @@ describe('RegisterComponent', () => {
   });
 
   it('should load form for edit Beneficiary', () => {
-    // component.ngOnInit();
     const form = component.beneficiaryRegistrationForm;
     expect(form).toBeTruthy();
   });
 
   it('should load component in Edit Beneficiary Mode  ', () => {
-    // component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(component.patientRevisit).toBe(true);
   });
 
   it('should set Post button text to Update', () => {
-    // component.ngOnInit();
     const buttonText = component.postButtonText;
     expect(buttonText).toBe('Update');
   });
@@ -288,7 +274,6 @@ describe('RegisterComponent', () => {
   it('should reset the form', () => {
     const form = component.beneficiaryRegistrationForm;
     form.markAsDirty();
-    // console.log(form.dirty,'is it dirty')
     fixture.detectChanges();
     component.resetBeneficiaryForm();
     fixture.detectChanges();

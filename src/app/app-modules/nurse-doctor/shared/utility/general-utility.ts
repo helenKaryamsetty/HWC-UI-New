@@ -74,7 +74,6 @@ export class GeneralUtils {
       generalExaminationForm: this.createGeneralExaminationForm(),
       headToToeExaminationForm: this.createHeadToToeExaminationForm(),
       systemicExaminationForm: this.createSystemicExaminationForm(),
-      // oralExaminationForm: this.createOralExaminationForm()
     });
   }
 
@@ -368,8 +367,6 @@ export class GeneralUtils {
 
     return this.fb.group({
       gravida_G: null,
-      // termDeliveries_T: null,
-      // pretermDeliveries_P: null,
       para: null,
       abortions_A: null,
       stillBirth: null,
@@ -560,10 +557,6 @@ export class GeneralUtils {
       pregOutcomeID: null,
       pregOutcome: null,
 
-      // postNatalComplicationID: null,
-      // postNatalComplication: null,
-      // otherPostNatalComplication: null,
-
       newBornComplicationID: null,
       newBornComplication: null,
       otherNewBornComplication: null,
@@ -624,7 +617,6 @@ export class GeneralUtils {
       beneficiaryRegID: null,
       benVisitID: null,
       providerServiceMapID: null,
-      // clinicalObservation: null,
       otherSymptoms: null,
       significantFindings: null,
       isForHistory: null,
@@ -719,7 +711,6 @@ export class GeneralUtils {
     const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      // ncdScreeningConditionID: null,
       ncdScreeningConditionArray: [null, Validators.required],
       ncdScreeningConditionOther: null,
       ncdCareTypeID: null,
@@ -880,19 +871,6 @@ export class GeneralUtils {
     });
   }
 
-  // createNCDScreeningDiagnosisFormForCbac() {
-  //   return this.fb.group({
-  //     instruction: null,
-  //     prescriptionID: null,
-  //     vanID: JSON.parse(localStorage.getItem('serviceLineDetails')).vanID,
-  //     parkingPlaceID: JSON.parse(localStorage.getItem('serviceLineDetails')).parkingPlaceID,
-  //     provisionalDiagnosisList: this.fb.array([this.initProvisionalDiagnosisList()]),
-  //     diabetesScreeningConfirmed: null,
-  //     hypertensionScreeningConfirmed: null,
-
-  //   });
-  // }
-
   createANCCaseRecord() {
     return this.fb.group({
       generalFindingsForm: this.createGeneralFindingsForm(),
@@ -995,9 +973,7 @@ export class GeneralUtils {
   /*Birth & Immunization History */
   createBirthImmunizationHistoryForm() {
     return this.fb.group({
-      // birthInfantForm: this.createPastHistoryForm(),
       infantBirthDetailsForm: this.createInfantBirthDetailsForm(),
-      //immunizationHistory: this.createComorbidityConcurrentConditionsForm(),
       immunizationHistory: this.createImmunizationHistoryForm(),
     });
   }

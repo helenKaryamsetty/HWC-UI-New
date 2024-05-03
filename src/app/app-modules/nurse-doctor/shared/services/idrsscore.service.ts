@@ -165,11 +165,8 @@ export class IdrsscoreService {
 
   clearMessage() {
     this.IDRSFamilyScore.next(0);
-    // this.IDRSScoreFlagCheck.next(0);
     this.IDRSWaistScore.next(0);
     this.IDRSPhysicalActivityScore.next(0);
-    // this.IRDSscorePhysicalActivity.next("");
-    // this.IDRSWaistScore.next("");
   }
 
   setIDRSScoreWaist(score: any) {

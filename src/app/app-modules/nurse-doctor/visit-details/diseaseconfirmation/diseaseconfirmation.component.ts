@@ -114,26 +114,11 @@ export class DiseaseconfirmationComponent
       this.diseaseFormsArray.removeAt(0);
     }
 
-    // if (String(this.mode) === 'view') {
-    //   let visitID = localStorage.getItem('visitID');
-    //   let benRegID = localStorage.getItem('beneficiaryRegID');
-    //   if (visitID !== null && benRegID !== null) {
-    //     if( this.idrsOrCbac === "idrs")
-    //        this.getIDRSDetailsFrmNurse(visitID, benRegID);
-
-    //     else if( this.idrsOrCbac === "cbac")
-    //         this.getCbacDiseaseDetailsFromNurse(visitID, benRegID);
-
-    //   }
-    // }
-    // else
-    // {
     if (String(this.mode) !== 'view') {
       if (this.idrsOrCbac === 'cbac') this.getpatientDiseasesata();
       else if (this.idrsOrCbac === 'idrs')
         this.getPatientRevisitSuspectedDieseaData();
     }
-    // }
 
     this.attendantType = this.route.snapshot.params['attendant'];
     if (
@@ -150,7 +135,6 @@ export class DiseaseconfirmationComponent
   }
 
   ngOnChanges() {
-    //this.nurseService.mmuVisitData=false;
     if (String(this.mode) === 'view') {
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -537,8 +521,6 @@ export class DiseaseconfirmationComponent
           };
           this.nurseService.getPreviousVisitData(obj).subscribe((res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              //console.log("visit", res);
-              //if (res.data.suspectedDisease !== null) {
               this.suspect = [];
               if (
                 res.data.confirmedDisease !== undefined &&
@@ -574,7 +556,6 @@ export class DiseaseconfirmationComponent
                   ) {
                     this.questionArray = [];
                     let suspect1 = [];
-                    // this.suspect = [];
                     if (
                       value.data.IDRSDetail !== undefined &&
                       value.data.IDRSDetail !== null &&
@@ -595,7 +576,6 @@ export class DiseaseconfirmationComponent
                             if (val.disease === value) val.current = true;
                           });
                         });
-                        // });
                       } else {
                         let check = false;
                         suspect1.forEach((element: any) => {
@@ -769,7 +749,6 @@ export class DiseaseconfirmationComponent
           if (this.questions && this.questions.length > 0) {
             for (let i = 0; i < this.questions.length; i++) {
               if (i !== 0) {
-                // console.log(this.questions.DiseaseQuestionType !== this.questions[i - 1].DiseaseQuestionType);
                 if (
                   this.questions[i].DiseaseQuestionType !==
                   this.questions[i - 1].DiseaseQuestionType
@@ -795,8 +774,6 @@ export class DiseaseconfirmationComponent
               .getPreviousVisitData(obj)
               .subscribe((res: any) => {
                 if (res.statusCode === 200 && res.data !== null) {
-                  //console.log("visit", res);
-                  //if (res.data.suspectedDisease !== null) {
                   this.suspect = [];
                   if (
                     res.data.confirmedDisease !== undefined &&

@@ -42,12 +42,7 @@ describe('VisitDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        //CdssFormComponent,
-      ],
+      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
       declarations: [VisitDetailsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
