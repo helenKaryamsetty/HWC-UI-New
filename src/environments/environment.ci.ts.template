@@ -57,11 +57,11 @@ export const environment = {
   IdrsOrCbac: ["IDRS", "CBAC"],
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: `${INVENTORY_UI}/#/redirin?`,
+  INVENTORY_URL: `${INVENTORY_UI}/inventory-ui-v1.0/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${SCHEDULER_UI}/#/?`,
+  TELEMEDICINE_URL: `${SCHEDULER_UI}/schedulerui-v1.0/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
@@ -458,7 +458,7 @@ export const environment = {
   saveNurseNeonatalAndInfantDetails: `${TM_API}neonatal-infant-services/save/nurseData`,
   getBirthImmunizationHistoryDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
   updateBirthImmunizationHistoryDetailsUrl: `${TM_API}/neonatal-infantServices/update/BirthAndImmunizationHistoryScreen`,
-  getNeonatalVitalsDetailsUrl : `${TM_API}neonatal-infant-services/getBenVitalDetailsFrmNurse`,
+  getNeonatalVitalsDetailsUrl: `${TM_API}neonatal-infant-services/getBenVitalDetailsFrmNurse`,
   updateNeonatalVitalsDetailsUrl: `${TM_API}/neonatal-infantServices/update/vitalScreen`,
   getPreviousBirthImmunizationDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
   saveDoctorNeonatalAndInfantService: `${TM_API}neonatal-infant-services/save-neo-natal-doctor-data`,
@@ -469,11 +469,10 @@ export const environment = {
   updateNeonatalImmunizationService: `${TM_API}neonatal-infantServices/update/ImmunizationServicesScreen`,
   getNeonatalVisitDetails: `${TM_API}/neonatal-infant-services/getBenVisitDetailsFrmNurseNNI`,
 
-
   /* Child And Adolescent Urls */
   saveNurseChildAndAdloescentDetails: `${TM_API}/child-adolescent-care/save/nurseData`,
   getChildAndAdolescentVisitDetails: `${TM_API}/child-adolescent-care/getBenVisitDetailsFrmNurseCAC`,
-  getChildAndAdolescentVitalsDetailsUrl : `${TM_API}/child-adolescent-care/getBenVitalDetailsFrmNurse`,
+  getChildAndAdolescentVitalsDetailsUrl: `${TM_API}/child-adolescent-care/getBenVitalDetailsFrmNurse`,
   getPreviousBirthImmunizationDataForChildAndAdolascentUrl: `${TM_API}/child-adolescent-care/getBenHistoryDetails`,
   updateChildAndAdolescentVitalsDetailsUrl: `${TM_API}/child-adolescent-care/update/vitalScreen`,
   getChildAndAdolescentDetails: `${TM_API}/child-adolescent-care/getBenCaseRecordFromDoctor`,
@@ -489,7 +488,6 @@ export const environment = {
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
   getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
   getnurse104referredworklisturls: `${TM_API}uptsu/getWorklistByVanID`,
-
 
   /* CDSS Urls */
   getCdssQuestionsUrl: `${API104}CDSS/getQuestions`,
