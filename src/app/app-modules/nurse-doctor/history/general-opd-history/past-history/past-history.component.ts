@@ -216,10 +216,17 @@ export class PastHistoryComponent
       if (temp[i].illnessType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
         this.filterPastIllnessTypeInDoctor(temp[i].illnessType, i);
       }
-
       if (i + 1 < temp.length) this.addPastIllness();
     }
   }
@@ -280,11 +287,17 @@ export class PastHistoryComponent
       if (temp[i].surgeryType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
         this.filterPastSurgeryType(temp[i].surgeryType, i);
       }
-
-      console.log('FormArray', formArray);
 
       if (i + 1 < temp.length) this.addPastSurgery();
     }

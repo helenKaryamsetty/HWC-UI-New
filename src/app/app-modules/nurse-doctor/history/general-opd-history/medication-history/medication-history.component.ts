@@ -148,7 +148,21 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.addMedicationHistory();
     }
     formArray.patchValue(temp);
+    for (const formGroup of formArray.controls) {
+      if (formGroup instanceof FormGroup) {
+        if (
+          formGroup?.get('timePeriodAgo')?.value !== null &&
+          formGroup?.get('timePeriodUnit')?.value !== null
+        ) {
+          formGroup?.get('timePeriodAgo')?.enable();
+          formGroup?.get('timePeriodUnit')?.enable();
+        }
+        formGroup.markAsTouched();
+        formGroup.markAsDirty();
+      }
+    }
     formArray.markAsTouched();
+    formArray.markAsDirty();
   }
 
   addMedicationHistory() {
