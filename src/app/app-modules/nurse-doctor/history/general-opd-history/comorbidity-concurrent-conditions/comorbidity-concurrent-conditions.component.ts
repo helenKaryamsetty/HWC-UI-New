@@ -523,9 +523,12 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
 
-  checkValidity(comorbidityConcurrentConditions: any) {
-    const temp = comorbidityConcurrentConditions.value;
-    if (temp.comorbidConditions && temp.timePeriodAgo && temp.timePeriodUnit) {
+  checkValidity(comorbidityConcurrentConditions: AbstractControl<any, any>) {
+    if (
+      comorbidityConcurrentConditions?.get('comorbidConditions')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodAgo')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodUnit')?.value
+    ) {
       return false;
     } else {
       return true;

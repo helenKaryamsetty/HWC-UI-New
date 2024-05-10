@@ -182,7 +182,9 @@
               class="select-full-width"
               formControlName="surgeryType"
               name="surgeryType"
-              (selectionChange)="filterPastSurgeryType($event, i, pastSurgery)"
+              (selectionChange)="
+                filterPastSurgeryType($event.value, i, pastSurgery)
+              "
             >
               <mat-option
                 *ngFor="let surgery of pastSurgerySelectList[i]"

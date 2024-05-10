@@ -697,13 +697,12 @@ export class PastHistoryComponent
     });
   }
 
-  checkIllnessValidity(illnessForm: any) {
-    const temp = illnessForm.value;
+  checkIllnessValidity(illnessForm: AbstractControl<any, any>) {
     if (
-      temp.illnessType &&
-      temp.illnessType !== 'None' &&
-      temp.timePeriodAgo &&
-      temp.timePeriodUnit
+      illnessForm?.get('illnessType') &&
+      illnessForm?.get('illnessType')?.value !== 'None' &&
+      illnessForm?.get('timePeriodAgo')?.value &&
+      illnessForm?.get('timePeriodUnit')?.value
     ) {
       return false;
     } else {
@@ -719,13 +718,12 @@ export class PastHistoryComponent
     });
   }
 
-  checkSurgeryValidity(surgeryForm: any) {
-    const temp = surgeryForm.value;
+  checkSurgeryValidity(surgeryForm: AbstractControl<any, any>) {
     if (
-      temp.surgeryType &&
-      temp.surgeryType !== 'None' &&
-      temp.timePeriodAgo &&
-      temp.timePeriodUnit
+      surgeryForm?.get('surgeryType') &&
+      surgeryForm?.get('surgeryType')?.value !== 'None' &&
+      surgeryForm?.get('timePeriodAgo')?.value &&
+      surgeryForm?.get('timePeriodUnit')?.value
     ) {
       return false;
     } else {

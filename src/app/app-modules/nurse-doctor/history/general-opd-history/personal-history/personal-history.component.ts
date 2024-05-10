@@ -987,13 +987,13 @@ export class GeneralPersonalHistoryComponent
     });
   }
 
-  checkTobaccoValidity(tobaccoForm: any) {
+  checkTobaccoValidity(tobaccoForm: AbstractControl<any, any>) {
     const temp = tobaccoForm.value;
     if (
-      temp.tobaccoUseType &&
-      temp.number &&
-      temp.duration &&
-      temp.durationUnit
+      tobaccoForm?.get('tobaccoUseType')?.value &&
+      tobaccoForm?.get('number')?.value &&
+      tobaccoForm?.get('duration')?.value &&
+      tobaccoForm?.get('durationUnit')?.value
     ) {
       return false;
     } else {
@@ -1001,14 +1001,13 @@ export class GeneralPersonalHistoryComponent
     }
   }
 
-  checkAlcoholValidity(alcoholForm: any) {
-    const temp = alcoholForm.value;
+  checkAlcoholValidity(alcoholForm: AbstractControl<any, any>) {
     if (
-      temp.typeOfAlcohol &&
-      temp.alcoholIntakeFrequency &&
-      temp.avgAlcoholConsumption &&
-      temp.duration &&
-      temp.durationUnit
+      alcoholForm?.get('typeOfAlcohol')?.value &&
+      alcoholForm?.get('alcoholIntakeFrequency')?.value &&
+      alcoholForm?.get('avgAlcoholConsumption')?.value &&
+      alcoholForm?.get('duration')?.value &&
+      alcoholForm?.get('durationUnit')?.value
     ) {
       return false;
     } else {
@@ -1016,13 +1015,12 @@ export class GeneralPersonalHistoryComponent
     }
   }
 
-  checkAllergyValidity(allergyForm: any) {
-    const temp = allergyForm.value;
+  checkAllergyValidity(allergyForm: AbstractControl<any, any>) {
     if (
-      temp.allergyType &&
-      temp.snomedTerm &&
-      temp.snomedCode &&
-      temp.typeOfAllergicReactions
+      allergyForm?.get('allergyType')?.value &&
+      allergyForm?.get('snomedTerm')?.value &&
+      allergyForm?.get('snomedCode')?.value &&
+      allergyForm?.get('typeOfAllergicReactions')?.value
     ) {
       return false;
     } else {
