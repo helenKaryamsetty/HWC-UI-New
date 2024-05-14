@@ -78,7 +78,6 @@ export const environment = {
   getSubDistrictName: `${COMMON_API}location/taluks/`,
   getCountryName: `${TM_API}location/get/countryMaster`,
   getCityName: `${TM_API}location/get/countryCityMaster/`,
-
   /**
    * Login and Logout Urls
    */
@@ -291,7 +290,6 @@ export const environment = {
   updateGeneralOPDDoctorDetails: `${TM_API}generalOPD/update/doctorData`,
   updateNCDCareDoctorDetails: `${TM_API}NCDCare/update/doctorData`,
   updatePNCDoctorDetails: `${TM_API}PNC/update/doctorData`,
-
   getTMCasesheetDataUrl: `${TM_API}common/get/Case-sheet/printData`,
   getMMUCasesheetDataUrl: `${MMU_API}common/get/Case-sheet/printData`,
 
@@ -396,7 +394,6 @@ export const environment = {
   /*Health ID - care context Mapping*/
   careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
   verifyOtpForMappingContextUrl: `${FHIR_API}careContext/validateOTPAndCreateCareContext`,
-
   /*Health ID Validation URL*/
   generateOTPForHealthIDValidation: `${FHIR_API}validate/generateOTPForHealthIDValidation`,
   verifyOTPForHealthIDValidation: `${FHIR_API}validate/verifyOTPForHealthIDValidation`,
