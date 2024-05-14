@@ -213,11 +213,21 @@ export class ComorbidityConcurrentConditionsComponent
       if (temp[i].comorbidCondition) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
         this.filterComorbidityConcurrentConditionsType(
           temp[i].comorbidCondition,
           i,
         );
+        if (
+          k?.get('comorbidConditions')?.value !== null &&
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+          k?.get('isForHistory')?.enable();
+        }
       }
 
       if (i + 1 < temp.length) this.addComorbidityConcurrentConditions();
@@ -523,9 +533,12 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
 
-  checkValidity(comorbidityConcurrentConditions: any) {
-    const temp = comorbidityConcurrentConditions.value;
-    if (temp.comorbidConditions && temp.timePeriodAgo && temp.timePeriodUnit) {
+  checkValidity(comorbidityConcurrentConditions: AbstractControl<any, any>) {
+    if (
+      comorbidityConcurrentConditions?.get('comorbidConditions')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodAgo')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodUnit')?.value
+    ) {
       return false;
     } else {
       return true;

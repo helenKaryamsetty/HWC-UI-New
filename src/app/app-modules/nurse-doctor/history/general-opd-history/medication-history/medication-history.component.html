@@ -93,7 +93,11 @@
             color="warn"
             class="mat_warn_circle"
             style="margin-right: 5px"
-            *ngIf="i !== 0 || (i === 0 && medicationHistory.touched)"
+            *ngIf="
+              i !== 0 ||
+              (i === 0 &&
+                (medicationHistory.touched || medicationHistory.dirty))
+            "
             (click)="removeMedicationHistory(i, medicationHistory)"
           >
             <mat-icon class="md-18">close</mat-icon>

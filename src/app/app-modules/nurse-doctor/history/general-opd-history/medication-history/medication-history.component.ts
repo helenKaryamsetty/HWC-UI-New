@@ -148,7 +148,21 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.addMedicationHistory();
     }
     formArray.patchValue(temp);
+    for (const formGroup of formArray.controls) {
+      if (formGroup instanceof FormGroup) {
+        if (
+          formGroup?.get('timePeriodAgo')?.value !== null &&
+          formGroup?.get('timePeriodUnit')?.value !== null
+        ) {
+          formGroup?.get('timePeriodAgo')?.enable();
+          formGroup?.get('timePeriodUnit')?.enable();
+        }
+        formGroup.markAsTouched();
+        formGroup.markAsDirty();
+      }
+    }
     formArray.markAsTouched();
+    formArray.markAsDirty();
   }
 
   addMedicationHistory() {
@@ -282,9 +296,12 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  checkValidity(medicationForm: any) {
-    const temp = medicationForm.value;
-    if (temp.currentMedication && temp.timePeriodAgo && temp.timePeriodUnit) {
+  checkValidity(medicationForm: AbstractControl<any, any>) {
+    if (
+      medicationForm?.get('currentMedication')?.value &&
+      medicationForm?.get('timePeriodAgo')?.value &&
+      medicationForm?.get('timePeriodUnit')?.value
+    ) {
       return false;
     } else {
       return true;

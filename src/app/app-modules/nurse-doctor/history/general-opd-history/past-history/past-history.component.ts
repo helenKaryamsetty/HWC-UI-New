@@ -216,10 +216,17 @@ export class PastHistoryComponent
       if (temp[i].illnessType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
         this.filterPastIllnessTypeInDoctor(temp[i].illnessType, i);
       }
-
       if (i + 1 < temp.length) this.addPastIllness();
     }
   }
@@ -280,11 +287,17 @@ export class PastHistoryComponent
       if (temp[i].surgeryType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
         this.filterPastSurgeryType(temp[i].surgeryType, i);
       }
-
-      console.log('FormArray', formArray);
 
       if (i + 1 < temp.length) this.addPastSurgery();
     }
@@ -697,13 +710,12 @@ export class PastHistoryComponent
     });
   }
 
-  checkIllnessValidity(illnessForm: any) {
-    const temp = illnessForm.value;
+  checkIllnessValidity(illnessForm: AbstractControl<any, any>) {
     if (
-      temp.illnessType &&
-      temp.illnessType !== 'None' &&
-      temp.timePeriodAgo &&
-      temp.timePeriodUnit
+      illnessForm?.get('illnessType') &&
+      illnessForm?.get('illnessType')?.value !== 'None' &&
+      illnessForm?.get('timePeriodAgo')?.value &&
+      illnessForm?.get('timePeriodUnit')?.value
     ) {
       return false;
     } else {
@@ -719,13 +731,12 @@ export class PastHistoryComponent
     });
   }
 
-  checkSurgeryValidity(surgeryForm: any) {
-    const temp = surgeryForm.value;
+  checkSurgeryValidity(surgeryForm: AbstractControl<any, any>) {
     if (
-      temp.surgeryType &&
-      temp.surgeryType !== 'None' &&
-      temp.timePeriodAgo &&
-      temp.timePeriodUnit
+      surgeryForm?.get('surgeryType') &&
+      surgeryForm?.get('surgeryType')?.value !== 'None' &&
+      surgeryForm?.get('timePeriodAgo')?.value &&
+      surgeryForm?.get('timePeriodUnit')?.value
     ) {
       return false;
     } else {

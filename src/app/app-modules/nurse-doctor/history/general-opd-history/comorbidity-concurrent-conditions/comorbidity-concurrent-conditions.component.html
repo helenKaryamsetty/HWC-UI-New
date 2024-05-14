@@ -148,7 +148,10 @@
             style="margin-right: 3px"
             id="removeComorbidityConcurrentConditions"
             *ngIf="
-              i !== 0 || (i === 0 && comorbidityConcurrentConditions.touched)
+              i !== 0 ||
+              (i === 0 &&
+                (comorbidityConcurrentConditions.touched ||
+                  comorbidityConcurrentConditions.dirty))
             "
             (click)="
               removeComorbidityConcurrentConditions(
