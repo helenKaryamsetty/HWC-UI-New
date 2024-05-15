@@ -347,7 +347,7 @@
               color="warn"
               class="mat_warn_circle"
               style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && tobacco.touched)"
+              *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
               (click)="removeTobacco(i, tobacco)"
             >
               <mat-icon class="md-18">close</mat-icon>
@@ -521,7 +521,7 @@
               color="warn"
               class="mat_warn_circle"
               style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && alcohol.touched)"
+              *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
               (click)="removeAlcohol(i, alcohol)"
             >
               <mat-icon class="md-18">close</mat-icon>
@@ -678,7 +678,7 @@
               color="warn"
               class="mat_warn_circle"
               style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && allergy.touched)"
+              *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
               (click)="removeAllergy(i, allergy)"
             >
               <mat-icon class="md-18">close</mat-icon>
