@@ -1,26 +1,17 @@
-<mat-icon
-  class="mdicon mat-icon material-icons pull-right cursorPointer"
-  matTooltip="{{ currentLanguageSet?.close }}"
-  role="img"
-  aria-hidden="true"
-  (click)="close()"
->
-  clear</mat-icon
->
-
-<h4 mat-dialog-title class="f-s-b m-l-15" *ngIf="page1">
-  {{ currentLanguageSet?.symptoms }}
-</h4>
-<h4 mat-dialog-title class="f-s-b m-b-5 m-l-15" *ngIf="page2">
-  {{ currentLanguageSet?.symptomResults }}
-</h4>
-<h4
-  mat-dialog-title
-  class="f-s-b m-l-15"
-  *ngIf="formattedResult !== null && page3"
->
-  {{ currentLanguageSet?.diseases }}
-</h4>
+<div class="dialog-header-panel">
+  <h4 mat-dialog-title class="f-s-b m-l-15" *ngIf="page1">
+    {{ currentLanguageSet?.symptoms }}
+  </h4>
+  <h4 mat-dialog-title class="f-s-b m-b-5 m-l-15" *ngIf="page2">
+    {{ currentLanguageSet?.symptomResults }}
+  </h4>
+  <h4 mat-dialog-title class="f-s-b m-l-15" *ngIf="formattedResult && page3">
+    {{ currentLanguageSet?.diseases }}
+  </h4>
+  <button class="close" mat-button (click)="close()">
+    <mat-icon aria-hidden="true">clear</mat-icon>
+  </button>
+</div>
 
 <mat-dialog-content *ngIf="page1" class="captialize">
   <div class="col-xs-12 col-sm-12" id="Questions">
@@ -96,7 +87,7 @@
   </div>
 </mat-dialog-actions>
 
-<mat-dialog-content *ngIf="formattedResult !== null && page3">
+<mat-dialog-content *ngIf="formattedResult && page3">
   <form #table="ngForm" autocomplete="off">
     <div class="container-fluid">
       <div class="row table-responsive">
@@ -202,7 +193,7 @@
 <mat-dialog-actions
   class="row m-t-20"
   style="margin-bottom: 30px"
-  *ngIf="formattedResult !== null && page3"
+  *ngIf="formattedResult && page3"
 >
   <div class="col-sm-12 step-btn" style="text-align: right">
     <button
