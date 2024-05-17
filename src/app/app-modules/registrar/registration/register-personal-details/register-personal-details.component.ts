@@ -63,6 +63,8 @@ export class RegisterPersonalDetailsComponent
   genderCategory: any = 'Male';
   revisitData: any;
   revisitDataSubscription: any;
+  maritalSubscription!: Subscription;
+  MaritalStatus = false;
 
   @Input()
   personalDetailsForm!: FormGroup;
@@ -72,8 +74,6 @@ export class RegisterPersonalDetailsComponent
 
   @ViewChild(BsDatepickerDirective) datepicker!: BsDatepickerDirective;
   personalDataOnHealthIDSubscription!: Subscription;
-  maritalSubscription!: Subscription;
-  MaritalStatus = false;
 
   @HostListener('window:scroll')
   onScrollEvent() {
@@ -153,6 +153,7 @@ export class RegisterPersonalDetailsComponent
     if (this.personalDataOnHealthIDSubscription) {
       this.personalDataOnHealthIDSubscription.unsubscribe();
     }
+    this.registrarService.clearMaritalDetails();
   }
 
   setPhoneSelectionEnabledByDefault() {
@@ -434,21 +435,6 @@ export class RegisterPersonalDetailsComponent
     }
   }
 
-  isMaritalStatus() {
-    this.maritalSubscription = this.registrarService.maritalStatus$.subscribe(
-      (response) => {
-        if (response === true) {
-          this.MaritalStatus = true;
-          this.enableMaritalStatus = true;
-          this.onGenderSelected();
-        } else {
-          this.MaritalStatus = false;
-          this.enableMaritalStatus = false;
-        }
-      },
-    );
-  }
-
   /**
    *
    * Gender Selection - Transgender Confirmation
@@ -636,6 +622,21 @@ export class RegisterPersonalDetailsComponent
     if (this.personalDetailsForm.value.age !== null) {
       this.onAgeEntered();
     }
+  }
+
+  isMaritalStatus() {
+    this.maritalSubscription = this.registrarService.maritalStatus$.subscribe(
+      (response) => {
+        if (response === true) {
+          this.MaritalStatus = true;
+          this.enableMaritalStatus = true;
+          this.onGenderSelected();
+        } else {
+          this.MaritalStatus = false;
+          this.enableMaritalStatus = false;
+        }
+      },
+    );
   }
 
   /**

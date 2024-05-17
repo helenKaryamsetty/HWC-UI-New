@@ -52,3 +52,10 @@ ul li div i {
 .abnormal {
     color: red
 }
+
+.fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }
+  
