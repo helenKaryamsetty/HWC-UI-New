@@ -55,7 +55,7 @@
                   *matHeaderCellDef
                   mat-sort-header
                 >
-                  {{ currentLanguageSet?.casesheet?.serialNo }}
+                  {{ currentLanguageSet?.coreComponents?.sno }}
                 </th>
                 <td
                   mat-cell
@@ -161,24 +161,6 @@
                   </span>
                   /
                   <span style="color: #a6a6a6">{{ element.benVisitNo }}</span>
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="district">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
-                  {{ currentLanguageSet?.bendetails?.district }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadDoctorExaminationPage(element)"
-                >
-                  {{ element.districtName | titlecase }} /
-                  {{ element.villageName | titlecase }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="visitDate">

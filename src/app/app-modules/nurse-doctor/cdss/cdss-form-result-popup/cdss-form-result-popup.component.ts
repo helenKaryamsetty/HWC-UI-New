@@ -323,11 +323,11 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   changePage(val: any) {
     this.diseasess = [];
     this.indexArray = [];
-    if (val === 2) {
+    if (val === '2') {
       this.page3 = false;
       this.page2 = true;
     }
-    if (val === 1) {
+    if (val === '1') {
       this.page2 = false;
       this.page1 = true;
     }

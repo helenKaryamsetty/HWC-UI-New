@@ -68,7 +68,6 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
     'gender',
     'age',
     'visitCategory',
-    'district',
     'visitDate',
     'beneficiaryArrived',
     'image',

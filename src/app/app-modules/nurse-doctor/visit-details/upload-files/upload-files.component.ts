@@ -256,6 +256,11 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
           this.savedFileData.map((file: any) => {
             file.isUploaded = true;
           });
+        } else {
+          this.confirmationService.alert(
+            'File Upload failed, Please try again',
+            'warn',
+          );
         }
       },
       (err: any) => {
