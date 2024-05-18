@@ -1,23 +1,4 @@
 <div class="container-fluid">
-  <button
-    mat-mini-fab
-    style="margin-left: 10px; position: absolute"
-    class="mat_blue_circle"
-    color="primary"
-    (click)="sideNavModeChange(sidenav)"
-  >
-    <mat-icon>account_box</mat-icon>
-  </button>
-
-  <button
-    style="margin-left: 55px; position: absolute"
-    class="mat_blue_circle"
-    (click)="openBenPreviousisitDetails()"
-    matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
-  >
-    <mat-icon> description</mat-icon>
-  </button>
-
   <mat-sidenav-container class="example-sidenav-fab-container">
     <mat-sidenav #sidenav mode="side" opened="true">
       <div class="example-scrolling-content sidenav">
@@ -875,4 +856,24 @@
       </form>
     </div>
   </mat-sidenav-container>
+  <div class="col-6">
+    <button
+      mat-mini-fab
+      style="margin-left: 10px; position: absolute"
+      class="mat_blue_circle"
+      color="primary"
+      (click)="sideNavModeChange(sidenav)"
+    >
+      <mat-icon>account_box</mat-icon>
+    </button>
+
+    <button
+      style="margin-left: 55px; position: absolute"
+      class="mat_blue_circle"
+      (click)="openBenPreviousisitDetails()"
+      matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
+    >
+      <mat-icon> description</mat-icon>
+    </button>
+  </div>
 </div>
