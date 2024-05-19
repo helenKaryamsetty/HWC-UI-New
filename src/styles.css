@@ -642,3 +642,23 @@ h5{
 .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
   border-bottom-color:#336CFB !important ;
 }
+button.mat-button[_ngcontent-c12] {
+  font-weight: bold;
+  /* width: 100%; */
+}
+
+.mat-mdc-row:hover {
+  color: #0277bd !important;
+}
+.mat-mdc-header-cell {
+  border-bottom-color: var(--mat-table-row-item-outline-color, rgba(0, 0, 0, 0.12));
+  border-bottom-width: var(--mat-table-row-item-outline-width, 1px);
+  border-bottom-style: solid;
+  font-weight: revert !important;
+  line-height: inherit;
+}
+.mat-expansion-panel-header-title {
+  color: var(--mat-expansion-header-text-color);
+  font-size: 15px;
+  font-weight: 550;
+}
