@@ -78,7 +78,7 @@
   border-color: unset !important;
   color: white;
   border: unset;
-  border-radius: 3px;
+  border-radius: 20px;
   line-height: 36px;
   min-width: 88px;
 }
@@ -87,7 +87,7 @@
   border-color: unset !important;
   color: rgba(0, 0, 0, 0.38);
   border: unset;
-  border-radius: 3px;
+  border-radius: 20px;
   line-height: 36px;
   min-width: 88px;
 }
@@ -96,7 +96,7 @@
   border-color: unset !important;
   color: white;
   border: unset;
-  border-radius: 3px;
+  border-radius: 20px;
   line-height: 36px;
   min-width: 88px;
 }
@@ -105,7 +105,7 @@
   border-color: unset !important;
   color: rgba(0, 0, 0, 0.38);
   border: unset;
-  border-radius: 3px;
+  border-radius: 20px;
   line-height: 36px;
   min-width: 88px;
 }
@@ -115,7 +115,7 @@
   border-color: unset !important;
   color: black;
   border: unset;
-  border-radius: 3px;
+  border-radius: 20px;
   line-height: 36px;
   min-width: 88px;
 }
@@ -635,4 +635,10 @@ input:-webkit-autofill:active {
 }
 h5{
   font-size: 14px !important;
+}
+/* .mat-form-field-disabled {
+  border-bottom:red;
+} */
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+  border-bottom-color:#336CFB !important ;
 }
