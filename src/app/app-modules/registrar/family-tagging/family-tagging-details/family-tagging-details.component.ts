@@ -382,7 +382,7 @@ export class FamilyTaggingDetailsComponent
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
       (beneficiaryDetails: any) => {
-        if (beneficiaryDetails && beneficiaryDetails.length === 1) {
+        if (beneficiaryDetails && beneficiaryDetails.data.length === 1) {
           this.benFamilyId =
             beneficiaryDetails[0].familyId !== undefined &&
             beneficiaryDetails[0].familyId !== null
