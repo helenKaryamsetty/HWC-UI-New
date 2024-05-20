@@ -694,8 +694,10 @@ export class RegisterPersonalDetailsComponent
       this.personalDetailsForm.value.ageUnit === 'Years'
     ) {
       this.enableMaritalStatus = true;
+      this.MaritalStatus = true;
     } else {
       this.enableMaritalStatus = false;
+      this.MaritalStatus = false;
       this.clearMaritalStatus();
     }
   }
