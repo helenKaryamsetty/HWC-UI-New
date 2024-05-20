@@ -190,6 +190,11 @@
   bottom: 50px;
   z-index: 3;
 }
+.matIcon-button-style {
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+}
 .mat_icon_white{
   background-color: #336CFB;
   min-width: 0;
@@ -661,4 +666,28 @@ button.mat-button[_ngcontent-c12] {
   color: var(--mat-expansion-header-text-color);
   font-size: 15px;
   font-weight: 550;
+}
+/* .mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-disabled-selected-icon-color: rgba(0, 0, 0, .38);
+  --mdc-checkbox-disabled-unselected-icon-color: rgba(0, 0, 0, .38);
+  --mdc-checkbox-selected-checkmark-color: #fff;
+  --mdc-checkbox-selected-focus-icon-color: #43a047 !important;
+  --mdc-checkbox-selected-hover-icon-color: #43a047 !important;
+  --mdc-checkbox-selected-icon-color: #43a047 !important;
+  --mdc-checkbox-selected-pressed-icon-color: #43a047 !important;
+  --mdc-checkbox-unselected-focus-icon-color: #212121;
+  --mdc-checkbox-unselected-hover-icon-color: #212121;
+  --mdc-checkbox-unselected-icon-color: rgba(0, 0, 0, .54);
+  --mdc-checkbox-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+  --mdc-checkbox-selected-focus-state-layer-color: #43a047 !important;
+  --mdc-checkbox-selected-hover-state-layer-color: #43a047 !important;
+  --mdc-checkbox-selected-pressed-state-layer-color: #43a047 !important;
+  --mdc-checkbox-unselected-focus-state-layer-color: black;
+  --mdc-checkbox-unselected-hover-state-layer-color: black;
+  --mdc-checkbox-unselected-pressed-state-layer-color: black;
+} */
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
+  border-color: #43a047 !important;
+  background-color: #43a047 !important;
 }
