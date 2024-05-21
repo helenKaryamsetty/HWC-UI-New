@@ -384,9 +384,9 @@ export class FamilyTaggingDetailsComponent
       (beneficiaryDetails: any) => {
         if (beneficiaryDetails && beneficiaryDetails.data.length === 1) {
           this.benFamilyId =
-            beneficiaryDetails[0].familyId !== undefined &&
-            beneficiaryDetails[0].familyId !== null
-              ? beneficiaryDetails[0].familyId
+            beneficiaryDetails.data[0].familyId !== undefined &&
+            beneficiaryDetails.data[0].familyId !== null
+              ? beneficiaryDetails.data[0].familyId
               : null;
           this.registrarService.getBenFamilyDetails(this.benFamilyId);
         } else {
