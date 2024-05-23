@@ -6,10 +6,17 @@
   >
     <div
       class="pull-right"
+      style="text-align: end"
       [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
     >
-      <button mat-icon-button (click)="hideCervicalScreeningForm()">
-        <mat-icon matTooltip="Remove" class="md-24 matIcon-button-style"
+      <button
+        mat-icon-button
+        (click)="hideCervicalScreeningForm()"
+        style="border: unset; background-color: unset"
+      >
+        <mat-icon
+          matTooltip="Remove"
+          class="md-24 matIcon-button-style mat_icon_blue"
           >close</mat-icon
         >
       </button>

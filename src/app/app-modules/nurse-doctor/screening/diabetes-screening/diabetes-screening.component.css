@@ -73,3 +73,9 @@ md-expansion-panel {
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }

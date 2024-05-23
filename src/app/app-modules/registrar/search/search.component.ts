@@ -154,8 +154,8 @@ export class SearchComponent implements OnInit, DoCheck {
   getSearchResult(reqObj: any, searchObject: any) {
     this.registrarService.identityQuickSearch(reqObj).subscribe(
       (beneficiaryList: any) => {
-        if (!beneficiaryList || beneficiaryList.length <= 0) {
-          this.beneficiaryList = [];
+        if (!beneficiaryList || beneficiaryList.data.length <= 0) {
+          this.beneficiaryList.data = [];
           this.filteredBeneficiaryList = [];
           this.pagedList = [];
           this.confirmationService.alert(

@@ -242,7 +242,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     this.masterDataSubscription =
       this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
         console.log('Registrar master data', res);
-        if (res != null) {
+        if (res !== null) {
           this.registrarMasterData = Object.assign({}, res);
           console.log('master data', this.registrarMasterData);
         }

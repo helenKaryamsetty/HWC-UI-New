@@ -17,12 +17,10 @@
     width : 85%;
 }
 .nav-btn{
-    background-color: #c9cdce;
+    background-color: white !important;
     box-sizing: border-box;
     position: relative;
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     cursor: pointer;
     outline: 0;
@@ -38,7 +36,10 @@
     line-height: 36px;
     padding: 0 16px;
     border-radius: 30px;
- 
+    font-weight: bold;
+    color: #808080;
+    font-size: 15px;
+    letter-spacing: unset;
 }
 .menu-font{
     font-size: 14px !important;
@@ -206,3 +207,15 @@ mat-menu {
 .navbar-collapse.menu-font{
     display: contents !important;
 }
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+  }
+  
