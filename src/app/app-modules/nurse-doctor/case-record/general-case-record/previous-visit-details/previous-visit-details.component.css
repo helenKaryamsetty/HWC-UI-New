@@ -50,3 +50,7 @@ img {
 .norecord {
   text-align: center;
 }
+tbody, td, tfoot, th, thead, tr {
+ 
+  height: 40px !important;
+}

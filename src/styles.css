@@ -690,4 +690,8 @@ button.mat-button[_ngcontent-c12] {
 .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
   border-color: #43a047 !important;
   background-color: #43a047 !important;
+
+}
+.mat-accent {
+  --mat-option-selected-state-label-text-color: #43a047 !important;
 }
