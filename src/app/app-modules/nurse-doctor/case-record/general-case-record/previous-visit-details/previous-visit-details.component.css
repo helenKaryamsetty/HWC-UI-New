@@ -53,4 +53,5 @@ img {
 tbody, td, tfoot, th, thead, tr {
  
   height: 40px !important;
+  border: 1px solid #ddd !important;
 }
