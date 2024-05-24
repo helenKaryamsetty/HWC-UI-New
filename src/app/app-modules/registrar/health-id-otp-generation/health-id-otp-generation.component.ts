@@ -250,8 +250,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   }
   posthealthIDButtonCall() {
     const dialogRefPass = this.dialog.open(SetPasswordForAbhaComponent, {
-      height: '300px',
-      width: '420px',
+      height: '400px',
+      width: '520px',
       disableClose: true,
     });
     dialogRefPass.afterClosed().subscribe((result) => {

@@ -112,3 +112,7 @@ ul.md2-pagination {
     opacity: 0.8;
     cursor: not-allowed;
 }
+
+table {
+    width: 100%;
+}

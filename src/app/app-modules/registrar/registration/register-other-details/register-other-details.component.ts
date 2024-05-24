@@ -1491,8 +1491,8 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
               address: this.address,
             };
             const dialogRef = this.dialog.open(HealthIdOtpSuccessComponent, {
-              height: '260px',
-              width: '420px',
+              height: '460px',
+              width: '520px',
               disableClose: true,
               data: res,
             });
