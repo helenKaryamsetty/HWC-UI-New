@@ -99,7 +99,7 @@ export class GenerateAbhaComponentComponent implements OnInit {
 
   getOTP() {
     const dialogRef = this.dialog.open(HealthIdOtpGenerationComponent, {
-      height: '290px',
+      height: '250px',
       width: '420px',
       data: {
         aadharNumber: this.aadharNumber,

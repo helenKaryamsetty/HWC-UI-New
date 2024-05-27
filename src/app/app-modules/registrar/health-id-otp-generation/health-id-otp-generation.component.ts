@@ -250,7 +250,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   }
   posthealthIDButtonCall() {
     const dialogRefPass = this.dialog.open(SetPasswordForAbhaComponent, {
-      height: '400px',
+      height: '350px',
       width: '520px',
       disableClose: true,
     });
@@ -278,8 +278,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
             const dialogRefSuccess = this.dialog.open(
               HealthIdOtpSuccessComponent,
               {
-                height: '300px',
-                width: '420px',
+                height: '380px',
+                width: '480px',
                 disableClose: true,
                 data: res,
               },
@@ -557,7 +557,7 @@ export class HealthIdOtpSuccessComponent implements OnInit, DoCheck {
 
   openDialogForprintHealthIDCard(data: any, txnId: any) {
     const dialogRefValue = this.dialog.open(HealthIdValidateComponent, {
-      height: '300px',
+      height: '240px',
       width: '500px',
       disableClose: true,
       data: {
