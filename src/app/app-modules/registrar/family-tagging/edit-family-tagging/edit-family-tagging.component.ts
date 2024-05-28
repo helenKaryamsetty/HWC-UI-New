@@ -51,7 +51,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
   ];
 
   disableForm = false;
-  uncheckMember = true;
+  uncheckMember = false;
   familyDetails: any;
   showCheckbox = true;
   enableOther = false;
