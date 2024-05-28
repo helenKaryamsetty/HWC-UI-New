@@ -207,3 +207,10 @@ table {
 .contentNav {
     padding: 20px 0px;
   }
+.mat-side-nav-content {
+    margin-left:48px;
+  }
+  .modal-title{
+    font-size: 24px;
+    font-weight: 700;
+  }

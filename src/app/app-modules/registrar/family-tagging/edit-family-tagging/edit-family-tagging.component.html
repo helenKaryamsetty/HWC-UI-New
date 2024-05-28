@@ -83,7 +83,7 @@
             <mat-checkbox
               *ngIf="showCheckbox"
               (change)="selectMember($event, element)"
-              checked="uncheckMember && element.selected"
+              [checked]="uncheckMember && element.selected"
             ></mat-checkbox>
           </td>
         </ng-container>
