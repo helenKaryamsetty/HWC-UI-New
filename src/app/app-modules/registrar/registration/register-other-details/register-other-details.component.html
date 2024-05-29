@@ -61,7 +61,7 @@
           <input
             autocomplete="off"
             matInput
-            validateEmail
+            appValidateEmail
             formControlName="emailID"
           />
           <mat-error *ngIf="!otherDetailsForm.controls['emailID'].valid">{{
@@ -346,12 +346,11 @@
             "
           >
             <ng-container [formGroupName]="i">
-              <mat-form-field>
+              <mat-form-field [style.width]="'100%'">
                 <mat-label class="mat-label-text">
                   {{ currentLanguageSet?.ro?.otherInfo?.govtHealthProgramType }}
                 </mat-label>
                 <mat-select
-                  [style.width]="'100%'"
                   formControlName="type"
                   (selectionChange)="filterOtherGovIDs(id.value.type, i)"
                 >
