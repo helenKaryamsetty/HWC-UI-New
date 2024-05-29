@@ -645,10 +645,9 @@ export class RegisterPersonalDetailsComponent
    */
   dobChangeByCalender(dobval: any) {
     const date = new Date(this.dateForCalendar);
-    console.log(this.personalDetailsForm.value.dob);
     if (
       this.dateForCalendar &&
-      (!dobval || dobval.length === 10) &&
+      (dobval || dobval.length === 10) &&
       this.personalDetailsForm.controls['dob'].valid
     ) {
       const dateDiff = Date.now() - date.getTime();
