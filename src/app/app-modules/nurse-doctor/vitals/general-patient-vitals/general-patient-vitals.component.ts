@@ -33,8 +33,8 @@ import { HrpService } from '../../shared/services/hrp.service';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MmuRbsDetailsComponent } from 'src/app/app-modules/core/component/mmu-rbs-details/mmu-rbs-details.component';
-import { IotcomponentComponent } from 'src/app/app-modules/core/component/iotcomponent/iotcomponent.component';
+import { MmuRbsDetailsComponent } from 'src/app/app-modules/core/components/mmu-rbs-details/mmu-rbs-details.component';
+import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',

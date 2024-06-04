@@ -7,7 +7,7 @@ import { DoctorService, MasterdataService } from '../../shared/services';
 import { ViewDiseaseSummaryDetailsComponent } from '../viewDiseaseSummaryDetails/viewDiseaseSummaryDet.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({

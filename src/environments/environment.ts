@@ -38,17 +38,17 @@ const SERVER_IP = '10.208.122.39';
 const SWYMED_IP = '14.143.13.109';
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
-const COMMON_API = `${commonIP}/commonapi-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}/commonapi-v1.1/`;
+const COMMON_API = `${commonIP}/commonapi-v1.1/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 const TM_API = `${tmIP}/hwc-facility-service/`;
 
 const API104 = `${IP104}/104api-v1.0/`;
 const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
+const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.1/`;
 const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
+const ADMIN_API = `${adminIP}/adminapi-v1.1/`;
 
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
@@ -135,6 +135,8 @@ export const environment = {
   nurseMasterDataUrl: `${TM_API}master/nurse/masterData/`,
   doctorMasterDataUrl: `${TM_API}master/doctor/masterData/`,
   snomedCTRecordURL: `${TM_API}snomed/getSnomedCTRecord`,
+  getDistrictTalukUrl: `${MMU_API}location/get/DistrictTalukMaster/`,
+
   /**
    * Lab Data Urls
    */
@@ -519,4 +521,7 @@ export const environment = {
   getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
   getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
   getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,
+
+  /* Customization APIs*/
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
 };
