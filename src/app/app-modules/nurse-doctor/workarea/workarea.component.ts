@@ -2137,13 +2137,6 @@ export class WorkareaComponent
     );
     const required = [];
 
-    if (
-      this.enableLungAssessment === true &&
-      this.beneficiaryAge >= 18 &&
-      this.nurseService.isAssessmentDone === false
-    ) {
-      required.push('Please perform Lung Assessment');
-    }
     //Required validation for family planning
     if (
       this.visitCategory === 'FP & Contraceptive Services' &&
@@ -2935,13 +2928,6 @@ export class WorkareaComponent
       this.validateNCDScreeningFormsOnNurseSave(medicalForm, required);
     }
 
-    if (
-      this.enableLungAssessment === true &&
-      this.beneficiaryAge >= 18 &&
-      this.nurseService.isAssessmentDone === false
-    ) {
-      required.push('Please perform Lung Assessment');
-    }
     //WDF requirement
     if (NCDScreeningForm.controls['height_cm'].errors) {
       required.push(

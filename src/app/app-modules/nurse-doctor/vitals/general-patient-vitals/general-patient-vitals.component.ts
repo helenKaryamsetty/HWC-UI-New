@@ -202,14 +202,6 @@ export class GeneralPatientVitalsComponent
     const vitalsForm = this.patientVitalsForm;
     const required = [];
 
-    if (
-      this.enableLungAssessment === true &&
-      this.benAge >= 18 &&
-      this.nurseService.isAssessmentDone === false
-    ) {
-      required.push('Please perform Lung Assessment');
-    }
-
     if (this.visitCategory === 'NCD screening') {
       if (vitalsForm.controls['height_cm'].errors) {
         required.push(
