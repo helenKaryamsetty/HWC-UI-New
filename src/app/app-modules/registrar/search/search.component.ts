@@ -25,19 +25,11 @@ import {
   ChangeDetectorRef,
   DoCheck,
   ViewChild,
+  AfterViewInit,
+  AfterViewChecked,
 } from '@angular/core';
-import {
-  MatDialogRef,
-  MatDialog,
-  MatDialogConfig,
-} from '@angular/material/dialog';
-import {
-  Params,
-  RouterModule,
-  Routes,
-  Router,
-  ActivatedRoute,
-} from '@angular/router';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 
@@ -64,7 +56,9 @@ export interface Consent {
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
-export class SearchComponent implements OnInit, DoCheck {
+export class SearchComponent
+  implements OnInit, DoCheck, AfterViewInit, AfterViewChecked
+{
   rowsPerPage = 5;
   activePage = 1;
   pagedList: any[] = [];
@@ -117,8 +111,15 @@ export class SearchComponent implements OnInit, DoCheck {
     'abhaAddress',
     'image',
   ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
   dataSource = new MatTableDataSource<any>();
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   displayedColumns1: string[] = [
     'sNo',
@@ -142,7 +143,6 @@ export class SearchComponent implements OnInit, DoCheck {
     private registrarService: RegistrarService,
     private cameraService: CameraService,
     private router: Router,
-    private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private commonService: CommonService,
@@ -156,7 +156,6 @@ export class SearchComponent implements OnInit, DoCheck {
     this.stateMaster();
     this.registrarService.getRegistrationMaster(this.countryId);
   }
-
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -166,8 +165,12 @@ export class SearchComponent implements OnInit, DoCheck {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
-  AfterViewChecked() {
+  ngAfterViewChecked() {
     this.changeDetectorRef.detectChanges();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   validateSearchTerm(searchTerm: any, searchObject: any) {
@@ -198,7 +201,6 @@ export class SearchComponent implements OnInit, DoCheck {
           this.beneficiaryList.data = [];
           this.filteredBeneficiaryList = [];
           this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
           this.pagedList = [];
           this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.beneNotFound,
@@ -211,11 +213,13 @@ export class SearchComponent implements OnInit, DoCheck {
           );
           this.filteredBeneficiaryList = this.beneficiaryList;
           this.dataSource.data = this.beneficiaryList;
-          this.dataSource.paginator = this.paginator;
-          this.pageChanged({
-            page: this.activePage,
-            itemsPerPage: this.rowsPerPage,
-          });
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+            this.paginator.pageSize = 5;
+            this.paginator.firstPage();
+          }
+
+          this.changeDetectorRef.detectChanges();
         }
         console.log(
           'beneficiaryList********* in line 182',
@@ -351,7 +355,6 @@ export class SearchComponent implements OnInit, DoCheck {
             this.beneficiaryList = [];
             this.filteredBeneficiaryList = [];
             this.dataSource.data = [];
-            this.dataSource.paginator = this.paginator;
             this.pagedList = [];
             this.confirmationService.alert(
               this.currentLanguageSet.alerts.info.beneNotFound,
@@ -364,7 +367,6 @@ export class SearchComponent implements OnInit, DoCheck {
             );
             this.filteredBeneficiaryList = this.beneficiaryList;
             this.dataSource.data = this.beneficiaryList;
-            this.dataSource.paginator = this.paginator;
           }
           console.log('hi', JSON.stringify(beneficiaryList, null, 4));
         },
@@ -561,11 +563,6 @@ export class SearchComponent implements OnInit, DoCheck {
         'info',
       );
   }
-  pageChanged(event: any): void {
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-  }
 
   getCorrectPhoneNo(phoneMaps: any, benObject: any) {
     if (!phoneMaps.length) {
@@ -588,7 +585,6 @@ export class SearchComponent implements OnInit, DoCheck {
     else {
       this.filteredBeneficiaryList = [];
       this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
       this.beneficiaryList.forEach((item: any) => {
         for (const key in item) {
           if (key !== 'benObject') {
@@ -608,11 +604,6 @@ export class SearchComponent implements OnInit, DoCheck {
         }
       });
     }
-    this.activePage = 1;
-    this.pageChanged({
-      page: 1,
-      itemsPerPage: this.rowsPerPage,
-    });
   }
 
   filterExternalBeneficiaryList(searchTerm?: string) {
@@ -621,14 +612,12 @@ export class SearchComponent implements OnInit, DoCheck {
     else {
       this.filteredExternalBeneficiaryList = [];
       this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
       this.externalBeneficiaryList.forEach((item: any) => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
             this.filteredExternalBeneficiaryList.push(item);
             this.dataSource.data.push(item);
-            this.dataSource.paginator = this.paginator;
             this.dataSource.data.forEach((sectionCount: any, index: number) => {
               sectionCount.sno = index + 1;
             });
@@ -637,11 +626,6 @@ export class SearchComponent implements OnInit, DoCheck {
         }
       });
     }
-    this.activePage = 1;
-    this.pageChangedExternal({
-      page: 1,
-      itemsPerPage: this.rowsPerPage,
-    });
   }
 
   patientRevisited(benObject: any) {
@@ -765,7 +749,6 @@ export class SearchComponent implements OnInit, DoCheck {
                 this.beneficiaryList = [];
                 this.filteredBeneficiaryList = [];
                 this.dataSource.data = [];
-                this.dataSource.paginator = this.paginator;
                 this.quicksearchTerm = null;
                 this.confirmationService.alert(
                   this.currentLanguageSet.alerts.info.beneNotFound,
@@ -832,7 +815,6 @@ export class SearchComponent implements OnInit, DoCheck {
               this.filteredExternalBeneficiaryList =
                 this.externalBeneficiaryList;
               this.dataSource.data = this.externalBeneficiaryList;
-              this.dataSource.paginator = this.paginator;
               this.dataSource.data.forEach(
                 (sectionCount: any, index: number) => {
                   sectionCount.sno = index + 1;
@@ -842,7 +824,6 @@ export class SearchComponent implements OnInit, DoCheck {
               this.externalBeneficiaryList = [];
               this.filteredExternalBeneficiaryList = [];
               this.dataSource.data = [];
-              this.dataSource.paginator = this.paginator;
             }
           }
         },
@@ -892,17 +873,10 @@ export class SearchComponent implements OnInit, DoCheck {
     this.filteredBeneficiaryList = [];
     this.pagedList = [];
     this.pageNo = 1;
+    this.dataSource.data = [];
+    this.dataSourceOne.data = [];
   }
 
-  pageChangedExternal(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.externalPagedList = this.filteredExternalBeneficiaryList.slice(
-      startItem,
-      endItem,
-    );
-  }
   /* Ends - Search external beneficiary details in mongo*/
 
   /* Update external beneficiary details in AMRIT*/
@@ -1100,8 +1074,7 @@ export class SearchComponent implements OnInit, DoCheck {
                 this.searchExternalRestruct(externalBenList);
               this.filteredExternalBeneficiaryList =
                 this.externalBeneficiaryList;
-              this.dataSource.data = this.externalBeneficiaryList;
-              this.dataSource.paginator = this.paginator;
+              this.dataSourceOne.data = this.externalBeneficiaryList;
               this.dataSource.data.forEach(
                 (sectionCount: any, index: number) => {
                   sectionCount.sno = index + 1;
@@ -1114,7 +1087,6 @@ export class SearchComponent implements OnInit, DoCheck {
               );
               this.pageNo = this.pageNo - 1;
               this.dataSourceOne.data = [];
-              this.dataSourceOne.paginator = this.paginator;
             }
           }
         },
