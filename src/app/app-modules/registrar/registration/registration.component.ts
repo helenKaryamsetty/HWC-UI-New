@@ -714,10 +714,6 @@ export class RegistrationComponent
         }
       }
       if (c > 1 || c === 0 || cflag) {
-        this.confirmationService.alert(
-          this.currentLanguageSet.validHealthIDMessage,
-          'error',
-        );
         return false;
       }
     }
@@ -809,10 +805,6 @@ export class RegistrationComponent
     } else {
       if (healthid) {
         if (!this.disableGenerateOTP) {
-          this.confirmationService.alert(
-            this.currentLanguageSet.validHealthIDMessage,
-            'info',
-          );
           otherDetailsForm.controls['healthId'].patchValue(null);
           return false;
         } else {

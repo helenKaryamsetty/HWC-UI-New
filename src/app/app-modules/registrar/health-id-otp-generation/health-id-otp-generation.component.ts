@@ -272,7 +272,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
         (res: any) => {
           if (res.statusCode == 200 && res.data) {
             this.registrarService.abhaGenerateData = res.data;
-            this.registrarService.aadharNumberNew = this.aadharNum;
             this.registrarService.getabhaDetail(true);
 
             const dialogRefSuccess = this.dialog.open(
@@ -355,8 +354,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
                           dob: dob,
                           gender: genderID,
                           genderName: genderName,
-                          // "stateID": res.data.stateCode,
-                          // "stateName": res.data.stateName,
                           stateID: stateID,
                           stateName: stateName,
                           districtID: districtID,

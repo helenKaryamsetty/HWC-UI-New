@@ -143,11 +143,6 @@ export class RegisterOtherDetailsComponent
 
     const formGroupIndexed = <FormGroup>id.at(0);
     this.filtergovIDs(aadharId, 0);
-    formGroupIndexed.patchValue({
-      type: aadharId,
-      idValue: this.registrarService.aadharNumberNew,
-      allow: this.getAllowedGovChars(aadharId),
-    });
   }
 
   ngDoCheck() {
@@ -945,11 +940,7 @@ export class RegisterOtherDetailsComponent
           }
         }
       }
-      if (c > 1 || c === 0 || cflag)
-        this.confirmationService.alert(
-          this.currentLanguageSet.validHealthIDMessage,
-          'error',
-        );
+      if (c > 1 || c === 0 || cflag) console.log('Print Data');
     }
     if (healthidval && c === 1 && !cflag) {
       this.openDialogForValidate();
