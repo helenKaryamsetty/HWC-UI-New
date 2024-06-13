@@ -305,11 +305,5 @@ export class NurseMmuTmReferredWorklistComponent
         }
       });
     }
-    // this.activePage = 1;
-    // this.pageChanged({
-    //   page: 1,
-    //   itemsPerPage: this.rowsPerPage,
-    // });
-    // this.currentPage = 1;
   }
 }

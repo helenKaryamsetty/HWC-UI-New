@@ -485,12 +485,6 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
     }
-    // this.activePage = 1;
-    // this.pageChanged({
-    //   page: 1,
-    //   itemsPerPage: this.rowsPerPage,
-    // });
-    // this.currentPage = 1;
   }
 
   ngDoCheck() {
