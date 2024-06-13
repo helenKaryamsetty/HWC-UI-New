@@ -178,7 +178,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     this.navigation = [
       {
         role: 'Registrar',
-        label: this.currentLanguageSet.role_selection.Registrar,
+        label: 'Registrar',
 
         work: [
           {
