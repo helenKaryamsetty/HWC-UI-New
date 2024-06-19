@@ -695,3 +695,6 @@ button.mat-button[_ngcontent-c12] {
 .mat-accent {
   --mat-option-selected-state-label-text-color: #43a047 !important;
 }
+.mat-mdc-form-field-error {
+  margin-top: -20px !important;
+}
