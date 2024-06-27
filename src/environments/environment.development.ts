@@ -497,4 +497,7 @@ export const environment = {
   getCheifComplaintsSymptomsUrl: `${API104}CDSS/Symptoms`,
   getActionMasterUrl: `${TM_API}uptsu/get/action-master`,
   closeVisitSaveComplaintsUrl: `${TM_API}uptsu/submit/closevisit`,
+
+  /** Previous Anthropometry  Urls */
+  getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
 };

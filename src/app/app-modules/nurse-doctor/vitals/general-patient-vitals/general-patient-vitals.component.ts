@@ -196,6 +196,41 @@ export class GeneralPatientVitalsComponent
       this.doctorScreen = true;
       this.updateGeneralVitals(this.patientVitalsForm);
     }
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant == 'nurse') {
+      this.getPreviousVisitAnthropometry();
+    }
+  }
+
+  previousAnthropometryDataSubscription: any;
+  getPreviousVisitAnthropometry() {
+    this.previousAnthropometryDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: localStorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.patientVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response,
+          );
+
+          if (this.visitCategory === 'ANC') {
+            this.hrpService.setHeightFromVitals(
+              this.patientVitalsForm.controls['height_cm'].value,
+            );
+          }
+        }
+      });
   }
 
   checkNurseRequirements(medicalForm: any) {
@@ -471,6 +506,8 @@ export class GeneralPatientVitalsComponent
     if (this.disablingVitalsSectionSubscription)
       this.disablingVitalsSectionSubscription.unsubscribe();
     this.nurseService.isAssessmentDone = false;
+    if (this.previousAnthropometryDataSubscription)
+      this.previousAnthropometryDataSubscription.unsubscribe();
   }
 
   checkDiasableRBS() {
