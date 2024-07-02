@@ -469,6 +469,7 @@ hr {
 
 .first-visit-marker {
   background: #336CFB !important;
+  margin-right: 5px !important;
 }
 
 .visitStatus.first-visit::before {
@@ -610,7 +611,7 @@ input:-webkit-autofill:active {
   min-height: 45px !important;
 }
 .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
-  padding-top: 24px;
+  padding-top: 26px;
   padding-bottom: unset !important;
 }
 

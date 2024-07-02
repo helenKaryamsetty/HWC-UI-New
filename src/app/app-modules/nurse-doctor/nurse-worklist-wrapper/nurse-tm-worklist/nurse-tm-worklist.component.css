@@ -50,26 +50,38 @@ ul li div {
 
 .marker-p-f-c {
   background: #336CFB;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-t {
   background: #e44e4f;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-d {
   background: #eaaa26;
+  margin-right: 5px !important;
+
 }
 
 .marker-c-d {
   background: #43760f;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-t-c {
   background: #9933ff;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-c-c {
   background: black;
+  margin-right: 5px !important;
+
 }
 
 .color-rows>td {
