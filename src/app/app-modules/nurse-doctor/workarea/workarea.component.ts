@@ -571,9 +571,19 @@ export class WorkareaComponent
           this.patientQuickConsultForm = this.patientMedicalForm.get(
             'patientQuickConsultForm',
           ) as FormGroup;
+
+          this.patientMedicalForm.addControl(
+            'patientReferForm',
+            new CancerUtils(this.fb).createCancerReferForm(),
+          );
+          this.patientReferForm = this.patientMedicalForm.get(
+            'patientReferForm',
+          ) as FormGroup;
           this.visitMode = new String(mode);
           this.showQuickConsult = true;
+          this.showRefer = true;
           this.quickConsultMode = new String(mode);
+          this.referMode = new String(mode);
         } else {
           this.patientMedicalForm.addControl(
             'patientVitalsForm',
@@ -2610,8 +2620,10 @@ export class WorkareaComponent
       this.visitCategory.toLowerCase() !==
         'childhood & adolescent healthcare services'
     ) {
-      this.checkForSnomedCTCode(caseRecordForm);
-      this.checkForSnomedCTCodeForFindings(caseRecordForm);
+      if (this.visitCategory !== 'General OPD (QC)') {
+        this.checkForSnomedCTCode(caseRecordForm);
+        this.checkForSnomedCTCodeForFindings(caseRecordForm);
+      }
       if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
         if (
           referForm.controls['refrredToAdditionalServiceList'].value.length > 0
@@ -3401,6 +3413,11 @@ export class WorkareaComponent
     const caseRecordForm = <FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
     );
+
+    const referForm = <FormGroup>(
+      patientMedicalForm.controls['patientReferForm']
+    );
+
     const required = [];
 
     if (form.controls['chiefComplaintList'].errors) {
@@ -3488,6 +3505,30 @@ export class WorkareaComponent
       );
     }
 
+    if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
+      if (
+        referForm.controls['refrredToAdditionalServiceList'].value.length > 0
+      ) {
+        if (referForm.controls['referralReason'].errors) {
+          required.push(this.current_language_set.Referdetails.referralReason);
+        }
+      } else if (referForm.controls['referredToInstituteName'].value !== null) {
+        if (referForm.controls['referralReason'].errors) {
+          required.push(this.current_language_set.Referdetails.referralReason);
+        }
+      }
+    } else if (referForm.controls['referredToInstituteName'].value !== null) {
+      if (this.visitCategory === 'FP & Contraceptive Services') {
+        if (referForm.controls['referralReasonList'].errors) {
+          required.push(this.current_language_set.Referdetails.referralReason);
+        }
+      } else {
+        if (referForm.controls['referralReason'].errors) {
+          required.push(this.current_language_set.Referdetails.referralReason);
+        }
+      }
+    }
+
     if (required.length) {
       this.confirmationService.notify(
         this.current_language_set.alerts.info.belowFields,
@@ -3504,6 +3545,15 @@ export class WorkareaComponent
    * Submit DOCTOR GENERAL QUICK CONSULT
    */
   submitQuickConsultDiagnosisForm() {
+    const tempObj = {
+      beneficiaryRegID: this.beneficiaryRegID,
+      benVisitID: this.visitID,
+      visitCode: localStorage.getItem('visitCode'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+      isSpecialist: this.isSpecialist,
+    };
+
     const valid = this.checkQuickConsultDoctorData(this.patientMedicalForm);
     if (valid) {
       const patientQuickConsultForm = <FormGroup>(
@@ -3546,6 +3596,10 @@ export class WorkareaComponent
       patientQuickConsultFormValue.labTestOrders = labTestOrders;
       patientQuickConsultFormValue.test = undefined;
       patientQuickConsultFormValue.radiology = undefined;
+      patientQuickConsultFormValue.refer = this.doctorService.postGeneralRefer(
+        this.patientReferForm,
+        tempObj,
+      );
       patientQuickConsultFormValue = Object.assign(
         {},
         patientQuickConsultFormValue,
@@ -3663,6 +3717,24 @@ export class WorkareaComponent
   }
 
   mapDoctorQuickConsultDetails() {
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
+    const tempObj = {
+      beneficiaryRegID: this.beneficiaryRegID,
+      benVisitID: this.visitID,
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+      sessionID: localStorage.getItem('sessionID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      parkingPlaceID: parkingPlaceID,
+      vanID: vanID,
+      visitCode: localStorage.getItem('visitCode'),
+      serviceID: localStorage.getItem('serviceID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      isSpecialist: this.isSpecialist,
+    };
+
     const patientQuickConsultForm = <FormGroup>(
       this.patientMedicalForm.controls['patientQuickConsultForm']
     );
@@ -3701,6 +3773,13 @@ export class WorkareaComponent
     patientQuickConsultDetails.prescribedDrugs = prescribedDrugs;
     patientQuickConsultDetails.test = undefined;
     patientQuickConsultDetails.radiology = undefined;
+    this.patientReferForm = this.patientMedicalForm.get(
+      'patientReferForm',
+    ) as FormGroup;
+    patientQuickConsultDetails.refer = this.doctorService.postGeneralRefer(
+      this.patientReferForm,
+      tempObj,
+    );
 
     return patientQuickConsultDetails;
   }
