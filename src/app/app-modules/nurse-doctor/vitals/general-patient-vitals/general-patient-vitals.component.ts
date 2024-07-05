@@ -198,7 +198,7 @@ export class GeneralPatientVitalsComponent
     }
 
     this.attendant = this.route.snapshot.params['attendant'];
-    if (this.attendant == 'nurse') {
+    if (this.attendant === 'nurse') {
       this.getPreviousVisitAnthropometry();
     }
   }
