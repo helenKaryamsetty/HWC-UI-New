@@ -189,7 +189,7 @@
             [style.width]="'96%'"
             class="mat_form_field_width_one"
           >
-            <mat-label>{{
+            <mat-label class="mat-label-text">{{
               current_language_set?.ro?.personalInfo?.dob
             }}</mat-label>
             <input
@@ -200,7 +200,6 @@
               [min]="minDate"
               [max]="today"
               [matDatepicker]="dobPicker"
-              required
               ng-readonly="true"
               autocomplete="off"
               #dobval
