@@ -71,6 +71,7 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   enablingCBACSectionSubscription!: Subscription;
   isCdssStatus = false;
   isCdss: any;
+  isCovidVaccinationStatusVisible = false;
 
   patientVisitDetailsForm!: FormGroup;
   covidVaccineStatusForm!: FormGroup;

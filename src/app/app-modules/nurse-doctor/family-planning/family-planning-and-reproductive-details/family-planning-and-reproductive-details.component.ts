@@ -37,11 +37,45 @@ import { DoctorService } from '../../shared/services';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-family-planning-and-reproductive-details',
   templateUrl: './family-planning-and-reproductive-details.component.html',
   styleUrls: ['./family-planning-and-reproductive-details.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class FamilyPlanningAndReproductiveComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

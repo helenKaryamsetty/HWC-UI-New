@@ -135,11 +135,11 @@
   z-index: 3;
 }
 .mat_blue_circle:disabled {
-  background-color: #e0e0e0;
+  background-color: #336CFB;
   min-width: 0;
   border-radius: 50%;
   border-color: unset !important;
-  color: rgba(0, 0, 0, 0.38);
+  color: white;
   border: unset;
   width: 40px;
   height: 40px;
@@ -147,6 +147,7 @@
   left: 20px;
   bottom: 50px;
   z-index: 3;
+  opacity: 0.5 ;
 }
 .mat_gray_circle {
   background-color: rgba(0, 0, 0, 0.12);
@@ -697,5 +698,8 @@ button.mat-button[_ngcontent-c12] {
 }
 .background_color{
   background: #336CFB !important;
+}
 
+.mdc-form-field>label {
+  font-weight: 700 !important;
 }

@@ -58,6 +58,7 @@ export class PrintPageSelectComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   language_file_path: any = './assets/';
   language: any;
+  isCovidVaccinationStatusVisible = false;
 
   constructor(
     public dialogRef: MatDialogRef<PrintPageSelectComponent>,
