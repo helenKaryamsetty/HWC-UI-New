@@ -126,7 +126,7 @@
         class="nav navbar-nav ml-auto"
         *ngFor="let item of filteredNavigation; let isLast = last"
       >
-        <li class="nav-item" *ngIf="item.role === 'Registrar'">
+        <!-- <li class="nav-item" *ngIf="item.role === 'Registrar'">
           <button
             class="nav-btn"
             mat-button
@@ -152,7 +152,25 @@
               {{ value.label }}
             </button>
           </mat-menu>
+        </li> -->
+        <li
+          class="nav-item"
+          *ngIf="
+            item.role === 'Registrar' &&
+            item.work[1].link === '/registrar/search'
+          "
+        >
+          <button
+            class="nav-btn"
+            mat-button
+            [routerLink]="[item.work[1].link]"
+            routerLinkActive="active"
+            [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+          >
+            {{ item.work[1].label }}
+          </button>
         </li>
+
         <li
           class="nav-item"
           *ngIf="item.role !== 'Registrar' && item.role !== 'TC Specialist'"

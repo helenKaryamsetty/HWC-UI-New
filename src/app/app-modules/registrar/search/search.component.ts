@@ -39,10 +39,10 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { RegistrarService } from '../shared/services/registrar.service';
 import * as moment from 'moment';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { QuickSearchComponent } from '../quick-search/quick-search.component';
 import { CommonService } from '../../core/services/common-services.service';
-import { HealthIdDisplayModalComponent } from '../../core/component/health-id-display-modal/health-id-display-modal.component';
+import { HealthIdDisplayModalComponent } from '../../core/components/health-id-display-modal/health-id-display-modal.component';
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
