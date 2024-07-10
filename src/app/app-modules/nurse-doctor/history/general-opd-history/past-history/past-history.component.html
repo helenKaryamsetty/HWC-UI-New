@@ -66,7 +66,6 @@
           <div
             class="col-sm-6 col-md-3 box"
             *ngIf="pastIllness.value.illnessType?.illnessType === 'Other'"
-            style="margin-top: -4px"
           >
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
@@ -105,10 +104,7 @@
           </div>
 
           <div class="col-sm-4 col-md-2 box">
-            <mat-form-field
-              [style.width]="'135%'"
-              style="line-height: 0px !important"
-            >
+            <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.DurationData?.timeperiodAgo
               }}</mat-label>
@@ -128,7 +124,7 @@
 
           <div class="col-sm-2 col-md-2 box action-btn-container pull-right">
             <button
-              style="margin-right: 5px; margin-left: 22px"
+              style="margin-right: 5px"
               mat-mini-fab
               color="warn"
               class="mat_warn_circle"
@@ -144,7 +140,6 @@
               mat-mini-fab
               color="primary"
               *ngIf="isLast"
-              style="margin-left: 12px"
               class="mat_blue_circle"
               [disabled]="checkIllnessValidity(pastIllness)"
               (click)="addPastIllness()"
@@ -203,7 +198,6 @@
         <div
           class="col-sm-6 col-md-3 box"
           *ngIf="pastSurgery.value.surgeryType?.surgeryType === 'Other'"
-          style="margin-top: -4px"
         >
           <mat-form-field class="input-full-width">
             <mat-label class="mat-label-text">{{
@@ -222,7 +216,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-6 col-md-2 box">
+        <div class="col-sm-4 col-md-2 box">
           <mat-form-field class="input-full-width">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
@@ -240,11 +234,8 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-4 col-md-2 box">
-          <mat-form-field
-            [style.width]="'135%'"
-            style="line-height: 0px !important"
-          >
+        <div class="col-sm-6 col-md-2 box">
+          <mat-form-field style="margin-top: -7px" [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.DurationData?.timeperiodAgo
             }}</mat-label>
@@ -266,7 +257,7 @@
           <button
             mat-mini-fab
             color="warn"
-            style="margin-right: 5px; margin-left: 22px"
+            style="margin-right: 5px"
             class="mat_warn_circle"
             id="removePastSurgery"
             *ngIf="
@@ -279,7 +270,6 @@
           <button
             mat-mini-fab
             color="primary"
-            style="margin-left: 12px"
             class="mat_blue_circle"
             *ngIf="isLast"
             [disabled]="checkSurgeryValidity(pastSurgery)"

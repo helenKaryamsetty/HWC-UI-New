@@ -1,9 +1,12 @@
 <div class="row m-t-20" [formGroup]="familyPlanningAndReproductiveForm">
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
     <div class="form-group">
-      <label class="control-label" for="familyPlanningAndReproductive">{{
-        current_language_set?.fertilityStatus
-      }}</label>
+      <label
+        class="control-label"
+        style="padding-top: 10px"
+        for="familyPlanningAndReproductive"
+        >{{ current_language_set?.fertilityStatus }}</label
+      >
       <div class="clearfix"></div>
       <mat-radio-group
         id="fertilityStatus"
