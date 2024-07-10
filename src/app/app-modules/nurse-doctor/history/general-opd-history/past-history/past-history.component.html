@@ -41,12 +41,11 @@
         <ng-container [formGroupName]="i">
           <div class="col-sm-6 col-md-3 box">
             <mat-form-field [style.width]="'100%'">
-              <mat-label class="mat-label-text">{{
+              <mat-label>{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
               }}</mat-label>
               <mat-select
-                class="select-full-width"
                 name="pastAcuteIllness"
                 formControlName="illnessType"
                 (selectionChange)="
@@ -67,8 +66,8 @@
             class="col-sm-6 col-md-3 box"
             *ngIf="pastIllness.value.illnessType?.illnessType === 'Other'"
           >
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
                   ?.others
               }}</mat-label>
@@ -86,8 +85,8 @@
           </div>
 
           <div class="col-sm-6 col-md-2 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
               }}</mat-label>
               <input
@@ -104,12 +103,11 @@
           </div>
 
           <div class="col-sm-4 col-md-2 box">
-            <mat-form-field [style.width]="'130%'">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.DurationData?.timeperiodAgo
               }}</mat-label>
               <mat-select
-                class="select-full-width"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
                 (selectionChange)="validateDuration(pastIllness)"
@@ -141,7 +139,6 @@
               color="primary"
               *ngIf="isLast"
               class="mat_blue_circle"
-              style="margin-left: 10px"
               [disabled]="checkIllnessValidity(pastIllness)"
               (click)="addPastIllness()"
             >
@@ -175,12 +172,11 @@
       <ng-container [formGroupName]="i">
         <div class="col-sm-6 col-md-3 box">
           <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
+            <mat-label>{{
               currentLanguageSet?.historyData?.ancHistory
                 ?.pastHOSurgeryANC_OPD_NCD_PNC?.hoSurgery
             }}</mat-label>
             <mat-select
-              class="select-full-width"
               formControlName="surgeryType"
               name="surgeryType"
               (selectionChange)="
@@ -200,8 +196,8 @@
           class="col-sm-6 col-md-3 box"
           *ngIf="pastSurgery.value.surgeryType?.surgeryType === 'Other'"
         >
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.obstetric
                 ?.others
             }}</mat-label>
@@ -218,8 +214,8 @@
         </div>
 
         <div class="col-sm-4 col-md-2 box">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
             }}</mat-label>
             <input
@@ -236,12 +232,11 @@
         </div>
 
         <div class="col-sm-6 col-md-2 box">
-          <mat-form-field [style.width]="'130%'">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.DurationData?.timeperiodAgo
             }}</mat-label>
             <mat-select
-              class="select-full-width"
               formControlName="timePeriodUnit"
               name="timePeriodUnit"
               (change)="validateDuration(pastSurgery)"
@@ -272,7 +267,6 @@
             mat-mini-fab
             color="primary"
             class="mat_blue_circle"
-            style="margin-left: 10px"
             *ngIf="isLast"
             [disabled]="checkSurgeryValidity(pastSurgery)"
             id="addPastSurgery"

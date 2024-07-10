@@ -612,7 +612,7 @@ input:-webkit-autofill:active {
   min-height: 45px !important;
 }
 .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
-  padding-top: 26px;
+  padding-top: 24px;
   padding-bottom: unset !important;
 }
 
@@ -629,7 +629,6 @@ input:-webkit-autofill:active {
 }
 
 .mdc-tab__text-label {
-  /* color: var(--mat-tab-header-active-label-text-color); */
   font-size: 14px !important;
   font-weight: 750 !important;
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
@@ -639,15 +638,12 @@ input:-webkit-autofill:active {
 h5{
   font-size: 14px !important;
 }
-/* .mat-form-field-disabled {
-  border-bottom:red;
-} */
+
 .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
   border-bottom-color:#336CFB !important ;
 }
 button.mat-button[_ngcontent-c12] {
   font-weight: bold;
-  /* width: 100%; */
 }
 
 .mat-mdc-row:hover {
@@ -665,25 +661,6 @@ button.mat-button[_ngcontent-c12] {
   font-size: 15px;
   font-weight: 550;
 }
-/* .mat-mdc-checkbox.mat-primary {
-  --mdc-checkbox-disabled-selected-icon-color: rgba(0, 0, 0, .38);
-  --mdc-checkbox-disabled-unselected-icon-color: rgba(0, 0, 0, .38);
-  --mdc-checkbox-selected-checkmark-color: #fff;
-  --mdc-checkbox-selected-focus-icon-color: #43a047 !important;
-  --mdc-checkbox-selected-hover-icon-color: #43a047 !important;
-  --mdc-checkbox-selected-icon-color: #43a047 !important;
-  --mdc-checkbox-selected-pressed-icon-color: #43a047 !important;
-  --mdc-checkbox-unselected-focus-icon-color: #212121;
-  --mdc-checkbox-unselected-hover-icon-color: #212121;
-  --mdc-checkbox-unselected-icon-color: rgba(0, 0, 0, .54);
-  --mdc-checkbox-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
-  --mdc-checkbox-selected-focus-state-layer-color: #43a047 !important;
-  --mdc-checkbox-selected-hover-state-layer-color: #43a047 !important;
-  --mdc-checkbox-selected-pressed-state-layer-color: #43a047 !important;
-  --mdc-checkbox-unselected-focus-state-layer-color: black;
-  --mdc-checkbox-unselected-hover-state-layer-color: black;
-  --mdc-checkbox-unselected-pressed-state-layer-color: black;
-} */
 
 .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
   border-color: #43a047 !important;
@@ -696,4 +673,10 @@ button.mat-button[_ngcontent-c12] {
 
 .mdc-form-field>label {
   font-weight: 700 !important;
+}
+.mdc-text-field--outlined .mdc-notched-outline {
+  height: 40px !important;
+}
+.mat-mdc-text-field-wrapper {
+  padding-right: unset !important;
 }
