@@ -37,7 +37,7 @@ import {
 } from '../shared/services';
 import { ActivatedRoute } from '@angular/router';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,

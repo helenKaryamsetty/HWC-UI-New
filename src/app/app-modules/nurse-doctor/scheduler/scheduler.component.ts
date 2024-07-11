@@ -26,7 +26,7 @@ import { DoctorService } from '../shared/services/doctor.service';
 import { NurseService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,

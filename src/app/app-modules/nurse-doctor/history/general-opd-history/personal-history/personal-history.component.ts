@@ -47,9 +47,9 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NcdScreeningService } from '../../../shared/services/ncd-screening.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { AllergenSearchComponent } from 'src/app/app-modules/core/component/allergen-search/allergen-search.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-general-personal-history',

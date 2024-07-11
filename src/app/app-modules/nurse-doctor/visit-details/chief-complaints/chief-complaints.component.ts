@@ -44,7 +44,7 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { Observable } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({

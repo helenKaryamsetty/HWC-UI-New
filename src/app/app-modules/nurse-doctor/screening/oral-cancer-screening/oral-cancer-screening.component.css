@@ -8,3 +8,9 @@
 .lineheight {
     line-height: 15px;
 }
+.ng-tns-font{
+    font-weight: 600 !important;
+    font-family: SF-UI-Display-Regular, "Helvetica Neue", sans-serif;
+    font-size: 15px !important;
+    margin-bottom: -5px !important;
+}

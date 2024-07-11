@@ -1,6 +1,5 @@
-<style></style>
 <mat-card class="m-t-10 m-b-5">
-  <div [formGroup]="hypertensionScreeningForm">
+  <div [formGroup]="hypertensionScreeningForm" style="padding-left: 10px">
     <div
       class="pull-right"
       [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
@@ -371,7 +370,7 @@
       >
         <button
           mat-raised-button
-          class="full-width-status button-status-disabled"
+          class="full-width-status button-status-disabled mat_blue custom-disabled-button"
           (click)="checkBloodPressureStatus()"
           [disabled]="disableStatusButton"
           color="primary"

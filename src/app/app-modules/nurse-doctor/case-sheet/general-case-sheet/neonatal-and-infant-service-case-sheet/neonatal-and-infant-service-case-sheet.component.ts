@@ -19,8 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+// import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
+// import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({

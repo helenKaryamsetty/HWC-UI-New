@@ -39,7 +39,7 @@ import { CdssFormResultPopupComponent } from '../cdss-form-result-popup/cdss-for
 import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { VisitDetailUtils } from '../../shared/utility';
 
 @Component({

@@ -33,8 +33,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,

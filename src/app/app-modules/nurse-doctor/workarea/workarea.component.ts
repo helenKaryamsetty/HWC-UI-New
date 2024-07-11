@@ -57,10 +57,10 @@ import { HrpService } from '../shared/services/hrp.service';
 import { Observable, Subscription, of } from 'rxjs';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { environment } from 'src/environments/environment';
-import { HealthIdDisplayModalComponent } from '../../core/component/health-id-display-modal/health-id-display-modal.component';
-import { OpenPreviousVisitDetailsComponent } from '../../core/component/open-previous-visit-details/open-previous-visit-details.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
-import { SpecialistLoginComponent } from '../../core/component/specialist-login/specialist-login.component';
+import { HealthIdDisplayModalComponent } from '../../core/components/health-id-display-modal/health-id-display-modal.component';
+import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-previous-visit-details/open-previous-visit-details.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SpecialistLoginComponent } from '../../core/components/specialist-login/specialist-login.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 

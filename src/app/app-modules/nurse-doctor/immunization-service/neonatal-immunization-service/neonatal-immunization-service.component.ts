@@ -33,7 +33,7 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { SetLanguageComponent } from '../../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { HttpServiceService } from '../../../core/services/http-service.service';

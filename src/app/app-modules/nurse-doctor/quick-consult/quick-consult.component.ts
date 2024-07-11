@@ -50,8 +50,8 @@ import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 
 interface prescribe {
