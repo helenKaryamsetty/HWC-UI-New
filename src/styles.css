@@ -687,3 +687,11 @@ button.mat-button[_ngcontent-c12] {
 .mat-mdc-text-field-wrapper {
   padding-left: unset !important;
 }
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-line-ripple::before {
+  border-bottom-color: #336CFB  !important;
+  
+  border-bottom-style: dotted !important;
+  /* background-color: transparent !important;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.42) 33%, transparent 0%) !important;
+  */
+}
