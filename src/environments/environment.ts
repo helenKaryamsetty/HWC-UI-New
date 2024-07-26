@@ -52,7 +52,7 @@ const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
 
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
-const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.1/`;
 
 export const environment = {
   production: false,
@@ -526,4 +526,11 @@ export const environment = {
   getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  /*Biometric with Health ID*/
+  getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 };
