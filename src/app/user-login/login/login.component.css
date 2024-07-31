@@ -147,3 +147,16 @@ input::-ms-reveal,
 input::-ms-clear {
     display: none;
 }
+
+
+
+
+/* @media screen  and (min-width:768px) and (max-width:1024px) {
+    
+} */
+@media screen  and (min-width:360px) and (max-width:430px) {
+    .screen_adjustment {
+        width: 100% !important;
+        margin-left: -50px !important;
+    } 
+}
