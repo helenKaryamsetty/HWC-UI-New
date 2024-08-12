@@ -140,3 +140,31 @@ It creates a `environment.ci.ts` file with all environment variables used in the
 ## Usage
 All features have been exposed as REST endpoints. Refer to the SWAGGER API specification for details.
 
+### Initializing Submodule `Common-UI`
+
+To initialize the `Common-UI` submodule, follow these steps
+
+To initialize the `Common-UI` submodule, follow these steps
+
+1. Clone the `mmu-ui` project
+   ```bash
+   git clone httpsgithub.comPSMRIMMU-UI
+
+2. Navigate to the project directory and pull the latest changes from the develop branch
+   cd mmu-ui
+   git checkout develop
+   git pull origin develop
+
+3. Open the integrated terminal for the common-ui submodule and initialize it
+
+   cd Common-UI
+   git init
+   git remote add origin httpsgithub.comPSMRICommon-UI
+   git submodule update --init --recursive
+
+4. Check the available branches and switch to the develop branch
+
+   git branch
+   git checkout develop
+   git pull origin develop
+
