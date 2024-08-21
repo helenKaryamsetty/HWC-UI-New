@@ -270,7 +270,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
       };
       this.registrarService.generateHealthIdWithUID(reqObj).subscribe(
         (res: any) => {
-          if (res.statusCode == 200 && res.data) {
+          if (res.statusCode === 200 && res.data) {
             this.registrarService.abhaGenerateData = res.data;
             this.registrarService.getabhaDetail(true);
 
@@ -316,7 +316,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
                 localStorage.getItem('location') as any,
               );
               location.stateMaster.forEach((item: any) => {
-                if (item.govtLGDStateID == res.data.stateCode) {
+                if (item.govtLGDStateID === res.data.stateCode) {
                   matchedState = item;
                   stateID = matchedState.stateID;
                   stateName = matchedState.stateName;
@@ -328,7 +328,9 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
                         const districtList = resp.data;
                         this.registrarService.updateDistrictList(districtList);
                         resp.data.forEach((item: any) => {
-                          if (item.govtLGDDistrictID == res.data.districtCode) {
+                          if (
+                            item.govtLGDDistrictID === res.data.districtCode
+                          ) {
                             matchedDistrict = item;
                             districtID = matchedDistrict.districtID;
                             districtName = matchedDistrict.districtName;
