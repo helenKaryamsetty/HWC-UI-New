@@ -28,9 +28,10 @@ This microservice is built on Java, Spring boot framework and MySQL DB.
 
 ### Prerequisites 
 * HWC-API module should be running
-* JDK 1.8
+* JDK 17
 * Maven 
-* Nodejs v8.9.0
+* Nodejs v18.10.0
+* MySQL
 
 
 ## Installation
@@ -53,7 +54,7 @@ https://github.com/coreybutler/nvm-windows/releases
 Steps to download nvm and node: https://dev.to/skaytech/how-to-install-node-version-manager-nvm-for-windows-10-4nbi
 
 Install Node.js using below command:
-`nvm install 8.9.0`
+`nvm install 18.10.0`
 
 Check Node.js version:
 `node --version`
@@ -62,11 +63,11 @@ Check npm version:
 `npm --version`
 
 Using the below command to specify the version of npm that you wish to use. In our case, since we have only one version installed. Let's go with that.
- `nvm use 8.9.0`
+ `nvm use 18.10.0`
 
 * Angular CLI Installation
 Angular CLI is a command line tool for Angular. You can install it globally using npm with the following command:
-`npm install -g @angular/cli@1.7.0`
+`npm install -g @angular/cli@16.2.10`
 
 * Python Installation [ If you face any Python related error during node_modules installation]
 Download Python 2.7.12
@@ -144,14 +145,12 @@ All features have been exposed as REST endpoints. Refer to the SWAGGER API speci
 
 To initialize the `Common-UI` submodule, follow these steps
 
-To initialize the `Common-UI` submodule, follow these steps
 
-1. Clone the `mmu-ui` project
+1. Clone the `hwc-ui` project
    ```bash
-   git clone httpsgithub.comPSMRIMMU-UI
-
+   git clone https://github.com/PSMRI/HWC-UI
 2. Navigate to the project directory and pull the latest changes from the develop branch
-   cd mmu-ui
+   cd hwc-ui
    git checkout develop
    git pull origin develop
 
@@ -159,7 +158,7 @@ To initialize the `Common-UI` submodule, follow these steps
 
    cd Common-UI
    git init
-   git remote add origin httpsgithub.comPSMRICommon-UI
+   git remote add origin https://github.com/PSMRI/Common-UI
    git submodule update --init --recursive
 
 4. Check the available branches and switch to the develop branch
