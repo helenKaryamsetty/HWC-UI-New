@@ -42,6 +42,7 @@
     font-size: 14px !important;
 }
 .navbar-iemr {
+    height: 50px;
     background-color: #336CFB;
     color: white;
     border-radius: 0px;
