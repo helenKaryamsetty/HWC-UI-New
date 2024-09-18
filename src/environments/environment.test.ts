@@ -74,11 +74,11 @@ export const environment = {
   IdrsOrCbac: ['IDRS', 'CBAC'],
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}/inventory-ui-v1.0/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}/hwc-inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}/schedulerui-v1.0/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
