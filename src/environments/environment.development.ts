@@ -507,4 +507,5 @@ export const environment = {
 
   /* ABDM Mapped Facility */
   getAbdmMappedFacility: `${COMMON_API}facility/getWorklocationMappedAbdmFacility/`,
+  saveAbdmFacilityIdForVisit: `${FHIR_API}facility/saveAbdmFacilityId`,
 };

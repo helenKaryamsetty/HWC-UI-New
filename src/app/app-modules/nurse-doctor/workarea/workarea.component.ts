@@ -51,7 +51,6 @@ import {
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { SchedulerComponent } from './../scheduler/scheduler.component';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
-import { RegistrarService } from '../../registrar/shared/services/registrar.service';
 import { NcdScreeningService } from '../shared/services/ncd-screening.service';
 import { HrpService } from '../shared/services/hrp.service';
 import { Observable, Subscription, of } from 'rxjs';
@@ -63,6 +62,7 @@ import { SpecialistLoginComponent } from '../../core/components/specialist-login
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HealthIdDisplayModalComponent } from 'Common-UI/src/registrar/health-id-display-modal/health-id-display-modal.component';
+import { RegistrarService } from 'Common-UI/src/registrar/services/registrar.service';
 
 @Component({
   selector: 'app-workarea',
@@ -200,6 +200,8 @@ export class WorkareaComponent
   provideCounsellingForm!: FormGroup;
   patientFollowUpImmunizationForm!: FormGroup;
   patientQuickConsultForm!: FormGroup;
+  abdmFacilityId: any;
+  abdmFacilityName: any;
 
   constructor(
     private router: Router,
@@ -4197,6 +4199,7 @@ export class WorkareaComponent
   }
   /* Fetch health ID detaiuls to link the visit */
   getHealthIDDetails(successResponseFromAPI: any) {
+    this.getMappedAbdmFacility();
     this.confirmationService
       .confirmCareContext(
         'info',
@@ -4212,6 +4215,59 @@ export class WorkareaComponent
           console.log();
         }
       });
+  }
+  getMappedAbdmFacility() {
+    const locationData: any = localStorage.getItem('loginDataResponse');
+    const jsonLoccationData = JSON.parse(locationData);
+    let workLocationId: any;
+    if (jsonLoccationData?.previlegeObj[0]?.roles) {
+      const roles = jsonLoccationData?.previlegeObj[0]?.roles;
+      roles.find((item: any) => {
+        item.RoleName.toLowerCase() === 'doctor';
+        workLocationId = item.workingLocationID;
+      });
+    }
+    console.log('workLocationId', workLocationId);
+    this.registrarService.getMappedFacility(workLocationId).subscribe(
+      (res: any) => {
+        if (res.statusCode === 200 && res.data != null) {
+          const data = res.data;
+          if (data.abdmFacilityID && data.abdmFacilityName) {
+            this.abdmFacilityId = data.abdmFacilityID;
+            this.abdmFacilityName = data.abdmFacilityName;
+            this.saveAbdmFacilityForVisit();
+          }
+        } else {
+          this.confirmationService.confirm(res.errorMessage, 'info');
+          this.abdmFacilityId = null;
+          this.abdmFacilityName = null;
+          this.saveAbdmFacilityForVisit();
+        }
+      },
+      (err: any) => {
+        this.confirmationService.alert(err.errorMessage, 'error');
+        this.saveAbdmFacilityForVisit();
+      },
+    );
+  }
+
+  saveAbdmFacilityForVisit() {
+    const reqObj = {
+      visitCode: localStorage.getItem('visitCode'),
+      abdmFacilityId: this.abdmFacilityId,
+    };
+    this.registrarService.saveAbdmFacilityForVisit(reqObj).subscribe(
+      (res: any) => {
+        if (res.statusCode === 200) {
+          console.log('Abdm saved successfully');
+        } else {
+          this.confirmationService.alert(res.errorMessage, 'error');
+        }
+      },
+      (err: any) => {
+        this.confirmationService.alert(err.errorMessage, 'error');
+      },
+    );
   }
   fetchHealthIDDetailsOnConfirmation() {
     const data = {
@@ -4242,7 +4298,7 @@ export class WorkareaComponent
           this.router.navigate(['/nurse-doctor/nurse-worklist']);
         }
       },
-      (err) => {
+      (err: any) => {
         this.confirmationService.alert(
           this.current_language_set.issueInGettingBeneficiaryABHADetails,
           'error',
