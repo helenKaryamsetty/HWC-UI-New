@@ -150,6 +150,9 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
         return item.name === temp;
       })[0];
       this.menstrualHistoryForm.patchValue({ menstrualCycleStatus: temp });
+      this.menstrualHistoryForm.get('lMPDate')?.disable();
+    } else {
+      this.menstrualHistoryForm.get('lMPDate')?.enable();
     }
   }
 
