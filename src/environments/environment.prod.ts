@@ -530,4 +530,9 @@ export const environment = {
   /* ABDM Mapped Facility */
   getAbdmMappedFacility: `${COMMON_API}facility/getWorklocationMappedAbdmFacility/`,
   saveAbdmFacilityIdForVisit: `${FHIR_API}facility/saveAbdmFacilityId`,
+
+  /* Abha V3 APIs */
+  requestOtpForAbhaEnroll: `${FHIR_API}abhaCreation/requestOtpForAbhaEnrollment`,
+  abhaEnrollmentByAadhaar: `${FHIR_API}abhaCreation/abhaEnrollmentByAadhaar`,
+  verifyMobileForAbhaAuth: `${FHIR_API}abhaCreation/verifyAuthByMobile`,
 };

@@ -2091,7 +2091,9 @@
         "treatment": "Treatment",
         "selfcare": "Self-Care",
         "investigations": "Investigations",
-        "noRecordsFound": "No Records Found"
+        "noRecordsFound": "No Records Found",
+        "enterMobileNumberToBeLinkedWithAbha": "Please enter phone number that needs to be linked with ABHA Card",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?"
     }
 
     
