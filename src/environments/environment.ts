@@ -39,7 +39,7 @@ const SWYMED_IP = '14.143.13.109';
 
 // Without API MAN Configuration
 const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
-const COMMON_API = `${commonIP}/commonapi-v1.2/`;
+const COMMON_API = `${commonIP}/commonapi-v1.0/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
 const TM_API = `${tmIP}/hwc-facility-service/`;
 
