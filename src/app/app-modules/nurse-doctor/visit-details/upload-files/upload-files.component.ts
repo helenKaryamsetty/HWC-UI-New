@@ -250,6 +250,10 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
             this.savedFileData.push(file);
             this.fileIDs.push(file.kmFileManagerID);
           });
+          this.confirmationService.alert(
+            this.currentLanguageSet.fileUploadedSuccessfully,
+            'success',
+          );
           this.fileObj.map((file: any) => {
             file.isUploaded = true;
           });
