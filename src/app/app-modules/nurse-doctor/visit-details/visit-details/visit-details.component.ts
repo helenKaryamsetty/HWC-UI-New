@@ -275,32 +275,36 @@ export class PatientVisitDetailsComponent
           }
           if (visitCategory === 'NCD care') {
             const visitDetails = value.data.NCDCareNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.NCDCareNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
             this.loadConfirmedDiseasesFromNCD();
           }
           if (visitCategory === 'PNC') {
             const visitDetails = value.data.PNCNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.PNCNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
+            this.doctorService.fileIDs =
+              value.data.covid19NurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'Neonatal and Infant Health Care Services') {
             const visitDetails = value.data.neonatalNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.neonatalNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'Childhood & Adolescent Healthcare Services') {
             const visitDetails = value.data.cacNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.cacNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
@@ -361,28 +365,32 @@ export class PatientVisitDetailsComponent
           }
           if (visitCategory === 'NCD care') {
             const visitDetails = value.data.NCDCareNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.NCDCareNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.loadConfirmedDiseasesFromNCD();
           }
           if (visitCategory === 'PNC') {
             const visitDetails = value.data.PNCNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.PNCNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
+            this.doctorService.fileIDs =
+              value.data.covid19NurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'Neonatal and Infant Health Care Services') {
             const visitDetails = value.data.neonatalNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.neonatalNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'Childhood & Adolescent Healthcare Services') {
             const visitDetails = value.data.cacNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.cacNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
 
