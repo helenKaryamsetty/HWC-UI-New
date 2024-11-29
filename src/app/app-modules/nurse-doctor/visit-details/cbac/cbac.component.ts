@@ -36,6 +36,7 @@ import {
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cbac',
@@ -143,6 +144,7 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    private sessionstorage: SessionStorageService,
   ) {}
   @Input()
   cbacScreeningForm!: FormGroup;
@@ -216,9 +218,9 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   getCbacDetails() {
     if (String(this.mode) === 'view') {
       const reqObj = {
-        visitID: localStorage.getItem('visitID'),
-        beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
-        visitCode: localStorage.getItem('visitCode'),
+        visitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
+        visitCode: this.sessionstorage.getItem('visitCode'),
       };
       this.cbacService.fetchCbacDetails(reqObj).subscribe((response: any) => {
         if (response.data !== null && response.statusCode === 200) {

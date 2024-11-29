@@ -35,6 +35,7 @@ import { NcdScreeningService } from '../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-visit-details',
@@ -90,6 +91,7 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private ncdScreeningService: NcdScreeningService,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -128,7 +130,7 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.diseaseSummaryDb = cdssForm.get('diseaseSummaryDb') as FormGroup;
 
     this.ncdScreeningService.clearDiseaseConfirmationScreenFlag();
-    this.isCdss = localStorage.getItem('isCdss');
+    this.isCdss = this.sessionstorage.getItem('isCdss');
     if (
       this.isCdss !== undefined &&
       this.isCdss !== null &&
@@ -157,14 +159,14 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.getVisitCategory();
     this.getVisitReason();
     this.assignSelectedLanguage();
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitCategory: any = localStorage.getItem('visitCat');
-      localStorage.setItem('visitCategory', visitCategory);
+      const visitCategory: any = this.sessionstorage.getItem('visitCat');
+      this.sessionstorage.setItem('visitCategory', visitCategory);
     }
   }
 
