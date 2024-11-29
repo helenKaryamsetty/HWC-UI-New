@@ -30,6 +30,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-beneficiary-platform-history',
@@ -119,6 +120,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -291,17 +293,26 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       .subscribe((res) => {
         console.log('print', print);
         if (res) {
-          localStorage.setItem('previousCaseSheetVisitCode', visit.visitCode);
-          localStorage.setItem('previousCaseSheetBenFlowID', visit.benFlowID);
-          localStorage.setItem(
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitCode',
+            visit.visitCode,
+          );
+          this.sessionstorage.setItem(
+            'previousCaseSheetBenFlowID',
+            visit.benFlowID,
+          );
+          this.sessionstorage.setItem(
             'previousCaseSheetVisitCategory',
             visit.VisitCategory,
           );
-          localStorage.setItem(
+          this.sessionstorage.setItem(
             'previousCaseSheetBeneficiaryRegID',
             visit.beneficiaryRegID,
           );
-          localStorage.setItem('previousCaseSheetVisitID', visit.benVisitID);
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitID',
+            visit.benVisitID,
+          );
           if (print) {
             const url = environment.newTaburl;
             window.open(

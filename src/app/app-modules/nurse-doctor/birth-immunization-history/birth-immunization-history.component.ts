@@ -37,6 +37,7 @@ import {
   ConfirmationService,
 } from '../../core/services';
 import { DoctorService } from '../shared/services';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-birth-immunization-history',
@@ -68,6 +69,7 @@ export class BirthImmunizationHistoryComponent
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -100,7 +102,7 @@ export class BirthImmunizationHistoryComponent
 
   ngOnChanges() {
     if (String(this.immunizationHistoryMode) === 'update') {
-      const visitCategory = localStorage.getItem('visitCategory');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.updateBirthAndImmunizationHistoryFromDoctor(
         this.patientBirthImmunizationHistoryForm,
         visitCategory,
