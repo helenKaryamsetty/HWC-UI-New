@@ -24,6 +24,8 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+import { keys } from './enckey';
+
 const commonIP = 'https://amritwprdev.piramalswasthya.org';
 const identityIP = 'https://amritwprdev.piramalswasthya.org';
 const tmIP = 'https://amritwprdev.piramalswasthya.org';
@@ -38,25 +40,26 @@ const SERVER_IP = '10.208.122.39';
 const SWYMED_IP = '14.143.13.109';
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}/commonapi-v1.0/`;
-const COMMON_API = `${commonIP}/commonapi-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}/commonapi-v3.0.0/`;
+const COMMON_API = `${commonIP}/commonapi-v3.0.0/`;
 const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
-const TM_API = `${tmIP}/hwc-facility-service/`;
+const TM_API = `${tmIP}/hwc-facility-service-v3.0.0/`;
 
-const API104 = `${IP104}/104api-v1.0/`;
-const MMU_API = `${mmuIP}/mmuapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
-const SCHEDULER_API = `${schedulerIP}/schedulerapi-v1.0/`;
+const API104 = `${IP104}/104api-v3.0.0/`;
+const MMU_API = `${mmuIP}/mmuapi-v3.0.0/`;
+const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v3.0.0/`;
+const SCHEDULER_API = `${schedulerIP}/schedulerapi-v3.0.0/`;
 const mmuUICasesheet = 'http://localhost:4200/';
-const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
+const ADMIN_API = `${adminIP}/adminapi-v3.0.0/`;
 
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
-const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.2/`;
 
 export const environment = {
   production: false,
   app: `MMU`,
+  encKey: keys.prod,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
@@ -70,10 +73,10 @@ export const environment = {
 
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: inventoryUI_IP + '/hwc-inventory/#/redirin?',
+  INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-wasa/#/redirin?',
   fallbackUrl: '/pharmacist/redirfallback',
   redirInUrl: '/pharmacist/redirin',
-  TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler/#/?',
+  TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-wasa/#/?',
 
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/nurse-doctor/tcspecialist-worklist`,

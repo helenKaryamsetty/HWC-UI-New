@@ -24,20 +24,22 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'http://183.82.107.186:8080/';
-const tmIP = 'http://183.82.107.186:8080/';
-const mmuIP = 'http://183.82.107.186:8080/';
-const schedulerIP = 'http://183.82.107.186:8080/';
-const tmUI_IP = 'http://183.82.107.186:8080/';
-const schedulerUI_IP = 'http://183.82.107.186:8080/';
-const inventoryUI_IP = 'http://183.82.107.186:8080/';
+import { keys } from './enckey';
+
+const commonIP = 'https://amritwprdev.piramalswasthya.org/';
+const tmIP = 'https://amritwprdev.piramalswasthya.org/';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
+const tmUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const schedulerUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const inventoryUI_IP = 'https://amritwprdev.piramalswasthya.org/';
 const SERVER_IP = 'dataSYNCIP';
 const SWYMED_IP = '14.143.13.109';
-const adminIP = 'http://183.82.107.186:8080';
-const FHIRIP = 'http://183.82.107.186:8080';
-const identityIP = 'http://183.82.107.186:8080/';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
+const identityIP = 'https://amritwprdev.piramalswasthya.org/';
 const IDENTITY_API = `${identityIP}/hwc-identity-0.0.1/`;
-const IP104 = 'http://183.82.107.186:8080/';
+const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
 //const TM_API = `http://${IP}:8080/apiman-gateway/IEMR/TM/1.0/`;
@@ -46,21 +48,21 @@ const IP104 = 'http://183.82.107.186:8080/';
 //  const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
-const COMMON_API = `${commonIP}commonapi-v1.0/`;
-const TM_API = `${tmIP}hwc-facility-service/`;
-const MMU_API = `${mmuIP}mmuapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
-const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
-const ADMIN_API = `${adminIP}/adminapi-v1.0`;
-const API104 = `${IP104}/104api-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}commonapi-v3.0.0/`;
+const COMMON_API = `${commonIP}commonapi-v3.0.0/`;
+const TM_API = `${tmIP}hwc-facility-service-v3.0.0/`;
+const MMU_API = `${mmuIP}mmuapi-v3.0.0/`;
+const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v3.0.0/`;
+const SCHEDULER_API = `${schedulerIP}schedulerapi-v3.0.0/`;
+const ADMIN_API = `${adminIP}/adminapi-v3.0.0`;
+const API104 = `${IP104}/104api-v3.0.0/`;
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
-const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
-const mmuUICasesheet = `${tmUI_IP}tmui-v1.0`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.2/`;
+const mmuUICasesheet = `${tmUI_IP}tmui-v3.0.0`;
 
 export const environment = {
   production: true,
-
+  encKey: keys.test,
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
@@ -74,11 +76,11 @@ export const environment = {
   IdrsOrCbac: ['IDRS', 'CBAC'],
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}/hwc-inventory/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}/hwc-inventory-wasa/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler-wasa/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
