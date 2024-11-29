@@ -40,6 +40,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-menstrual-history',
@@ -95,6 +96,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -131,7 +133,8 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
             this.getGeneralHistory();
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -215,7 +218,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousMenstrualHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousMenstrualHistory(benRegID, this.visitCategory)
       .subscribe(
