@@ -47,6 +47,7 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-register-demographic-details',
@@ -92,6 +93,7 @@ export class RegisterDemographicDetailsComponent
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private router: Router,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -243,12 +245,12 @@ export class RegisterDemographicDetailsComponent
    * Config States  for Ben Edit
    */
   configState() {
-    const location: any = localStorage.getItem('location');
+    const location: any = this.sessionstorage.getItem('location');
     this.demographicsMaster = Object.assign(
       {},
       JSON.parse(location),
-      { servicePointID: localStorage.getItem('servicePointID') },
-      { servicePointName: localStorage.getItem('servicePointName') },
+      { servicePointID: this.sessionstorage.getItem('servicePointID') },
+      { servicePointName: this.sessionstorage.getItem('servicePointName') },
     );
     if (
       this.demographicsMaster.stateMaster &&
@@ -468,11 +470,11 @@ export class RegisterDemographicDetailsComponent
    * Check and save location Data from Storage
    */
   loadLocationFromStorage() {
-    const locationData: any = localStorage.getItem('location');
+    const locationData: any = this.sessionstorage.getItem('location');
     const location = JSON.parse(locationData);
     this.demographicsMaster = Object.assign({}, location, {
-      servicePointID: localStorage.getItem('servicePointID'),
-      servicePointName: localStorage.getItem('servicePointName'),
+      servicePointID: this.sessionstorage.getItem('servicePointID'),
+      servicePointName: this.sessionstorage.getItem('servicePointName'),
     });
 
     if (

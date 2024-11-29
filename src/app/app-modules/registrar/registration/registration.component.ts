@@ -53,6 +53,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { ConsentFormComponent } from '../consent-form/consent-form.component';
 import { SearchFamilyComponent } from '../search-family/search-family.component';
 import { GenerateAbhaComponentComponent } from '../generate-abha-component/generate-abha-component.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-registration',
@@ -118,6 +119,7 @@ export class RegistrationComponent
     private changeDetectorRef: ChangeDetectorRef,
     public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -852,14 +854,15 @@ export class RegistrationComponent
       this.beneficiaryRegistrationForm.controls['otherDetailsForm']
     );
 
-    const servicePointObject: any = localStorage.getItem('serviceLineDetails');
+    const servicePointObject: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const servicePointDetails = JSON.parse(servicePointObject);
     iEMRForm['vanID'] = servicePointDetails.vanID;
     iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
-    iEMRForm['createdBy'] = localStorage.getItem('userName');
+    iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
     phoneMaps[0]['vanID'] = servicePointDetails.vanID;
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
-    phoneMaps[0]['createdBy'] = localStorage.getItem('userName');
+    phoneMaps[0]['createdBy'] = this.sessionstorage.getItem('userName');
     this.registrarService.submitBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res.statusCode === 200) {
         const responseValue = res.data.response;
@@ -873,9 +876,10 @@ export class RegistrationComponent
             beneficiaryID: numb,
             healthId: otherDetailsForm.controls['healthId'].value,
             healthIdNumber: otherDetailsForm.controls['healthIdNumber'].value,
-            providerServiceMapId: localStorage.getItem('providerServiceID'),
+            providerServiceMapId:
+              this.sessionstorage.getItem('providerServiceID'),
             authenticationMode: otherDetailsForm.controls['healthIdMode'].value,
-            createdBy: localStorage.getItem('userName'),
+            createdBy: this.sessionstorage.getItem('userName'),
           };
           if (
             (otherDetailsForm.controls['healthId'].value !== undefined &&
@@ -970,8 +974,9 @@ export class RegistrationComponent
           healthId: otherDetailsForm.controls['healthId'].value,
           healthIdNumber: otherDetailsForm.controls['healthIdNumber'].value,
           authenticationMode: otherDetailsForm.controls['healthIdMode'].value,
-          providerServiceMapId: localStorage.getItem('providerServiceID'),
-          createdBy: localStorage.getItem('userName'),
+          providerServiceMapId:
+            this.sessionstorage.getItem('providerServiceID'),
+          createdBy: this.sessionstorage.getItem('userName'),
         };
 
         if (
@@ -1158,8 +1163,9 @@ export class RegistrationComponent
                   otherDetailsForm.controls['healthIdNumber'].value,
                 authenticationMode:
                   otherDetailsForm.controls['healthIdMode'].value,
-                providerServiceMapId: localStorage.getItem('providerServiceID'),
-                createdBy: localStorage.getItem('userName'),
+                providerServiceMapId:
+                  this.sessionstorage.getItem('providerServiceID'),
+                createdBy: this.sessionstorage.getItem('userName'),
               };
               if (
                 (otherDetailsForm.controls['healthId'].value !== undefined &&
@@ -1200,14 +1206,15 @@ export class RegistrationComponent
     const iEMRForm: any = this.iEMRFormUpdate();
     const phoneMaps = iEMRForm.benPhoneMaps;
 
-    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
+    const servicePointDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     iEMRForm['vanID'] = servicePointDetails.vanID;
     iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
-    iEMRForm['createdBy'] = localStorage.getItem('userName');
+    iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
     phoneMaps[0]['vanID'] = servicePointDetails.vanID;
     phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
-    phoneMaps[0]['modifiedBy'] = localStorage.getItem('userName');
+    phoneMaps[0]['modifiedBy'] = this.sessionstorage.getItem('userName');
     return iEMRForm;
   }
 
@@ -1289,7 +1296,7 @@ export class RegistrationComponent
           villageName: demographicsForm.villageName,
         },
         pinCode: demographicsForm.pincode || undefined,
-        createdBy: localStorage.getItem('userName'),
+        createdBy: this.sessionstorage.getItem('userName'),
         zoneID: demographicsForm.zoneID,
         zoneName: demographicsForm.zoneName,
         parkingPlaceID: demographicsForm.parkingPlace,
@@ -1352,7 +1359,7 @@ export class RegistrationComponent
       changeInFamilyDetails: true,
       changeInAssociations: true,
       is1097: false,
-      createdBy: localStorage.getItem('userName'),
+      createdBy: this.sessionstorage.getItem('userName'),
       changeInBankDetails: true,
       beneficiaryIdentities: iEMRids,
       ageAtMarriage: personalForm.ageAtMarriage || undefined,
@@ -1371,8 +1378,8 @@ export class RegistrationComponent
       incomeStatus: personalForm.incomeName || undefined,
       religionId: othersForm.religion || undefined,
       religion: othersForm.religionOther || undefined,
-      providerServiceMapId: localStorage.getItem('providerServiceID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      providerServiceMapId: this.sessionstorage.getItem('providerServiceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
     };
 
     return finalForm;
@@ -1457,7 +1464,7 @@ export class RegistrationComponent
             govtIdentityTypeID: gov.type,
             deleted: gov.deleted,
             benIdentityId: gov.benIdentityId || undefined,
-            createdBy: localStorage.getItem('userName'),
+            createdBy: this.sessionstorage.getItem('userName'),
           });
         }
       });
@@ -1482,7 +1489,7 @@ export class RegistrationComponent
               benIdentityId: othergov.benIdentityId || undefined,
               govtIdentityTypeID: othergov.type,
               deleted: othergov.deleted,
-              createdBy: localStorage.getItem('userName'),
+              createdBy: this.sessionstorage.getItem('userName'),
             });
           }
         }
@@ -1546,7 +1553,7 @@ export class RegistrationComponent
             govtIdentityTypeID: gov.type,
             deleted: false,
             benIdentityId: gov.benIdentityId || undefined,
-            createdBy: localStorage.getItem('userName'),
+            createdBy: this.sessionstorage.getItem('userName'),
           });
         }
       });
@@ -1571,7 +1578,7 @@ export class RegistrationComponent
               benIdentityId: othergov.benIdentityId || undefined,
               govtIdentityTypeID: othergov.type,
               deleted: false,
-              createdBy: localStorage.getItem('userName'),
+              createdBy: this.sessionstorage.getItem('userName'),
             });
           }
         }
@@ -1641,8 +1648,8 @@ export class RegistrationComponent
       literacyStatus: personalForm.literacyStatus,
       name: personalForm.name,
       email: othersForm.emailID,
-      providerServiceMapId: localStorage.getItem('providerServiceID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      providerServiceMapId: this.sessionstorage.getItem('providerServiceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
 
       i_bendemographics: {
         incomeStatusID: personalForm.income,
@@ -1715,7 +1722,7 @@ export class RegistrationComponent
               expiryDate: null,
               isVerified: null,
               identityFilePath: null,
-              createdBy: localStorage.getItem('userName'),
+              createdBy: this.sessionstorage.getItem('userName'),
             });
           }
         }
@@ -1735,7 +1742,7 @@ export class RegistrationComponent
               expiryDate: null,
               isVerified: null,
               identityFilePath: null,
-              createdBy: localStorage.getItem('userName'),
+              createdBy: this.sessionstorage.getItem('userName'),
             });
           }
         }
