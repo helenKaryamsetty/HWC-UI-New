@@ -34,6 +34,7 @@ import {
   DoctorService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { HrpService } from 'src/app/app-modules/nurse-doctor/shared/services/hrp.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-nurse-anc-obstetric-examination',
   templateUrl: './obstetric-examination.component.html',
@@ -214,6 +215,7 @@ export class ObstetricExaminationComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private datePipe: DatePipe,
+    private sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
   ) {}
 
@@ -229,8 +231,8 @@ export class ObstetricExaminationComponent
     this.getNurseMasterData();
     this.nurseService.clearLMPForFetosenseTest();
     this.assignSelectedLanguage();
-    this.benVisitNo = localStorage.getItem('benVisitNo');
-    this.visitReason = localStorage.getItem('visitReason');
+    this.benVisitNo = this.sessionstorage.getItem('benVisitNo');
+    this.visitReason = this.sessionstorage.getItem('visitReason');
     this.getHrpDetailsForFollowUp();
 
     this.beneficiaryDetailsSubscription =
@@ -291,7 +293,7 @@ export class ObstetricExaminationComponent
         this.benVisitNo !== 1
       ) {
         const reqObj = {
-          beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
+          beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
         };
         this.hrpService.getHrpForFollowUP(reqObj).subscribe((res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
@@ -433,8 +435,9 @@ export class ObstetricExaminationComponent
       todayDate.toString();
 
       const serviceLineDetails: any =
-        localStorage.getItem('serviceLineDetails');
-      const providerServiceID: any = localStorage.getItem('providerServiceID');
+        this.sessionstorage.getItem('serviceLineDetails');
+      const providerServiceID: any =
+        this.sessionstorage.getItem('providerServiceID');
       const reqObj = {
         beneficiaryRegID: this.beneficiary.beneficiaryRegID,
         benFlowID: this.beneficiary.benFlowID,
@@ -445,7 +448,7 @@ export class ObstetricExaminationComponent
         testName: testName,
         vanID: JSON.parse(serviceLineDetails).vanID,
         ProviderServiceMapID: JSON.parse(providerServiceID),
-        createdBy: localStorage.getItem('userName'),
+        createdBy: this.sessionstorage.getItem('userName'),
       };
 
       this.nurseService.sendTestDetailsToFetosense(reqObj).subscribe(
