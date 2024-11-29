@@ -33,6 +33,7 @@ import {
   FormArray,
   AbstractControl,
 } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
@@ -52,7 +53,7 @@ import { environment } from 'src/environments/environment';
 export class NcdScreeningDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -103,6 +104,7 @@ export class NcdScreeningDiagnosisComponent
     private ncdScreeningService: NcdScreeningService,
     private idrsScoreService: IdrsscoreService,
     private nurseService: NurseService,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -121,8 +123,8 @@ export class NcdScreeningDiagnosisComponent
           }
         },
       );
-    this.designation = localStorage.getItem('designation');
-    this.benGender = localStorage.getItem('beneficiaryGender');
+    this.designation = this.sessionstorage.getItem('designation');
+    this.benGender = this.sessionstorage.getItem('beneficiaryGender');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['instruction'].enable();
       this.specialist = true;
@@ -176,13 +178,14 @@ export class NcdScreeningDiagnosisComponent
 
   ngOnChanges() {
     if (String(this.caseRecordMode) === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
-      const specialistFlagString = localStorage.getItem('specialist_flag');
+      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
+      const specialistFlagString =
+        this.sessionstorage.getItem('specialist_flag');
       if (
-        localStorage.getItem('referredVisitCode') === 'undefined' ||
-        localStorage.getItem('referredVisitCode') === null
+        this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
+        this.sessionstorage.getItem('referredVisitCode') === null
       ) {
         this.getDiagnosisDetails();
       } else if (
@@ -193,14 +196,14 @@ export class NcdScreeningDiagnosisComponent
           beneficiaryRegID,
           visitID,
           visitCategory,
-          localStorage.getItem('visitCode'),
+          this.sessionstorage.getItem('visitCode'),
         );
       } else {
         this.getMMUDiagnosisDetails(
           beneficiaryRegID,
-          localStorage.getItem('referredVisitID'),
+          this.sessionstorage.getItem('referredVisitID'),
           visitCategory,
-          localStorage.getItem('referredVisitCode'),
+          this.sessionstorage.getItem('referredVisitCode'),
         );
       }
     }

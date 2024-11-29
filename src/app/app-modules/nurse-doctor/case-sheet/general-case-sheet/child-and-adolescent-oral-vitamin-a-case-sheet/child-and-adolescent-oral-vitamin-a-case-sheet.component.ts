@@ -27,6 +27,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -70,10 +71,11 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
   constructor(
     private httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    private sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
     this.assignSelectedLanguage();
   }
 
