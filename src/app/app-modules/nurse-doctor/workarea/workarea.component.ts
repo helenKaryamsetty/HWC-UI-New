@@ -127,7 +127,6 @@ export class WorkareaComponent
 
   doctorFlag: any;
   nurseFlag: any;
-
   specialistFlag: any;
   patientMedicalForm!: FormGroup;
   patientBirthImmunizationHistoryForm!: FormGroup;
@@ -282,9 +281,11 @@ export class WorkareaComponent
     const disableFlag = this.visitCategory ? true : false;
     this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.visitID = this.sessionstorage.getItem('visitID');
-    this.nurseFlag = this.sessionstorage.getItem('nurseFlag');
-    this.doctorFlag = this.sessionstorage.getItem('doctorFlag');
-    this.specialistFlag = this.sessionstorage.getItem('specialist_flag');
+    this.nurseFlag = JSON.stringify(this.sessionstorage.getItem('nurseFlag'));
+    this.doctorFlag = JSON.stringify(this.sessionstorage.getItem('doctorFlag'));
+    this.specialistFlag = JSON.stringify(
+      this.sessionstorage.getItem('specialist_flag'),
+    );
     this.rbsPresentSubscription =
       this.idrsScoreService.rBSPresentFlag$.subscribe(
         (response) => (this.rbsPresent = response),
