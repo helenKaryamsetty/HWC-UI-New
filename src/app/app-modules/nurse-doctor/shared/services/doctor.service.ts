@@ -44,11 +44,18 @@ export class DoctorService {
   enableDispenseFlag = false;
   immunizationServiceFetchDetails: any = null;
   immunizationServiceValueChanged = false;
+  sessionID: any;
 
   constructor(
     private http: HttpClient,
     private sessionstorage: SessionStorageService,
-  ) {}
+  ) {
+    if (this.sessionstorage.getItem('sessionID') === '') {
+      this.sessionID = null;
+    } else {
+      this.sessionID = this.sessionstorage.getItem('sessionID');
+    }
+  }
 
   screeninDataFromNurse = new BehaviorSubject<any>(null);
   screeningData$ = this.screeninDataFromNurse.asObservable();
@@ -726,7 +733,8 @@ export class DoctorService {
       doctorFlag: this.sessionstorage.getItem('doctorFlag'),
       nurseFlag: this.sessionstorage.getItem('nurseFlag'),
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      sessionID: this.sessionID,
+      // sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
