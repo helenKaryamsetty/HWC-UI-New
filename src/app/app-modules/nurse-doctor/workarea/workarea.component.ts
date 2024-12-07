@@ -61,7 +61,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { SpecialistLoginComponent } from '../../core/components/specialist-login/specialist-login.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { HealthIdDisplayModalComponent } from 'Common-UI/src/registrar/health-id-display-modal/health-id-display-modal.component';
+import { HealthIdDisplayModalComponent } from 'Common-UI/src/registrar/abha-components/health-id-display-modal/health-id-display-modal.component';
 import { RegistrarService } from 'Common-UI/src/registrar/services/registrar.service';
 
 @Component({

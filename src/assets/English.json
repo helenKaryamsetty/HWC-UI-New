@@ -2092,8 +2092,17 @@
         "selfcare": "Self-Care",
         "investigations": "Investigations",
         "noRecordsFound": "No Records Found",
-        "enterMobileNumberToBeLinkedWithAbha": "Please enter phone number that needs to be linked with ABHA Card",
-        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?"
+        "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+        "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+        "enterABHANumberOrAadhar": "Enter Aadhaar Number Or ABHA Number",
+        "enterABHANumberOrMobile": "Enter Mobile Number Or ABHA Number",
+        "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+        "abhaAddressFound" : "ABHA Address Found:",
+        "searchAndDownloadAbha": "Search and Download ABHA",
+        "abhaSearchMode": "ABHA Search Mode*",
+        "verifyAbha": "Verify ABHA",
+        "issueInAbhaCard": "Issue in printing ABHA Card"
     }
 
     
