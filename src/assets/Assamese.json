@@ -2086,5 +2086,7 @@
         "searchAndDownloadAbha": "Search and Download ABHA",
         "abhaSearchMode": "ABHA Search Mode*",
         "verifyAbha": "Verify ABHA",
-        "issueInAbhaCard": "Issue in printing ABHA Card"      }
+        "issueInAbhaCard": "Issue in printing ABHA Card",
+        "fileUploadedSuccessfully": "File Uploaded successfully"
+      }
 }
