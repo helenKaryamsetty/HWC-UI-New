@@ -92,7 +92,7 @@ export class GeneralOpdHistoryComponent
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private ncdScreeningService: NcdScreeningService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

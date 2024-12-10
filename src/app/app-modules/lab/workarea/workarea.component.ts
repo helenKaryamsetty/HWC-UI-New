@@ -97,7 +97,7 @@ export class WorkareaComponent
     private masterdataService: MasterDataService,
     public httpServiceService: HttpServiceService,
     private labService: LabService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

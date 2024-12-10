@@ -68,7 +68,7 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private masterdataService: MasterdataService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     private router: Router,
   ) {}
 

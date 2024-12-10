@@ -60,7 +60,7 @@ export class GeneralOpdExaminationComponent
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

@@ -140,7 +140,7 @@ export class DoctorDiagnosisCaseSheetComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     public cdssService: CDSSService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

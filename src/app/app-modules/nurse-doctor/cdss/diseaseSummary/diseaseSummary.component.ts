@@ -51,7 +51,7 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
     private dialog: MatDialog,
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

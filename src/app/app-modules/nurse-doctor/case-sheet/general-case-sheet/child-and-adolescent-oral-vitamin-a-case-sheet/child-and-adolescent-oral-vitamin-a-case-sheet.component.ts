@@ -71,7 +71,7 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
   constructor(
     private httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

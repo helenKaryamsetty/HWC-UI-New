@@ -124,7 +124,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private dialog: MatDialog,
     private confirmationService: ConfirmationService,
     private ncdScreeningService: NcdScreeningService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

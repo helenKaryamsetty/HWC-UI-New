@@ -25,7 +25,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 
 @Injectable()
 export class WorkareaCanActivate implements CanActivate {
-  constructor(private sessionstorage: SessionStorageService) {}
+  constructor(readonly sessionstorage: SessionStorageService) {}
 
   canActivate() {
     const visitCategory = this.sessionstorage.getItem('visitCategory');

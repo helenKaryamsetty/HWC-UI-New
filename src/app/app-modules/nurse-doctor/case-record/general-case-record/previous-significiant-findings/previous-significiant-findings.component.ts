@@ -44,7 +44,7 @@ export class PreviousSignificiantFindingsComponent
   constructor(
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   rowsPerPage = 5;
   activePage = 1;

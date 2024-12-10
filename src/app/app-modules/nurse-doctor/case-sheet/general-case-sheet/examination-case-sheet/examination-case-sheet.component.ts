@@ -70,7 +70,7 @@ export class ExaminationCaseSheetComponent
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

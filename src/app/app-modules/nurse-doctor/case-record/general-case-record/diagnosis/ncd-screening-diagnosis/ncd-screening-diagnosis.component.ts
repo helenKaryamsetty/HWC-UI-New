@@ -104,7 +104,7 @@ export class NcdScreeningDiagnosisComponent
     private ncdScreeningService: NcdScreeningService,
     private idrsScoreService: IdrsscoreService,
     private nurseService: NurseService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

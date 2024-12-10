@@ -69,7 +69,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private confirmationService: ConfirmationService,
     private familyTaggingService: FamilyTaggingService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

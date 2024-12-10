@@ -100,7 +100,7 @@ export class GeneralPatientVitalsComponent
     private testInVitalsService: TestInVitalsService,
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

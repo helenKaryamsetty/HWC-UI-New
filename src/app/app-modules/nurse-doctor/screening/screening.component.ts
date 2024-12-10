@@ -96,7 +96,7 @@ export class ScreeningComponent
     private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit(): void {

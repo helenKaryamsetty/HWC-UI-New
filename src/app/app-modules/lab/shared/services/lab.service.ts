@@ -28,7 +28,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class LabService {
   constructor(
     private http: HttpClient,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   getLabWorklist() {

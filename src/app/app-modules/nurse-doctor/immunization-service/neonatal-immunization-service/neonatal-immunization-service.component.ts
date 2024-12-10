@@ -121,7 +121,7 @@ export class NeonatalImmunizationServiceComponent
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
   ) {}
 

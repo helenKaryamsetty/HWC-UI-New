@@ -85,7 +85,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     private masterdataService: MasterdataService,
     private router: Router,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
     this.formUtility.createCdssForm();

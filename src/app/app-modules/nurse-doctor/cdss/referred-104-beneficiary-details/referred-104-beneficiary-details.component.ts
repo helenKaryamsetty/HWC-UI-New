@@ -63,7 +63,7 @@ export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

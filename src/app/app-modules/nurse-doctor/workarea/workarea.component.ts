@@ -219,7 +219,7 @@ export class WorkareaComponent
     private registrarService: RegistrarService,
     private ncdScreeningService: NcdScreeningService,
     private dialog: MatDialog,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   isSpecialist = false;
   doctorSaveAndTCSave: any;

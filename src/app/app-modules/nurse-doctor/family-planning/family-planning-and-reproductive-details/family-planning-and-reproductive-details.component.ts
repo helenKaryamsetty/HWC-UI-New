@@ -125,7 +125,7 @@ export class FamilyPlanningAndReproductiveComponent
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private route: ActivatedRoute,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

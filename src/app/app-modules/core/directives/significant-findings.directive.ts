@@ -53,7 +53,7 @@ export class SignificantFindingsDirective {
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   openDialog(): void {

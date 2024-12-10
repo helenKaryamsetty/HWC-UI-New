@@ -144,7 +144,7 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   @Input()
   cbacScreeningForm!: FormGroup;

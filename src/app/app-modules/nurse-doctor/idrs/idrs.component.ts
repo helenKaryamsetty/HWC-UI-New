@@ -109,7 +109,7 @@ export class IdrsComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   currentLanguageSet: any;
 
   constructor(
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private route: ActivatedRoute,
     private dialog: MatDialog,

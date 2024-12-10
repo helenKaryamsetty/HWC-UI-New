@@ -73,7 +73,7 @@ export class NeonatalAndInfantServiceCaseSheetComponent
 
   constructor(
     private httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

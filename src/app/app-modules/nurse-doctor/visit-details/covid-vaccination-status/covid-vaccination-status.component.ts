@@ -54,7 +54,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   @Input()
   covidVaccineStatusForm!: FormGroup;

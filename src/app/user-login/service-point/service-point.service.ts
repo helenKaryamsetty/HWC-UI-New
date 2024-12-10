@@ -35,7 +35,7 @@ export class ServicePointService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   getServicePoints(userId: string, serviceProviderId: string) {

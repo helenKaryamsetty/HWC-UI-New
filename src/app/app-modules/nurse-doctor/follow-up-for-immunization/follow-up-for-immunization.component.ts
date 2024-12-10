@@ -105,7 +105,7 @@ export class FollowUpForImmunizationComponent
     public datepipe: DatePipe,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

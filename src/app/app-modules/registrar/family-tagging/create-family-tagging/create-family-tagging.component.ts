@@ -63,7 +63,7 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
     private familyTaggingService: FamilyTaggingService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 

@@ -10,7 +10,7 @@ export class InventoryService {
 
   constructor(
     @Inject(DOCUMENT) private document: any,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService,
   ) {}
 

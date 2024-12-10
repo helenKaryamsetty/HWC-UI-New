@@ -107,7 +107,7 @@ export class DispensationDetailsComponent
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

@@ -93,7 +93,7 @@ export class PatientVisitDetailsComponent
     private ncdScreeningService: NcdScreeningService,
     private nurseService: NurseService,
     private route: ActivatedRoute,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

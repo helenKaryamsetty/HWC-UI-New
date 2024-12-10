@@ -73,7 +73,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     private http_service: HttpServiceService,
     private dialog: MatDialog,
     public service: IotService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

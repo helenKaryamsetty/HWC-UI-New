@@ -106,7 +106,7 @@ export class FamilyTaggingDetailsComponent
     private familyTaggingService: FamilyTaggingService,
     private registrarService: RegistrarService,
     private route: ActivatedRoute,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

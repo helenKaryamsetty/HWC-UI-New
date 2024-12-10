@@ -144,7 +144,7 @@ export class PreviousVisitDetailsComponent
     private cameraService: CameraService,
     private router: Router,
     public httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

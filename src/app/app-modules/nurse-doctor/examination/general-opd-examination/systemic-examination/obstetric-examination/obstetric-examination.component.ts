@@ -215,7 +215,7 @@ export class ObstetricExaminationComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private datePipe: DatePipe,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
   ) {}
 

@@ -180,7 +180,7 @@ export class QuickConsultComponent
     private dialog: MatDialog,
     private testInVitalsService: TestInVitalsService,
     private nurseService: NurseService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

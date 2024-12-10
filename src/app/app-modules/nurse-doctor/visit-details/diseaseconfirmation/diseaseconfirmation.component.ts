@@ -83,7 +83,7 @@ export class DiseaseconfirmationComponent
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

@@ -48,7 +48,7 @@ export class DoctorService {
 
   constructor(
     private http: HttpClient,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     if (this.sessionstorage.getItem('sessionID') === '') {
       this.sessionID = null;

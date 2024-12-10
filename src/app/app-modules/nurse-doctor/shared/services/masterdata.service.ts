@@ -72,7 +72,7 @@ export class MasterdataService {
 
   constructor(
     private http: HttpClient,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   /**

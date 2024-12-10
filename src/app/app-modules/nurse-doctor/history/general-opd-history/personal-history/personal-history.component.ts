@@ -114,7 +114,7 @@ export class GeneralPersonalHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private ncdScreeningService: NcdScreeningService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

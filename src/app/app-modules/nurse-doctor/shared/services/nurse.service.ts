@@ -89,7 +89,7 @@ export class NurseService {
     private http: HttpClient,
     private spinnerService: SpinnerService,
     private ncdScreeningService: NcdScreeningService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   getNurseWorklist() {

@@ -69,7 +69,7 @@ export class FamilyPlanningComponent
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

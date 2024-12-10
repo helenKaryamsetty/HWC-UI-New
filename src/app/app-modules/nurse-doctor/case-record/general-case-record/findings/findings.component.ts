@@ -100,7 +100,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this.formUtils = new GeneralUtils(this.fb, this.sessionstorage);
   }

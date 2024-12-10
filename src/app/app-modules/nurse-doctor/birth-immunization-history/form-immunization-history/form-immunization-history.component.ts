@@ -86,7 +86,7 @@ export class FormImmunizationHistoryComponent
     private dialog: MatDialog,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   ngOnInit() {
     this.assignSelectedLanguage();

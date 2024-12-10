@@ -33,7 +33,7 @@ export class ServiceComponent implements OnInit, DoCheck {
     private servicePointService: ServicePointService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

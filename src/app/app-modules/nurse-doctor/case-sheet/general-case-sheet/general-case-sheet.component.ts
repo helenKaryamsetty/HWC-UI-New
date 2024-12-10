@@ -85,7 +85,7 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

@@ -52,7 +52,7 @@ export class AdherenceComponent implements OnChanges, OnInit, DoCheck {
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

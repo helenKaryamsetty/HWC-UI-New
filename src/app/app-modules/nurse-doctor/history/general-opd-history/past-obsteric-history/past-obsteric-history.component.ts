@@ -85,7 +85,7 @@ export class PastObstericHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this.formUtility = new GeneralUtils(this.fb, this.sessionstorage);
   }

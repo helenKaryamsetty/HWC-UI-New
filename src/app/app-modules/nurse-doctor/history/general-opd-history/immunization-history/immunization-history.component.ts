@@ -55,7 +55,7 @@ export class ImmunizationHistoryComponent
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   /**Modified by JA354063 */
   /** Code optimization required */

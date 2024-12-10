@@ -69,7 +69,7 @@ export class BirthImmunizationHistoryComponent
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

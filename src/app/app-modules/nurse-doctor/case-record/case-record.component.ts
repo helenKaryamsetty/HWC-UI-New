@@ -62,7 +62,7 @@ export class CaseRecordComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private doctorService: DoctorService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

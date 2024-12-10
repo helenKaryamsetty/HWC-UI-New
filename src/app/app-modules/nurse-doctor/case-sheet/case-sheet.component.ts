@@ -52,7 +52,7 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private injector: Injector,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService,
   ) {}
 

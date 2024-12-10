@@ -90,7 +90,7 @@ export class PastHistoryComponent
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     private hrpService: HrpService,
-    private sessionstorage: SessionStorageService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
