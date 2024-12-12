@@ -60,7 +60,7 @@ export const environment = {
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
-  abhaExtension: `@abdm`,
+  abhaExtension: `@sbx`,
   diabetes: `Diabetes Mellitus`,
   hypertension: `Hypertension`,
   oral: `Oral cancer`,
