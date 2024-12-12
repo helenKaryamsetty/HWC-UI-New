@@ -16,3 +16,8 @@
     display: inline-block;
   }
 
+  .container-fluid {
+    max-height: 400px; 
+    overflow-y: auto;  
+    overflow-x: hidden; 
+   }
