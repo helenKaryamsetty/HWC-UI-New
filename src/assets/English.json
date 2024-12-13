@@ -2105,7 +2105,8 @@
         "issueInAbhaCard": "Issue in printing ABHA Card",
         "fileUploadedSuccessfully": "File Uploaded successfully",
         "verifyMobileOtp": "Verify Mobile OTP",
-        "enterMobileOtp": "Enter Mobile OTP"
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify"
     }
 
     
