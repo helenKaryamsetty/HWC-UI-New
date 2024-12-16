@@ -2121,7 +2121,8 @@
         "verifyAbha": "Verify ABHA",
         "issueInAbhaCard": "Issue in printing ABHA Card",
         "verifyMobileOtp": "Verify Mobile OTP",
-        "enterMobileOtp": "Enter Mobile OTP"    
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify"
     }  
 
     
