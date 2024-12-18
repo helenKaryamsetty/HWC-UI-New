@@ -32,7 +32,6 @@ import { FormBuilder } from '@angular/forms';
 import { DataSyncLoginComponent } from 'src/app/app-modules/data-sync/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from 'src/app/app-modules/data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login-cmp',
@@ -61,7 +60,6 @@ export class LoginComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private cookieService: CookieService,
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -151,8 +149,6 @@ export class LoginComponent implements OnInit {
             console.log('res in login', res);
             if (res.statusCode === 200) {
               if (res?.data?.previlegeObj[0]) {
-                const tkn = res.data.Jwttoken;
-                this.cookieService.set('Jwttoken', tkn);
                 this.sessionstorage.setItem(
                   'loginDataResponse',
                   JSON.stringify(res.data),
@@ -203,8 +199,6 @@ export class LoginComponent implements OnInit {
                               .subscribe((userLoggedIn: any) => {
                                 if (userLoggedIn.statusCode === 200) {
                                   if (userLoggedIn?.data?.previlegeObj[0]) {
-                                    const tkn = userLoggedIn.data.Jwttoken;
-                                    this.cookieService.set('Jwttoken', tkn);
                                     this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data),
