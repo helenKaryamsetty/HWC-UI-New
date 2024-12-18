@@ -53,7 +53,7 @@ const ADMIN_API = `${adminIP}/adminapi-v3.0.0/`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
 const FHIR_API = `${FHIRIP}/fhirapi-v3.0.0/`;
-const sessionStorageEncKey = 'asdfghjkjhgfd';
+const sessionStorageEncKey = '<>';
 
 export const environment = {
   production: false,
