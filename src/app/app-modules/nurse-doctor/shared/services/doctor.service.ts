@@ -733,8 +733,7 @@ export class DoctorService {
       doctorFlag: this.sessionstorage.getItem('doctorFlag'),
       nurseFlag: this.sessionstorage.getItem('nurseFlag'),
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      // sessionID: this.sessionID,
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      sessionID: this.sessionID,
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
@@ -2516,8 +2515,10 @@ export class DoctorService {
     visitCategory: any,
   ) {
     const otherDetails = Object.assign({
-      benRegID: beneficiaryRegID,
-      benVisitID: visitID,
+      // benRegID: beneficiaryRegID,
+      // benVisitID: visitID,
+      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
     });
 
@@ -2599,9 +2600,14 @@ export class DoctorService {
     visitcode: any,
   ) {
     const otherDetails = Object.assign({
-      benRegID: beneficiaryRegID,
-      benVisitID: visitID,
-      visitCode: visitcode,
+      // benRegID: beneficiaryRegID,
+      // benVisitID: visitID,
+      // visitCode: visitcode,
+      // benRegID: beneficiaryRegID,
+      // benVisitID: visitID,
+      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     });
 
     if (visitCategory === 'General OPD (QC)') {
