@@ -58,7 +58,7 @@ const API104 = `${IP104}/104api-v3.0.0/`;
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 const FHIR_API = `${FHIRIP}/fhirapi-v1.2/`;
 const mmuUICasesheet = `${tmUI_IP}tmui-v3.0.0`;
-const sessionStorageEncKey = '<>';
+const sessionStorageEncKey = '';
 
 export const environment = {
   production: true,

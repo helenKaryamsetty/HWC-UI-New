@@ -37,7 +37,7 @@ const API104 = `${IP104}/104api-v3.0.0/`;
 
 const FHIR_API = `${FHIRIP}/fhirapi-v1.2/`;
 const mmuUICasesheet = `${tmUI_IP}tmui-v3.0.0`;
-const sessionStorageEncKey = '<>';
+const sessionStorageEncKey = '';
 
 export const environment = {
   production: false,
