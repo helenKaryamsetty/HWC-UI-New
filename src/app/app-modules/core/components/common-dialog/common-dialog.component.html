@@ -137,7 +137,12 @@
   </h3>
   <div class="message">{{ message }}</div>
   <div class="action">
-    <button class="full-width-login button-ok" mat-dialog-close cdkFocusInitial>
+    <button
+      class="full-width-login button-ok"
+      (click)="matDialogRef.close(true)"
+      mat-dialog-close
+      cdkFocusInitial
+    >
       {{ btnOkText }}
     </button>
   </div>

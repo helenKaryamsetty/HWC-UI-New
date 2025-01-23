@@ -26,17 +26,17 @@ const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 //  const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}commonapi-v3.0.0/`;
-const COMMON_API = `${commonIP}commonapi-v3.0.0/`;
-const TM_API = `${tmIP}hwc-facility-service-v3.0.0/`;
-const MMU_API = `${mmuIP}mmuapi-v3.0.0/`;
-const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v3.0.0/`;
-const SCHEDULER_API = `${schedulerIP}schedulerapi-v3.0.0/`;
-const ADMIN_API = `${adminIP}/adminapi-v3.0.0`;
-const API104 = `${IP104}/104api-v3.0.0/`;
+const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
+const COMMON_API = `${commonIP}commonapi-v1.0/`;
+const TM_API = `${tmIP}hwc-facility-service-v1.0/`;
+const MMU_API = `${mmuIP}mmuapi-v1.0/`;
+const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
+const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
+const ADMIN_API = `${adminIP}/adminapi-v1.0`;
+const API104 = `${IP104}/104api-v1.0/`;
 
-const FHIR_API = `${FHIRIP}/fhirapi-v1.2/`;
-const mmuUICasesheet = `${tmUI_IP}tmui-v3.0.0`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
+const mmuUICasesheet = `${tmUI_IP}tmui-v1.0`;
 const sessionStorageEncKey = '';
 
 export const environment = {
@@ -46,7 +46,7 @@ export const environment = {
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
-  abhaExtension: `@abdm`,
+  abhaExtension: `@sbx`,
   diabetes: `Diabetes Mellitus`,
   hypertension: `Hypertension`,
   oral: `Oral cancer`,
@@ -505,4 +505,16 @@ export const environment = {
   getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  /* ABDM Mapped Facility */
+  getAbdmMappedFacility: `${COMMON_API}facility/getWorklocationMappedAbdmFacility/`,
+  saveAbdmFacilityIdForVisit: `${FHIR_API}facility/saveAbdmFacilityId`,
+
+  /* Abha V3 APIs */
+  requestOtpForAbhaEnroll: `${FHIR_API}abhaCreation/requestOtpForAbhaEnrollment`,
+  abhaEnrollmentByAadhaar: `${FHIR_API}abhaCreation/abhaEnrollmentByAadhaar`,
+  verifyMobileForAbhaAuth: `${FHIR_API}abhaCreation/verifyAuthByAbdm`,
+  requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
+  verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
+  printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
 };
