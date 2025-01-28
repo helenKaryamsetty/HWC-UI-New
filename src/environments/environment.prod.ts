@@ -49,7 +49,7 @@ const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 // Without API MAN Configuration
 const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
 const COMMON_API = `${commonIP}commonapi-v1.0/`;
-const TM_API = `${tmIP}hwc-facility-service-v1.0/`;
+const TM_API = `${tmIP}hwc-facility-service/`;
 const MMU_API = `${mmuIP}mmuapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
@@ -77,11 +77,11 @@ export const environment = {
   IdrsOrCbac: ['IDRS', 'CBAC'],
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}/hwc-inventory-wasa/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}/hwc-inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler-wasa/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
