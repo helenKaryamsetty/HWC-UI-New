@@ -41,6 +41,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { VisitDetailUtils } from '../../shared/utility';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cdss-form',
@@ -84,8 +85,9 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     private masterdataService: MasterdataService,
     private router: Router,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
   ) {
-    this.formUtility = new VisitDetailUtils(this.fb);
+    this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
     this.formUtility.createCdssForm();
   }
 
@@ -112,8 +114,8 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
 
   showingCdssForm() {
     if (
-      localStorage.getItem('currentRole') === 'Nurse' ||
-      localStorage.getItem('currentRole') === 'Doctor'
+      this.sessionstorage.getItem('currentRole') === 'Nurse' ||
+      this.sessionstorage.getItem('currentRole') === 'Doctor'
     ) {
       this.showCdssForm = true;
     } else {
@@ -124,23 +126,23 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     if (String(this.mode) === 'view') {
       2;
       this.getChiefComplaintSymptoms();
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getCdssDetails(benRegID, visitID);
     }
 
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getCdssDetails(benRegID, visitID);
     }
   }
   getCdssDetails(beneficiaryRegID: any, visitID: any) {
-    const visitCategory = localStorage.getItem('visitCategory');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     if (visitCategory === 'General OPD (QC)') {
       this.disableVisit = true;
       this.viewMode = true;
@@ -198,8 +200,9 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
 
   getChiefComplaintSymptoms() {
     const reqObj = {
-      age: localStorage.getItem('patientAge'),
-      gender: localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+      age: this.sessionstorage.getItem('patientAge'),
+      gender:
+        this.sessionstorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
     };
 
     this.cdssService.getcheifComplaintSymptoms(reqObj).subscribe((res: any) => {
@@ -225,9 +228,11 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
       searchSymptom !== ''
     ) {
       const reqObj = {
-        age: localStorage.getItem('patientAge'),
+        age: this.sessionstorage.getItem('patientAge'),
         gender:
-          localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+          this.sessionstorage.getItem('beneficiaryGender') === 'Male'
+            ? 'M'
+            : 'F',
         symptom: searchSymptom,
       };
       console.log('reqObj in getQuestions', reqObj);
@@ -271,9 +276,11 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
       disableClose: true,
       data: {
         patientData: {
-          age: localStorage.getItem('patientAge'),
+          age: this.sessionstorage.getItem('patientAge'),
           gender:
-            localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+            this.sessionstorage.getItem('beneficiaryGender') === 'Male'
+              ? 'M'
+              : 'F',
           symptom: searchSymptom,
         },
       },
@@ -374,21 +381,22 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   }
 
   saveData() {
-    const patientAge: any = localStorage.getItem('patientAge');
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const patientAge: any = this.sessionstorage.getItem('patientAge');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const reqObj = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      patientName: localStorage.getItem('patientName'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      patientName: this.sessionstorage.getItem('patientName'),
       patientAge: patientAge,
       patientGenderID:
-        localStorage.getItem('beneficiaryGender') === 'Male' ? 1 : 2,
-      sessionID: localStorage.getItem('sessionID'),
-      serviceID: localStorage.getItem('serviceID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      createdBy: localStorage.getItem('userName'),
+        this.sessionstorage.getItem('beneficiaryGender') === 'Male' ? 1 : 2,
+      sessionID: this.sessionstorage.getItem('sessionID'),
+      serviceID: this.sessionstorage.getItem('serviceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
       vanID: JSON.parse(serviceLineDetails).vanID,
-      benCallID: localStorage.getItem('benCallID'),
+      benCallID: this.sessionstorage.getItem('benCallID'),
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       selecteDiagnosisID: this.sctID_psd_toSave,
       selecteDiagnosis: this.cdssForm.controls['selectedDiagnosis'].value,

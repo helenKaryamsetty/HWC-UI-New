@@ -41,6 +41,7 @@ import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-test-and-radiology',
@@ -77,6 +78,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     private idrsScoreService: IdrsscoreService,
     public sanitizer: DomSanitizer,
     private testInVitalsService: TestInVitalsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   currentLabRowsPerPage = 5;
@@ -88,12 +90,12 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   visitID: any;
   visitCategory: any;
   ngOnInit() {
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    this.visitID = localStorage.getItem('visitID');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
     this.assignSelectedLanguage();
     this.testInVitalsService.clearVitalsRBSValueInReports();
     this.testInVitalsService.clearVitalsRBSValueInReportsInUpdate();
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     if (
       this.visitCategory.toLowerCase() ===
         'neonatal and infant health care services' ||
@@ -101,8 +103,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         'childhood & adolescent healthcare services'
     ) {
       if (
-        localStorage.getItem('referredVisitCode') === 'undefined' ||
-        localStorage.getItem('referredVisitCode') === null
+        this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
+        this.sessionstorage.getItem('referredVisitCode') === null
       ) {
         this.getTestResults(this.visitCategory);
       } else {
@@ -139,8 +141,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         }
 
         if (
-          localStorage.getItem('referredVisitCode') === 'undefined' ||
-          localStorage.getItem('referredVisitCode') === null
+          this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
+          this.sessionstorage.getItem('referredVisitCode') === null
         ) {
           this.getTestResults(this.visitCategory);
         } else {
@@ -298,7 +300,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         beneficiaryRegID,
         visitID,
         visitCategory,
-        localStorage.getItem('visitCode'),
+        this.sessionstorage.getItem('visitCode'),
       )
       .subscribe((res: any) => {
         console.log('response archive', res);
@@ -314,9 +316,9 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           this.testMMUResultsSubscription = this.doctorService
             .getMMUCaseRecordAndReferDetails(
               beneficiaryRegID,
-              localStorage.getItem('referredVisitID'),
+              this.sessionstorage.getItem('referredVisitID'),
               visitCategory,
-              localStorage.getItem('referredVisitCode'),
+              this.sessionstorage.getItem('referredVisitCode'),
             )
             .subscribe((response: any) => {
               if (response && response.statusCode === 200 && response.data) {
@@ -522,7 +524,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   visitCode: any;
   showArchivedTestResult(visitCode: any) {
     const archivedReport = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       visitCode: visitCode.visitCode,
     };
     this.doctorService

@@ -49,6 +49,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-neonatal-immunization-service',
@@ -102,7 +103,7 @@ export class NeonatalImmunizationServiceComponent
   nurseMasterDataSubscription!: Subscription;
   masterData: any;
   missingVaccineList: any = [];
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
   enableFieldsToCaptureMissedVaccineDetails = false;
   currentVaccineTaken: any = [];
   capturedImmunizationService: any;
@@ -120,6 +121,7 @@ export class NeonatalImmunizationServiceComponent
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
   ) {}
 

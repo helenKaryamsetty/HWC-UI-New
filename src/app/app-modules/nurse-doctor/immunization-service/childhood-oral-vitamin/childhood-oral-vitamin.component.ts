@@ -44,6 +44,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-childhood-oral-vitamin',
@@ -89,7 +90,7 @@ export class ChildhoodOralVitaminComponent
 
   currentLanguageSet: any;
   today: any;
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
   nurseMasterDataSubscription!: Subscription;
   oralVitaminADoses: any = [];
   vaccineStatus = ['Given', 'Not Given'];
@@ -103,6 +104,7 @@ export class ChildhoodOralVitaminComponent
     private fb: FormBuilder,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   todayDate = new Date();
