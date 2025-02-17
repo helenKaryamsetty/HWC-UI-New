@@ -725,3 +725,8 @@ button.mat-button[_ngcontent-c12] {
       height: auto !important;
   }
 }
+
+.mat-mdc-checkbox label {
+  font-weight: 500 !important;
+  cursor: pointer;
+}
