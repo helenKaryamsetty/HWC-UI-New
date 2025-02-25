@@ -517,4 +517,5 @@ export const environment = {
   requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
+  printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 };
