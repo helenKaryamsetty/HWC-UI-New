@@ -329,14 +329,14 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
                 );
                 labTestArray = mmulabResultsRef;
 
-                for (
-                  let i = 0, j = this.filteredLabResults.data.length;
-                  i < labTestArray.length;
-                  i++, j++
-                ) {
-                  this.filteredLabResults.data[j] = labTestArray[i];
-                }
-                console.log('labTestArray', labTestArray);
+                // for (
+                //   let i = 0, j = this.filteredLabResults.data.length;
+                //   i < labTestArray.length;
+                //   i++, j++
+                // ) {
+                //   this.filteredLabResults.data[j] = labTestArray[i];
+                // }
+                // console.log('labTestArray', labTestArray);
 
                 this.labResults = this.filteredLabResults.data;
 
