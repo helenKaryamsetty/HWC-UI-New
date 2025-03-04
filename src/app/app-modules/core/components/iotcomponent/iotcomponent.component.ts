@@ -30,7 +30,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { IotService } from '../../services/iot.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-iotcomponent',
@@ -59,7 +58,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -73,8 +71,7 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     this.startAPI = this.input['startAPI'];
     this.output = this.input['output'];
     this.procedure = this.input['procedure'];
-    const providerServiceMapID =
-      this.sessionstorage.getItem('providerServiceID');
+    const providerServiceMapID = localStorage.getItem('providerServiceID');
     if (
       this.procedure !== undefined &&
       this.procedure.value !== undefined &&

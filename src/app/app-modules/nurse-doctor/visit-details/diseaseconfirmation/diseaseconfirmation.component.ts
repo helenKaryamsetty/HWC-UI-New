@@ -39,7 +39,6 @@ import { NcdScreeningService } from '../../shared/services/ncd-screening.service
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { environment } from 'src/environments/environment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-diseaseconfirmation',
@@ -83,7 +82,6 @@ export class DiseaseconfirmationComponent
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -138,8 +136,8 @@ export class DiseaseconfirmationComponent
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       if (visitID !== null && benRegID !== null) {
         if (this.idrsOrCbac === 'idrs')
           this.getIDRSDetailsFrmNurse(visitID, benRegID);
@@ -172,15 +170,12 @@ export class DiseaseconfirmationComponent
 
   addMoreDiseases(data: any) {
     this.getData().push(
-      new VisitDetailUtils(
-        this.fb,
-        this.sessionstorage,
-      ).createPatientDiseaseArrayForm(data),
+      new VisitDetailUtils(this.fb).createPatientDiseaseArrayForm(data),
     );
   }
   fetchPreviousVisitConfirmedDiseases() {
     const obj = {
-      beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
+      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
     };
     this.nurseService.getPreviousVisitConfirmedDiseases(obj).subscribe(
       (value: any) => {
@@ -279,7 +274,7 @@ export class DiseaseconfirmationComponent
           if (this.confirmedDisease && this.confirmedDisease.length > 0) {
             const obj = {
               beneficiaryRegId: benRegID,
-              visitCode: this.sessionstorage.getItem('visitCode'),
+              visitCode: localStorage.getItem('visitCode'),
             };
 
             this.cbacDiseaseDetailsSubscription = this.nurseService
@@ -522,7 +517,7 @@ export class DiseaseconfirmationComponent
             this.diseaseArray = this.diseases;
           }
           const obj = {
-            benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+            benRegID: localStorage.getItem('beneficiaryRegID'),
           };
           this.nurseService.getPreviousVisitData(obj).subscribe((res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
@@ -773,7 +768,7 @@ export class DiseaseconfirmationComponent
             this.diseaseArray = this.diseases;
 
             const obj = {
-              benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+              benRegID: localStorage.getItem('beneficiaryRegID'),
             };
             this.nurseService
               .getPreviousVisitData(obj)

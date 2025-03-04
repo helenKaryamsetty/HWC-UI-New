@@ -50,7 +50,6 @@ import { NcdScreeningService } from '../../../shared/services/ncd-screening.serv
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-personal-history',
@@ -114,7 +113,6 @@ export class GeneralPersonalHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private ncdScreeningService: NcdScreeningService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -779,7 +777,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousTobaccoHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousTobaccoHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -840,7 +838,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAlcoholHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAlcoholHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -872,7 +870,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAllergyHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAllergyHistory(benRegID, this.visitCategory)
       .subscribe(

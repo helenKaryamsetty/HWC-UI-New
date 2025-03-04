@@ -37,7 +37,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface Beneficary {
   firstName: string;
@@ -112,7 +111,6 @@ export class SearchDialogComponent implements OnInit, DoCheck {
     private registrarService: RegistrarService,
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -212,10 +210,10 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   onIDCardSelected() {}
 
   /**
-   * get states from this.sessionstorage and set default state
+   * get states from localstorage and set default state
    */
   getStatesData() {
-    const location: any = this.sessionstorage.getItem('location');
+    const location: any = localStorage.getItem('location');
     this.location = JSON.parse(location);
     console.log(location, 'gotit');
     if (location) {

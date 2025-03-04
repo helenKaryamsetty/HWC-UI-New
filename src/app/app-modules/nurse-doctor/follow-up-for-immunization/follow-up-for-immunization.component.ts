@@ -38,7 +38,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-follow-up-for-immunization',
@@ -88,7 +87,7 @@ export class FollowUpForImmunizationComponent
   futureDate = new Date();
   currentLanguageSet: any;
 
-  utils = new GeneralUtils(this.fb, this.sessionstorage);
+  utils = new GeneralUtils(this.fb);
   dueVaccines: any = [];
   nextImmunizationSession: any = [];
   male = false;
@@ -105,12 +104,11 @@ export class FollowUpForImmunizationComponent
     public datepipe: DatePipe,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = this.sessionstorage.getItem('visitCategory');
+    this.visitCategory = localStorage.getItem('visitCategory');
     this.futureDate.setDate(this.futureDate.getDate() + 1);
     this.loadMasterData();
     this.getBenificiaryDetails();

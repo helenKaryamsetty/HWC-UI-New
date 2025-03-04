@@ -39,7 +39,6 @@ import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-investigations',
@@ -67,7 +66,6 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -95,20 +93,19 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
           });
 
           if (String(this.mode) === 'view') {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getInvestigation(benRegID, visitID);
           }
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getInvestigation(benRegID, visitID);
           }
         }

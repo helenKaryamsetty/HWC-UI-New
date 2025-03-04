@@ -35,7 +35,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-worklist',
@@ -78,33 +77,32 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     private cameraService: CameraService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.sessionstorage.setItem('currentRole', 'Nurse');
+    localStorage.setItem('currentRole', 'Nurse');
     this.removeBeneficiaryDataForNurseVisit();
     this.getNurseWorklist();
     this.beneficiaryDetailsService.reset();
   }
 
   ngOnDestroy() {
-    this.sessionstorage.removeItem('currentRole');
+    localStorage.removeItem('currentRole');
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    this.sessionstorage.removeItem('visitCode');
-    this.sessionstorage.removeItem('beneficiaryGender');
-    this.sessionstorage.removeItem('benFlowID');
-    this.sessionstorage.removeItem('visitCategory');
-    this.sessionstorage.removeItem('visitReason');
-    this.sessionstorage.removeItem('beneficiaryRegID');
-    this.sessionstorage.removeItem('visitID');
-    this.sessionstorage.removeItem('beneficiaryID');
-    this.sessionstorage.removeItem('doctorFlag');
-    this.sessionstorage.removeItem('nurseFlag');
-    this.sessionstorage.removeItem('pharmacist_flag');
+    localStorage.removeItem('visitCode');
+    localStorage.removeItem('beneficiaryGender');
+    localStorage.removeItem('benFlowID');
+    localStorage.removeItem('visitCategory');
+    localStorage.removeItem('visitReason');
+    localStorage.removeItem('beneficiaryRegID');
+    localStorage.removeItem('visitID');
+    localStorage.removeItem('beneficiaryID');
+    localStorage.removeItem('doctorFlag');
+    localStorage.removeItem('nurseFlag');
+    localStorage.removeItem('pharmacist_flag');
   }
 
   getNurseWorklist() {
@@ -220,7 +218,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
             } else {
               this.cbacData = null;
               this.beneficiaryDetailsService.cbacData = this.cbacData;
-              this.sessionstorage.removeItem('visitCategory');
+              localStorage.removeItem('visitCategory');
               if (beneficiary.nurseFlag === 100) {
                 this.confirmationService
                   .confirm(
@@ -229,39 +227,24 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
                   )
                   .subscribe((result) => {
                     if (result) {
-                      this.sessionstorage.setItem(
-                        'visitCode',
-                        beneficiary.visitCode,
-                      );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem('visitCode', beneficiary.visitCode);
+                      localStorage.setItem(
                         'beneficiaryGender',
                         beneficiary.genderName,
                       );
-                      this.sessionstorage.setItem(
-                        'visitCategory',
-                        'NCD screening',
-                      );
-                      this.sessionstorage.setItem(
-                        'visitID',
-                        beneficiary.benVisitID,
-                      );
-                      this.sessionstorage.setItem(
-                        'nurseFlag',
-                        beneficiary.nurseFlag,
-                      );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem('visitCategory', 'NCD screening');
+                      localStorage.setItem('visitID', beneficiary.benVisitID);
+                      localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
+                      localStorage.setItem(
                         'beneficiaryRegID',
                         beneficiary.beneficiaryRegID,
                       );
-                      this.sessionstorage.setItem(
-                        'benFlowID',
-                        beneficiary.benFlowID,
-                      );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem('benFlowID', beneficiary.benFlowID);
+                      localStorage.setItem(
                         'beneficiaryID',
                         beneficiary.beneficiaryID,
                       );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem(
                         'benVisitNo',
                         beneficiary.benVisitNo,
                       );
@@ -279,23 +262,20 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
                   )
                   .subscribe((result) => {
                     if (result) {
-                      this.sessionstorage.setItem(
+                      localStorage.setItem(
                         'beneficiaryGender',
                         beneficiary.genderName,
                       );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem(
                         'beneficiaryRegID',
                         beneficiary.beneficiaryRegID,
                       );
-                      this.sessionstorage.setItem(
-                        'benFlowID',
-                        beneficiary.benFlowID,
-                      );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem('benFlowID', beneficiary.benFlowID);
+                      localStorage.setItem(
                         'beneficiaryID',
                         beneficiary.beneficiaryID,
                       );
-                      this.sessionstorage.setItem(
+                      localStorage.setItem(
                         'benVisitNo',
                         beneficiary.benVisitNo,
                       );
@@ -326,7 +306,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
       this.cbacData !== null &&
       this.cbacData.length > 0
     ) {
-      this.sessionstorage.removeItem('visitCategory');
+      localStorage.removeItem('visitCategory');
       if (beneficiary.nurseFlag === 100) {
         this.confirmationService
           .confirmCBAC(
@@ -336,24 +316,18 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           )
           .subscribe((result) => {
             if (result) {
-              this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
-              this.sessionstorage.setItem(
-                'beneficiaryGender',
-                beneficiary.genderName,
-              );
-              this.sessionstorage.setItem('visitCategory', 'NCD screening');
-              this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
-              this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
-              this.sessionstorage.setItem(
+              localStorage.setItem('visitCode', beneficiary.visitCode);
+              localStorage.setItem('beneficiaryGender', beneficiary.genderName);
+              localStorage.setItem('visitCategory', 'NCD screening');
+              localStorage.setItem('visitID', beneficiary.benVisitID);
+              localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
+              localStorage.setItem(
                 'beneficiaryRegID',
                 beneficiary.beneficiaryRegID,
               );
-              this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-              this.sessionstorage.setItem(
-                'beneficiaryID',
-                beneficiary.beneficiaryID,
-              );
-              this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
+              localStorage.setItem('benFlowID', beneficiary.benFlowID);
+              localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+              localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
                 '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
@@ -369,20 +343,14 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           )
           .subscribe((result) => {
             if (result) {
-              this.sessionstorage.setItem(
-                'beneficiaryGender',
-                beneficiary.genderName,
-              );
-              this.sessionstorage.setItem(
+              localStorage.setItem('beneficiaryGender', beneficiary.genderName);
+              localStorage.setItem(
                 'beneficiaryRegID',
                 beneficiary.beneficiaryRegID,
               );
-              this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-              this.sessionstorage.setItem(
-                'beneficiaryID',
-                beneficiary.beneficiaryID,
-              );
-              this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
+              localStorage.setItem('benFlowID', beneficiary.benFlowID);
+              localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+              localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
                 '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
@@ -393,7 +361,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       this.cbacData = null;
       this.beneficiaryDetailsService.cbacData = this.cbacData;
-      this.sessionstorage.removeItem('visitCategory');
+      localStorage.removeItem('visitCategory');
       if (beneficiary.nurseFlag === 100) {
         this.confirmationService
           .confirm(
@@ -402,24 +370,18 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           )
           .subscribe((result) => {
             if (result) {
-              this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
-              this.sessionstorage.setItem(
-                'beneficiaryGender',
-                beneficiary.genderName,
-              );
-              this.sessionstorage.setItem('visitCategory', 'NCD screening');
-              this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
-              this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
-              this.sessionstorage.setItem(
+              localStorage.setItem('visitCode', beneficiary.visitCode);
+              localStorage.setItem('beneficiaryGender', beneficiary.genderName);
+              localStorage.setItem('visitCategory', 'NCD screening');
+              localStorage.setItem('visitID', beneficiary.benVisitID);
+              localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
+              localStorage.setItem(
                 'beneficiaryRegID',
                 beneficiary.beneficiaryRegID,
               );
-              this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-              this.sessionstorage.setItem(
-                'beneficiaryID',
-                beneficiary.beneficiaryID,
-              );
-              this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
+              localStorage.setItem('benFlowID', beneficiary.benFlowID);
+              localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+              localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
                 '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,
@@ -434,20 +396,14 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
           )
           .subscribe((result) => {
             if (result) {
-              this.sessionstorage.setItem(
-                'beneficiaryGender',
-                beneficiary.genderName,
-              );
-              this.sessionstorage.setItem(
+              localStorage.setItem('beneficiaryGender', beneficiary.genderName);
+              localStorage.setItem(
                 'beneficiaryRegID',
                 beneficiary.beneficiaryRegID,
               );
-              this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-              this.sessionstorage.setItem(
-                'beneficiaryID',
-                beneficiary.beneficiaryID,
-              );
-              this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
+              localStorage.setItem('benFlowID', beneficiary.benFlowID);
+              localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+              localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
               this.router.navigate([
                 '/nurse-doctor/attendant/nurse/patient/',
                 beneficiary.beneficiaryRegID,

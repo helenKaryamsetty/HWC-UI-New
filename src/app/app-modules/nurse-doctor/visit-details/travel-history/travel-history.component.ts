@@ -35,7 +35,6 @@ import {
 } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-travel-history',
@@ -94,7 +93,6 @@ export class TravelHistoryComponent
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private fb: FormBuilder,
-    readonly sessionstorage: SessionStorageService,
   ) {
     this.masterdataService.listen().subscribe((m: any) => {
       console.log(m);
@@ -124,12 +122,12 @@ export class TravelHistoryComponent
   ngOnChanges() {
     if (this.mode?.toLowerCase() === 'view') {
       this.readTravel = true;
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getHistoryDetails(benRegID, visitID);
     }
 
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -137,8 +135,8 @@ export class TravelHistoryComponent
     ) {
       this.readTravel = true;
       this.readTravel1 = true;
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getHistoryDetails(benRegID, visitID);
     }
   }
@@ -178,8 +176,7 @@ export class TravelHistoryComponent
           } else {
             this.patientCovidForm.patchValue({ travelStatus: 'false' });
           }
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -315,7 +312,7 @@ export class TravelHistoryComponent
     this.getrecommendedtext();
   }
   travelStatuschange(boolean_flag: any) {
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -324,7 +321,7 @@ export class TravelHistoryComponent
       this.domtravel = false;
       this.intertravel = false;
     }
-    this.sessionstorage.setItem('travelstat', boolean_flag);
+    localStorage.setItem('travelstat', boolean_flag);
     this.patientCovidForm.patchValue({ travelStatus: boolean_flag });
     this.disableTravelButton = false;
     this.travelSelected = true;
@@ -353,14 +350,14 @@ export class TravelHistoryComponent
     const recomFormArray = <FormArray>(
       this.patientCovidForm.controls['recommendation']
     );
-    this.allSymp = this.sessionstorage.getItem('allSymptom');
+    this.allSymp = localStorage.getItem('allSymptom');
     if (this.allSymp === 'true') {
       this.travelReqiured = 'false';
     } else {
       this.travelReqiured = 'true';
     }
-    this.answer1 = this.sessionstorage.getItem('symptom');
-    this.answer2 = this.sessionstorage.getItem('contact');
+    this.answer1 = localStorage.getItem('symptom');
+    this.answer2 = localStorage.getItem('contact');
 
     console.log('answer1==', this.answer1);
     console.log('answer2==', this.answer2);

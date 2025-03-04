@@ -36,7 +36,6 @@ import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from '../set-language.component';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-beneficiary-details',
@@ -69,14 +68,13 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.today = new Date();
     this.getHealthIDDetails();
-    const benFlowID = this.sessionstorage.getItem('benFlowID');
+    const benFlowID = localStorage.getItem('benFlowID');
     if (benFlowID !== null && benFlowID !== undefined) {
       this.getBenDetails();
       this.benFlowStatus = true;
@@ -103,12 +101,12 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   ngOnDestroy() {
     if (this.beneficiaryDetailsSubscription)
       this.beneficiaryDetailsSubscription.unsubscribe();
-    this.sessionstorage.removeItem('benFlowID');
+    localStorage.removeItem('benFlowID');
     if (this.benFamilySubscription) this.benFamilySubscription.unsubscribe();
   }
 
   getBenDetails() {
-    const benFlowID: any = this.sessionstorage.getItem('benFlowID');
+    const benFlowID: any = localStorage.getItem('benFlowID');
     this.route.params.subscribe((param) => {
       this.beneficiaryDetailsService.getBeneficiaryDetails(
         param['beneficiaryRegID'],
@@ -138,7 +136,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
     const reqObj = {
       beneficiaryRegID: null,
       beneficiaryName: null,
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
       phoneNo: null,
       HealthID: null,
       HealthIDNumber: null,
@@ -159,7 +157,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
           .format('DD-MM-YYYY hh:mm A');
       }
     });
-    const benFlowID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benFlowID: any = localStorage.getItem('beneficiaryRegID');
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benFlowID)
       .subscribe((data: any) => {

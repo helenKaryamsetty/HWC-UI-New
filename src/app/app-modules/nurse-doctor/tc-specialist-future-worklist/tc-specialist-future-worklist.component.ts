@@ -35,7 +35,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-tc-specialist-future-worklist',
   templateUrl: './tc-specialist-future-worklist.component.html',
@@ -75,12 +74,11 @@ export class TcSpecialistFutureWorklistComponent
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.sessionstorage.setItem('currentRole', 'Doctor');
+    localStorage.setItem('currentRole', 'Doctor');
     this.removeBeneficiaryDataForDoctorVisit();
     this.loadWorklist();
     this.beneficiaryDetailsService.reset();
@@ -88,21 +86,21 @@ export class TcSpecialistFutureWorklistComponent
   }
 
   ngOnDestroy() {
-    this.sessionstorage.removeItem('currentRole');
+    localStorage.removeItem('currentRole');
   }
 
   removeBeneficiaryDataForDoctorVisit() {
-    this.sessionstorage.removeItem('visitCode');
-    this.sessionstorage.removeItem('beneficiaryGender');
-    this.sessionstorage.removeItem('benFlowID');
-    this.sessionstorage.removeItem('visitCategory');
-    this.sessionstorage.removeItem('visitReason');
-    this.sessionstorage.removeItem('beneficiaryRegID');
-    this.sessionstorage.removeItem('visitID');
-    this.sessionstorage.removeItem('beneficiaryID');
-    this.sessionstorage.removeItem('doctorFlag');
-    this.sessionstorage.removeItem('nurseFlag');
-    this.sessionstorage.removeItem('pharmacist_flag');
+    localStorage.removeItem('visitCode');
+    localStorage.removeItem('beneficiaryGender');
+    localStorage.removeItem('benFlowID');
+    localStorage.removeItem('visitCategory');
+    localStorage.removeItem('visitReason');
+    localStorage.removeItem('beneficiaryRegID');
+    localStorage.removeItem('visitID');
+    localStorage.removeItem('beneficiaryID');
+    localStorage.removeItem('doctorFlag');
+    localStorage.removeItem('nurseFlag');
+    localStorage.removeItem('pharmacist_flag');
   }
 
   pageChanged(event: any): void {
@@ -260,7 +258,7 @@ export class TcSpecialistFutureWorklistComponent
               benRegID: beneficiary.beneficiaryRegID,
               visitCode: beneficiary.visitCode,
               userID: beneficiary.tCSpecialistUserID,
-              modifiedBy: this.sessionstorage.getItem('userName'),
+              modifiedBy: localStorage.getItem('userName'),
             })
             .subscribe(
               (res: any) => {

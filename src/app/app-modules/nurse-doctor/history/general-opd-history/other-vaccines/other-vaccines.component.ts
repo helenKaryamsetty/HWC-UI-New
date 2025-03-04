@@ -46,7 +46,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-other-vaccines',
@@ -82,7 +81,6 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -149,8 +147,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
             this.getGeneralHistory();
           }
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -332,7 +329,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousOtherVaccineDetails() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID') || '{}';
+    const benRegID = localStorage.getItem('beneficiaryRegID') || '{}';
     this.nurseService
       .getPreviousOtherVaccines(benRegID, this.visitCategory)
       .subscribe(

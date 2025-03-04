@@ -3,21 +3,21 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'https://amritwprdev.piramalswasthya.org/';
-const tmIP = 'https://amritwprdev.piramalswasthya.org/';
-const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
-const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
-const tmUI_IP = 'https://amritwprdev.piramalswasthya.org/';
-const schedulerUI_IP = 'https://amritwprdev.piramalswasthya.org/';
-const inventoryUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const commonIP = 'http://183.82.107.186:8080/';
+const tmIP = 'http://183.82.107.186:8080/';
+const mmuIP = 'http://183.82.107.186:8080/';
+const schedulerIP = 'http://183.82.107.186:8080/';
+const tmUI_IP = 'http://183.82.107.186:8080/';
+const schedulerUI_IP = 'http://183.82.107.186:8080/';
+const inventoryUI_IP = 'http://183.82.107.186:8080/';
 const SERVER_IP = 'dataSYNCIP';
 const SWYMED_IP = 'swymed://14.143.13.109';
-const adminIP = 'https://amritwprdev.piramalswasthya.org';
-const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
-const identityIP = 'https://amritwprdev.piramalswasthya.org/';
+const adminIP = 'http://183.82.107.186:8080';
+const FHIRIP = 'http://183.82.107.186:8080';
+const identityIP = 'http://183.82.107.186:8080/';
 const IDENTITY_API = `${identityIP}/hwc-identity-0.0.1/`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
-const IP104 = 'https://amritwprdev.piramalswasthya.org/';
+const IP104 = 'http://183.82.107.186:8080/';
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
 //const TM_API = `http://${IP}:8080/apiman-gateway/IEMR/TM/1.0/`;
@@ -37,11 +37,10 @@ const API104 = `${IP104}/104api-v1.0/`;
 
 const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
 const mmuUICasesheet = `${tmUI_IP}tmui-v1.0`;
-const sessionStorageEncKey = '';
 
 export const environment = {
-  production: false,
-  encKey: sessionStorageEncKey,
+  production: true,
+
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,

@@ -39,7 +39,6 @@ import { Subject, Observable } from 'rxjs';
 import { ChartData, ChartType } from 'chart.js';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { saveAs } from 'file-saver';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface Mark {
   xCord: any;
@@ -96,7 +95,6 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
     public dialogRef: MatDialogRef<CameraDialogComponent>,
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {
     this.options = {
       audio: false,
@@ -264,11 +262,11 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
 
   getMarkers() {
     return {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitID: this.sessionstorage.getItem('visitID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      visitID: localStorage.getItem('visitID'),
+      createdBy: localStorage.getItem('userName'),
       imageID: '',
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
       markers: this.markers,
     };
   }
@@ -283,10 +281,9 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
             if (blob) {
               try {
                 const graphName =
-                  `${this.graph.type}_${this.sessionstorage.getItem(
+                  `${this.graph.type}_${localStorage.getItem(
                     'beneficiaryRegID',
-                  )}_${this.sessionstorage.getItem('visitID')}` ||
-                  'graphTrends';
+                  )}_${localStorage.getItem('visitID')}` || 'graphTrends';
                 saveAs(blob, graphName);
               } catch (e) {
                 console.error('Error saving image:', e);

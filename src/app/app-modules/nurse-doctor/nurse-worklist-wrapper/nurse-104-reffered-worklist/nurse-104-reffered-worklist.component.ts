@@ -36,7 +36,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-104-reffered-worklist',
@@ -82,12 +81,11 @@ export class Nurse104RefferedWorklistComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.sessionstorage.setItem('currentRole', 'Nurse');
+    localStorage.setItem('currentRole', 'Nurse');
     this.beneficiaryDetailsService.reset();
     this.nurse104ReferredWorklistResponce();
   }
@@ -101,18 +99,18 @@ export class Nurse104RefferedWorklistComponent
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
   ngOnDestroy() {
-    this.sessionstorage.removeItem('currentRole');
+    localStorage.removeItem('currentRole');
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    this.sessionstorage.removeItem('benCallID');
-    this.sessionstorage.removeItem('beneficiaryGender');
-    this.sessionstorage.removeItem('patientName');
-    this.sessionstorage.removeItem('patientAge');
-    this.sessionstorage.removeItem('referredFlag');
-    this.sessionstorage.removeItem('beneficiaryRegID');
-    this.sessionstorage.removeItem('beneficiaryID');
-    this.sessionstorage.removeItem('doctorFlag');
+    localStorage.removeItem('benCallID');
+    localStorage.removeItem('beneficiaryGender');
+    localStorage.removeItem('patientName');
+    localStorage.removeItem('patientAge');
+    localStorage.removeItem('referredFlag');
+    localStorage.removeItem('beneficiaryRegID');
+    localStorage.removeItem('beneficiaryID');
+    localStorage.removeItem('doctorFlag');
   }
 
   pageChanged(event: any): void {
@@ -142,27 +140,18 @@ export class Nurse104RefferedWorklistComponent
         )
         .subscribe((result) => {
           if (result) {
-            this.sessionstorage.setItem('benCallID', beneficiary.benCallID);
-            this.sessionstorage.setItem(
-              'beneficiaryGender',
-              beneficiary.genderName,
-            );
-            this.sessionstorage.setItem('patientName', beneficiary.benName);
-            this.sessionstorage.setItem('patientAge', beneficiary.age);
-            this.sessionstorage.setItem(
+            localStorage.setItem('benCallID', beneficiary.benCallID);
+            localStorage.setItem('beneficiaryGender', beneficiary.genderName);
+            localStorage.setItem('patientName', beneficiary.benName);
+            localStorage.setItem('patientAge', beneficiary.age);
+            localStorage.setItem(
               'beneficiaryRegID',
               beneficiary.beneficiaryRegID,
             );
-            this.sessionstorage.setItem(
-              'referredFlag',
-              beneficiary.referredFlag,
-            );
-            this.sessionstorage.setItem(
-              'beneficiaryID',
-              beneficiary.beneficiaryID,
-            );
-            this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
-            this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+            localStorage.setItem('referredFlag', beneficiary.referredFlag);
+            localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+            localStorage.setItem('benVisitNo', beneficiary.benVisitNo);
+            localStorage.setItem('benFlowID', beneficiary.benFlowID);
             this.router.navigate([
               '/nurse-doctor/attendant/nurse/104referredpatient/',
               beneficiary.beneficiaryRegID,
@@ -177,8 +166,7 @@ export class Nurse104RefferedWorklistComponent
   }
 
   nurse104ReferredWorklistResponce() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanId = JSON.parse(serviceLineDetails).vanID;
     this.nurseService.loadNursePatientDetails(vanId).subscribe(
       (res: any) => {

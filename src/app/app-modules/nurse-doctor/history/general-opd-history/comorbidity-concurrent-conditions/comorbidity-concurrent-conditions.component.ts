@@ -46,7 +46,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { HrpService } from '../../../shared/services/hrp.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
@@ -84,7 +83,6 @@ export class ComorbidityConcurrentConditionsComponent
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,
-    readonly sessionstorage: SessionStorageService,
   ) {
     this.nurseService.listen().subscribe((m: any) => {
       console.log(m);
@@ -92,9 +90,9 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
   onComorbidFilterClick(comorb: any) {
-    const comorbidstat = this.sessionstorage.getItem('setComorbid');
+    const comorbidstat = localStorage.getItem('setComorbid');
 
-    const visitCat = this.sessionstorage.getItem('visiCategoryANC');
+    const visitCat = localStorage.getItem('visiCategoryANC');
     if (comorbidstat === 'true' && visitCat === 'COVID-19 Screening') {
       this.ComorbidStatus = 'true';
     } else {
@@ -156,8 +154,7 @@ export class ComorbidityConcurrentConditionsComponent
           this.comorbidityFilteredMasterData = masterData.comorbidConditions;
 
           this.addComorbidityConcurrentConditions();
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (String(this.mode) === 'view') {
             this.getGeneralHistory();
@@ -444,7 +441,7 @@ export class ComorbidityConcurrentConditionsComponent
   }
 
   getPreviousComorbidityHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousComorbidityHistory(benRegID, this.visitCategory)
       .subscribe(

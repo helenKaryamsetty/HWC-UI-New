@@ -58,7 +58,6 @@ const sessionStorageEncKey = '';
 export const environment = {
   production: false,
   app: `MMU`,
-  encKey: sessionStorageEncKey,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,

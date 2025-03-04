@@ -37,7 +37,6 @@ import { RegistrarService } from '../../shared/services/registrar.service';
 import { CreateFamilyTaggingComponent } from '../create-family-tagging/create-family-tagging.component';
 import { EditFamilyTaggingComponent } from '../edit-family-tagging/edit-family-tagging.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-family-tagging-details',
@@ -106,7 +105,6 @@ export class FamilyTaggingDetailsComponent
     private familyTaggingService: FamilyTaggingService,
     private registrarService: RegistrarService,
     private route: ActivatedRoute,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -120,8 +118,8 @@ export class FamilyTaggingDetailsComponent
     this.benBlockId = this.route.snapshot.paramMap.get('benBlockId');
     this.benVillageId = this.route.snapshot.paramMap.get('benVillageId');
     this.beneficiaryId = this.route.snapshot.paramMap.get('beneficiaryId');
-    this.sessionstorage.setItem('beneficiaryID', this.beneficiaryId);
-    this.sessionstorage.setItem('beneficiaryRegID', this.beneficiaryRegID);
+    localStorage.setItem('beneficiaryID', this.beneficiaryId);
+    localStorage.setItem('beneficiaryRegID', this.beneficiaryRegID);
     const familySearchListValues = this.route.snapshot.paramMap.get(
       'familySearchListDetails',
     );
@@ -220,8 +218,8 @@ export class FamilyTaggingDetailsComponent
 
   ngOnDestroy() {
     this.registrarService.stateIdFamily = null;
-    this.sessionstorage.removeItem('beneficiaryRegID');
-    this.sessionstorage.removeItem('beneficiaryID');
+    localStorage.removeItem('beneficiaryRegID');
+    localStorage.removeItem('beneficiaryID');
   }
 
   assignSelectedLanguage() {

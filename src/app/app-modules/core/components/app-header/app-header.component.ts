@@ -35,7 +35,6 @@ import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component'
 import { IotService } from '../../services/iot.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-header',
@@ -73,7 +72,6 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     private http_service: HttpServiceService,
     private dialog: MatDialog,
     public service: IotService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -88,15 +86,15 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     });
 
     this.getUIVersionAndCommitDetails();
-    this.servicePoint = this.sessionstorage.getItem('servicePointName');
-    this.userName = this.sessionstorage.getItem('userName');
+    this.servicePoint = localStorage.getItem('servicePointName');
+    this.userName = localStorage.getItem('userName');
     this.isAuthenticated =
       sessionStorage.getItem('isAuthenticated') === 'true' ? true : false;
     this.license = environment.licenseUrl;
     if (this.isAuthenticated) {
       this.fetchLanguageSet();
     }
-    this.status = this.sessionstorage.getItem('providerServiceID');
+    this.status = localStorage.getItem('providerServiceID');
   }
 
   ngAfterContentChecked(): void {
@@ -245,7 +243,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       },
     ];
     if (this.showRoles) {
-      const role: any = this.sessionstorage.getItem('role');
+      const role: any = localStorage.getItem('role');
       this.roles = JSON.parse(role);
       if (this.roles !== undefined && this.roles !== null) {
         this.filteredNavigation = this.navigation.filter((item: any) => {
@@ -263,7 +261,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
       this.router.navigate(['/login']).then((result) => {
         if (result) {
           this.changeLanguage('English');
-          this.sessionstorage.clear();
+          localStorage.clear();
           sessionStorage.clear();
         }
       });

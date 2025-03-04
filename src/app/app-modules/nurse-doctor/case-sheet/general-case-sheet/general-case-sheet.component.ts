@@ -36,7 +36,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-case-sheet',
@@ -85,7 +84,6 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -93,35 +91,29 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
 
     let caseSheetRequest;
     if (this.dataStore === 'current') {
-      this.visitCategory = this.sessionstorage.getItem(
-        'caseSheetVisitCategory',
-      );
+      this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
       caseSheetRequest = {
-        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
-        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
-        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: this.sessionstorage.getItem(
-          'caseSheetBeneficiaryRegID',
-        ),
-        visitCode: this.sessionstorage.getItem('visitCode'),
+        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
+        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
+        benVisitID: localStorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
+        visitCode: localStorage.getItem('visitCode'),
       };
       this.getCasesheetData(caseSheetRequest);
     }
     if (this.dataStore === 'previous') {
       this.hideBack = true;
 
-      this.visitCategory = this.sessionstorage.getItem(
+      this.visitCategory = localStorage.getItem(
         'previousCaseSheetVisitCategory',
       );
       caseSheetRequest = {
-        VisitCategory: this.sessionstorage.getItem(
-          'previousCaseSheetVisitCategory',
-        ),
-        benFlowID: this.sessionstorage.getItem('previousCaseSheetBenFlowID'),
-        beneficiaryRegID: this.sessionstorage.getItem(
+        VisitCategory: localStorage.getItem('previousCaseSheetVisitCategory'),
+        benFlowID: localStorage.getItem('previousCaseSheetBenFlowID'),
+        beneficiaryRegID: localStorage.getItem(
           'previousCaseSheetBeneficiaryRegID',
         ),
-        visitCode: this.sessionstorage.getItem('previousCaseSheetVisitCode'),
+        visitCode: localStorage.getItem('previousCaseSheetVisitCode'),
       };
       this.getCasesheetData(caseSheetRequest);
     }

@@ -34,7 +34,6 @@ import { HttpServiceService } from '../../../core/services/http-service.service'
 import { Subscription } from 'rxjs';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { MasterdataService } from '../../shared/services/masterdata.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-iec-and-counselling-details',
@@ -67,7 +66,6 @@ export class IecAndCounsellingComponent
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private route: ActivatedRoute,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -188,11 +186,10 @@ export class IecAndCounsellingComponent
       this.getFamilyPlanningNurseFetchDetails();
     }
     if (
-      this.sessionstorage.getItem('visitReason') !== undefined &&
-      this.sessionstorage.getItem('visitReason') !== 'undefined' &&
-      this.sessionstorage.getItem('visitReason') !== null &&
-      this.sessionstorage.getItem('visitReason')?.toLowerCase() ===
-        'follow up' &&
+      localStorage.getItem('visitReason') !== undefined &&
+      localStorage.getItem('visitReason') !== 'undefined' &&
+      localStorage.getItem('visitReason') !== null &&
+      localStorage.getItem('visitReason')?.toLowerCase() === 'follow up' &&
       this.attendant === 'nurse'
     ) {
       this.getFamilyPlanningFetchDetailsForRevisit();

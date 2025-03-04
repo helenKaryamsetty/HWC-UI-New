@@ -25,7 +25,6 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { FamilyTaggingService } from '../../shared/services/familytagging.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-edit-family-tagging',
@@ -69,7 +68,6 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private confirmationService: ConfirmationService,
     private familyTaggingService: FamilyTaggingService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -235,7 +233,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
     } else {
       if (this.data.isEdit) {
         const serviceLineDetails: any =
-          this.sessionstorage.getItem('serviceLineDetails');
+          localStorage.getItem('serviceLineDetails');
         const vanID = JSON.parse(serviceLineDetails).vanID;
         const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -252,7 +250,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
           other: this.other,
           vanID: vanID,
           parkingPlaceID: parkingPlaceID,
-          modifiedBy: this.sessionstorage.getItem('userName'),
+          modifiedBy: localStorage.getItem('userName'),
         };
         this.familyTaggingService.editFamilyTagging(requestObjEdit).subscribe(
           (res: any) => {
@@ -269,7 +267,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
         );
       } else {
         const serviceLineDetails: any =
-          this.sessionstorage.getItem('serviceLineDetails');
+          localStorage.getItem('serviceLineDetails');
         const vanID = JSON.parse(serviceLineDetails).vanID;
         const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
         const requestObj = {
@@ -285,7 +283,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
           other: this.other,
           vanID: vanID,
           parkingPlaceID: parkingPlaceID,
-          createdBy: this.sessionstorage.getItem('userName'),
+          createdBy: localStorage.getItem('userName'),
         };
         this.familyTaggingService.saveFamilyTagging(requestObj).subscribe(
           (res: any) => {
@@ -307,8 +305,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
   untagFamilyMember() {
     const memberList: any[] = [];
 
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -320,7 +317,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
           item.relationWithHead.toLowerCase() === 'self' ? true : false,
         vanID: vanID,
         parkingPlaceID: parkingPlaceID,
-        modifiedBy: this.sessionstorage.getItem('userName'),
+        modifiedBy: localStorage.getItem('userName'),
       });
     });
 

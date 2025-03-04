@@ -30,7 +30,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-covid-vaccination-status',
@@ -54,7 +53,6 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
   @Input()
   covidVaccineStatusForm!: FormGroup;
@@ -179,7 +177,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   }
 
   getPreviousCovidVaccinationDetails() {
-    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(

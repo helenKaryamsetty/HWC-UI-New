@@ -22,7 +22,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -44,18 +43,8 @@ export class DoctorService {
   enableDispenseFlag = false;
   immunizationServiceFetchDetails: any = null;
   immunizationServiceValueChanged = false;
-  sessionID: any;
 
-  constructor(
-    private http: HttpClient,
-    readonly sessionstorage: SessionStorageService,
-  ) {
-    if (this.sessionstorage.getItem('sessionID') === '') {
-      this.sessionID = null;
-    } else {
-      this.sessionID = this.sessionstorage.getItem('sessionID');
-    }
-  }
+  constructor(private http: HttpClient) {}
 
   screeninDataFromNurse = new BehaviorSubject<any>(null);
   screeningData$ = this.screeninDataFromNurse.asObservable();
@@ -140,12 +129,11 @@ export class DoctorService {
   }
 
   getDoctorWorklist() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
-      this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.doctorWorkList + fetchUrl);
   }
 
@@ -179,8 +167,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -216,20 +203,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -261,50 +248,47 @@ export class DoctorService {
   getSpecialistWorklist() {
     return this.http.get(
       environment.specialistWorkListURL +
-        this.sessionstorage.getItem('providerServiceID') +
-        `/${this.sessionstorage.getItem('serviceID')}/${this.sessionstorage.getItem(
+        localStorage.getItem('providerServiceID') +
+        `/${localStorage.getItem('serviceID')}/${localStorage.getItem(
           'userID',
         )}`,
     );
   }
 
   getDoctorFutureWorklist() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
-      this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.doctorFutureWorkList + fetchUrl);
   }
 
   getSpecialistFutureWorklist() {
     return this.http.get(
       environment.specialistFutureWorkListURL +
-        this.sessionstorage.getItem('providerServiceID') +
-        `/${this.sessionstorage.getItem('serviceID')}/${this.sessionstorage.getItem(
+        localStorage.getItem('providerServiceID') +
+        `/${localStorage.getItem('serviceID')}/${localStorage.getItem(
           'userID',
         )}`,
     );
   }
 
   getRadiologistWorklist() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
-      this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.radiologistWorklist + fetchUrl);
   }
 
   getOncologistWorklist() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
-      this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      localStorage.getItem('providerServiceID') +
+      `/${localStorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.oncologistWorklist + fetchUrl);
   }
 
@@ -315,28 +299,28 @@ export class DoctorService {
   }
 
   getMMUHistory() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previousMMUHistoryUrl, {
       beneficiaryRegID: benRegID,
     });
   }
 
   getTMHistory() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previousTMHistoryUrl, {
       beneficiaryRegID: benRegID,
     });
   }
 
   getMCTSHistory() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previousMCTSHistoryUrl, {
       beneficiaryRegID: benRegID,
     });
   }
 
   get104History() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
     return this.http.post(environment.previous104HistoryUrl, {
       beneficiaryRegID: benRegID,
     });
@@ -351,23 +335,22 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      visitCode: localStorage.getItem('visitCode'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
       tcRequest: tcRequest,
@@ -390,23 +373,22 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      visitCode: localStorage.getItem('visitCode'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
       tcRequest: tcRequest,
@@ -442,14 +424,14 @@ export class DoctorService {
     return this.http.post(environment.getNCDScreeningDetails, {
       benRegID: beneficiaryID,
       benVisitID: benVisitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
   getNcdScreeningForCbac() {
     return this.http.post(environment.getNcdScreeningDetailsForCbac, {
-      beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
@@ -462,12 +444,12 @@ export class DoctorService {
     patientVisitFormValue: any,
   ) {
     const serviceDetails = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('userName'),
+      visitCode: localStorage.getItem('visitCode'),
+      serviceID: localStorage.getItem('serviceID'),
     };
     const postNCDScreeningFormValue = JSON.parse(
       JSON.stringify(ncdScreeningFormValue),
@@ -514,7 +496,7 @@ export class DoctorService {
       {},
       postNCDScreeningFormValue,
       serviceDetails,
-      { benFlowID: this.sessionstorage.getItem('benFlowID') },
+      { benFlowID: localStorage.getItem('benFlowID') },
       patientVisitFormValue.patientFileUploadDetailsForm,
     );
     console.log(
@@ -542,8 +524,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -577,20 +558,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -660,7 +641,7 @@ export class DoctorService {
     return this.http.post(environment.getANCDetailsUrl, {
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
   getAncCareDetailsRevisit(beneficiaryID: string) {
@@ -683,8 +664,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     console.log('message', patientMedicalForm);
@@ -728,20 +708,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionID,
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -771,8 +751,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -808,20 +787,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -846,8 +825,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -880,20 +858,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -923,11 +901,11 @@ export class DoctorService {
 
   getVisitComplaint: any;
   getVisitComplaintDetails(beneficiaryID: string, visitID: string) {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
 
     if (!this.getVisitComplaint) {
@@ -1003,11 +981,11 @@ export class DoctorService {
 
   generalHistory: any;
   getGeneralHistoryDetails(benRegID: any, visitID: any) {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: benRegID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
     if (!this.generalHistory) {
       if (visitCategory === 'ANC') {
@@ -1056,9 +1034,9 @@ export class DoctorService {
 
   getGenericVitals(beneficiary: any): Observable<any> {
     const otherDetails = Object.assign({}, beneficiary, {
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     if (visitCategory === 'General OPD (QC)') {
       return this.http.post(
         environment.getGeneralOPDQuickConsultVitalDetails,
@@ -1128,7 +1106,7 @@ export class DoctorService {
     });
   }
   getRBSPreviousVitals(beneficiary: any): Observable<any> {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     if (visitCategory === 'NCD screening') {
       return this.http.post(
         environment.getNCDSceeriningVitalDetails,
@@ -1144,9 +1122,9 @@ export class DoctorService {
 
   getGenericVitalsForMMULabReport(beneficiary: any): Observable<any> {
     const otherDetails = Object.assign({}, beneficiary, {
-      visitCode: this.sessionstorage.getItem('referredVisitCode'),
+      visitCode: localStorage.getItem('referredVisitCode'),
     });
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     if (visitCategory === 'General OPD (QC)') {
       return this.http.post(
         environment.getGeneralOPDQuickConsultVitalDetails,
@@ -1193,11 +1171,11 @@ export class DoctorService {
     beneficiaryID: string,
     visitID: string,
   ): Observable<any> {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
 
     if (visitCategory === 'ANC') {
@@ -1223,9 +1201,8 @@ export class DoctorService {
     temp: any,
     beneficiaryAge: any,
   ): Observable<any> {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const visitCategory = localStorage.getItem('visitCategory');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updatedHistoryDetails = {
@@ -1277,13 +1254,13 @@ export class DoctorService {
         generalHistoryForm.controls.perinatalHistory,
         temp,
       ),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
     };
 
     console.log(
@@ -1657,8 +1634,7 @@ export class DoctorService {
     patientVitalsForm: any,
     visitCategory: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientVitalData = Object.assign(
@@ -1666,14 +1642,14 @@ export class DoctorService {
       patientVitalsForm.value,
       patientVitalsForm.getRawValue(),
       {
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        modifiedBy: this.sessionstorage.getItem('userName'),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        modifiedBy: localStorage.getItem('userName'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       },
     );
     console.log('Vitals Form', patientVitalData);
@@ -1733,8 +1709,7 @@ export class DoctorService {
     neonatalVitalsForm: any,
     visitCategory: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientVitalData = Object.assign(
@@ -1742,14 +1717,14 @@ export class DoctorService {
       neonatalVitalsForm.value,
       neonatalVitalsForm.getRawValue(),
       {
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        modifiedBy: this.sessionstorage.getItem('userName'),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        modifiedBy: localStorage.getItem('userName'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       },
     );
     console.log('Vitals Form', patientVitalData);
@@ -1783,8 +1758,7 @@ export class DoctorService {
     updateDetails: any,
   ): Observable<any> {
     let updatedExaminationDetails;
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     if (visitCategory === 'ANC') {
@@ -1826,13 +1800,13 @@ export class DoctorService {
             .obstetricExaminationForANCForm,
           updateDetails,
         ),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       };
 
       console.log(
@@ -1885,13 +1859,13 @@ export class DoctorService {
             .genitoUrinarySystemForm,
           updateDetails,
         ),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       };
 
       console.log(
@@ -1944,13 +1918,13 @@ export class DoctorService {
             .genitoUrinarySystemForm,
           updateDetails,
         ),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       };
 
       console.log(
@@ -2335,9 +2309,9 @@ export class DoctorService {
     return this.http.post(environment.updateOncologistRemarksCancelUrl, {
       beneficiaryRegID: regID,
       benVisitID: visitID,
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      modifiedBy: localStorage.getItem('userName'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
       provisionalDiagnosisOncologist: remarks,
     });
   }
@@ -2359,8 +2333,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -2393,20 +2366,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -2423,7 +2396,7 @@ export class DoctorService {
     return this.http.post(environment.getPNCDetailsUrl, {
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
@@ -2437,7 +2410,7 @@ export class DoctorService {
     return this.http.post(environment.getPNCDetailsUrl, {
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
@@ -2515,11 +2488,9 @@ export class DoctorService {
     visitCategory: any,
   ) {
     const otherDetails = Object.assign({
-      // benRegID: beneficiaryRegID,
-      // benVisitID: visitID,
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: beneficiaryRegID,
+      benVisitID: visitID,
+      visitCode: localStorage.getItem('visitCode'),
     });
 
     if (!this.caseRecordAndReferDetails) {
@@ -2600,14 +2571,9 @@ export class DoctorService {
     visitcode: any,
   ) {
     const otherDetails = Object.assign({
-      // benRegID: beneficiaryRegID,
-      // benVisitID: visitID,
-      // visitCode: visitcode,
-      // benRegID: beneficiaryRegID,
-      // benVisitID: visitID,
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: beneficiaryRegID,
+      benVisitID: visitID,
+      visitCode: visitcode,
     });
 
     if (visitCategory === 'General OPD (QC)') {
@@ -2661,8 +2627,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     console.log('message', patientMedicalForm);
@@ -2707,20 +2672,20 @@ export class DoctorService {
           'counsellingProvidedList'
         ].value,
       refer: this.postGeneralRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
     };
@@ -2778,8 +2743,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -2818,20 +2782,20 @@ export class DoctorService {
         treatmentsOnSideEffectsFormDet,
       ),
       refer: this.postFamilyPlanningRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
     };
@@ -2965,8 +2929,7 @@ export class DoctorService {
   }
 
   getSwymedMail() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     console.log('vanID', vanID);
 
@@ -3003,16 +2966,15 @@ export class DoctorService {
   }
 
   invokeSwymedCall(specialistID: any) {
-    const userID = this.sessionstorage.getItem('userID');
+    const userID = localStorage.getItem('userID');
     return this.http.get(
       environment.invokeSwymedCallUrl + userID + '/' + specialistID,
     );
   }
 
   invokeSwymedCallSpecialist() {
-    const userID = this.sessionstorage.getItem('userID');
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const userID = localStorage.getItem('userID');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     return this.http.get(
       environment.invokeSwymedCallSpecialistUrl + userID + '/' + vanID,
@@ -3025,11 +2987,11 @@ export class DoctorService {
       .pipe(map((res: any) => <Blob>res.blob()));
   }
   getIDRSDetails(beneficiaryID: string, visitID: string): Observable<any> {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     const otherDetails = Object.assign({
       benRegID: beneficiaryID,
       benVisitID: visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     });
 
     if (visitCategory === 'NCD screening') {
@@ -3048,20 +3010,19 @@ export class DoctorService {
     idrsScreeningForm: any,
     visitCategory: any,
   ): Observable<object> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientIDRSData = Object.assign({}, idrsScreeningForm.value, {
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('userName'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      createdBy: this.sessionstorage.getItem('userName'),
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
+      createdBy: localStorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
       deleted: false,
     });
 
@@ -3084,9 +3045,8 @@ export class DoctorService {
     temp: any,
     beneficiaryAge: any,
   ): Observable<any> {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const visitCategory = localStorage.getItem('visitCategory');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updatedHistoryDetails = {
@@ -3102,13 +3062,13 @@ export class DoctorService {
         NCDScreeningHistoryForm.controls.personalHistory,
         temp,
       ),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
     };
 
     console.log(
@@ -3162,43 +3122,41 @@ export class DoctorService {
   }
 
   setCommonDataForFP() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const data = {
       vanID: vanID,
       parkingPlaceID: parkingPlaceID,
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      modifiedBy: this.sessionstorage.getItem('username'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
     };
   }
 
   updateFamilyPlanning(medicalForm: any, visitCategory: any): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const commonData = {
       vanID: vanID,
       parkingPlaceID: parkingPlaceID,
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      modifiedBy: this.sessionstorage.getItem('username'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
+      createdBy: localStorage.getItem('userName'),
     };
     const familyPlanningReproductiveDetailsForm = Object.assign(
       {},
@@ -3230,14 +3188,14 @@ export class DoctorService {
       { iecAndCounsellingDetails: iecAndCounsellingDetails },
       { dispensationDetails: dispensationDetails },
       {
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
-        createdBy: this.sessionstorage.getItem('userName'),
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
+        createdBy: localStorage.getItem('userName'),
       },
     );
 
@@ -3257,19 +3215,18 @@ export class DoctorService {
     medicalForm: any,
     visitCategory: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
       vanID: vanID,
       parkingPlaceID: parkingPlaceID,
-      modifiedBy: this.sessionstorage.getItem('username'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
     const infantBirthDetailsForm = Object.assign(
       {},
@@ -3286,13 +3243,13 @@ export class DoctorService {
       { infantBirthDetails: infantBirthDetailsForm },
       { immunizationHistory: ImmunizationHistoryDetails },
       {
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       },
     );
 
@@ -3323,8 +3280,7 @@ export class DoctorService {
     medicalForm: any,
     visitCategory: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientNCDScreeningData = Object.assign(
@@ -3335,16 +3291,16 @@ export class DoctorService {
       { breast: medicalForm.controls.breast.value },
       { cervical: medicalForm.controls.cervical.value },
       {
-        benFlowID: this.sessionstorage.getItem('benFlowID'),
-        beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        benFlowID: localStorage.getItem('benFlowID'),
+        beneficiaryID: localStorage.getItem('beneficiaryID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        modifiedBy: this.sessionstorage.getItem('userName'),
+        modifiedBy: localStorage.getItem('userName'),
         vanID: vanID,
-        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: localStorage.getItem('visitID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
       },
     );
 
@@ -3375,15 +3331,15 @@ export class DoctorService {
 
   getFamilyPlanningFetchDetails() {
     return this.http.post(environment.getFamilyPlanningDetailsUrl, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitId: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
   getFamilyPlanningFetchDetailsOnRevisit() {
     return this.http.post(environment.getFamilyPlanningDetailsUrl, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
     });
   }
 
@@ -3393,17 +3349,17 @@ export class DoctorService {
 
   getBirthImmunizationHistoryNurseDetails() {
     return this.http.post(environment.getBirthImmunizationHistoryDetailsUrl, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitId: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
   getBirthImmunizationHistoryNurseDetailsForChildAndAdolescent() {
     return this.http.post(environment.getBirthImmunizationHistoryDataUrl, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitId: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
@@ -3416,7 +3372,7 @@ export class DoctorService {
       return this.http.post(
         environment.getPreviousBirthImmunizationDetailsUrl,
         {
-          benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+          benRegID: localStorage.getItem('beneficiaryRegID'),
         },
       );
     }
@@ -3427,7 +3383,7 @@ export class DoctorService {
       return this.http.post(
         environment.getPreviousBirthImmunizationDataForChildAndAdolascentUrl,
         {
-          benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+          benRegID: localStorage.getItem('beneficiaryRegID'),
         },
       );
     }
@@ -3443,8 +3399,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -3486,20 +3441,20 @@ export class DoctorService {
         treatmentsOnSideEffectsFormDet,
       ),
       refer: this.postFamilyPlanningRefer(referForm, otherDetails),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -3542,8 +3497,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -3587,20 +3541,20 @@ export class DoctorService {
         followUpImmunizationForm,
         otherDetails,
       ),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -3622,8 +3576,7 @@ export class DoctorService {
     tcRequest: any,
     isSpecialist: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -3667,20 +3620,20 @@ export class DoctorService {
         followUpImmunizationForm,
         otherDetails,
       ),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -3703,8 +3656,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -3748,20 +3700,20 @@ export class DoctorService {
         followUpImmunizationForm,
         otherDetails,
       ),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
     };
@@ -3783,8 +3735,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
   ) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
@@ -3828,20 +3779,20 @@ export class DoctorService {
         followUpImmunizationForm,
         otherDetails,
       ),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      doctorFlag: this.sessionstorage.getItem('doctorFlag'),
-      nurseFlag: this.sessionstorage.getItem('nurseFlag'),
-      pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      doctorFlag: localStorage.getItem('doctorFlag'),
+      nurseFlag: localStorage.getItem('nurseFlag'),
+      pharmacist_flag: localStorage.getItem('pharmacist_flag'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      beneficiaryRegID: '' + localStorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      visitCode: localStorage.getItem('visitCode'),
+      benVisitID: localStorage.getItem('visitID'),
+      serviceID: localStorage.getItem('serviceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
     };
@@ -3859,35 +3810,34 @@ export class DoctorService {
   /*Neonatal Immunization Service */
   fetchImmunizationServiceDeatilsFromNurse() {
     return this.http.post(environment.fetchNeonatalImmunizationService, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitId: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
   /*Oral Vitamin A Immunization Service */
   fetchOralVitaminADeatilsFromNurse() {
     return this.http.post(environment.fetchChildAndAdolescentService, {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitId: this.sessionstorage.getItem('visitID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitId: localStorage.getItem('visitID'),
+      visitCode: localStorage.getItem('visitCode'),
     });
   }
 
   updateImmunizationServices(immunizationServiceForm: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
       vanID: vanID,
       parkingPlaceID: parkingPlaceID,
-      modifiedBy: this.sessionstorage.getItem('username'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
     const updateImmunizationService = Object.assign(
       {},
@@ -3911,19 +3861,18 @@ export class DoctorService {
     medicalForm: any,
     visitCategory: any,
   ): Observable<any> {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
       vanID: vanID,
       parkingPlaceID: parkingPlaceID,
-      modifiedBy: this.sessionstorage.getItem('username'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('username'),
+      sessionID: localStorage.getItem('sessionID'),
+      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
     };
     const immunizationServicesForm = Object.assign(
       {},
@@ -3940,13 +3889,13 @@ export class DoctorService {
       { immunizationServices: immunizationServicesForm },
       { oralVitaminAProphylaxis: oralVitaminAFormDeatils },
       {
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegID: localStorage.getItem('beneficiaryID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        visitCode: localStorage.getItem('visitCode'),
+        benVisitID: localStorage.getItem('visitID'),
       },
     );
 

@@ -39,7 +39,6 @@ import { ConfirmationService } from '../../../../../core/services/confirmation.s
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-opd-diagnosis',
@@ -49,7 +48,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class GeneralOpdDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
-  utils = new GeneralUtils(this.fb, this.sessionstorage);
+  utils = new GeneralUtils(this.fb);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -68,12 +67,11 @@ export class GeneralOpdDiagnosisComponent
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['instruction'].enable();
       this.specialist = true;
@@ -107,16 +105,15 @@ export class GeneralOpdDiagnosisComponent
 
   ngOnChanges() {
     if (String(this.caseRecordMode) === 'view') {
-      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
-      const visitID = this.sessionstorage.getItem('visitID');
-      const visitCategory = this.sessionstorage.getItem('visitCategory');
+      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const visitCategory = localStorage.getItem('visitCategory');
 
-      const specialistFlagString =
-        this.sessionstorage.getItem('specialist_flag');
+      const specialistFlagString = localStorage.getItem('specialist_flag');
 
       if (
-        this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
-        this.sessionstorage.getItem('referredVisitCode') === null
+        localStorage.getItem('referredVisitCode') === 'undefined' ||
+        localStorage.getItem('referredVisitCode') === null
       ) {
         this.getDiagnosisDetails();
       } else if (
@@ -127,14 +124,14 @@ export class GeneralOpdDiagnosisComponent
           beneficiaryRegID,
           visitID,
           visitCategory,
-          this.sessionstorage.getItem('visitCode'),
+          localStorage.getItem('visitCode'),
         );
       } else {
         this.getMMUDiagnosisDetails(
           beneficiaryRegID,
-          this.sessionstorage.getItem('referredVisitID'),
+          localStorage.getItem('referredVisitID'),
           visitCategory,
-          this.sessionstorage.getItem('referredVisitCode'),
+          localStorage.getItem('referredVisitCode'),
         );
       }
     }

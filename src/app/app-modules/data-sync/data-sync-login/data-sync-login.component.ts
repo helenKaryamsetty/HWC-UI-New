@@ -30,7 +30,6 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { DataSyncService } from '../shared/service/data-sync.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-data-sync-login',
@@ -64,7 +63,6 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
-    readonly sessionstorage: SessionStorageService,
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -165,11 +163,11 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                   mmuService.length > 0
                 ) {
                   this.showProgressBar = false;
-                  this.sessionstorage.setItem('serverKey', res.data.key);
+                  localStorage.setItem('serverKey', res.data.key);
                   this.getDataSyncMMU(res);
                 } else {
                   this.showProgressBar = false;
-                  this.sessionstorage.removeItem('serverKey');
+                  localStorage.removeItem('serverKey');
                   this.confirmationService.alert(
                     "User doesn't have previlege to perform this activity. Please contact administrator.",
                   );
@@ -204,7 +202,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
       const mmuService = res.data.previlegeObj.filter((item: any) => {
         return item.serviceName === 'MMU';
       });
-      this.sessionstorage.setItem(
+      localStorage.setItem(
         'dataSyncProviderServiceMapID',
         mmuService[0].providerServiceMapID,
       );

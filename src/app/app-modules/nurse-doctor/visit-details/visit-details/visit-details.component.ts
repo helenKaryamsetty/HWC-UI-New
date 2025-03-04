@@ -39,7 +39,6 @@ import { NcdScreeningService } from '../../shared/services/ncd-screening.service
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-visit-details',
@@ -93,7 +92,6 @@ export class PatientVisitDetailsComponent
     private ncdScreeningService: NcdScreeningService,
     private nurseService: NurseService,
     private route: ActivatedRoute,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -159,13 +157,13 @@ export class PatientVisitDetailsComponent
     this.nurseService.mmuVisitData = false;
     if (String(this.mode) === 'view') {
       this.loadNurseMasters();
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.disableVisit = true;
       this.getVisitDetails(visitID, benRegID);
     }
 
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -173,8 +171,8 @@ export class PatientVisitDetailsComponent
     ) {
       this.loadNurseMasters();
       console.log('MMUSpecialist');
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getMMUVisitDetails(visitID, benRegID);
     }
   }
@@ -182,7 +180,7 @@ export class PatientVisitDetailsComponent
   enableCbacIdrs(visitID: any, benRegID: any) {
     const obj = {
       beneficiaryRegId: benRegID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      visitCode: localStorage.getItem('visitCode'),
     };
 
     console.log('obj in enableCbacIdrs', obj);
@@ -243,7 +241,7 @@ export class PatientVisitDetailsComponent
 
   visitDetSubscription: any;
   getMMUVisitDetails(visitID: any, benRegID: any) {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     this.visitDetSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
       .subscribe((value: any) => {
@@ -333,7 +331,7 @@ export class PatientVisitDetailsComponent
   visitDetailsSubscription: any;
   getVisitDetails(visitID: any, benRegID: any) {
     console.log('visitID and benRegID in 356', visitID, benRegID);
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     this.visitDetailsSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
       .subscribe((value: any) => {
@@ -469,7 +467,7 @@ export class PatientVisitDetailsComponent
   reasonSelected(visitReason: any) {
     this.templateFilterVisitCategories = [];
     this.patientVisitDetailsForm.controls['visitCategory'].setValue(null);
-    this.sessionstorage.setItem('visitReason', visitReason);
+    localStorage.setItem('visitReason', visitReason);
     if (visitReason === 'Screening') {
       this.templateFilterVisitCategories = this.templateVisitCategories.filter(
         (item: any) =>
@@ -643,7 +641,7 @@ export class PatientVisitDetailsComponent
     this.previousConfirmedDiseasesList = [];
     this.enableConfirmedDiseases = false;
 
-    this.sessionstorage.setItem('visiCategoryANC', visitCategory);
+    localStorage.setItem('visiCategoryANC', visitCategory);
     if (visitCategory === 'ANC') {
       this.templatePregnancyStatus = ['Yes'];
       this.patientVisitDetailsForm.patchValue({ pregnancyStatus: 'Yes' });
@@ -703,7 +701,7 @@ export class PatientVisitDetailsComponent
     this.previousConfirmedDiseasesList = [];
     this.enableConfirmedDiseases = false;
     const obj = {
-      beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
+      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
     };
 
     this.nurseService

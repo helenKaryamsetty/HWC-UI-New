@@ -37,7 +37,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-general-opd-history',
@@ -92,7 +91,6 @@ export class GeneralOpdHistoryComponent
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private ncdScreeningService: NcdScreeningService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -150,7 +148,7 @@ export class GeneralOpdHistoryComponent
   ngOnChanges(changes: any) {
     this.loadFormData();
     if (changes.mode && String(this.mode) === 'update') {
-      const visitCategory = this.sessionstorage.getItem('visitCategory');
+      const visitCategory = localStorage.getItem('visitCategory');
       if (visitCategory === 'NCD screening') {
         this.updatePatientNCDScreeningHistory(this.patientHistoryForm);
       } else {
@@ -190,23 +188,22 @@ export class GeneralOpdHistoryComponent
   }
 
   updatePatientGeneralHistory(generalOPDHistory: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const temp = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+      modifiedBy: localStorage.getItem('userName'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
     };
 
     this.doctorService
@@ -214,7 +211,7 @@ export class GeneralOpdHistoryComponent
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            if (this.sessionstorage.getItem('visitCategory') === 'ANC') {
+            if (localStorage.getItem('visitCategory') === 'ANC') {
               this.getHRPDetails();
             }
             this.confirmationService.alert(res.data.response, 'success');
@@ -230,8 +227,8 @@ export class GeneralOpdHistoryComponent
   }
 
   getHRPDetails() {
-    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
-    const visitCode = this.sessionstorage.getItem('visitCode');
+    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    const visitCode = localStorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -312,22 +309,21 @@ export class GeneralOpdHistoryComponent
     else if (!this.primiGravida) this.showObstetricHistory = true;
   }
   updatePatientNCDScreeningHistory(NCDScreeningHistory: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
+      modifiedBy: localStorage.getItem('userName'),
+      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      sessionID: localStorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      benFlowID: localStorage.getItem('benFlowID'),
+      visitCode: localStorage.getItem('visitCode'),
     };
 
     this.doctorService

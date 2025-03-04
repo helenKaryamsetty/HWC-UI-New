@@ -22,15 +22,11 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DataSyncService {
-  constructor(
-    private http: HttpClient,
-    readonly sessionstorage: SessionStorageService,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getDataSYNCGroup() {
     return this.http.get(environment.getDataSYNCGroupUrl);
@@ -47,10 +43,9 @@ export class DataSyncService {
   syncUploadData(groupID: any) {
     const req = {
       groupID: groupID,
-      user: this.sessionstorage.getItem('userName'),
-      vanID: JSON.parse(
-        this.sessionstorage.getItem('serviceLineDetails') ?? '{}',
-      )?.vanID,
+      user: localStorage.getItem('userName'),
+      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
+        ?.vanID,
     };
     console.log(req, 'reqobj');
 

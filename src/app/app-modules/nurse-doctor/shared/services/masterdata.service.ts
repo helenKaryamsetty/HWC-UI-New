@@ -21,7 +21,6 @@
  */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -70,10 +69,7 @@ export class MasterdataService {
   doctorMasterDataSource = new BehaviorSubject<any>(null);
   doctorMasterData$ = this.doctorMasterDataSource.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    readonly sessionstorage: SessionStorageService,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /**
    * Visit details master data api call
@@ -90,7 +86,7 @@ export class MasterdataService {
    * Nurse master data api call
    */
   getNurseMasterData(visitID: string, providerServiceID: any) {
-    const gender = this.sessionstorage.getItem('beneficiaryGender');
+    const gender = localStorage.getItem('beneficiaryGender');
     return this.http
       .get(
         this.nurseMasterDataUrl +
@@ -110,8 +106,7 @@ export class MasterdataService {
    */
   getDoctorMasterData(visitID: string, providerServiceID: any) {
     let facilityID = 0;
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     if (
       JSON.parse(serviceLineDetails).facilityID !== undefined &&
       JSON.parse(serviceLineDetails).facilityID !== null
@@ -125,7 +120,7 @@ export class MasterdataService {
     ) {
       vanID = JSON.parse(serviceLineDetails).vanID;
     }
-    const gender = this.sessionstorage.getItem('beneficiaryGender');
+    const gender = localStorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
     return this.http
@@ -203,7 +198,7 @@ export class MasterdataService {
   }
   /* Neonatal immunization service masters*/
   getVaccineList(currentImmunizationServiceID: any) {
-    const visitCategoryID = this.sessionstorage.getItem('visitCategoryId');
+    const visitCategoryID = localStorage.getItem('visitCategoryId');
     return this.http.get(
       environment.vaccineListUrl +
         currentImmunizationServiceID +

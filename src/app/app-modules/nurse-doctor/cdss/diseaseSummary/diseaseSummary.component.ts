@@ -9,7 +9,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-disease-summary-form',
@@ -51,7 +50,6 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
     private dialog: MatDialog,
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -83,9 +81,8 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
 
   getChiefComplaintSymptoms() {
     const reqObj = {
-      age: this.sessionstorage.getItem('patientAge'),
-      gender:
-        this.sessionstorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+      age: localStorage.getItem('patientAge'),
+      gender: localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
     };
 
     this.cdssService.getcheifComplaintSymptoms(reqObj).subscribe((res: any) => {
@@ -137,23 +134,23 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.disableVisit = true;
       this.getDiseaseSummaryDet(benRegID, visitID);
     }
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getDiseaseSummaryDet(benRegID, visitID);
     }
   }
   getDiseaseSummaryDet(beneficiaryRegID: any, visitID: any) {
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
+    const visitCategory = localStorage.getItem('visitCategory');
     if (visitCategory === 'General OPD (QC)') {
       this.disableVisit = true;
       this.viewMode = true;

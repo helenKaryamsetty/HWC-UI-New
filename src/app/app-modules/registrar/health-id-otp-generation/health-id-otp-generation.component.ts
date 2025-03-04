@@ -34,7 +34,6 @@ import { HealthIdValidateComponent } from '../registration/register-other-detail
 import { SetPasswordForAbhaComponent } from '../set-password-for-abha/set-password-for-abha.component';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { ServicePointService } from 'src/app/user-login/service-point/service-point.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-health-id-otp-generation',
@@ -64,7 +63,6 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private servicePointService: ServicePointService,
     private dialog: MatDialog,
-    readonly sessionstorage: SessionStorageService,
   ) {
     dialogRef.disableClose = true;
   }
@@ -267,8 +265,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
         txnId: this.transactionId,
         profilePhoto: this.data.profilePhoto,
         healthId: this.data.healthId,
-        createdBy: this.sessionstorage.getItem('userName'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+        createdBy: localStorage.getItem('userName'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
       };
       this.registrarService.generateHealthIdWithUID(reqObj).subscribe(
         (res: any) => {
@@ -315,7 +313,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
               let districtID: any;
               let districtName: any;
               const location = JSON.parse(
-                this.sessionstorage.getItem('location') as any,
+                localStorage.getItem('location') as any,
               );
               location.stateMaster.forEach((item: any) => {
                 if (item.govtLGDStateID === res.data.stateCode) {

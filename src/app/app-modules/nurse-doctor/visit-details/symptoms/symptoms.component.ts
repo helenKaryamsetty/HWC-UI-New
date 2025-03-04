@@ -37,7 +37,6 @@ import {
 } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-symptoms',
@@ -67,7 +66,6 @@ export class SymptomsComponent
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   disable: any = ['false', 'false', 'false', 'false'];
@@ -75,7 +73,7 @@ export class SymptomsComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.sessionstorage.setItem('symptom', 'null');
+    localStorage.setItem('symptom', 'null');
 
     this.disable = ['false', 'false', 'false', 'false'];
     this.checked = [false, false, false, false];
@@ -91,8 +89,8 @@ export class SymptomsComponent
   }
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getHistoryDetails(benRegID, visitID);
     }
   }
@@ -144,30 +142,30 @@ export class SymptomsComponent
     console.log('SymptomLength' + this.symptom.length);
     if (this.symptom.length !== 0) {
       if (this.symptom.indexOf('No Symptoms') > -1) {
-        this.sessionstorage.setItem('symptom', 'false');
+        localStorage.setItem('symptom', 'false');
 
         this.symptomsList = this.symptomsList.filter((item: any) => {
           return item === 'No Symptoms';
         });
       } else {
-        this.sessionstorage.setItem('symptom', 'true'); //change
+        localStorage.setItem('symptom', 'true'); //change
 
         this.symptomsList = this.symptomsList.filter((item: any) => {
           return item !== 'No Symptoms';
         });
         if (this.symptom.length === 3) {
-          this.sessionstorage.setItem('allSymptom', 'true');
+          localStorage.setItem('allSymptom', 'true');
         } else {
-          this.sessionstorage.setItem('allSymptom', 'false');
+          localStorage.setItem('allSymptom', 'false');
         }
       }
-      this.answer1 = this.sessionstorage.getItem('symptom');
+      this.answer1 = localStorage.getItem('symptom');
       this.masterdataService.filter(this.answer1);
     } else {
       this.symptomsList = this.symptomsArray;
-      this.sessionstorage.setItem('symptom', 'null');
-      this.sessionstorage.setItem('allSymptom', 'null');
-      this.answer1 = this.sessionstorage.getItem('symptom');
+      localStorage.setItem('symptom', 'null');
+      localStorage.setItem('allSymptom', 'null');
+      this.answer1 = localStorage.getItem('symptom');
       this.masterdataService.filter(this.answer1);
     }
   }
@@ -187,15 +185,14 @@ export class SymptomsComponent
           }
           this.symptomsArray = this.symptomsList;
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getMMUHistoryDetails(benRegID, visitID);
           }
         }

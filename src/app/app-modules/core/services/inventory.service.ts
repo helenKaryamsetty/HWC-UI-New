@@ -2,7 +2,6 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Injectable()
 export class InventoryService {
   inventoryUrl: any;
@@ -10,7 +9,6 @@ export class InventoryService {
 
   constructor(
     @Inject(DOCUMENT) private document: any,
-    readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService,
   ) {}
 
@@ -73,19 +71,19 @@ export class InventoryService {
 
   getVanID() {
     const serviceLineDetailsData: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+      localStorage.getItem('serviceLineDetails');
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.vanID;
   }
   getppID() {
     const serviceLineDetailsData: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+      localStorage.getItem('serviceLineDetails');
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.parkingPlaceID;
   }
 
   getServiceDetails() {
-    const serviceName = this.sessionstorage.getItem('serviceName');
+    const serviceName = localStorage.getItem('serviceName');
     return serviceName;
   }
 }

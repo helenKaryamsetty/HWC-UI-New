@@ -49,7 +49,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-pnc-diagnosis',
@@ -84,7 +83,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class PncDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
-  utils = new GeneralUtils(this.fb, this.sessionstorage);
+  utils = new GeneralUtils(this.fb);
   @Input()
   generalDiagnosisForm!: FormGroup;
 
@@ -100,7 +99,6 @@ export class PncDiagnosisComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   beneficiaryAge: any;
@@ -116,7 +114,7 @@ export class PncDiagnosisComponent
       this.today.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
     this.assignSelectedLanguage();
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
       this.specialist = true;
@@ -145,15 +143,14 @@ export class PncDiagnosisComponent
 
   ngOnChanges() {
     if (String(this.caseRecordMode) === 'view') {
-      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
-      const visitID = this.sessionstorage.getItem('visitID');
-      const visitCategory = this.sessionstorage.getItem('visitCategory');
-      const specialistFlagString =
-        this.sessionstorage.getItem('specialist_flag');
+      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const visitCategory = localStorage.getItem('visitCategory');
+      const specialistFlagString = localStorage.getItem('specialist_flag');
 
       if (
-        this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
-        this.sessionstorage.getItem('referredVisitCode') === null
+        localStorage.getItem('referredVisitCode') === 'undefined' ||
+        localStorage.getItem('referredVisitCode') === null
       ) {
         this.getDiagnosisDetails();
       } else if (
@@ -164,14 +161,14 @@ export class PncDiagnosisComponent
           beneficiaryRegID,
           visitID,
           visitCategory,
-          this.sessionstorage.getItem('visitCode'),
+          localStorage.getItem('visitCode'),
         );
       } else {
         this.getMMUDiagnosisDetails(
           beneficiaryRegID,
-          this.sessionstorage.getItem('referredVisitID'),
+          localStorage.getItem('referredVisitID'),
           visitCategory,
-          this.sessionstorage.getItem('referredVisitCode'),
+          localStorage.getItem('referredVisitCode'),
         );
       }
     }

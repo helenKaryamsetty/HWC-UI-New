@@ -42,7 +42,6 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-physical-activity-history',
@@ -77,7 +76,6 @@ export class PhysicalActivityHistoryComponent
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -88,8 +86,8 @@ export class PhysicalActivityHistoryComponent
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      // let visitID = this.sessionstorage.getItem('visitID');
-      // let benRegID = this.sessionstorage.getItem('beneficiaryRegID')
+      // let visitID = localStorage.getItem('visitID');
+      // let benRegID = localStorage.getItem('beneficiaryRegID')
       // this.getGeneralHistory(benRegID, visitID);
     }
   }
@@ -103,9 +101,9 @@ export class PhysicalActivityHistoryComponent
           console.log('masterData', this.masterData);
 
           if (String(this.mode) === 'view') {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
-            const visitCategory = this.sessionstorage.getItem('visitCategory');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitCategory = localStorage.getItem('visitCategory');
             if (
               visitID !== null &&
               benRegID !== null &&
@@ -114,8 +112,7 @@ export class PhysicalActivityHistoryComponent
               this.getGeneralHistory();
             }
           }
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -184,7 +181,7 @@ export class PhysicalActivityHistoryComponent
   }
 
   getPreviousPhysicalActivityHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousPhysicalActivityHistory(benRegID, this.visitType)
       .subscribe(

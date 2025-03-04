@@ -38,7 +38,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-upload-files',
@@ -86,7 +85,6 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     private dialog: MatDialog,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -101,7 +99,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
   ngOnChanges() {
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (String(this.mode) === 'view' && !this.enableFileSelection) {
       this.disableFileSelection = true;
@@ -207,8 +205,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   }
   fileObj: any = [];
   assignFileObject(fileContent: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -216,10 +213,10 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      userID: this.sessionstorage.getItem('userID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      userID: localStorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
-      createdBy: this.sessionstorage.getItem('userName'),
+      createdBy: localStorage.getItem('userName'),
       vanID: vanID,
       isUploaded: false,
     };

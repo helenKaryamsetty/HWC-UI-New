@@ -22,7 +22,6 @@
 
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { AuthService } from 'src/app/app-modules/core/services';
 
@@ -36,7 +35,6 @@ export class ResetPasswordComponent {
     private router: Router,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   public response: any;
@@ -57,7 +55,7 @@ export class ResetPasswordComponent {
   wrong_answer_msg: any = '';
 
   getQuestions(username: any) {
-    this.sessionstorage.setItem('userName', username);
+    localStorage.setItem('userName', username);
     this.authService.getUserSecurityQuestionsAnswer(username).subscribe(
       (response: any) => {
         if (response !== undefined && response !== null)
@@ -145,7 +143,7 @@ export class ResetPasswordComponent {
     this.authService
       .validateSecurityQuestionAndAnswer(
         this.userFinalAnswers,
-        this.sessionstorage.getItem('userName'),
+        localStorage.getItem('userName'),
       )
       .subscribe(
         (response) => {
@@ -158,7 +156,7 @@ export class ResetPasswordComponent {
               this.showQuestions = true;
               this.counter = 0;
               this.confirmationService.alert(response.errorMessage, 'error');
-              this.getQuestions(this.sessionstorage.getItem('userName'));
+              this.getQuestions(localStorage.getItem('userName'));
               this.router.navigate(['/reset-password']);
               this.splitQuestionAndQuestionID();
             }
@@ -181,7 +179,7 @@ export class ResetPasswordComponent {
     this.authService.logout().subscribe((res) => {
       this.router.navigate(['/login']).then((result) => {
         if (result) {
-          this.sessionstorage.clear();
+          localStorage.clear();
           sessionStorage.clear();
         }
       });

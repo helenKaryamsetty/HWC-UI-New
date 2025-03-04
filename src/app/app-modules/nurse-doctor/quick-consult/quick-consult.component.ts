@@ -53,7 +53,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface prescribe {
   id: any;
@@ -85,7 +84,7 @@ interface prescribe {
 export class QuickConsultComponent
   implements OnInit, OnDestroy, OnChanges, DoCheck
 {
-  utils = new QuickConsultUtils(this.fb, this.sessionstorage);
+  utils = new QuickConsultUtils(this.fb);
 
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
@@ -180,7 +179,6 @@ export class QuickConsultComponent
     private dialog: MatDialog,
     private testInVitalsService: TestInVitalsService,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -189,7 +187,7 @@ export class QuickConsultComponent
     this.nurseService.clearRbsSelectedInInvestigation();
     this.nurseService.clearRbsInVitals();
     this.assignSelectedLanguage();
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.patientQuickConsultForm.controls['instruction'].enable();
       this.specialist = true;
@@ -198,7 +196,7 @@ export class QuickConsultComponent
       this.specialist = false;
     }
 
-    this.createdBy = this.sessionstorage.getItem('userName');
+    this.createdBy = localStorage.getItem('userName');
     this.getPrescriptionForm();
     this.setLimits();
     this.makeDurationMaster();
@@ -509,17 +507,14 @@ export class QuickConsultComponent
 
           this.loadVitalsFromNurse();
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialist_flag');
+          const specialistFlagString = localStorage.getItem('specialist_flag');
           if (String(this.quickConsultMode) === 'view') {
-            const beneficiaryRegID =
-              this.sessionstorage.getItem('beneficiaryRegID');
-            const visitID = this.sessionstorage.getItem('visitID');
-            const visitCategory = this.sessionstorage.getItem('visitCategory');
+            const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const visitCategory = localStorage.getItem('visitCategory');
             if (
-              this.sessionstorage.getItem('referredVisitCode') ===
-                'undefined' ||
-              this.sessionstorage.getItem('referredVisitCode') === null
+              localStorage.getItem('referredVisitCode') === 'undefined' ||
+              localStorage.getItem('referredVisitCode') === null
             ) {
               this.getDiagnosisDetails(
                 beneficiaryRegID,
@@ -534,14 +529,14 @@ export class QuickConsultComponent
                 beneficiaryRegID,
                 visitID,
                 visitCategory,
-                this.sessionstorage.getItem('visitCode'),
+                localStorage.getItem('visitCode'),
               );
             } else {
               this.getMMUDiagnosisDetails(
                 beneficiaryRegID,
-                this.sessionstorage.getItem('referredVisitID'),
+                localStorage.getItem('referredVisitID'),
                 visitCategory,
-                this.sessionstorage.getItem('referredVisitCode'),
+                localStorage.getItem('referredVisitCode'),
               );
             }
           }
@@ -781,8 +776,8 @@ export class QuickConsultComponent
   loadVitalsFromNurse() {
     this.getQuickConsultSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
+        benRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: localStorage.getItem('visitID'),
       })
       .subscribe((res) => {
         if (

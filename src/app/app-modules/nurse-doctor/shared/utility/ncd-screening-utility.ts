@@ -20,17 +20,12 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class NCDScreeningUtils {
-  constructor(
-    private fb: FormBuilder,
-    readonly sessionstorage: SessionStorageService,
-  ) {}
+  constructor(private fb: FormBuilder) {}
 
   createNCDScreeningForm() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       ncdScreeningConditionList: null,
@@ -66,8 +61,7 @@ export class NCDScreeningUtils {
     });
   }
   createIDRSForm() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,

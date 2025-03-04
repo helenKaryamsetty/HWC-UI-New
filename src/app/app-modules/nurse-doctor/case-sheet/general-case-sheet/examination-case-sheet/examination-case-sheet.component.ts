@@ -30,7 +30,6 @@ import {
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { DoctorService } from '../../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-examination-case-sheet',
@@ -70,13 +69,12 @@ export class ExaminationCaseSheetComponent
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
-    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
-    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
-    this.visitID = this.sessionstorage.getItem('visitID');
+    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    this.visitID = localStorage.getItem('visitID');
     this.assignSelectedLanguage();
   }
 

@@ -36,7 +36,6 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-worklist',
@@ -76,12 +75,11 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
     private labService: LabService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.sessionstorage.setItem('currentRole', 'Lab Technician');
+    localStorage.setItem('currentRole', 'Lab Technician');
     this.loadWorklist();
     this.beneficiaryDetailsService.reset();
     this.removeBeneficiaryDataForVisit();
@@ -98,22 +96,22 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   removeBeneficiaryDataForVisit() {
-    this.sessionstorage.removeItem('visitCode');
-    this.sessionstorage.removeItem('beneficiaryGender');
-    this.sessionstorage.removeItem('benFlowID');
-    this.sessionstorage.removeItem('visitCategory');
-    this.sessionstorage.removeItem('visitReason');
-    this.sessionstorage.removeItem('beneficiaryRegID');
-    this.sessionstorage.removeItem('visitID');
-    this.sessionstorage.removeItem('beneficiaryID');
-    this.sessionstorage.removeItem('doctorFlag');
-    this.sessionstorage.removeItem('nurseFlag');
-    this.sessionstorage.removeItem('pharmacist_flag');
-    this.sessionstorage.removeItem('specialistFlag');
+    localStorage.removeItem('visitCode');
+    localStorage.removeItem('beneficiaryGender');
+    localStorage.removeItem('benFlowID');
+    localStorage.removeItem('visitCategory');
+    localStorage.removeItem('visitReason');
+    localStorage.removeItem('beneficiaryRegID');
+    localStorage.removeItem('visitID');
+    localStorage.removeItem('beneficiaryID');
+    localStorage.removeItem('doctorFlag');
+    localStorage.removeItem('nurseFlag');
+    localStorage.removeItem('pharmacist_flag');
+    localStorage.removeItem('specialistFlag');
   }
 
   ngOnDestroy() {
-    this.sessionstorage.removeItem('currentRole');
+    localStorage.removeItem('currentRole');
   }
 
   loadWorklist() {
@@ -255,47 +253,29 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       )
       .subscribe((result) => {
         if (result) {
-          this.sessionstorage.setItem(
-            'doctorFlag',
-            beneficiary.labObject.doctorFlag,
-          );
-          this.sessionstorage.setItem(
-            'nurseFlag',
-            beneficiary.labObject.nurseFlag,
-          );
-          this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
-          this.sessionstorage.setItem(
+          localStorage.setItem('doctorFlag', beneficiary.labObject.doctorFlag);
+          localStorage.setItem('nurseFlag', beneficiary.labObject.nurseFlag);
+          localStorage.setItem('visitID', beneficiary.benVisitID);
+          localStorage.setItem(
             'beneficiaryRegID',
             beneficiary.beneficiaryRegID,
           );
-          this.sessionstorage.setItem(
-            'beneficiaryID',
-            beneficiary.beneficiaryID,
-          );
-          this.sessionstorage.setItem(
-            'visitCategory',
-            beneficiary.VisitCategory,
-          );
-          this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-          this.sessionstorage.setItem(
-            'visitCode',
-            beneficiary.labObject.visitCode,
-          );
+          localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+          localStorage.setItem('visitCategory', beneficiary.VisitCategory);
+          localStorage.setItem('benFlowID', beneficiary.benFlowID);
+          localStorage.setItem('visitCode', beneficiary.labObject.visitCode);
           if (
             beneficiary.labObject.specialist_flag &&
             beneficiary.labObject.specialist_flag >= 0
           ) {
-            this.sessionstorage.setItem(
+            localStorage.setItem(
               'specialist_flag',
               beneficiary.labObject.specialist_flag,
             );
           } else {
-            this.sessionstorage.setItem('specialist_flag', 'null');
+            localStorage.setItem('specialist_flag', 'null');
           }
-          console.log(
-            this.sessionstorage.getItem('visitCode'),
-            'visitCodebeforedave',
-          );
+          console.log(localStorage.getItem('visitCode'), 'visitCodebeforedave');
           this.router.navigate(['/lab/patient/', beneficiary.beneficiaryRegID]);
         }
       });

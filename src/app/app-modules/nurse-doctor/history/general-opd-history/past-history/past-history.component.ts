@@ -47,7 +47,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { HrpService } from '../../../shared/services/hrp.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-past-history',
@@ -90,7 +89,6 @@ export class PastHistoryComponent
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     private hrpService: HrpService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -102,8 +100,8 @@ export class PastHistoryComponent
   }
   ngOnChanges() {
     if (parseInt(sessionStorage.getItem('specialistFlag') || '{}') === 100) {
-      //  let visitID = this.sessionstorage.getItem('visitID');
-      // let benRegID = this.sessionstorage.getItem('beneficiaryRegID')
+      //  let visitID = localStorage.getItem('visitID');
+      // let benRegID = localStorage.getItem('beneficiaryRegID')
       // this.getGeneralHistory(benRegID, visitID);
     }
   }
@@ -168,8 +166,7 @@ export class PastHistoryComponent
           console.log('Add Past Illness Called==');
 
           this.changeDetectorRef.detectChanges();
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -632,7 +629,7 @@ export class PastHistoryComponent
   }
 
   getPreviousPastHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousPastHistory(benRegID, this.visitCategory)
       .subscribe(

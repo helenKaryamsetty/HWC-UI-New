@@ -46,7 +46,6 @@ import { Observable } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-chief-complaints',
@@ -93,15 +92,14 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {
-    this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
+    this.formUtility = new VisitDetailUtils(this.fb);
   }
 
   ngOnInit() {
     this.ncdTemperature = false;
     this.assignSelectedLanguage();
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -151,8 +149,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.mode) === 'view') {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
         }
@@ -170,20 +168,19 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.mode) === 'view') {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.getMMUChiefComplaints(benRegID, visitID);
           }
         }

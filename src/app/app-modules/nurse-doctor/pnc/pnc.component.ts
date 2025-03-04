@@ -47,7 +47,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-pnc',
@@ -97,7 +96,6 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -118,8 +116,8 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
     }
 
     if (String(this.mode) === 'update') {
@@ -211,11 +209,11 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   updatePatientPNC(patientPNCForm: any) {
     const temp = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      benVisitID: this.sessionstorage.getItem('visitID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      modifiedBy: this.sessionstorage.getItem('userName'),
-      visitCode: this.sessionstorage.getItem('visitCode'),
+      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      benVisitID: localStorage.getItem('visitID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      modifiedBy: localStorage.getItem('userName'),
+      visitCode: localStorage.getItem('visitCode'),
     };
 
     this.doctorService.updatePNCDetails(patientPNCForm, temp).subscribe(
@@ -324,30 +322,29 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (
-            this.sessionstorage.getItem('visitReason') !== undefined &&
-            this.sessionstorage.getItem('visitReason') !== 'undefined' &&
-            this.sessionstorage.getItem('visitReason') !== null &&
-            this.sessionstorage.getItem('visitReason') === 'Follow Up' &&
+            localStorage.getItem('visitReason') !== undefined &&
+            localStorage.getItem('visitReason') !== 'undefined' &&
+            localStorage.getItem('visitReason') !== null &&
+            localStorage.getItem('visitReason') === 'Follow Up' &&
             this.attendant === 'nurse'
           ) {
             this.getPreviousVisitPNCDetails();
           }
 
           if (this.mode) {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
 
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = this.sessionstorage.getItem('visitID');
-            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = localStorage.getItem('visitID');
+            const benRegID = localStorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
         }
@@ -355,7 +352,7 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousVisitPNCDetails() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
 
     this.doctorService
       .getPreviousPNCDetails(benRegID)

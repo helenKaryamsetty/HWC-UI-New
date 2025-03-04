@@ -24,7 +24,6 @@ import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-systemic-examination',
@@ -34,7 +33,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class SystemicExaminationComponent
   implements OnInit, OnChanges, DoCheck
 {
-  generalUtils = new GeneralUtils(this.fb, this.sessionstorage);
+  generalUtils = new GeneralUtils(this.fb);
 
   @Input()
   systemicExaminationForm!: FormGroup;
@@ -56,7 +55,6 @@ export class SystemicExaminationComponent
   constructor(
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

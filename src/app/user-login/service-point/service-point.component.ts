@@ -26,7 +26,6 @@ import { ServicePointService } from './service-point.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-service-point',
@@ -72,7 +71,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   districtBranchID: any;
   blockName: any;
   villageName: any;
-  currVanId: any;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -80,13 +78,12 @@ export class ServicePointComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.serviceProviderId !== this.sessionstorage.getItem('providerServiceID');
-    this.userId !== this.sessionstorage.getItem('userID');
+    this.serviceProviderId !== localStorage.getItem('providerServiceID');
+    this.userId !== localStorage.getItem('userID');
     this.getServicePoint();
     this.getCdssAdminStatus();
     console.log('here at three', this.current_language_set);
@@ -102,12 +99,12 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   resetLocalStorage() {
-    this.sessionstorage.removeItem('sessionID');
-    this.sessionstorage.removeItem('serviceLineDetails');
-    this.sessionstorage.removeItem('vanType');
-    this.sessionstorage.removeItem('location');
-    this.sessionstorage.removeItem('servicePointID');
-    this.sessionstorage.removeItem('servicePointName');
+    localStorage.removeItem('sessionID');
+    localStorage.removeItem('serviceLineDetails');
+    localStorage.removeItem('vanType');
+    localStorage.removeItem('location');
+    localStorage.removeItem('servicePointID');
+    localStorage.removeItem('servicePointName');
     sessionStorage.removeItem('facilityID');
   }
 
@@ -121,7 +118,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
           const data = res['servicePoints'].data;
           if (data.UserVanSpDetails) {
             this.vanServicepointDetails = data.UserVanSpDetails;
-            this.currVanId = this.vanServicepointDetails[0].vanID;
             this.filterVanList(this.vanServicepointDetails);
           }
         } else if (res['servicePoints'].statusCode === 5002) {
@@ -159,24 +155,21 @@ export class ServicePointComponent implements OnInit, DoCheck {
     const serviceLineDetails: any = this.vansList.filter((van: any) => {
       return this.vanID === van.vanID;
     })[0];
-    this.sessionstorage.setItem(
+    localStorage.setItem(
       'serviceLineDetails',
       JSON.stringify(serviceLineDetails),
     );
     if (serviceLineDetails.facilityID)
       sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
     if (serviceLineDetails.servicePointID)
-      this.sessionstorage.setItem(
-        'servicePointID',
-        serviceLineDetails.servicePointID,
-      );
+      localStorage.setItem('servicePointID', serviceLineDetails.servicePointID);
     if (serviceLineDetails.servicePointName)
-      this.sessionstorage.setItem(
+      localStorage.setItem(
         'servicePointName',
         serviceLineDetails.servicePointName,
       );
     if (serviceLineDetails.vanSession)
-      this.sessionstorage.setItem('sessionID', serviceLineDetails.vanSession);
+      localStorage.setItem('sessionID', serviceLineDetails.vanSession);
   }
 
   routeToDesignation(designation: any) {
@@ -208,21 +201,19 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
-    this.servicePointService
-      .getMMUDemographics(this.currVanId)
-      .subscribe((res: any) => {
-        if (res && res.statusCode === 200) {
-          this.saveDemographicsToStorage(res.data);
-        } else {
-          this.locationGathetingIssues();
-        }
-      });
+    this.servicePointService.getMMUDemographics().subscribe((res: any) => {
+      if (res && res.statusCode === 200) {
+        this.saveDemographicsToStorage(res.data);
+      } else {
+        this.locationGathetingIssues();
+      }
+    });
   }
 
   saveDemographicsToStorage(data: any) {
     if (data) {
       if (data.stateMaster && data.stateMaster.length >= 1) {
-        this.sessionstorage.setItem('location', JSON.stringify(data));
+        localStorage.setItem('location', JSON.stringify(data));
         this.goToWorkList();
       } else {
         this.locationGathetingIssues();
@@ -304,20 +295,17 @@ export class ServicePointComponent implements OnInit, DoCheck {
     // Convert the object into a JSON string
     const locationDataJSON = JSON.stringify(locationData);
 
-    // Store the JSON string in this.sessionstorage
-    this.sessionstorage.setItem('locationData', locationDataJSON);
+    // Store the JSON string in localStorage
+    localStorage.setItem('locationData', locationDataJSON);
     this.goToWorkList();
   }
 
   goToWorkList() {
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     this.routeToDesignation(this.designation);
   }
 
   locationGathetingIssues() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.current_language_set = getLanguageJson.currentLanguageObject;
     this.confirmationService.alert(
       this.current_language_set.coreComponents
         .issuesInGettingLocationTryToReLogin,
@@ -336,7 +324,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
           res.data.isCdss !== undefined &&
           res.data.isCdss !== null
         ) {
-          this.sessionstorage.setItem('isCdss', res.data.isCdss);
+          localStorage.setItem('isCdss', res.data.isCdss);
         }
       });
   }

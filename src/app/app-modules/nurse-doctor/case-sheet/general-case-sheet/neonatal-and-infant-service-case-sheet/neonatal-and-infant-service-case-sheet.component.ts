@@ -29,7 +29,6 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -71,14 +70,11 @@ export class NeonatalAndInfantServiceCaseSheetComponent
   visitCategory: any;
   birthTime!: Date;
 
-  constructor(
-    private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
-  ) {}
+  constructor(private httpServiceService: HttpServiceService) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
   }
 
   ngDoCheck() {

@@ -37,7 +37,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-tm-future-worklist',
@@ -76,11 +75,10 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
-    this.sessionstorage.setItem('currentRole', 'Doctor');
+    localStorage.setItem('currentRole', 'Doctor');
     this.loadWorklist();
     this.assignSelectedLanguage();
   }
@@ -95,7 +93,7 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sessionstorage.removeItem('currentRole');
+    localStorage.removeItem('currentRole');
   }
 
   pageChanged(event: any): void {
@@ -242,7 +240,7 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
               benRegID: beneficiary.beneficiaryRegID,
               visitCode: beneficiary.visitCode,
               userID: beneficiary.tCSpecialistUserID,
-              modifiedBy: this.sessionstorage.getItem('userName'),
+              modifiedBy: localStorage.getItem('userName'),
             })
             .subscribe(
               (res: any) => {
@@ -282,8 +280,8 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
       benVisitID: beneficiary.benVisitID,
       visitCode: beneficiary.visitCode,
       vanID: beneficiary.vanID,
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      createdBy: localStorage.getItem('userName'),
       tcRequest: tcRequest,
     };
     this.doctorService.scheduleTC(scedulerRequest).subscribe(

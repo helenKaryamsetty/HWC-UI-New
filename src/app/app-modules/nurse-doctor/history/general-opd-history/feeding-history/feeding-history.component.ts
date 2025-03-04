@@ -39,7 +39,6 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-feeding-history',
@@ -70,7 +69,6 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private dialog: MatDialog,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -99,8 +97,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
-          const specialistFlagString =
-            this.sessionstorage.getItem('specialistFlag');
+          const specialistFlagString = localStorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -166,7 +163,7 @@ export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousFeedingHistory() {
-    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID: any = localStorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousFeedingHistory(benRegID, this.visitCategory)
       .subscribe(

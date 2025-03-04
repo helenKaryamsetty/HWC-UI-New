@@ -32,7 +32,6 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { DoctorService, NurseService } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-general-opd-examination',
@@ -60,7 +59,6 @@ export class GeneralOpdExaminationComponent
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -97,17 +95,17 @@ export class GeneralOpdExaminationComponent
   ngOnChanges() {
     this.loadFormData();
     if (String(this.mode) === 'view') {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getAncExaminationData(benRegID, visitID);
     }
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = this.sessionstorage.getItem('visitID');
-      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = localStorage.getItem('visitID');
+      const benRegID = localStorage.getItem('beneficiaryRegID');
       this.getAncExaminationData(benRegID, visitID);
     }
     if (String(this.mode) === 'update') {
@@ -163,20 +161,20 @@ export class GeneralOpdExaminationComponent
   updatePatientExamination(patientExaminationForm: any) {
     if (this.checkRequired(patientExaminationForm)) {
       const serviceLineDetails: any =
-        this.sessionstorage.getItem('serviceLineDetails');
+        localStorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
       const updateDetails = {
-        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-        benVisitID: this.sessionstorage.getItem('visitID'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        modifiedBy: this.sessionstorage.getItem('userName'),
-        beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-        sessionID: this.sessionstorage.getItem('sessionID'),
+        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+        benVisitID: localStorage.getItem('visitID'),
+        providerServiceMapID: localStorage.getItem('providerServiceID'),
+        modifiedBy: localStorage.getItem('userName'),
+        beneficiaryID: localStorage.getItem('beneficiaryID'),
+        sessionID: localStorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        benFlowID: this.sessionstorage.getItem('benFlowID'),
-        visitCode: this.sessionstorage.getItem('visitCode'),
+        benFlowID: localStorage.getItem('benFlowID'),
+        visitCode: localStorage.getItem('visitCode'),
       };
 
       this.doctorService

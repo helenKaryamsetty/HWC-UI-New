@@ -36,7 +36,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-scheduler',
@@ -80,7 +79,6 @@ export class SchedulerComponent implements OnInit, DoCheck {
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private fb: FormBuilder,
     public mdDialogRef: MatDialogRef<SchedulerComponent>,
-    readonly sessionstorage: SessionStorageService,
   ) {}
   today!: Date;
   schedulerDate!: Date;
@@ -101,8 +99,8 @@ export class SchedulerComponent implements OnInit, DoCheck {
       clear: true,
     };
 
-    this.sessionstorage.setItem('setComorbid', 'false');
-    this.ansComorbid = this.sessionstorage.getItem('setComorbid');
+    localStorage.setItem('setComorbid', 'false');
+    this.ansComorbid = localStorage.getItem('setComorbid');
     this.nurseService.filter(this.ansComorbid);
     this.mdDialogRef.close(modalClear);
   }
@@ -222,9 +220,9 @@ export class SchedulerComponent implements OnInit, DoCheck {
       specialistDetails: null,
     });
     const specialistReqObj = {
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      providerServiceMapID: localStorage.getItem('providerServiceID'),
       specializationID: this.specialization.specializationID,
-      userID: this.sessionstorage.getItem('userID'),
+      userID: localStorage.getItem('userID'),
     };
 
     this.doctorService.getSpecialist(specialistReqObj).subscribe(
@@ -288,8 +286,8 @@ export class SchedulerComponent implements OnInit, DoCheck {
       });
       console.log('modalData', modalData);
 
-      this.sessionstorage.setItem('setComorbid', 'true');
-      this.ansComorbid = this.sessionstorage.getItem('setComorbid');
+      localStorage.setItem('setComorbid', 'true');
+      this.ansComorbid = localStorage.getItem('setComorbid');
       this.nurseService.filter(this.ansComorbid);
 
       this.mdDialogRef.close(modalData);

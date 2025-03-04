@@ -33,7 +33,6 @@ import { GeneralUtils } from '../../../../shared/utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-covid-diagnosis',
@@ -43,7 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class CovidDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
 {
-  utils = new GeneralUtils(this.fb, this.sessionstorage);
+  utils = new GeneralUtils(this.fb);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -59,12 +58,11 @@ export class CovidDiagnosisComponent
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
       this.specialist = true;

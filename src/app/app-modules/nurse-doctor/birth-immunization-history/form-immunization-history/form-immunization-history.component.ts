@@ -40,7 +40,6 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NurseService } from '../../shared/services/nurse.service';
 import { DoctorService, MasterdataService } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-form-immunization-history',
@@ -86,7 +85,6 @@ export class FormImmunizationHistoryComponent
     private dialog: MatDialog,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -250,7 +248,7 @@ export class FormImmunizationHistoryComponent
     if (String(this.immunizationHistoryMode) === 'view') {
       this.getNurseFetchDetails();
     }
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
@@ -489,7 +487,7 @@ export class FormImmunizationHistoryComponent
   }
 
   getPreviousImmunizationServicesHistory() {
-    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const benRegID = localStorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousImmunizationServicesData(benRegID).subscribe(
       (res: any) => {
         if (res !== null && res.data !== null) {

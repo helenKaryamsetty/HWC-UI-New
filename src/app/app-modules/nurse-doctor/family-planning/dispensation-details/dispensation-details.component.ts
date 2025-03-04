@@ -42,7 +42,6 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-dispensation-details',
@@ -107,7 +106,6 @@ export class DispensationDetailsComponent
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -341,11 +339,10 @@ export class DispensationDetailsComponent
       this.getFamilyPlanningNurseFetchDetails();
     }
     if (
-      this.sessionstorage.getItem('visitReason') !== undefined &&
-      this.sessionstorage.getItem('visitReason') !== 'undefined' &&
-      this.sessionstorage.getItem('visitReason') !== null &&
-      this.sessionstorage.getItem('visitReason')?.toLowerCase() ===
-        'follow up' &&
+      localStorage.getItem('visitReason') !== undefined &&
+      localStorage.getItem('visitReason') !== 'undefined' &&
+      localStorage.getItem('visitReason') !== null &&
+      localStorage.getItem('visitReason')?.toLowerCase() === 'follow up' &&
       this.attendant === 'nurse'
     ) {
       this.getFamilyPlanningFetchDetailsForRevisit();

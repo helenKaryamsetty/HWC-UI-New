@@ -5,7 +5,6 @@ import { TelemedicineService } from 'src/app/app-modules/core/services/telemedic
 import { ServicePointService } from './../service-point/service-point.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -22,7 +21,6 @@ export class ServiceComponent implements OnInit, DoCheck {
   vanServicepointDetails: any;
   vansList = [];
   vanID!: string;
-  currVanId: any;
   serviceDetails: any;
   stateName: any;
 
@@ -33,37 +31,20 @@ export class ServiceComponent implements OnInit, DoCheck {
     private servicePointService: ServicePointService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    // this.sessionstorage.removeItem('providerServiceID');
-    const services: any = this.sessionstorage.getItem('services');
+    localStorage.removeItem('providerServiceID');
+    const services: any = localStorage.getItem('services');
     this.servicesList = JSON.parse(services);
-    if (this.servicesList.length === 1) {
-      this.sessionstorage.setItem(
-        'providerServiceID',
-        this.servicesList[0].providerServiceID,
-      );
-      this.sessionstorage.setItem(
-        'serviceName',
-        this.servicesList[0].serviceName,
-      );
-      this.sessionstorage.setItem('serviceID', this.servicesList[0].serviceID);
-      sessionStorage.setItem(
-        'apimanClientKey',
-        this.servicesList[0].apimanClientKey,
-      );
-    }
-    this.fullName = this.sessionstorage.getItem('fullName');
+    this.fullName = localStorage.getItem('fullName');
   }
 
   getServicePoint() {
-    const serviceProviderId: any =
-      this.sessionstorage.getItem('providerServiceID');
-    const userId: any = this.sessionstorage.getItem('userID');
-    const data: any = this.sessionstorage.getItem('loginDataResponse');
+    const serviceProviderId: any = localStorage.getItem('providerServiceID');
+    const userId: any = localStorage.getItem('userID');
+    const data: any = localStorage.getItem('loginDataResponse');
     const jsonData = JSON.parse(data);
     const designation = jsonData.designation.designationName;
     this.servicePointService
@@ -76,7 +57,6 @@ export class ServiceComponent implements OnInit, DoCheck {
 
             if (data.UserVanSpDetails && data.UserVanSpDetails.length > 0) {
               this.vanServicepointDetails = data.UserVanSpDetails;
-              this.currVanId = this.vanServicepointDetails[0].vanID;
               this.filterVanList(this.vanServicepointDetails);
               this.getDemographics();
               this.checkRoleAndDesingnationMappedForservice(
@@ -118,7 +98,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   getServiceLineDetails() {
     const serviceLineDetails: any = this.vansList[0];
     console.log('serviceLineDetails', serviceLineDetails);
-    this.sessionstorage.setItem(
+    localStorage.setItem(
       'serviceLineDetails',
       JSON.stringify(serviceLineDetails),
     );
@@ -129,17 +109,14 @@ export class ServiceComponent implements OnInit, DoCheck {
     )
       sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
     if (serviceLineDetails.servicePointID)
-      this.sessionstorage.setItem(
-        'servicePointID',
-        serviceLineDetails.servicePointID,
-      );
+      localStorage.setItem('servicePointID', serviceLineDetails.servicePointID);
     if (serviceLineDetails.servicePointName)
-      this.sessionstorage.setItem(
+      localStorage.setItem(
         'servicePointName',
         serviceLineDetails.servicePointName,
       );
     if (serviceLineDetails.vanSession)
-      this.sessionstorage.setItem('sessionID', serviceLineDetails.vanSession);
+      localStorage.setItem('sessionID', serviceLineDetails.vanSession);
   }
 
   loginDataResponse: any;
@@ -154,13 +131,12 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   selectService(service: any) {
-    this.sessionstorage.setItem('providerServiceID', service.providerServiceID);
-    console.log(this.sessionstorage.getItem('provideServiceID'));
-    this.sessionstorage.setItem('serviceName', service.serviceName);
-    this.sessionstorage.setItem('serviceID', service.serviceID);
+    localStorage.setItem('providerServiceID', service.providerServiceID);
+    console.log(localStorage.getItem('provideServiceID'));
+    localStorage.setItem('serviceName', service.serviceName);
+    localStorage.setItem('serviceID', service.serviceID);
     sessionStorage.setItem('apimanClientKey', service.apimanClientKey);
-    const loginDataResponse: any =
-      this.sessionstorage.getItem('loginDataResponse');
+    const loginDataResponse: any = localStorage.getItem('loginDataResponse');
     this.loginDataResponse = JSON.parse(loginDataResponse);
     this.serviceDetails = service;
     this.getServicePoint();
@@ -197,7 +173,7 @@ export class ServiceComponent implements OnInit, DoCheck {
           });
         });
         if (this.roleArray && this.roleArray.length > 0) {
-          this.sessionstorage.setItem('role', JSON.stringify(this.roleArray));
+          localStorage.setItem('role', JSON.stringify(this.roleArray));
           this.checkMappedDesignation(this.loginDataResponse);
         } else {
           this.confirmationService.alert(
@@ -244,7 +220,7 @@ export class ServiceComponent implements OnInit, DoCheck {
 
   checkDesignationWithRole() {
     if (this.roleArray.includes(this.designation)) {
-      this.sessionstorage.setItem('designation', this.designation);
+      localStorage.setItem('designation', this.designation);
       this.routeToDesignation(this.designation);
     } else {
       this.confirmationService.alert(
@@ -260,21 +236,19 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
-    this.servicePointService
-      .getMMUDemographics(this.currVanId)
-      .subscribe((res: any) => {
-        if (res && res.statusCode === 200) {
-          this.saveDemographicsToStorage(res.data);
-        } else {
-          this.locationGathetingIssues();
-        }
-      });
+    this.servicePointService.getMMUDemographics().subscribe((res: any) => {
+      if (res && res.statusCode === 200) {
+        this.saveDemographicsToStorage(res.data);
+      } else {
+        this.locationGathetingIssues();
+      }
+    });
   }
 
   saveDemographicsToStorage(data: any) {
     if (data) {
       if (data.stateMaster && data.stateMaster.length >= 1) {
-        this.sessionstorage.setItem('location', JSON.stringify(data));
+        localStorage.setItem('location', JSON.stringify(data));
       } else {
         this.locationGathetingIssues();
       }
@@ -288,9 +262,6 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   locationGathetingIssues() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.current_language_set = getLanguageJson.currentLanguageObject;
     this.confirmationService.alert(
       this.current_language_set.coreComponents
         .issuesInGettingLocationTryToReLogin,
@@ -298,7 +269,7 @@ export class ServiceComponent implements OnInit, DoCheck {
     );
   }
   goToWorkList() {
-    this.designation = this.sessionstorage.getItem('designation');
+    this.designation = localStorage.getItem('designation');
     this.routeToDesignationWorklist(this.designation);
   }
 
@@ -338,17 +309,15 @@ export class ServiceComponent implements OnInit, DoCheck {
         this.telemedicineService.routeToTeleMedecine();
         break;
       default:
-        this.router.navigate(['/nurse-doctor/doctor-worklist']);
+        this.router.navigate(['/servicePoint']);
         this.goToWorkList();
         break;
     }
   }
 
-  async getCdssAdminStatus() {
-    const psmid = this.sessionstorage.getItem('providerServiceID');
-    console.error('psmid', psmid);
-    // if(psmid){
-    await this.servicePointService
+  getCdssAdminStatus() {
+    const psmid = localStorage.getItem('providerServiceID');
+    this.servicePointService
       .getCdssAdminDetails(psmid)
       .subscribe((res: any) => {
         if (
@@ -357,35 +326,32 @@ export class ServiceComponent implements OnInit, DoCheck {
           res.data.isCdss !== undefined &&
           res.data.isCdss !== null
         ) {
-          this.sessionstorage.setItem('isCdss', res.data.isCdss);
+          localStorage.setItem('isCdss', res.data.isCdss);
         }
       });
-    // }
   }
 
   saveLocationDataToStorage() {
-    setTimeout(() => {
-      const location: any = this.sessionstorage.getItem('location');
-      const data = JSON.parse(location);
-      this.stateName = data.stateMaster.find((item: any) => {
-        if (item.stateID === data.otherLoc.stateID) return item.stateName;
-      });
-      const locationData = {
-        stateID: data.otherLoc.stateID,
-        stateName: this.stateName.stateName,
-        districtID: data.otherLoc.districtList[0].districtID,
-        districtName: data.otherLoc.districtList[0].districtName,
-        blockName: data.otherLoc.districtList[0].blockName,
-        blockID: data.otherLoc.districtList[0].blockId,
-        subDistrictID: data.otherLoc.districtList[0].districtBranchID,
-        villageName: data.otherLoc.districtList[0].villageName,
-      };
+    const location: any = localStorage.getItem('location');
+    const data = JSON.parse(location);
+    this.stateName = data.stateMaster.find((item: any) => {
+      if (item.stateID === data.otherLoc.stateID) return item.stateName;
+    });
+    const locationData = {
+      stateID: data.otherLoc.stateID,
+      stateName: this.stateName.stateName,
+      districtID: data.otherLoc.districtList[0].districtID,
+      districtName: data.otherLoc.districtList[0].districtName,
+      blockName: data.otherLoc.districtList[0].blockName,
+      blockID: data.otherLoc.districtList[0].blockId,
+      subDistrictID: data.otherLoc.districtList[0].districtBranchID,
+      villageName: data.otherLoc.districtList[0].villageName,
+    };
 
-      // Convert the object into a JSON string
-      const locationDataJSON = JSON.stringify(locationData);
+    // Convert the object into a JSON string
+    const locationDataJSON = JSON.stringify(locationData);
 
-      // Store the JSON string in this.sessionstorage
-      this.sessionstorage.setItem('locationData', locationDataJSON);
-    }, 1000);
+    // Store the JSON string in localStorage
+    localStorage.setItem('locationData', locationDataJSON);
   }
 }

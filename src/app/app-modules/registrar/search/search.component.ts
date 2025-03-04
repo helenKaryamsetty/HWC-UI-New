@@ -46,7 +46,6 @@ import { HealthIdDisplayModalComponent } from '../../core/components/health-id-d
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export interface Consent {
   consentGranted: string;
@@ -147,7 +146,6 @@ export class SearchComponent
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private commonService: CommonService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -640,10 +638,10 @@ export class SearchComponent
       const action = false;
       console.log(JSON.stringify(benObject, null, 4), 'benObject');
       const serviceLineDetails: any =
-        this.sessionstorage.getItem('serviceLineDetails');
+        localStorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       benObject['providerServiceMapId'] =
-        this.sessionstorage.getItem('providerServiceID');
+        localStorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
       this.confirmationService
         .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)
@@ -937,8 +935,7 @@ export class SearchComponent
     });
   }
   sendBenToAmrit(benDetails: any) {
-    const servicePointDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const servicePointDetails: any = localStorage.getItem('serviceLineDetails');
 
     const date = new Date(
       benDetails.profile.patient.yearOfBirth +
@@ -958,8 +955,8 @@ export class SearchComponent
         stateID: this.stateID,
         districtName: benDetails.profile.patient.address.district,
         districtID: this.districtID,
-        servicePointID: this.sessionstorage.getItem('servicePointID'),
-        servicePointName: this.sessionstorage.getItem('servicePointName'),
+        servicePointID: localStorage.getItem('servicePointID'),
+        servicePointName: localStorage.getItem('servicePointName'),
       },
       benPhoneMaps: [
         {
@@ -968,13 +965,13 @@ export class SearchComponent
           phoneNo: null,
           vanID: servicePointDetails.vanID,
           parkingPlaceID: servicePointDetails.parkingPlaceID,
-          createdBy: this.sessionstorage.getItem('userName'),
+          createdBy: localStorage.getItem('userName'),
         },
       ],
-      providerServiceMapId: this.sessionstorage.getItem('providerServiceID'),
+      providerServiceMapId: localStorage.getItem('providerServiceID'),
       vanID: servicePointDetails.vanID,
       parkingPlaceID: servicePointDetails.parkingPlaceID,
-      createdBy: this.sessionstorage.getItem('userName'),
+      createdBy: localStorage.getItem('userName'),
     };
 
     this.registrarService.submitBeneficiary(req).subscribe(
@@ -1018,10 +1015,10 @@ export class SearchComponent
       benObject.amritID !== ''
     ) {
       const serviceLineDetails: any =
-        this.sessionstorage.getItem('serviceLineDetails');
+        localStorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       benObject['providerServiceMapId'] =
-        this.sessionstorage.getItem('providerServiceID');
+        localStorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
       this.confirmationService
         .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)
@@ -1134,11 +1131,10 @@ export class SearchComponent
   }
 
   transferMigratedBeneficiaryToNurse(benObject: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     benObject['providerServiceMapId'] =
-      this.sessionstorage.getItem('providerServiceID');
+      localStorage.getItem('providerServiceID');
     benObject['vanID'] = vanID;
     this.confirmationService
       .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)

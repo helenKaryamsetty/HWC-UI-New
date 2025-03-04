@@ -25,7 +25,6 @@ import { MasterdataService, DoctorService } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-immunization-history',
@@ -55,7 +54,6 @@ export class ImmunizationHistoryComponent
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
   /**Modified by JA354063 */
   /** Code optimization required */
@@ -232,7 +230,7 @@ export class ImmunizationHistoryComponent
       this.loadVaccineData();
     }
 
-    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
+    const specialistFlagString = localStorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&

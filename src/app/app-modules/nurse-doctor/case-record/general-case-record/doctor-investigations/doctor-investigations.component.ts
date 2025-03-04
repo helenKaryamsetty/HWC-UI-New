@@ -34,7 +34,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-investigations',
@@ -100,7 +99,6 @@ export class DoctorInvestigationsComponent
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -118,7 +116,7 @@ export class DoctorInvestigationsComponent
         this.hypertensionSelected = response;
         this.changeOfConfirmedHypertension(this.hypertensionSelected);
       });
-    this.visitCategoryCheck = this.sessionstorage.getItem('visitCategory');
+    this.visitCategoryCheck = localStorage.getItem('visitCategory');
 
     this.finalHypertensionSubscription =
       this.idrsScoreService.finalDiagnosisHypertensionConfirmation$.subscribe(
@@ -132,8 +130,8 @@ export class DoctorInvestigationsComponent
     this.sysAndDiaBp();
     this.getDoctorMasterData();
     this.getNurseMasterData();
-    if (this.sessionstorage.getItem('referredVisitCode')) {
-      this.referredVisitcode = this.sessionstorage.getItem('referredVisitCode');
+    if (localStorage.getItem('referredVisitCode')) {
+      this.referredVisitcode = localStorage.getItem('referredVisitCode');
     } else {
       this.referredVisitcode = 'undefined';
     }
@@ -331,10 +329,9 @@ export class DoctorInvestigationsComponent
             }
           });
           if (String(this.caseRecordMode) === 'view') {
-            this.beneficiaryRegID =
-              this.sessionstorage.getItem('beneficiaryRegID');
-            this.visitID = this.sessionstorage.getItem('visitID');
-            this.visitCategory = this.sessionstorage.getItem('visitCategory');
+            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+            this.visitID = localStorage.getItem('visitID');
+            this.visitCategory = localStorage.getItem('visitCategory');
             this.getInvestigationDetails();
           }
         }
@@ -513,14 +510,14 @@ export class DoctorInvestigationsComponent
 
   loadMMUInvestigation() {
     const reqObj = {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('referredVisitCode'),
-      benVisitID: this.sessionstorage.getItem('referredVisitID'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('referredVisitCode'),
+      benVisitID: localStorage.getItem('referredVisitID'),
       fetchMMUDataFor: 'Investigation',
     };
     if (
-      this.sessionstorage.getItem('referredVisitCode') !== 'undefined' &&
-      this.sessionstorage.getItem('referredVisitID') !== 'undefined'
+      localStorage.getItem('referredVisitCode') !== 'undefined' &&
+      localStorage.getItem('referredVisitID') !== 'undefined'
     ) {
       this.doctorService.getMMUData(reqObj).subscribe(
         (res: any) => {
@@ -563,14 +560,14 @@ export class DoctorInvestigationsComponent
 
   getMMUInvestigationDetails() {
     const reqObj = {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('referredVisitCode'),
-      benVisitID: this.sessionstorage.getItem('referredVisitID'),
+      benRegID: localStorage.getItem('beneficiaryRegID'),
+      visitCode: localStorage.getItem('referredVisitCode'),
+      benVisitID: localStorage.getItem('referredVisitID'),
       fetchMMUDataFor: 'Investigation',
     };
     if (
-      this.sessionstorage.getItem('referredVisitCode') !== 'undefined' &&
-      this.sessionstorage.getItem('referredVisitID') !== 'undefined'
+      localStorage.getItem('referredVisitCode') !== 'undefined' &&
+      localStorage.getItem('referredVisitID') !== 'undefined'
     ) {
       this.doctorService.getMMUData(reqObj).subscribe(
         (res: any) => {
