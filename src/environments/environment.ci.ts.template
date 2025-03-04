@@ -392,7 +392,7 @@ export const environment = {
   checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
   verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
   gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
-  mapHealthIdUrl: `${FHIR_API}healthID/mapHealthIDToBeneficiary`,
+  mapHealthIdUrl: `${FHIR_API}healthIDRecord/mapHealthIDToBeneficiary`,
 
   /*Health ID - care context Mapping*/
   careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
