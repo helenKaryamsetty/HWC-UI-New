@@ -133,9 +133,9 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   cbacFamilyHistoryBpdiabetesScore = 0;
   beneficiaryGender: any;
   beneficiaryAge: any;
-  totalCbacScore!: number;
+  totalCbacScore = 0;
   cbacDetailsFromNurse: any;
-  totalScore!: number;
+  totalScore = 0;
 
   constructor(
     private fb: FormBuilder,

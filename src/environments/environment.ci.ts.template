@@ -465,16 +465,16 @@ export const environment = {
   /* Neonatal And Infant Services Urls*/
   saveNurseNeonatalAndInfantDetails: `${HWC_API}neonatal-infant-services/save/nurseData`,
   getBirthImmunizationHistoryDetailsUrl: `${HWC_API}neonatal-infant-services/getBenHistoryDetails`,
-  updateBirthImmunizationHistoryDetailsUrl: `${HWC_API}neonatal-infantServices/update/BirthAndImmunizationHistoryScreen`,
+  updateBirthImmunizationHistoryDetailsUrl: `${HWC_API}neonatal-infant-services/update/BirthAndImmunizationHistoryScreen`,
   getNeonatalVitalsDetailsUrl: `${HWC_API}neonatal-infant-services/getBenVitalDetailsFrmNurse`,
-  updateNeonatalVitalsDetailsUrl: `${HWC_API}neonatal-infantServices/update/vitalScreen`,
+  updateNeonatalVitalsDetailsUrl: `${HWC_API}neonatal-infant-services/update/vitalScreen`,
   getPreviousBirthImmunizationDetailsUrl: `${HWC_API}neonatal-infant-services/getBenHistoryDetails`,
   saveDoctorNeonatalAndInfantService: `${HWC_API}neonatal-infant-services/save-neo-natal-doctor-data`,
-  updateNeonatalAndInfantService: `${HWC_API}neonatal-infantServices/update/doctorData`,
+  updateNeonatalAndInfantService: `${HWC_API}neonatal-infant-services/update/doctorData`,
   getNeonatalAndInfantDetails: `${HWC_API}neonatal-infant-services/getBenCaseRecordFromDoctor`,
   vaccineListUrl: `${HWC_API}master/common/masterData/getVaccine/`,
   fetchNeonatalImmunizationService: `${HWC_API}neonatal-infant-services/getBenImmunizationServiceDetails`,
-  updateNeonatalImmunizationService: `${HWC_API}neonatal-infantServices/update/ImmunizationServicesScreen`,
+  updateNeonatalImmunizationService: `${HWC_API}neonatal-infant-services/update/ImmunizationServicesScreen`,
   getNeonatalVisitDetails: `${HWC_API}neonatal-infant-services/getBenVisitDetailsFrmNurseNNI`,
 
   /* Child And Adolescent Urls */
