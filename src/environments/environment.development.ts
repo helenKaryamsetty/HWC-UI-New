@@ -461,17 +461,17 @@ export const environment = {
 
   saveNurseNeonatalAndInfantDetails: `${TM_API}neonatal-infant-services/save/nurseData`,
   getBirthImmunizationHistoryDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
-  updateBirthImmunizationHistoryDetailsUrl: `${TM_API}/neonatal-infantServices/update/BirthAndImmunizationHistoryScreen`,
+  updateBirthImmunizationHistoryDetailsUrl: `${TM_API}/neonatal-infant-services/update/BirthAndImmunizationHistoryScreen`,
   getNeonatalVitalsDetailsUrl: `${TM_API}neonatal-infant-services/getBenVitalDetailsFrmNurse`,
-  updateNeonatalVitalsDetailsUrl: `${TM_API}/neonatal-infantServices/update/vitalScreen`,
+  updateNeonatalVitalsDetailsUrl: `${TM_API}/neonatal-infant-services/update/vitalScreen`,
   getPreviousBirthImmunizationDetailsUrl: `${TM_API}neonatal-infant-services/getBenHistoryDetails`,
   saveDoctorNeonatalAndInfantService: `${TM_API}neonatal-infant-services/save-neo-natal-doctor-data`,
-  updateNeonatalAndInfantService: `${TM_API}/neonatal-infantServices/update/doctorData`,
+  updateNeonatalAndInfantService: `${TM_API}/neonatal-infant-services/update/doctorData`,
   getNeonatalAndInfantDetails: `${TM_API}neonatal-infant-services/getBenCaseRecordFromDoctor`,
   vaccineListUrl: `${TM_API}master/common/masterData/getVaccine/`,
   fetchNeonatalImmunizationService: `${TM_API}neonatal-infant-services/getBenImmunizationServiceDetails`,
   getNeonatalVisitDetails: `${TM_API}/neonatal-infant-services/getBenVisitDetailsFrmNurseNNI`,
-  updateNeonatalImmunizationService: `${TM_API}neonatal-infantServices/update/ImmunizationServicesScreen`,
+  updateNeonatalImmunizationService: `${TM_API}neonatal-infant-services/update/ImmunizationServicesScreen`,
 
   /* Child And Adolescent Urls */
   saveNurseChildAndAdloescentDetails: `${TM_API}/child-adolescent-care/save/nurseData`,
