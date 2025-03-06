@@ -28,6 +28,7 @@ import { environment } from 'src/environments/environment';
 import { DoctorService, MasterdataService } from '../../../shared/services';
 import { CDSSService } from '../../../shared/services/cdss-service';
 import * as moment from 'moment';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -139,10 +140,11 @@ export class DoctorDiagnosisCaseSheetComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     public cdssService: CDSSService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
     this.fetchHRPPositive();
     this.getHealthIDDetails();
     this.assignSelectedLanguage();
@@ -591,8 +593,10 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   fetchHRPPositive() {
-    const beneficiaryRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem(
+      'caseSheetBeneficiaryRegID',
+    );
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -607,7 +611,9 @@ export class DoctorDiagnosisCaseSheetComponent
   }
   getHealthIDDetails() {
     const data = {
-      beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
+      beneficiaryRegID: this.sessionstorage.getItem(
+        'caseSheetBeneficiaryRegID',
+      ),
       beneficiaryID: null,
     };
     this.registrarService.getHealthIdDetails(data).subscribe(
@@ -687,7 +693,9 @@ export class DoctorDiagnosisCaseSheetComponent
     doseTypeList: any[],
     vaccineTypeList: any[],
   ) {
-    const beneficiaryRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
+    const beneficiaryRegID = this.sessionstorage.getItem(
+      'caseSheetBeneficiaryRegID',
+    );
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(

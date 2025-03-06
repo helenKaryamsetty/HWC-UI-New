@@ -42,10 +42,12 @@ const INVENTORY_UI =  '<%= INVENTORY_UI_BASE %>';
 const SCHEDULER_UI =  '<%= SCHEDULER_UI_BASE %>';
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
+const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 
 export const environment = {
   production: true,
   app: `MMU`,
+  encKey: sessionStorageEncKey,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
@@ -390,7 +392,7 @@ export const environment = {
   checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
   verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
   gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
-  mapHealthIdUrl: `${FHIR_API}healthID/mapHealthIDToBeneficiary`,
+  mapHealthIdUrl: `${FHIR_API}healthIDRecord/mapHealthIDToBeneficiary`,
 
   /*Health ID - care context Mapping*/
   careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
@@ -530,5 +532,7 @@ export const environment = {
   verifyMobileForAbhaAuth: `${FHIR_API}abhaCreation/verifyAuthByAbdm`,
   requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
-  printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`
+  printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
+  printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`
+
 };

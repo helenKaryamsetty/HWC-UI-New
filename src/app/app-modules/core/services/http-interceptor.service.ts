@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private router: Router,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   intercept(
@@ -73,7 +75,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       url.indexOf('user/userAuthenticate') < 0
     ) {
       sessionStorage.clear();
-      localStorage.clear();
+      this.sessionstorage.clear();
       setTimeout(() => this.router.navigate(['/login']), 0);
       this.confirmationService.alert(response.errorMessage, 'error');
     } else {
@@ -105,7 +107,7 @@ export class HttpInterceptorService implements HttpInterceptor {
               } else if (result.action === 'timeout') {
                 clearTimeout(this.timerRef);
                 sessionStorage.clear();
-                localStorage.clear();
+                this.sessionstorage.clear();
                 this.confirmationService.alert(
                   this.currentLanguageSet.sessionExpired,
                   'error',
@@ -115,7 +117,7 @@ export class HttpInterceptorService implements HttpInterceptor {
                 setTimeout(() => {
                   clearTimeout(this.timerRef);
                   sessionStorage.clear();
-                  localStorage.clear();
+                  this.sessionstorage.clear();
                   this.confirmationService.alert(
                     this.currentLanguageSet.sessionExpired,
                     'error',

@@ -31,6 +31,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-case-sheet',
@@ -51,7 +52,7 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private injector: Injector,
-
+    readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService,
   ) {}
 
@@ -88,14 +89,14 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     let type;
     if (this.previous) {
       if (dataStore === 'previous') {
-        type = localStorage.getItem('previousCaseSheetVisitCategory');
+        type = this.sessionstorage.getItem('previousCaseSheetVisitCategory');
       }
     } else {
       if (dataStore === 'current') {
-        type = localStorage.getItem('caseSheetVisitCategory');
+        type = this.sessionstorage.getItem('caseSheetVisitCategory');
       }
       if (dataStore === 'previous') {
-        type = localStorage.getItem('previousCaseSheetVisitCategory');
+        type = this.sessionstorage.getItem('previousCaseSheetVisitCategory');
       }
     }
 
