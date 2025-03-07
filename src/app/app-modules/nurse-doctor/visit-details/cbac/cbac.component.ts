@@ -227,7 +227,11 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
           console.log('cbac fetched data from nurse', response.data);
           this.cbacDetailsFromNurse = response.data;
           const cbacData = response.data;
-          if (cbacData !== null && cbacData !== undefined) {
+          if (
+            cbacData !== null &&
+            cbacData !== undefined &&
+            cbacData.totalScore
+          ) {
             this.totalScore = cbacData.totalScore;
             this.cbacScreeningForm.patchValue({
               totalScore:
