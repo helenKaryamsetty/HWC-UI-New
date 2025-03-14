@@ -515,9 +515,21 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
 
   loadMMUReferDeatils() {
     const reqObj = {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('referredVisitCode'),
-      benVisitID: this.sessionstorage.getItem('referredVisitID'),
+      benRegID:
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('beneficiaryRegID') !== ''
+          ? this.sessionstorage.getItem('beneficiaryRegID')
+          : null,
+      visitCode:
+        this.sessionstorage.getItem('referredVisitCode') &&
+        this.sessionstorage.getItem('referredVisitCode') !== ''
+          ? this.sessionstorage.getItem('referredVisitCode')
+          : null,
+      benVisitID:
+        this.sessionstorage.getItem('referredVisitID') &&
+        this.sessionstorage.getItem('referredVisitID') !== ''
+          ? this.sessionstorage.getItem('referredVisitID')
+          : null,
       fetchMMUDataFor: 'Referral',
     };
     if (
