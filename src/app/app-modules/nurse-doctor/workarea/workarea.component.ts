@@ -4399,7 +4399,7 @@ export class WorkareaComponent
       });
   }
   getMappedAbdmFacility() {
-    const locationData: any = localStorage.getItem('loginDataResponse');
+    const locationData: any = this.sessionstorage.getItem('loginDataResponse');
     const jsonLoccationData = JSON.parse(locationData);
     let workLocationId: any;
     if (jsonLoccationData?.previlegeObj[0]?.roles) {
@@ -4436,7 +4436,7 @@ export class WorkareaComponent
 
   saveAbdmFacilityForVisit() {
     const reqObj = {
-      visitCode: localStorage.getItem('visitCode'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
       abdmFacilityId: this.abdmFacilityId,
     };
     this.registrarService.saveAbdmFacilityForVisit(reqObj).subscribe(
