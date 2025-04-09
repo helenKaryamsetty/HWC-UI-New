@@ -37,7 +37,7 @@ import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment.dev';
 
 @Component({
   selector: 'app-oral-cancer-screening',
