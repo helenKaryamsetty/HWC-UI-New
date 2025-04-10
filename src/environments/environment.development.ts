@@ -1,24 +1,3 @@
-/*
- * AMRIT – Accessible Medical Records via Integrated Technology
- * Integrated EHR (Electronic Health Records) Solution
- *
- * Copyright (C) "Piramal Swasthya Management and Research Institute"
- *
- * This file is part of AMRIT.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see https://www.gnu.org/licenses/.
- */
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
@@ -32,11 +11,12 @@ const tmUI_IP = 'https://amritwprdev.piramalswasthya.org/';
 const schedulerUI_IP = 'https://amritwprdev.piramalswasthya.org/';
 const inventoryUI_IP = 'https://amritwprdev.piramalswasthya.org/';
 const SERVER_IP = 'dataSYNCIP';
-const SWYMED_IP = '14.143.13.109';
+const SWYMED_IP = 'swymed://14.143.13.109';
 const adminIP = 'https://amritwprdev.piramalswasthya.org';
 const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
 const identityIP = 'https://amritwprdev.piramalswasthya.org/';
 const IDENTITY_API = `${identityIP}/hwc-identity-0.0.1/`;
+const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
@@ -54,13 +34,13 @@ const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
 const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 const API104 = `${IP104}/104api-v1.0/`;
-const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
+
 const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
 const mmuUICasesheet = `${tmUI_IP}tmui-v1.0`;
 const sessionStorageEncKey = '';
 
 export const environment = {
-  production: true,
+  production: false,
   encKey: sessionStorageEncKey,
   app: `MMU`,
   RBSTest: `RBS Test`,
@@ -81,7 +61,7 @@ export const environment = {
 
   TELEMEDICINE_URL: `${schedulerUI_IP}/hwc-scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
-  redirInMMUUrl: `/common/tcspecialist-worklist`,
+  redirInMMUUrl: `/nurse-doctor/tcspecialist-worklist`,
 
   getSessionExistsURL: `${COMMON_API_OPEN}user/getLoginResponse`,
   extendSessionUrl: `${TM_API}common/extend/redisSession`,
@@ -232,10 +212,9 @@ export const environment = {
   updateANCHistoryDetailsUrl: `${TM_API}ANC/update/historyScreen`,
   updateANCExaminationDetailsUrl: `${TM_API}ANC/update/examinationScreen`,
 
-  /**ANC foetalMonitor API URLs */
-  savefetosenseTestDetailsUrl: `${TM_API}/foetalMonitor/sendMotherTestDetailsToFoetalMonitor`,
-  getPrescribedFetosenseTests: `${TM_API}/foetalMonitor/fetch/foetalMonitorDetails/`,
-  getESanjeevaniDetailsUrl: `${COMMON_API}esanjeevani/getESanjeevaniUrl/`,
+  /**ANC Fetosense API URLs */
+  savefetosenseTestDetailsUrl: `${TM_API}/fetosense/sendMotherTestDetailsToFetosense`,
+  getPrescribedFetosenseTests: `${TM_API}/fetosense/fetch/fetosenseDetails/`,
 
   /**
    * GENERAL OPD API URLs
@@ -341,7 +320,7 @@ export const environment = {
   previousImmunizationServiceDataUrl: `${TM_API}common/getBenImmunizationServiceHistory`,
   /* */
   archivedReportsUrl: `${TM_API}labTechnician/get/labResultForVisitcode`,
-  ReportsBase64Url: `${TM_API}foetalMonitor/fetch/reportGraphBase64`,
+  ReportsBase64Url: `${TM_API}fetosense/fetch/reportGraphBase64`,
   previousMMUHistoryUrl: `${MMU_API}common/getBeneficiaryCaseSheetHistory`,
   previousTMHistoryUrl: `${TM_API}common/getBeneficiaryCaseSheetHistory`,
   previousMCTSHistoryUrl: `${COMMON_API}mctsOutboundHistoryController/getMctsCallHistory`,
@@ -366,12 +345,12 @@ export const environment = {
   cancelBeneficiaryTCRequestUrl: `${TM_API}tc/cancel/benTCRequest`,
   scheduleTCUrl: `${TM_API}tc/create/benTCRequestWithVisitCode`,
   beneficiaryTCRequestStatusUrl: `${TM_API}tc/check/benTCRequestStatus`,
-  swymedUrl: `swymed://${SWYMED_IP}`,
+  swymedUrl: `${SWYMED_IP}`,
   saveSpecialistCancerObservationUrl: `${TM_API}CS-cancerScreening/update/doctorData`,
-  getSwymedMailLoginUrl: `${TM_API}videoConsultation/login/`,
-  invokeSwymedCallUrl: `${TM_API}videoConsultation/call/`,
-  invokeSwymedCallSpecialistUrl: `${TM_API}videoConsultation/callvan/`,
-  getSwymedLogoutUrl: `${TM_API}videoConsultation/logout`,
+  getSwymedMailLoginUrl: `${TM_API}swymed/login/`,
+  invokeSwymedCallUrl: `${TM_API}swymed/call/`,
+  invokeSwymedCallSpecialistUrl: `${TM_API}swymed/callvan/`,
+  getSwymedLogoutUrl: `${TM_API}swymed/logout`,
   updateTCStartTimeUrl: `${TM_API}tc/startconsultation`,
   snomedCTRecordListURL: `${TM_API}snomed/getSnomedCTRecordList`,
   getServiceOnStateUrl: `${COMMON_API}service/serviceList`,
@@ -379,11 +358,11 @@ export const environment = {
   apiVersionUrl: `${TM_API}version`,
   snomedCTRecordListURL1: `${COMMON_API}snomed/getSnomedCTRecordList`,
 
-  ioturl: `${biologicalScreeningDeviceAPI}`,
-  deviceStatusurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/connection_status`,
-  deviceDisconnectUrl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub/disconnect`,
-  deviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/service_discovery`,
-  connectdeviceBluetoothurl: `${biologicalScreeningDeviceAPI}/api/v1/bluetooth/hub_connection`,
+  ioturl: `${IOT_API}`,
+  deviceStatusurl: `${IOT_API}/api/v1/bluetooth/hub/connection_status`,
+  deviceDisconnectUrl: `${IOT_API}/api/v1/bluetooth/hub/disconnect`,
+  deviceBluetoothurl: `${IOT_API}/api/v1/bluetooth/service_discovery`,
+  connectdeviceBluetoothurl: `${IOT_API}/api/v1/bluetooth/hub_connection`,
 
   startWeighturl: '/api/v1/physical_tests/weight',
   startTempurl: '/api/v1/physical_tests/temperature',
@@ -509,9 +488,9 @@ export const environment = {
   getBirthImmunizationHistoryDataUrl: `${TM_API}/child-adolescent-care/getBenHistoryDetails`,
 
   /* SWAASA Urls*/
-  getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
-  getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
-  getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
+  getResultStatusURL: `${COMMON_API}swaasa/startAssesment`,
+  getAssessmentUrl: `${COMMON_API}swaasa/getAssesment`,
+  getAssessmentIdUrl: `${COMMON_API}swaasa/getAssesmentDetails`,
   getnurse104referredworklisturls: `${TM_API}uptsu/getWorklistByVanID`,
 
   /* CDSS Urls */
@@ -521,9 +500,6 @@ export const environment = {
   getCheifComplaintsSymptomsUrl: `${API104}CDSS/Symptoms`,
   getActionMasterUrl: `${TM_API}uptsu/get/action-master`,
   closeVisitSaveComplaintsUrl: `${TM_API}uptsu/submit/closevisit`,
-  getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
-  getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
-  getAdminCdssStatus: `${ADMIN_API}/uptsu/getCdssData`,
 
   /** Previous Anthropometry  Urls */
   getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,

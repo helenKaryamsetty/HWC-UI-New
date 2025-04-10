@@ -535,4 +535,5 @@ export const environment = {
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`
 
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`
 };
