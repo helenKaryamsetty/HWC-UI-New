@@ -51,6 +51,8 @@ const defaultEnvValues = {
   SWYMED_IP: '',
   SCHEDULER_UI_BASE: '',
   INVENTORY_UI_BASE: '',
+  HWC_API_BASE : '',
+  SESSION_STORAGE_ENC_KEY: '',
 };
 
 // Generate output data
