@@ -529,6 +529,13 @@ export const environment = {
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
 
+  /*Biometric with Health ID*/
+  getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
+
   /* ABDM Mapped Facility */
   getAbdmMappedFacility: `${COMMON_API}facility/getWorklocationMappedAbdmFacility/`,
   saveAbdmFacilityIdForVisit: `${FHIR_API}facility/saveAbdmFacilityId`,
