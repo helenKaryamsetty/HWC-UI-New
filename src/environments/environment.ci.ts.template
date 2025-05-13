@@ -35,7 +35,7 @@ const API104 = '<%= HELPLINE104_API_BASE %>';
 const MMU_API =  '<%= MMU_API_BASE %>';
 const COMMON_API_OPEN_SYNC = '<%= COMMON_API_OPEN_SYNC %>';
 const SCHEDULER_API =  '<%= SCHEDULER_API_BASE %>';
-const mmuUICasesheet = '<%= HWC_API_BASE %>';
+const mmuUICasesheet = '<%= HWC_UI_BASE %>';
 const ADMIN_API = '<%= ADMIN_API_BASE %>';
 const FHIR_API = '<%= FHIR_API_BASE %>';
 const INVENTORY_UI =  '<%= INVENTORY_UI_BASE %>';
