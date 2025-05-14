@@ -580,7 +580,6 @@ export class QuickConsultComponent
         if (res && res.statusCode === 200 && res.data) {
           this.patchDiagnosisDetails(res.data);
         }
-        2;
       });
     }
   }
