@@ -52,6 +52,8 @@ const defaultEnvValues = {
   SCHEDULER_UI_BASE: '',
   INVENTORY_UI_BASE: '',
   HWC_API_BASE : '',
+  HWC_UI_BASE: '',
+
   SESSION_STORAGE_ENC_KEY: '',
 };
 

@@ -274,7 +274,6 @@ export const environment = {
   saveDoctorCovidDetails: `${HWC_API}pandemic/covid/save/doctorData`,
   updateCovidHistoryDetailsUrl: `${HWC_API}pandemic/covid/update/historyScreen`,
   updateCovidVitalsDetailsUrl: `${HWC_API}pandemic/covid/update/vitalScreen`,
-  getCovidVisitDetailsUrl: ``,
   getCovidHistoryDetailsUrl: `${HWC_API}pandemic/covid/getBenCovid19HistoryDetails`,
   getCovidVitalDetailsUrl: `${HWC_API}pandemic/covid/getBenVitalDetailsFrmNurseCovid`,
   getCovidDoctorDetails: `${HWC_API}pandemic/covid/getBenCaseRecordFromDoctorCovid`,
