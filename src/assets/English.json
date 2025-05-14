@@ -1228,7 +1228,7 @@
                 "imageNotFound": "Image not found",
                 "familyDisease": "Family Disease history",
                 "dataUpdated": "Data updated successfully",
-                "pendingForConsultation": "Pending For Tele-Consultation",
+                "pendingForConsultation": "Pending For Consultation",
                 "consultationDone": "Tele-Consultation Done",
                 "pendingForTC": "Pending For TC",
                 "tCCancelled": "TC Cancelled",
@@ -2109,7 +2109,8 @@
         "verifyMobileOtp": "Verify Mobile OTP",
         "enterMobileOtp": "Enter Mobile OTP",
         "verify": "Verify",
-        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - "
+        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+        "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID"
     }
 
     

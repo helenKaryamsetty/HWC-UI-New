@@ -231,7 +231,11 @@ export class PatientVisitDetailsComponent
           this.templateNurseMasterData = masterData;
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
           this.templateVisitCategories =
-            this.templateNurseMasterData.visitCategories;
+            this.templateNurseMasterData.visitCategories.filter(
+              (visit: any) =>
+                visit.visitCategory.toLowerCase() !== 'cancer screening',
+            );
+          this.templateFilterVisitCategories = [];
           this.templateFilterVisitCategories = this.templateVisitCategories;
           console.log(
             'this.templateFilterVisitCategories in 247',

@@ -465,7 +465,7 @@ export class ObstetricExaminationComponent
           }
         },
         (err) => {
-          this.confirmationService.alert(err, 'error');
+          this.confirmationService.alert(err.errorMessage, 'error');
         },
       );
     } else {
