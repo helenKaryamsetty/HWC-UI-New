@@ -363,19 +363,23 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.doctorService.populateCaserecordResponse$.subscribe((res) => {
         if (res && res.statusCode === 200 && res.data && res.data.Refer) {
           const referAndRevistData = res.data.Refer;
-          const referedToInstitute = this.higherHealthcareCenter.filter(
-            (item: any) => {
-              return (
-                item.institutionID === referAndRevistData.referredToInstituteID
-              );
-            },
-          );
-          if (referedToInstitute.length > 0) {
-            referAndRevistData.referredToInstituteName = referedToInstitute[0];
+          if (referAndRevistData && referAndRevistData.referredToInstituteID) {
+            const referedToInstitute = this.higherHealthcareCenter.filter(
+              (item: any) => {
+                return (
+                  item.institutionID ===
+                  referAndRevistData.referredToInstituteID
+                );
+              },
+            );
+            if (referedToInstitute.length > 0) {
+              referAndRevistData.referredToInstituteName =
+                referedToInstitute[0];
+            }
+            this.higherhealthcarecenter(
+              referAndRevistData.referredToInstituteName,
+            );
           }
-          this.higherhealthcarecenter(
-            referAndRevistData.referredToInstituteName,
-          );
           if (
             referAndRevistData.referralReasonList !== undefined &&
             referAndRevistData.referralReasonList !== null

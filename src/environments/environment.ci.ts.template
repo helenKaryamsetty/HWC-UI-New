@@ -31,6 +31,7 @@ const COMMON_API_OPEN = '<%= COMMON_API_BASE %>';
 const COMMON_API = '<%= COMMON_API_BASE %>';
 const IDENTITY_API =  '<%= IDENTITY_API_BASE %>';
 const HWC_API = '<%= HWC_API_BASE %>';
+const TM_API = '<%= TM_API_BASE %>';
 const API104 = '<%= HELPLINE104_API_BASE %>';
 const MMU_API =  '<%= MMU_API_BASE %>';
 const COMMON_API_OPEN_SYNC = '<%= COMMON_API_OPEN_SYNC %>';
@@ -508,7 +509,7 @@ export const environment = {
   getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,
 
     /** Previous Anthropometry  Urls */
-  getPreviousAnthropometryUrl: `${HWC_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
+  getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
 
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,

@@ -104,7 +104,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     ) {
       if (
         this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
-        this.sessionstorage.getItem('referredVisitCode') === null
+        this.sessionstorage.getItem('referredVisitCode') === null ||
+        this.sessionstorage.getItem('referredVisitCode') === ''
       ) {
         this.getTestResults(this.visitCategory);
       } else {
@@ -142,7 +143,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
 
         if (
           this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
-          this.sessionstorage.getItem('referredVisitCode') === null
+          this.sessionstorage.getItem('referredVisitCode') === null ||
+          this.sessionstorage.getItem('referredVisitCode') === ''
         ) {
           this.getTestResults(this.visitCategory);
         } else {
@@ -295,16 +297,22 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     let mmulabResultsRef = [];
     let respObj;
     //Calling TM Reports
-    this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    const doctorCasesheetData =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         this.sessionstorage.getItem('visitCode'),
-      )
-      .subscribe((res: any) => {
+      );
+    if (doctorCasesheetData) {
+      doctorCasesheetData.subscribe((res: any) => {
         console.log('response archive', res);
-        if (res && res.statusCode === 200 && res.data) {
+        if (
+          res !== undefined &&
+          res !== null &&
+          res.statusCode === 200 &&
+          res.data
+        ) {
           console.log('labresult', res.data.LabReport);
           mmulabResults = res.data.LabReport.filter((lab: any) => {
             return lab.procedureType === 'Laboratory';
@@ -406,6 +414,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             });
         }
       });
+    }
   }
 
   getGeneralVitalsData(beneficiaryRegID: any, visitID: any) {

@@ -26,6 +26,7 @@
 
 const commonIP = 'https://amritwprdev.piramalswasthya.org/';
 const hwcIP = 'https://amritwprdev.piramalswasthya.org/';
+const tmIP = 'https://amritwprdev.piramalswasthya.org/';
 const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
 const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
 const hwcUI_IP = 'https://amritwprdev.piramalswasthya.org/';
@@ -50,6 +51,7 @@ const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
 const COMMON_API = `${commonIP}commonapi-v1.0/`;
 const HWC_API = `${hwcIP}hwc-facility-service/`;
+const TM_API = `${tmIP}tmapi-v1.0/`;
 const MMU_API = `${mmuIP}mmuapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
@@ -524,7 +526,7 @@ export const environment = {
   getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,
 
   /** Previous Anthropometry  Urls */
-  getPreviousAnthropometryUrl: `${HWC_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
+  getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
 

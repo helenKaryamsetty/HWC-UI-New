@@ -57,6 +57,7 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.assignSelectedLanguage();
     this.caseSheetCategory();
     this.serviceType = this.route.snapshot.params['serviceType'];
     console.log('route1' + this.route.snapshot.params['serviceType']);
@@ -66,8 +67,6 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
       this.previous = input.previous;
       this.serviceType = input.serviceType;
     }
-
-    this.assignSelectedLanguage();
   }
 
   ngDoCheck() {
