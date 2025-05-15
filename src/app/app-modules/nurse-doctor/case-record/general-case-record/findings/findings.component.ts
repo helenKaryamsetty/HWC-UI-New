@@ -179,14 +179,15 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     visitCategory: any,
     visitCode: any,
   ) {
-    this.findingSubscription = this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    const caseRecordData = (this.findingSubscription =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         visitCode,
-      )
-      .subscribe((res: any) => {
+      ));
+    if (caseRecordData) {
+      caseRecordData.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data && res.data.findings) {
           const findings = res.data.findings;
           this.complaintList = findings.complaints.slice();
@@ -197,6 +198,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.generalFindingsForm.patchValue(res.data.findings);
         }
       });
+    }
   }
 
   filterInitialComplaints(element: any) {
@@ -243,7 +245,8 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
             if (
               this.sessionstorage.getItem('referredVisitCode') ===
                 'undefined' ||
-              this.sessionstorage.getItem('referredVisitCode') === null
+              this.sessionstorage.getItem('referredVisitCode') === null ||
+              this.sessionstorage.getItem('referredVisitCode') === ''
             ) {
               this.getFindingDetails();
             } else if (

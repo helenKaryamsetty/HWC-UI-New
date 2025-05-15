@@ -568,18 +568,20 @@ export class QuickConsultComponent
     visitCategory: any,
     visitCode: any,
   ) {
-    this.MMUdiagnosisSubscription = this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    this.MMUdiagnosisSubscription =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         visitCode,
-      )
-      .subscribe((res: any) => {
+      );
+    if (this.MMUdiagnosisSubscription) {
+      this.MMUdiagnosisSubscription.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data) {
           this.patchDiagnosisDetails(res.data);
         }
       });
+    }
   }
 
   filterInitialComplaints(element: any) {

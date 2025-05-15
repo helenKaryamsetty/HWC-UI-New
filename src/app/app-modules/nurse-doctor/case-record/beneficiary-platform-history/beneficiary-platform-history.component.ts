@@ -315,6 +315,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           );
           if (print) {
             const url = environment.newTaburl;
+            // window.location.href = url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous';
             window.open(
               url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous',
             );
