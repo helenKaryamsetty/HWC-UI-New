@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iemr.hwc-ui</groupId>
 	<artifactId>HWC-UI</artifactId>
-	<version>1.0</version>
+	<version>3.1.0</version>
 	<name>HWC-UI</name>
 	<description>Piramal - HWC: Module ui</description>
 	<packaging>war</packaging>
@@ -75,7 +75,7 @@
 
 	<!-- install the necessary node_modules & compile in prod mode -->
 	<build>
-		<finalName>hwc-ui</finalName>
+		<finalName>${artifactId}-${version}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
