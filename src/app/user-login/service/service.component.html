@@ -13,17 +13,13 @@
               {{ this.fullName }}</span
             >
           </p>
-
-          <div class="note">
-            {{ currentLanguageSet?.clickonServiceToProceed }}
-          </div>
-          <li
-            tabindex="{0}"
-            class="width310px"
-            (click)="selectService(service)"
-            (keydown.enter)="selectService(true)"
-            (keyup.enter)="selectService(true)"
-          >
+          <br />
+          <p>
+            <span style="font-size: 18px; font-weight: 550">
+              AYUSHMAN AROGYA MANDIR
+            </span>
+          </p>
+          <li tabindex="{0}" class="width310px">
             <div style="margin-top: 30px">
               <ul class="list-unstyled text-center p-t-15">
                 <li class="f-s-20">
@@ -32,7 +28,18 @@
                       style="width: 160px; height: 140px"
                       src="assets/images/AAM-Image.png"
                       alt="AAM"
-                    />&nbsp;&nbsp;&nbsp; <br />AYUSHMAN AROGYA MANDIR
+                    />&nbsp;&nbsp;&nbsp; <br />
+                    <button
+                      id="resendButton"
+                      mat-raised-button
+                      type="button"
+                      style="margin-right: 20px"
+                      color="primary"
+                      class="mat_blue"
+                      (click)="selectService(service)"
+                    >
+                      Proceed
+                    </button>
                   </div>
                 </li>
               </ul>
