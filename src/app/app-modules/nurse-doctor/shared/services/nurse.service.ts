@@ -176,6 +176,13 @@ export class NurseService {
       { visitDetails: visitDetails },
       { vitalsDetails: vitalsDetails },
       {
+        chiefComplaintList: this.postCheifComplaintForm(
+          medicalForm.controls.patientVisitForm.controls
+            .patientChiefComplaintsForm.value.complaints,
+          null,
+        ),
+      },
+      {
         benFlowID: this.sessionstorage.getItem('benFlowID'),
         beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
         sessionID: this.sessionstorage.getItem('sessionID'),
