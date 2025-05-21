@@ -611,20 +611,17 @@
                       "
                     ></mat-row>
                   </mat-table>
-                  <div *ngIf="laboratoryData.data.length === 0">
+                  <div *ngIf="laboratoryData?.length === 0">
                     <h3>
                       {{ currentLanguageSet?.Reports?.notestresultsfound }}
                     </h3>
                   </div>
-                  <div
-                    *ngIf="laboratoryData.data.length > 0"
-                    class="totalCount"
-                  >
+                  <div *ngIf="laboratoryData?.length > 0" class="totalCount">
                     {{ currentLanguageSet?.common?.totalCount }} :
-                    {{ laboratoryData.data.length }}
+                    {{ laboratoryData?.length }}
                   </div>
                   <mat-paginator
-                    [hidden]="laboratoryData.data.length > 0"
+                    [hidden]="laboratoryData?.length > 0"
                     [pageSize]="5"
                     showFirstLastButtons
                   ></mat-paginator>
@@ -736,17 +733,17 @@
                     ></mat-row>
                   </mat-table>
 
-                  <div *ngIf="radiologyFile.data.length === 0">
+                  <div *ngIf="radiologyFile?.length === 0">
                     <h3>
                       {{ currentLanguageSet?.Reports?.noradiologyreportsfound }}
                     </h3>
                   </div>
-                  <div *ngIf="radiologyFile.data.length > 0" class="totalCount">
+                  <div *ngIf="radiologyFile?.length > 0" class="totalCount">
                     {{ currentLanguageSet?.common?.totalCount }} :
-                    {{ radiologyFile.data.length }}
+                    {{ radiologyFile?.length }}
                   </div>
                   <mat-paginator
-                    [hidden]="radiologyFile.data.length > 0"
+                    [hidden]="radiologyFile?.length > 0"
                     [pageSize]="5"
                     showFirstLastButtons
                   ></mat-paginator>
