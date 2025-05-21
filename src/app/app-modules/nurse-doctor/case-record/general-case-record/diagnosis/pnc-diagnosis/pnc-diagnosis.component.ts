@@ -285,6 +285,9 @@ export class PncDiagnosisComponent
       this.MMUdiagnosisSubscription.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
           this.generalDiagnosisForm.patchValue(res.data.diagnosis);
+          if (res.data.diagnosis) {
+            this.patchDiagnosisDetails(res.data.diagnosis);
+          }
           if (res.data.diagnosis.provisionalDiagnosisList) {
             this.patchDiagnosisDetails(
               res.data.diagnosis.provisionalDiagnosisList,
