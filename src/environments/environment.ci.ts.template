@@ -39,8 +39,8 @@ const SCHEDULER_API =  '<%= SCHEDULER_API_BASE %>';
 const mmuUICasesheet = '<%= HWC_UI_BASE %>';
 const ADMIN_API = '<%= ADMIN_API_BASE %>';
 const FHIR_API = '<%= FHIR_API_BASE %>';
-const INVENTORY_UI =  '<%= INVENTORY_UI_BASE %>';
-const SCHEDULER_UI =  '<%= SCHEDULER_UI_BASE %>';
+const INVENTORY_UI =  '<%= HWC_INVENTORY_UI %>';
+const SCHEDULER_UI =  '<%= HWC_SCHEDULER_UI %>';
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
@@ -52,7 +52,7 @@ export const environment = {
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
-  abhaExtension: `@abdm`,
+  abhaExtension: `@ABHA_MODE`,
   diabetes: `Diabetes Mellitus`,
   hypertension: `Hypertension`,
   oral: `Oral cancer`,
