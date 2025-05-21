@@ -44,6 +44,7 @@ const SCHEDULER_UI =  '<%= HWC_SCHEDULER_UI %>';
 const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeningDevice`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
+const ABHA_MODE = '<%= ABHA_MODE %>';
 
 export const environment = {
   production: true,
@@ -52,7 +53,7 @@ export const environment = {
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
-  abhaExtension: `@ABHA_MODE`,
+  abhaExtension: ABHA_MODE,
   diabetes: `Diabetes Mellitus`,
   hypertension: `Hypertension`,
   oral: `Oral cancer`,
