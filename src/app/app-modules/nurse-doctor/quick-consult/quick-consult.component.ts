@@ -519,7 +519,9 @@ export class QuickConsultComponent
             if (
               this.sessionstorage.getItem('referredVisitCode') ===
                 'undefined' ||
-              this.sessionstorage.getItem('referredVisitCode') === null
+              this.sessionstorage.getItem('referredVisitCode') === undefined ||
+              this.sessionstorage.getItem('referredVisitCode') === null ||
+              this.sessionstorage.getItem('referredVisitCode') === ''
             ) {
               this.getDiagnosisDetails(
                 beneficiaryRegID,
