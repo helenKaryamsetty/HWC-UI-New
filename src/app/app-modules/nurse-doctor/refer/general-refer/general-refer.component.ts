@@ -172,7 +172,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) {
           console.log('masterData=', masterData);
           this.higherHealthcareCenter = masterData.higherHealthCare;
-          if (this.higherHealthcareCenter.length === 0) {
+          if (this.higherHealthcareCenter?.length === 0) {
             this.instituteFlag = false;
             sessionStorage.setItem('instFlag', 'false');
           } else {
