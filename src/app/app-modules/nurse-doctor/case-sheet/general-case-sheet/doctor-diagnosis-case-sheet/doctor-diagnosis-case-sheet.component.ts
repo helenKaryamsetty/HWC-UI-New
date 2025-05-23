@@ -158,6 +158,13 @@ export class DoctorDiagnosisCaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {
@@ -612,9 +619,7 @@ export class DoctorDiagnosisCaseSheetComponent
   }
   getHealthIDDetails() {
     const data = {
-      beneficiaryRegID: this.sessionstorage.getItem(
-        'caseSheetBeneficiaryRegID',
-      ),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       beneficiaryID: null,
     };
     this.registrarService.getHealthIdDetails(data).subscribe(
