@@ -88,7 +88,7 @@ export class HistoryCaseSheetComponent implements OnChanges, OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
     if (
       this.current_language_set === undefined &&
-      this.sessionstorage.getItem('current_language_set')
+      this.sessionstorage.getItem('currentLanguageSet')
     ) {
       this.current_language_set =
         this.sessionstorage.getItem('currentLanguageSet');
