@@ -86,6 +86,13 @@ export class HistoryCaseSheetComponent implements OnChanges, OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('current_language_set')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {
