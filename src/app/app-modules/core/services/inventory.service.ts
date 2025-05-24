@@ -52,8 +52,8 @@ export class InventoryService {
   }
 
   getFacilityID() {
-    if (this.sessionstorage.getItem('facilityID')) {
-      return this.sessionstorage.getItem('facilityID');
+    if (sessionStorage.getItem('facilityID')) {
+      return sessionStorage.getItem('facilityID');
     } else {
       return undefined;
     }
