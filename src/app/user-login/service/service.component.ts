@@ -127,7 +127,7 @@ export class ServiceComponent implements OnInit, DoCheck {
       serviceLineDetails.facilityID !== undefined &&
       serviceLineDetails.facilityID !== null
     )
-      sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
+      this.sessionstorage.setItem('facilityID', serviceLineDetails.facilityID);
     if (serviceLineDetails.servicePointID)
       this.sessionstorage.setItem(
         'servicePointID',
