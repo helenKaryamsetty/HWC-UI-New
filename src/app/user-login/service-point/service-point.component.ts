@@ -108,7 +108,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.sessionstorage.removeItem('location');
     this.sessionstorage.removeItem('servicePointID');
     this.sessionstorage.removeItem('servicePointName');
-    sessionStorage.removeItem('facilityID');
+    this.sessionstorage.removeItem('facilityID');
   }
 
   getServicePoint() {
@@ -164,7 +164,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
       JSON.stringify(serviceLineDetails),
     );
     if (serviceLineDetails.facilityID)
-      sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
+      this.sessionstorage.setItem('facilityID', serviceLineDetails.facilityID);
     if (serviceLineDetails.servicePointID)
       this.sessionstorage.setItem(
         'servicePointID',
