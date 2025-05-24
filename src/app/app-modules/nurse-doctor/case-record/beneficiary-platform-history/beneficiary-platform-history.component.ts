@@ -311,10 +311,15 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
           );
           this.sessionstorage.setItem(
             'previousCaseSheetVisitID',
-            visit.benVisitID,
+            visit.visitCode,
+          );
+          this.sessionstorage.setItem(
+            'currentLanguageSet',
+            this.current_language_set,
           );
           if (print) {
             const url = environment.newTaburl;
+            // window.location.href = url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous';
             window.open(
               url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous',
             );

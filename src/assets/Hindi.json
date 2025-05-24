@@ -2103,7 +2103,8 @@
         "fileUploadedSuccessfully": "File Uploaded successfully",
         "verifyMobileOtp": "Verify Mobile OTP",
         "enterMobileOtp": "Enter Mobile OTP",
-        "verify": "Verify"
-
+        "verify": "Verify",
+        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+        "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID"
       }
 }

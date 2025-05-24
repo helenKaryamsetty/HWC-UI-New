@@ -274,16 +274,20 @@ export class PncDiagnosisComponent
     visitCategory: any,
     visitCode: any,
   ) {
-    this.MMUdiagnosisSubscription = this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    this.MMUdiagnosisSubscription =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         visitCode,
-      )
-      .subscribe((res: any) => {
+      );
+    if (this.MMUdiagnosisSubscription) {
+      this.MMUdiagnosisSubscription.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
           this.generalDiagnosisForm.patchValue(res.data.diagnosis);
+          if (res.data.diagnosis) {
+            this.patchDiagnosisDetails(res.data.diagnosis);
+          }
           if (res.data.diagnosis.provisionalDiagnosisList) {
             this.patchDiagnosisDetails(
               res.data.diagnosis.provisionalDiagnosisList,
@@ -291,6 +295,7 @@ export class PncDiagnosisComponent
           }
         }
       });
+    }
   }
 
   patchDiagnosisDetails(diagnosis: any) {

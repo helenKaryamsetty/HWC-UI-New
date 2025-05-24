@@ -2592,7 +2592,7 @@ export class DoctorService {
     }
     return this.caseRecordAndReferDetails;
   }
-  caseRecordAndReferDetails1: any;
+  caseRecordAndReferDetails1: any = null;
   getMMUCaseRecordAndReferDetails(
     beneficiaryRegID: any,
     visitID: any,
@@ -2611,48 +2611,43 @@ export class DoctorService {
     });
 
     if (visitCategory === 'General OPD (QC)') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getGeneralOPDQuickConsultDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'ANC') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'ANC') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getANCDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'General OPD') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'General OPD') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getGeneralOPDDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'NCD screening') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'NCD screening') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getNCDScreeningDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'NCD care') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'NCD care') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getNCDCareDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'COVID-19 Screening') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'COVID-19 Screening') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getCovidDoctorDetails,
         otherDetails,
-      );
-    }
-    if (visitCategory === 'PNC') {
-      this.caseRecordAndReferDetails1 = this.http.post(
+      ));
+    } else if (visitCategory === 'PNC') {
+      return (this.caseRecordAndReferDetails1 = this.http.post(
         environment.getPNCDoctorDetails,
         otherDetails,
-      );
+      ));
+    } else {
+      return this.caseRecordAndReferDetails1;
     }
-    return this.caseRecordAndReferDetails1;
   }
 
   updateDoctorDiagnosisDetails(

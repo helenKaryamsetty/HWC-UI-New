@@ -144,10 +144,10 @@ export class DoctorDiagnosisCaseSheetComponent
   ) {}
 
   ngOnInit() {
+    this.assignSelectedLanguage();
     this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
     this.fetchHRPPositive();
     this.getHealthIDDetails();
-    this.assignSelectedLanguage();
     this.getVaccinationTypeAndDoseMaster();
   }
 
@@ -158,9 +158,17 @@ export class DoctorDiagnosisCaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {
+    this.assignSelectedLanguage();
     this.ncdScreeningCondition = null;
     if (this.casesheetData !== undefined && this.casesheetData) {
       const temp2 = this.casesheetData.nurseData.covidDetails;
@@ -548,8 +556,8 @@ export class DoctorDiagnosisCaseSheetComponent
       if (
         this.casesheetData &&
         this.casesheetData.doctorData.Refer &&
-        this.referDetails.revisitDate &&
-        !moment(this.referDetails.revisitDate, 'DD/MM/YYYY', true).isValid()
+        this.referDetails?.revisitDate &&
+        !moment(this.referDetails?.revisitDate, 'DD/MM/YYYY', true).isValid()
       ) {
         const sDate = new Date(this.referDetails.revisitDate);
         this.referDetails.revisitDate = [
@@ -611,9 +619,7 @@ export class DoctorDiagnosisCaseSheetComponent
   }
   getHealthIDDetails() {
     const data = {
-      beneficiaryRegID: this.sessionstorage.getItem(
-        'caseSheetBeneficiaryRegID',
-      ),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       beneficiaryID: null,
     };
     this.registrarService.getHealthIdDetails(data).subscribe(

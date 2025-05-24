@@ -89,6 +89,13 @@ export class NeonatalAndInfantServiceCaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (
+      this.currentLanguageSet === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.currentLanguageSet =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   getAgeValueNew(age: any) {

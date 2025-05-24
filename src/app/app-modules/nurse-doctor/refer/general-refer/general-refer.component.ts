@@ -172,7 +172,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) {
           console.log('masterData=', masterData);
           this.higherHealthcareCenter = masterData.higherHealthCare;
-          if (this.higherHealthcareCenter.length === 0) {
+          if (this.higherHealthcareCenter?.length === 0) {
             this.instituteFlag = false;
             sessionStorage.setItem('instFlag', 'false');
           } else {
@@ -363,19 +363,23 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.doctorService.populateCaserecordResponse$.subscribe((res) => {
         if (res && res.statusCode === 200 && res.data && res.data.Refer) {
           const referAndRevistData = res.data.Refer;
-          const referedToInstitute = this.higherHealthcareCenter.filter(
-            (item: any) => {
-              return (
-                item.institutionID === referAndRevistData.referredToInstituteID
-              );
-            },
-          );
-          if (referedToInstitute.length > 0) {
-            referAndRevistData.referredToInstituteName = referedToInstitute[0];
+          if (referAndRevistData && referAndRevistData.referredToInstituteID) {
+            const referedToInstitute = this.higherHealthcareCenter.filter(
+              (item: any) => {
+                return (
+                  item.institutionID ===
+                  referAndRevistData.referredToInstituteID
+                );
+              },
+            );
+            if (referedToInstitute.length > 0) {
+              referAndRevistData.referredToInstituteName =
+                referedToInstitute[0];
+            }
+            this.higherhealthcarecenter(
+              referAndRevistData.referredToInstituteName,
+            );
           }
-          this.higherhealthcarecenter(
-            referAndRevistData.referredToInstituteName,
-          );
           if (
             referAndRevistData.referralReasonList !== undefined &&
             referAndRevistData.referralReasonList !== null
@@ -515,9 +519,21 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
 
   loadMMUReferDeatils() {
     const reqObj = {
-      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      visitCode: this.sessionstorage.getItem('referredVisitCode'),
-      benVisitID: this.sessionstorage.getItem('referredVisitID'),
+      benRegID:
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('beneficiaryRegID') !== ''
+          ? this.sessionstorage.getItem('beneficiaryRegID')
+          : null,
+      visitCode:
+        this.sessionstorage.getItem('referredVisitCode') &&
+        this.sessionstorage.getItem('referredVisitCode') !== ''
+          ? this.sessionstorage.getItem('referredVisitCode')
+          : null,
+      benVisitID:
+        this.sessionstorage.getItem('referredVisitID') &&
+        this.sessionstorage.getItem('referredVisitID') !== ''
+          ? this.sessionstorage.getItem('referredVisitID')
+          : null,
       fetchMMUDataFor: 'Referral',
     };
     if (
