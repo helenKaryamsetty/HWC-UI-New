@@ -69,7 +69,7 @@ export class GeneralPatientVitalsComponent
   doctorScreen = false;
   IDRSWaistScore: any;
   male = false;
-  ncdTemperature = false;
+  ncdTemperature!: boolean;
   enableLungAssessment = false;
   bmiStatusMinor: any;
   totalMonths!: number;
@@ -118,10 +118,17 @@ export class GeneralPatientVitalsComponent
     this.hideVitalsForm();
     this.rbsPopup = false;
     this.rbsCheckBox = true;
+    this.ncdTemperature = false;
     this.nurseService.clearNCDTemp();
     this.nurseService.clearRbsSelectedInInvestigation();
     this.idrsscore.clearDiabetesSelected();
     this.doctorService.setValueToEnableVitalsUpdateButton(false);
+    this.nurseService.ncdTemp$.subscribe((response) =>
+      response === undefined
+        ? (this.ncdTemperature = false)
+        : (this.ncdTemperature = response),
+    );
+
     this.httpServiceService.currentLangugae$.subscribe(
       (response) => (this.currentLanguageSet = response),
     );
