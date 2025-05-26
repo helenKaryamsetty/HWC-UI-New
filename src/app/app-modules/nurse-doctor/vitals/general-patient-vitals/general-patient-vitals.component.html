@@ -631,8 +631,9 @@
               maxlength="5"
               allowMax="150"
               [required]="
-                visitCategory !== 'FP & Contraceptive Services' &&
-                visitCategory !== 'General OPD'
+                visitCategory === 'ANC' ||
+                visitCategory === 'PNC' ||
+                ncdTemperature
               "
             />
             <svg
