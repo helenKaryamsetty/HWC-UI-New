@@ -69,7 +69,7 @@ export class GeneralPatientVitalsComponent
   doctorScreen = false;
   IDRSWaistScore: any;
   male = false;
-  ncdTemperature!: boolean;
+  ncdTemperature = false;
   enableLungAssessment = false;
   bmiStatusMinor: any;
   totalMonths!: number;
