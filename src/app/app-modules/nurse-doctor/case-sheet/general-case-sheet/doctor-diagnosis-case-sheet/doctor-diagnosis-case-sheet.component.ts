@@ -618,10 +618,20 @@ export class DoctorDiagnosisCaseSheetComponent
       });
   }
   getHealthIDDetails() {
-    const data = {
-      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
-      beneficiaryID: null,
-    };
+    let data: any;
+    if (this.sessionstorage.getItem('beneficiaryRegID')) {
+      data = {
+        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        beneficiaryID: null,
+      };
+    } else {
+      data = {
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID',
+        ),
+        beneficiaryID: null,
+      };
+    }
     this.registrarService.getHealthIdDetails(data).subscribe(
       (healthIDDetails: any) => {
         if (healthIDDetails.statusCode === 200) {
