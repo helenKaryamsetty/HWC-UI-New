@@ -81,7 +81,7 @@ export class GeneralCaseRecordComponent implements OnInit, DoCheck {
       'drugPrescriptionForm',
     ) as FormGroup;
     this.treatmentsOnSideEffectsFormData = this.generalCaseRecordForm.get(
-      'treatmentsOnSideEffectsFormData',
+      'treatmentsOnSideEffectsForm',
     ) as FormGroup;
     this.assignSelectedLanguage();
   }
