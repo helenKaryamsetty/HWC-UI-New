@@ -98,8 +98,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         'Unable to fetch session object from Redis server'
     ) {
       this.handleSessionExpiry(
-        this.currentLanguageSet.sessionExpiredPleaseLogin,
-      );
+        this.currentLanguageSet.sessionExpiredPleaseLogin);
     } else {
       this.startTimer();
     }
