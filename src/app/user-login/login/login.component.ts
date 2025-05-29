@@ -149,6 +149,7 @@ export class LoginComponent implements OnInit {
             console.log('res in login', res);
             if (res.statusCode === 200) {
               if (res?.data?.previlegeObj[0]) {
+                this.authService.sessionExpiredHandled = false;
                 this.sessionstorage.setItem(
                   'loginDataResponse',
                   JSON.stringify(res.data),
@@ -199,6 +200,8 @@ export class LoginComponent implements OnInit {
                               .subscribe((userLoggedIn: any) => {
                                 if (userLoggedIn.statusCode === 200) {
                                   if (userLoggedIn?.data?.previlegeObj[0]) {
+                                    this.authService.sessionExpiredHandled =
+                                      false;
                                     this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data),

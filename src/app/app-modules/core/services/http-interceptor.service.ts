@@ -18,6 +18,7 @@ import { ConfirmationService } from './confirmation.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { AuthService } from 'src/app/app-modules/core/services';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private http: HttpClient,
     readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService,
+    private authService: AuthService,
   ) {}
 
   assignSelectedLanguage() {
@@ -95,16 +97,21 @@ export class HttpInterceptorService implements HttpInterceptor {
       response.errorMessage ===
         'Unable to fetch session object from Redis server'
     ) {
-      sessionStorage.clear();
-      this.sessionstorage.clear();
-      setTimeout(() => this.router.navigate(['/login']), 0);
-      this.confirmationService.alert(
+      this.handleSessionExpiry(
         this.currentLanguageSet.sessionExpiredPleaseLogin,
-        'error',
       );
     } else {
       this.startTimer();
     }
+  }
+
+  handleSessionExpiry(message: string): void {
+    if (this.authService.sessionExpiredHandled) return;
+    this.authService.sessionExpiredHandled = true;
+    sessionStorage.clear();
+    this.sessionstorage.clear();
+    this.confirmationService.alert(message, 'error');
+    setTimeout(() => this.router.navigate(['/login']), 0);
   }
 
   startTimer() {
