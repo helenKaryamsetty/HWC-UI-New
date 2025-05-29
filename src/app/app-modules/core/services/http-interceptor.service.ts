@@ -16,6 +16,7 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,12 +30,20 @@ export class HttpInterceptorService implements HttpInterceptor {
     private confirmationService: ConfirmationService,
     private http: HttpClient,
     readonly sessionstorage: SessionStorageService,
+    public httpServiceService: HttpServiceService,
   ) {}
+
+  assignSelectedLanguage() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
+    this.assignSelectedLanguage();
     const key: any = sessionStorage.getItem('key');
     let modifiedReq = null;
     if (key !== undefined && key !== null) {
@@ -78,6 +87,18 @@ export class HttpInterceptorService implements HttpInterceptor {
       this.sessionstorage.clear();
       setTimeout(() => this.router.navigate(['/login']), 0);
       this.confirmationService.alert(response.errorMessage, 'error');
+    } else if (
+      response.statusCode === 5000 &&
+      response.errorMessage ===
+        'Unable to fetch session object from Redis server'
+    ) {
+      sessionStorage.clear();
+      this.sessionstorage.clear();
+      setTimeout(() => this.router.navigate(['/login']), 0);
+      this.confirmationService.alert(
+        this.currentLanguageSet.sessionExpiredPleaseLogin,
+        'error',
+      );
     } else {
       this.startTimer();
     }
