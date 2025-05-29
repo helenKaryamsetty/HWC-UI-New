@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class AuthService {
   transactionId: any;
+  sessionExpiredHandled = false;
 
   constructor(
     private router: Router,
