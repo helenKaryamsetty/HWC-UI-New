@@ -31,9 +31,13 @@
                     "
                   >
                     <ng-container [formGroupName]="i">
-                      <mat-expansion-panel [expanded]="i === 0">
+                      <mat-expansion-panel [expanded]="i === 0" #panel>
                         <mat-expansion-panel-header>
-                          <mat-panel-title style="color: #000000">
+                          <mat-panel-title
+                            [ngStyle]="{
+                              color: panel.expanded ? '#ffffff' : '#000000'
+                            }"
+                          >
                             {{ procedure.value.procedureName }}&nbsp;
                           </mat-panel-title>
                           <mat-panel-description> </mat-panel-description>
