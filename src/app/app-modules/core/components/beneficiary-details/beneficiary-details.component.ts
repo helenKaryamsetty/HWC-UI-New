@@ -77,6 +77,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.today = new Date();
     this.getHealthIDDetails();
     const benFlowID = this.sessionstorage.getItem('benFlowID');
+
     if (benFlowID) {
       this.getBenDetails();
       this.benFlowStatus = true;
