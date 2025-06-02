@@ -68,7 +68,7 @@
             [ngClass]="{
               disabledLoginButton: !captchaToken || loginForm.invalid
             }"
-            [disabled]="!captchaToken"
+            [disabled]="!captchaToken || loginForm.invalid"
           >
             Login
           </button>
