@@ -160,3 +160,10 @@ input::-ms-clear {
         margin-left: -50px !important;
     } 
 }
+
+.disabledLoginButton {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}

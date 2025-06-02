@@ -14,12 +14,13 @@ export class AuthService {
     private http: HttpClient,
   ) {}
 
-  login(userName: any, password: any, doLogout: any) {
+  login(userName: any, password: any, doLogout: any, captchaToken: string) {
     return this.http.post(environment.loginUrl, {
       userName: userName,
       password: password,
       doLogout: doLogout,
       withCredentials: true,
+      captchaToken: captchaToken,
     });
   }
 

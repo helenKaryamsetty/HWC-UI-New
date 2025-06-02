@@ -53,9 +53,23 @@
           </div>
         </div>
       </div>
+      <div class="row" role="group" aria-labelledby="captcha-label">
+        <label id="captcha-label" class="sr-only">Security check</label>
+        <app-captcha
+          style="display: flex; justify-content: center"
+          (tokenResolved)="onCaptchaResolved($event)"
+        ></app-captcha>
+      </div>
       <div class="row">
         <div class="col-xs-12 col-md-12 col-sm-12">
-          <button type="submit" class="full-width-login background-overall">
+          <button
+            type="submit"
+            class="full-width-login background-overall"
+            [ngClass]="{
+              disabledLoginButton: !captchaToken || loginForm.invalid
+            }"
+            [disabled]="!captchaToken"
+          >
             Login
           </button>
         </div>

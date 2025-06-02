@@ -28,7 +28,7 @@ import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DataSyncLoginComponent } from 'src/app/app-modules/data-sync/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from 'src/app/app-modules/data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
   eSanjeevaniArr: any = [];
 
   @ViewChild('focus') private elementRef!: ElementRef;
+  captchaToken!: string;
 
   constructor(
     private router: Router,
@@ -67,8 +68,8 @@ export class LoginComponent implements OnInit {
   }
 
   loginForm = this.fb.group({
-    userName: [''],
-    password: [''],
+    userName: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
   ngOnInit() {
@@ -143,6 +144,7 @@ export class LoginComponent implements OnInit {
           this.loginForm.controls.userName.value.trim(),
           encryptPassword,
           false,
+          this.captchaToken,
         )
         .subscribe(
           (res: any) => {
@@ -196,8 +198,10 @@ export class LoginComponent implements OnInit {
                                 this.loginForm.controls.userName.value,
                                 encryptPassword,
                                 true,
+                                this.captchaToken,
                               )
                               .subscribe((userLoggedIn: any) => {
+                                this.captchaToken = '';
                                 if (userLoggedIn.statusCode === 200) {
                                   if (userLoggedIn?.data?.previlegeObj[0]) {
                                     this.authService.sessionExpiredHandled =
@@ -210,12 +214,14 @@ export class LoginComponent implements OnInit {
                                       userLoggedIn.data,
                                     );
                                   } else {
+                                    this.captchaToken = '';
                                     this.confirmationService.alert(
                                       'Seems you are logged in from somewhere else, Logout from there & try back in.',
                                       'error',
                                     );
                                   }
                                 } else {
+                                  this.captchaToken = '';
                                   this.confirmationService.alert(
                                     userLoggedIn.errorMessage,
                                     'error',
@@ -223,6 +229,7 @@ export class LoginComponent implements OnInit {
                                 }
                               });
                           } else {
+                            this.captchaToken = '';
                             this.confirmationService.alert(
                               userlogoutPreviousSession.errorMessage,
                               'error',
@@ -230,17 +237,20 @@ export class LoginComponent implements OnInit {
                           }
                         });
                     } else {
+                      this.captchaToken = '';
                       sessionStorage.clear();
                       this.router.navigate(['/login']);
                       this.confirmationService.alert(res.errorMessage, 'error');
                     }
                   });
               } else {
+                this.captchaToken = '';
                 this.confirmationService.alert(res.errorMessage, 'error');
               }
             }
           },
           (err) => {
+            this.captchaToken = '';
             this.confirmationService.alert(err, 'error');
           },
         );
@@ -334,5 +344,9 @@ export class LoginComponent implements OnInit {
           });
       }
     });
+  }
+
+  onCaptchaResolved(token: any) {
+    this.captchaToken = token;
   }
 }

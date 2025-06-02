@@ -62,6 +62,9 @@ const FHIR_API = `${FHIRIP}fhirapi-v1.0/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
 
+const siteKey = '';
+const captchaChallengeURL = '';
+
 export const environment = {
   production: true,
   encKey: sessionStorageEncKey,
@@ -551,4 +554,7 @@ export const environment = {
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
 };
