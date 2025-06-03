@@ -45,8 +45,8 @@ const biologicalScreeningDeviceAPI = `${ADMIN_API}/diagnostics/biologicalScreeni
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 const ABHA_MODE = '<%= ABHA_MODE %>';
-const siteKey = '';
-const captchaChallengeURL = '';
+const siteKey = '<%= SITE_KEY %>';
+const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
 
 export const environment = {
   production: true,
@@ -537,7 +537,7 @@ export const environment = {
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
-  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL
