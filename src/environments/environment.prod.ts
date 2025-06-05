@@ -64,6 +64,7 @@ const sessionStorageEncKey = '';
 
 const siteKey = '';
 const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: true,
@@ -557,4 +558,5 @@ export const environment = {
 
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };

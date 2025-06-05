@@ -57,6 +57,7 @@ const defaultEnvValues = {
   SESSION_STORAGE_ENC_KEY: '',
   SITE_KEY: '',
   CAPTCHA_CHALLENGE_URL: '',
+  ENABLE_CAPTCHA: false,
 };
 
 // Generate output data

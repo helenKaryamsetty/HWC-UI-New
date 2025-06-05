@@ -53,7 +53,12 @@
           </div>
         </div>
       </div>
-      <div class="row" role="group" aria-labelledby="captcha-label">
+      <div
+        *ngIf="enableCaptcha"
+        class="row"
+        role="group"
+        aria-labelledby="captcha-label"
+      >
         <label id="captcha-label" class="sr-only">Security check</label>
         <app-captcha
           #captchaCmp
@@ -67,9 +72,14 @@
             type="submit"
             class="full-width-login background-overall"
             [ngClass]="{
-              disabledLoginButton: !captchaToken || loginForm.invalid
+              disabledLoginButton:
+                (enableCaptcha && (!captchaToken || loginForm.invalid)) ||
+                (!enableCaptcha && loginForm.invalid)
             }"
-            [disabled]="!captchaToken || loginForm.invalid"
+            [disabled]="
+              (enableCaptcha && (!captchaToken || loginForm.invalid)) ||
+              (!enableCaptcha && loginForm.invalid)
+            "
           >
             Login
           </button>

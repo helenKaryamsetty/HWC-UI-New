@@ -47,6 +47,7 @@ const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 const ABHA_MODE = '<%= ABHA_MODE %>';
 const siteKey = '<%= SITE_KEY %>';
 const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
+const enableCaptcha = '<%= ENABLE_CAPTCHA %>';
 
 export const environment = {
   production: true,
@@ -540,5 +541,6 @@ export const environment = {
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 
   siteKey: siteKey,
-  captchaChallengeURL: captchaChallengeURL
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };

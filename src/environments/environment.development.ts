@@ -63,6 +63,7 @@ const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
 const siteKey = '';
 const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: false,
@@ -556,4 +557,5 @@ export const environment = {
 
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };
