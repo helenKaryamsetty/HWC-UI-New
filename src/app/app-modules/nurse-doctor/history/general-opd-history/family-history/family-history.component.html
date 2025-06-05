@@ -1,12 +1,12 @@
 <div class="row m-t-10" [formGroup]="familyHistoryForm">
   <div class="col-xs-12" formArrayName="familyDiseaseList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label m-t-10">
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.familyHistoryDataANC_OPD_NCD_PNC?.previousFamilyHistory
-        }}
-      </span>
+    <div
+      class="history-label col-12"
+      tabindex="0"
+      role="button"
+      (click)="getPreviousFamilyHistory()"
+      (keydown.enter)="getPreviousFamilyHistory()"
+    >
       <button
         type="button"
         mat-icon-button
@@ -14,10 +14,15 @@
         id="previousANCFamilyHistory"
         class="mat_icon_blue"
         color="primary"
-        (click)="getPreviousFamilyHistory()"
       >
         <mat-icon class="md-18"> history</mat-icon>
       </button>
+      <span class="previousHistory">
+        {{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.familyHistoryDataANC_OPD_NCD_PNC?.previousFamilyHistory
+        }}
+      </span>
     </div>
     <div
       class="row multi-row-select"
