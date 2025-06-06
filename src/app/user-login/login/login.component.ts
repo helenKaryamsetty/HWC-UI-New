@@ -260,7 +260,6 @@ export class LoginComponent implements OnInit {
           },
         );
     }
-    this.resetCaptcha();
   }
 
   getServicesAuthdetails(loginDataResponse: any) {
