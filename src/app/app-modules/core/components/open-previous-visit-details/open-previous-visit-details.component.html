@@ -97,48 +97,73 @@
                               .benAnthropometryDetail
                           "
                         >
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.height_cm
+                            "
+                          >
                             <th id="height">Height :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.height_cm || "NA"
+                                  ?.benAnthropometryDetail?.height_cm
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.weight_Kg
+                            "
+                          >
                             <th id="weight">Weight :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.weight_Kg || "NA"
+                                  ?.benAnthropometryDetail?.weight_Kg
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.bMI
+                            "
+                          >
                             <th id="bmi">BMI :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.bMI || "NA"
+                                  ?.benAnthropometryDetail?.bMI
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benPhysicalVitalDetail?.temperature
+                            "
+                          >
                             <th id="temperature">Temperature (F) :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.temperature || "NA"
+                                  ?.benPhysicalVitalDetail?.temperature
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benPhysicalVitalDetail?.pulseRate
+                            "
+                          >
                             <th id="pulseRate">Pulse Rate (bpm) :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.pulseRate || "NA"
+                                  ?.benPhysicalVitalDetail?.pulseRate
                               }}
                             </td>
                           </tr>
