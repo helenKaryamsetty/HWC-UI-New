@@ -1,29 +1,23 @@
 <div class="row m-t-10" [formGroup]="comorbidityConcurrentConditionsForm">
   <div class="col-xs-12" formArrayName="comorbidityConcurrentConditionsList">
-    <div
-      class="history-label col-12"
-      tabindex="0"
-      role="button"
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCComorbidityHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       (click)="getPreviousComorbidityHistory()"
       (keydown.enter)="getPreviousComorbidityHistory()"
+      (keydown.space)="getPreviousComorbidityHistory()"
     >
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCComorbidityHistory"
-        class="mat_icon_blue"
-        color="primary"
-      >
-        <mat-icon class="md-18"> history</mat-icon>
-      </button>
-      <span class="previousHistory"
-        >{{
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
+        {{
           currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
             ?.PreviousDetails
         }}
       </span>
-    </div>
+    </button>
 
     <div
       class="col-12 row multi-row-select"

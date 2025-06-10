@@ -1,26 +1,21 @@
-<div
-  class="history-label col-12"
-  tabindex="0"
-  role="button"
+<button
+  type="button"
+  class="history-label col-12 mat-icon-button mat_icon_blue"
+  id="previousANCPastObstetricHistory"
+  color="primary"
+  matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
   (click)="getPreviousObstetricHistory()"
   (keydown.enter)="getPreviousObstetricHistory()"
+  (keydown.space)="getPreviousObstetricHistory()"
 >
-  <button
-    type="button"
-    mat-icon-button
-    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-    id="previousANCPastObstetricHistory"
-    class="mat_icon_blue"
-    color="primary"
-  >
-    <mat-icon class="md-18">history</mat-icon>
-  </button>
+  <mat-icon class="md-18 ms-2">history</mat-icon>
   <span class="previousHistory">
     {{
       currentLanguageSet?.historyData?.obstetrichistory?.previousObstetricHist
     }}
   </span>
-</div>
+</button>
+
 <div class="row" [formGroup]="pastObstericHistoryForm">
   <div class="col-xs-12 col-sm-4 box">
     <mat-form-field class="input-full-width mat_form_field_width_thee">

@@ -1,29 +1,23 @@
 <div class="row m-t-10" [formGroup]="pastHistoryForm">
   <div>
-    <div
-      class="history-label col-12"
-      tabindex="0"
-      role="button"
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCPastHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       (click)="getPreviousPastHistory()"
       (keydown.enter)="getPreviousPastHistory()"
+      (keydown.space)="getPreviousPastHistory()"
     >
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCPastHistory"
-        class="mat_icon_blue"
-        color="primary"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
+      <mat-icon class="md-18 ms-2">history</mat-icon>
       <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.Previousillness
             ?.previousillnessandsurgery
         }}
       </span>
-    </div>
+    </button>
     <div class="col-xs-12" formArrayName="pastIllness">
       <header class="description">
         <h4>

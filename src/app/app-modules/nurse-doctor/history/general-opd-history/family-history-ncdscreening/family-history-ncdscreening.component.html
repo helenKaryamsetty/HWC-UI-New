@@ -1,29 +1,24 @@
 <div class="row m-t-10" [formGroup]="familyHistoryForm">
   <div class="col-xs-12" formArrayName="familyDiseaseList">
-    <div
-      class="history-label col-12"
-      tabindex="0"
-      role="button"
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCFamilyHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       (click)="getPreviousFamilyHistory()"
       (keydown.enter)="getPreviousFamilyHistory()"
+      (keydown.space)="getPreviousFamilyHistory()"
     >
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCFamilyHistory"
-        class="mat_icon_blue"
-        color="primary"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
+      <mat-icon class="md-18 ms-2">history</mat-icon>
       <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.ancHistory
             ?.familyHistoryDataANC_OPD_NCD_PNC?.previousFamilyHistory
         }}
       </span>
-    </div>
+    </button>
+
     <div *ngIf="visitCategory === 'NCD screening' && age >= 30">
       <p style="color: red">
         *{{
